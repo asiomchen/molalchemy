@@ -21,7 +21,3 @@ repos:
       types_or: [ python, pyi ]
     # Run the formatter.
     - id: ruff-format
-- repo: https://github.com/rohaquinlop/complexipy-pre-commit
-  rev: v3.0.0
-  hooks:
-    - id: complexipy
