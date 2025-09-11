@@ -2,6 +2,7 @@
 name = "chemschema"
 version = "0.0.1"
 description = "Extensions for SQLAlchemy to work with chemical cartridges"
+license = {text = "Apache-2.0"}
 readme = "README.md"
 authors = [
     { name = "Anton Siomchen", email = "41703271+asiomchen@users.noreply.github.com" }
@@ -28,6 +29,9 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
 ]
+[project.urls]
+homepage = "https://github.com/asiomchen/chemschema"
+repository = "https://github.com/asiomchen/chemschema"
 
 [build-system]
 requires = ["uv_build>=0.8.13,<0.9.0"]
@@ -36,4 +40,6 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "ipykernel>=6.30.1",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
 ]

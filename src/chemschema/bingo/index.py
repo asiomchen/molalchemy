@@ -1,5 +1,6 @@
 from sqlalchemy.schema import Index
- 
+
+
 # @compiles(BingoMolIndex, 'postgresql')
 # def compile_bingo_rxn_index(element, compiler, **kw):
 #     expr = list(element.expressions)[0]
@@ -11,9 +12,19 @@ from sqlalchemy.schema import Index
 #     )
 class BingoMolIndex(Index):
     def __init__(self, name, mol_column):
-        super().__init__(name, mol_column, postgresql_using='bingo_idx', 
-                         postgresql_ops={mol_column: 'bingo.molecule'})
+        super().__init__(
+            name,
+            mol_column,
+            postgresql_using="bingo_idx",
+            postgresql_ops={mol_column: "bingo.molecule"},
+        )
+
+
 class BingoBinaryMolIndex(Index):
     def __init__(self, name, mol_column):
-        super().__init__(name, mol_column, postgresql_using='bingo_idx', 
-                         postgresql_ops={mol_column: 'bingo.bmolecule'})
+        super().__init__(
+            name,
+            mol_column,
+            postgresql_using="bingo_idx",
+            postgresql_ops={mol_column: "bingo.bmolecule"},
+        )

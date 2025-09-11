@@ -1,1 +1,3 @@
-https://lifescience.opensource.epam.com/downloads/bingo-1.34.0/bingo-postgres-17-linux-x86_64.zip
+# ChemSchema
+
+[WIP]
