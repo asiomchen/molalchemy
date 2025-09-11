@@ -1,0 +1,39 @@
+[project]
+name = "chemschema"
+version = "0.0.1"
+description = "Extensions for SQLAlchemy to work with chemical cartridges"
+readme = "README.md"
+authors = [
+    { name = "Anton Siomchen", email = "41703271+asiomchen@users.noreply.github.com" }
+]
+
+requires-python = ">=3.10"
+dependencies = [
+    "datamol>=0.12.5",
+    "geoalchemy2>=0.18.0",
+    "psycopg[binary]>=3.2.9",
+    "rdkit>=2025.3.6",
+    "sqlalchemy>=2.0.43",
+]
+keywords = ["chemistry"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Utilities",
+    "Topic :: Database",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.13,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.30.1",
+]

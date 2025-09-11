@@ -1,0 +1,42 @@
+
+services:
+
+  bingo:
+    build:
+      dockerfile: docker/Dockerfile.bingo
+      context: .
+      args:
+        - POSTGRES_VERSION=17.6
+        - BINGO_VERSION=1.34.0
+    restart: always
+    # set shared memory limit when using docker compose
+    shm_size: 1024mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - 5432:5432
+    # volumes:
+    #   - db_data:/var/lib/postgresql/data
+  rdkit:
+    build:
+      dockerfile: docker/Dockerfile.rdkit
+      context: .
+      args:
+        - rdkit_git_ref=Release_2025_03
+        - boost_dev_version=1.81
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: example
+
+
+
+# volumes:
+#   db_data:

@@ -1,0 +1,26 @@
+ARG POSTGRES_VERSION=17.6
+FROM alpine:latest as loader
+ARG POSTGRES_VERSION
+ARG BINGO_VERSION=1.34.0
+# install unzip tar and wget
+RUN apk --no-cache add bash wget tar unzip
+
+WORKDIR /tmp
+
+RUN POSTGRES_MAJOR_VERSION=$(echo ${POSTGRES_VERSION} | cut -d. -f1) && \
+    wget -O bingo-postgres.zip https://lifescience.opensource.epam.com/downloads/bingo-${BINGO_VERSION}/bingo-postgres-${POSTGRES_MAJOR_VERSION}-linux-x86_64.zip
+
+RUN unzip bingo-postgres.zip && rm bingo-postgres.zip && \
+    mv bingo*tgz bingo-postgres.tgz && \
+    tar -xvzf bingo-postgres.tgz && rm bingo-postgres.tgz && \
+    mv bingo* bingo-postgres
+
+
+FROM postgres:$POSTGRES_VERSION
+ARG POSTGRES_VERSION=17.6
+COPY --from=loader /tmp/bingo-postgres* /opt/bingo-postgres
+RUN cd /opt/bingo-postgres && \
+    sh ./bingo-pg-install.sh -libdir /opt/bingo-postgres/lib -y && \
+    cp ./bingo_install.sql /docker-entrypoint-initdb.d/ && \
+    chown postgres:postgres /opt/bingo-postgres/lib/libbingo-postgres.so && \
+    cp -p /opt/bingo-postgres/lib/libbingo-postgres.so /usr/lib/postgresql/17/lib/bingo_postgres.so
