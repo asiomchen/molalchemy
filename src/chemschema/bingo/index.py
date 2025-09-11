@@ -28,3 +28,23 @@ class BingoBinaryMolIndex(Index):
             postgresql_using="bingo_idx",
             postgresql_ops={mol_column: "bingo.bmolecule"},
         )
+
+
+class BingoRxnIndex(Index):
+    def __init__(self, name, mol_column):
+        super().__init__(
+            name,
+            mol_column,
+            postgresql_using="bingo_idx",
+            postgresql_ops={mol_column: "bingo.reaction"},
+        )
+
+
+class BingoBinaryRxnIndex(Index):
+    def __init__(self, name, mol_column):
+        super().__init__(
+            name,
+            mol_column,
+            postgresql_using="bingo_idx",
+            postgresql_ops={mol_column: "bingo.breaction"},
+        )
