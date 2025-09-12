@@ -1,0 +1,68 @@
+site_name: "chemschema"
+site_description: "A set of tools for handling chemical data in databases and data science workflows"
+repo_url: "https://github.com/asiomchen/chemschema"
+repo_name: "asiomchen/chemschema"
+copyright: Copyright 2025
+
+use_directory_urls: true
+docs_dir: "docs"
+
+
+
+theme: 
+  name: material
+  palette:
+  - media: "(prefers-color-scheme)"
+    toggle:
+      icon: material/lightbulb-auto
+      name: Switch to light mode
+  - media: '(prefers-color-scheme: light)'
+    scheme: default
+    primary: green
+    accent: green
+    toggle:
+      icon: material/lightbulb
+      name: Switch to dark mode
+  - media: '(prefers-color-scheme: dark)'
+    scheme: slate
+    primary: green
+    accent: green
+    toggle:
+      icon: material/lightbulb-outline
+      name: Switch to system preference
+  features:
+    - navigation.tabs
+    - navigation.expand
+
+extra_javascript:
+    - assets/js/readthedocs.js
+
+extra_css:
+  - assets/css/tweak-width.css
+  - assets/css/custom-chemschema.css
+
+watch:
+  - "src"
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+          inventories:
+            - https://docs.python.org/objects.inv
+            - https://www.rdkit.org/docs/objects.inv
+            - http://docs.sqlalchemy.org/en/stable/objects.inv
+  # - mkdocs-jupyter:
+  #     execute: false
+  #     include: ["*.ipynb"]
+
+nav:
+  - Overview: index.md
+  - API:
+    - chemschema.bingo.types: api/chemschema.bingo.types.md
+    
+  - Contributing: contributing.md
