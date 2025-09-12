@@ -352,7 +352,82 @@ class bingo_func:
         ...     bingo_func.to_binary(MoleculeTable.structure)
         ... )
         """
-        return func.Bingo.CompactMolecule(mol_column, int(preserve_pos))
+        return func.Bingo.CompactMolecule(mol_column, preserve_pos)
+
+    @staticmethod
+    def to_smiles(mol_column: ColumnElement) -> Function[str]:
+        """
+        Convert molecules to SMILES format.
+
+        Parameters
+        ----------
+        mol_column : ColumnElement
+            SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
+
+        Returns
+        -------
+        Function[str]
+            SQLAlchemy function expression returning SMILES strings.
+
+        Examples
+        --------
+        >>> # Get SMILES for all molecules
+        >>> session.query(
+        ...     MoleculeTable.id,
+        ...     bingo_func.to_smiles(MoleculeTable.structure)
+        ... )
+        """
+        return func.Bingo.SMILES(mol_column)
+
+    @staticmethod
+    def to_molfile(mol_column: ColumnElement) -> Function[str]:
+        """
+        Convert molecules to Molfile format.
+
+        Parameters
+        ----------
+        mol_column : ColumnElement
+            SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
+
+        Returns
+        -------
+        Function[str]
+            SQLAlchemy function expression returning Molfile strings with 2D coordinates.
+
+        Examples
+        --------
+        >>> # Get Molfile for all molecules
+        >>> session.query(
+        ...     MoleculeTable.id,
+        ...     bingo_func.to_molfile(MoleculeTable.structure)
+        ... )
+        """
+        return func.Bingo.Molfile(mol_column)
+
+    @staticmethod
+    def to_cml(mol_column: ColumnElement) -> Function[str]:
+        """
+        Convert molecules to CML (Chemical Markup Language) format.
+
+        Parameters
+        ----------
+        mol_column : ColumnElement
+            SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
+
+        Returns
+        -------
+        Function[str]
+            SQLAlchemy function expression returning CML strings.
+
+        Examples
+        --------
+        >>> # Get CML for all molecules
+        >>> session.query(
+        ...     MoleculeTable.id,
+        ...     bingo_func.to_cml(MoleculeTable.structure)
+        ... )
+        """
+        return func.Bingo.CML(mol_column)
 
 
 class bingo_rxn_func:
@@ -480,7 +555,7 @@ class bingo_rxn_func:
         ...     bingo_rxn_func.to_binary(ReactionTable.structure)
         ... )
         """
-        return func.Bingo.CompactReaction(rxn_column, int(preserve_pos))
+        return func.Bingo.CompactReaction(rxn_column, preserve_pos)
 
     @staticmethod
     def to_smiles(rxn_column: ColumnElement) -> Function[str]:
