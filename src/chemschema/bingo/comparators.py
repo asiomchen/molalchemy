@@ -12,6 +12,9 @@ class BingoMolComparator(UserDefinedType.Comparator):
     substructure matching, SMARTS pattern matching, and exact structure matching.
     """
 
+    def __eq__(self, other: str):
+        return self.equals(other)
+
     def has_substructure(self, query: str, parameters: str = ""):
         """
         Check if the molecular structure contains a given substructure.
