@@ -138,7 +138,7 @@ class BingoRxnProxy:
         pass
 
     @staticmethod
-    def has_equals(query: str, parameters: str = ""):
+    def equals(query: str, parameters: str = ""):
         """Check if the reaction exactly matches the given reaction.
 
         Parameters

@@ -14,3 +14,5 @@ To install all dependencies listed in the `pyproject.toml` file, run:
 
 ```uv sync
 ```
+
+If you need to check bingo docs look at `docs/bingo-postgres-manual.md`

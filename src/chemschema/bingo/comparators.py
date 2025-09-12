@@ -131,7 +131,7 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         """
         return self.expr.op("@")(text(f"('{query}', '{parameters}')::bingo.rsmarts"))
 
-    def has_equals(self, query: str, parameters: str = ""):
+    def equals(self, query: str, parameters: str = ""):
         """
         Check if the reaction exactly matches the given reaction.
 
