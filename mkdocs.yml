@@ -1,4 +1,4 @@
-site_name: "chemschema"
+site_name: "ChemSchema"
 site_description: "A set of tools for handling chemical data in databases and data science workflows"
 repo_url: "https://github.com/asiomchen/chemschema"
 repo_name: "asiomchen/chemschema"
@@ -31,8 +31,27 @@ theme:
       icon: material/lightbulb-outline
       name: Switch to system preference
   features:
-    - navigation.tabs
-    - navigation.expand
+  - content.code.annotate
+  - content.code.copy
+  # - content.code.select
+  - content.footnote.tooltips
+  - content.tabs.link
+  - content.tooltips
+  - navigation.footer
+  - navigation.indexes
+  - navigation.instant
+  - navigation.instant.prefetch
+  # - navigation.instant.preview
+  - navigation.instant.progress
+  - navigation.path
+  - navigation.tabs
+  - navigation.tabs.sticky
+  - navigation.top
+  - navigation.tracking
+  - search.highlight
+  - search.share
+  - search.suggest
+  - toc.follow
 
 extra_javascript:
     - assets/js/readthedocs.js
@@ -47,6 +66,8 @@ watch:
 plugins:
   - search
   - autorefs
+  - social
+  # Other plugin
   - mkdocstrings:
       handlers:
         python:
@@ -61,8 +82,25 @@ plugins:
   #     include: ["*.ipynb"]
 
 nav:
-  - Overview: index.md
+  - ChemSchema: index.md
   - API:
     - chemschema.bingo.types: api/chemschema.bingo.types.md
     
   - Contributing: contributing.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+extra:
+  social:
+  - icon: fontawesome/brands/github-alt
+    link: https://github.com/asiomchen/chemschema
+  - icon: fontawesome/brands/linkedin
+    link: https://www.linkedin.com/in/anton-siomchen/
+  

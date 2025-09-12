@@ -49,6 +49,34 @@ wheels = [
 ]
 
 [[package]]
+name = "cairocffi"
+version = "1.7.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cffi" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/70/c5/1a4dc131459e68a173cbdab5fad6b524f53f9c1ef7861b7698e998b837cc/cairocffi-1.7.1.tar.gz", hash = "sha256:2e48ee864884ec4a3a34bfa8c9ab9999f688286eb714a15a43ec9d068c36557b", size = 88096, upload-time = "2024-06-18T10:56:06.741Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/93/d8/ba13451aa6b745c49536e87b6bf8f629b950e84bd0e8308f7dc6883b67e2/cairocffi-1.7.1-py3-none-any.whl", hash = "sha256:9803a0e11f6c962f3b0ae2ec8ba6ae45e957a146a004697a1ac1bbf16b073b3f", size = 75611, upload-time = "2024-06-18T10:55:59.489Z" },
+]
+
+[[package]]
+name = "cairosvg"
+version = "2.8.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cairocffi" },
+    { name = "cssselect2" },
+    { name = "defusedxml" },
+    { name = "pillow" },
+    { name = "tinycss2" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ab/b9/5106168bd43d7cd8b7cc2a2ee465b385f14b63f4c092bb89eee2d48c8e67/cairosvg-2.8.2.tar.gz", hash = "sha256:07cbf4e86317b27a92318a4cac2a4bb37a5e9c1b8a27355d06874b22f85bef9f", size = 8398590, upload-time = "2025-05-15T06:56:32.653Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/67/48/816bd4aaae93dbf9e408c58598bc32f4a8c65f4b86ab560864cb3ee60adb/cairosvg-2.8.2-py3-none-any.whl", hash = "sha256:eab46dad4674f33267a671dce39b64be245911c901c70d65d2b7b0821e852bf5", size = 45773, upload-time = "2025-05-15T06:56:28.552Z" },
+]
+
+[[package]]
 name = "certifi"
 version = "2025.8.3"
 source = { registry = "https://pypi.org/simple" }
@@ -185,6 +213,7 @@ source = { editable = "." }
 dependencies = [
     { name = "datamol" },
     { name = "geoalchemy2" },
+    { name = "mkdocs-material", extra = ["imaging"] },
     { name = "psycopg", extra = ["binary"] },
     { name = "rdkit" },
     { name = "sqlalchemy" },
@@ -197,15 +226,18 @@ dev = [
     { name = "pytest-cov" },
 ]
 docs = [
+    { name = "griffe-typingdoc" },
     { name = "mkdocs" },
-    { name = "mkdocs-material" },
+    { name = "mkdocs-material", extra = ["imaging"] },
     { name = "mkdocstrings", extra = ["python"] },
+    { name = "pymdown-extensions" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "datamol", specifier = ">=0.12.5" },
     { name = "geoalchemy2", specifier = ">=0.18.0" },
+    { name = "mkdocs-material", extras = ["imaging"], specifier = ">=9.6.19" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2.9" },
     { name = "rdkit", specifier = ">=2025.3.6" },
     { name = "sqlalchemy", specifier = ">=2.0.43" },
@@ -218,9 +250,11 @@ dev = [
     { name = "pytest-cov", specifier = ">=7.0.0" },
 ]
 docs = [
+    { name = "griffe-typingdoc", specifier = ">=0.2.9" },
     { name = "mkdocs", specifier = ">=1.6.1" },
-    { name = "mkdocs-material", specifier = ">=9.6.2" },
+    { name = "mkdocs-material", extras = ["imaging"], specifier = ">=9.6.2" },
     { name = "mkdocstrings", extras = ["python"], specifier = ">=0.28.0" },
+    { name = "pymdown-extensions", specifier = ">=10.16.1" },
 ]
 
 [[package]]
@@ -500,6 +534,19 @@ toml = [
 ]
 
 [[package]]
+name = "cssselect2"
+version = "0.8.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "tinycss2" },
+    { name = "webencodings" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/9f/86/fd7f58fc498b3166f3a7e8e0cddb6e620fe1da35b02248b1bd59e95dbaaa/cssselect2-0.8.0.tar.gz", hash = "sha256:7674ffb954a3b46162392aee2a3a0aedb2e14ecf99fcc28644900f4e6e3e9d3a", size = 35716, upload-time = "2025-03-05T14:46:07.988Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0f/e7/aa315e6a749d9b96c2504a1ba0ba031ba2d0517e972ce22682e3fccecb09/cssselect2-0.8.0-py3-none-any.whl", hash = "sha256:46fc70ebc41ced7a32cd42d58b1884d72ade23d21e5a4eaaf022401c13f0e76e", size = 15454, upload-time = "2025-03-05T14:46:06.463Z" },
+]
+
+[[package]]
 name = "cycler"
 version = "0.12.1"
 source = { registry = "https://pypi.org/simple" }
@@ -569,6 +616,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/43/fa/6d96a0978d19e17b68d634497769987b16c8f4cd0a7a05048bec693caa6b/decorator-5.2.1.tar.gz", hash = "sha256:65f266143752f734b0a7cc83c46f4618af75b8c5911b00ccb61d0ac9b6da0360", size = 56711, upload-time = "2025-02-24T04:41:34.073Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/4e/8c/f3147f5c4b73e7550fe5f9352eaa956ae838d5c51eb58e7a25b9f3e2643b/decorator-5.2.1-py3-none-any.whl", hash = "sha256:d316bb415a2d9e2d2b3abcc4084c6502fc09240e292cd76a76afc106a1c8e04a", size = 9190, upload-time = "2025-02-24T04:41:32.565Z" },
+]
+
+[[package]]
+name = "defusedxml"
+version = "0.7.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/0f/d5/c66da9b79e5bdb124974bfe172b4daf3c984ebd9c2a06e2b8a4dc7331c72/defusedxml-0.7.1.tar.gz", hash = "sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69", size = 75520, upload-time = "2021-03-08T10:59:26.269Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/07/6c/aa3f2f849e01cb6a001cd8554a88d4c77c5c1a31c95bdf1cf9301e6d9ef4/defusedxml-0.7.1-py2.py3-none-any.whl", hash = "sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61", size = 25604, upload-time = "2021-03-08T10:59:24.45Z" },
 ]
 
 [[package]]
@@ -744,6 +800,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ec/d7/6c09dd7ce4c7837e4cdb11dce980cb45ae3cd87677298dc3b781b6bce7d3/griffe-1.14.0.tar.gz", hash = "sha256:9d2a15c1eca966d68e00517de5d69dd1bc5c9f2335ef6c1775362ba5b8651a13", size = 424684, upload-time = "2025-09-05T15:02:29.167Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2a/b1/9ff6578d789a89812ff21e4e0f80ffae20a65d5dd84e7a17873fe3b365be/griffe-1.14.0-py3-none-any.whl", hash = "sha256:0e9d52832cccf0f7188cfe585ba962d2674b241c01916d780925df34873bceb0", size = 144439, upload-time = "2025-09-05T15:02:27.511Z" },
+]
+
+[[package]]
+name = "griffe-typingdoc"
+version = "0.2.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "griffe" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/63/15/92e1cdd63515f18e35c357f10970f5a8b46fed15d615305497241c944be2/griffe_typingdoc-0.2.9.tar.gz", hash = "sha256:99c05bf09a9c391464e3937718c9a5a1055bb95ed549f4f7706be9a71578669c", size = 32878, upload-time = "2025-09-05T15:45:32.178Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9e/33/f2e21b688e36d5e3d1ee681aed9b7e651b97bc8c31e9ec096d7f7a2181e3/griffe_typingdoc-0.2.9-py3-none-any.whl", hash = "sha256:cc6b1e34d64e1659da5b3d37506214834bc8fbb62b081b2fb43563ee5cdaf8f5", size = 9876, upload-time = "2025-09-05T15:45:31.137Z" },
 ]
 
 [[package]]
@@ -1281,6 +1350,12 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/44/94/eb0fca39b19c2251b16bc759860a50f232655c4377116fa9c0e7db11b82c/mkdocs_material-9.6.19.tar.gz", hash = "sha256:80e7b3f9acabfee9b1f68bd12c26e59c865b3d5bbfb505fd1344e970db02c4aa", size = 4038202, upload-time = "2025-09-07T17:46:40.468Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/02/23/a2551d1038bedc2771366f65ff3680bb3a89674cd7ca6140850c859f1f71/mkdocs_material-9.6.19-py3-none-any.whl", hash = "sha256:7492d2ac81952a467ca8a10cac915d6ea5c22876932f44b5a0f4f8e7d68ac06f", size = 9240205, upload-time = "2025-09-07T17:46:36.484Z" },
+]
+
+[package.optional-dependencies]
+imaging = [
+    { name = "cairosvg" },
+    { name = "pillow" },
 ]
 
 [[package]]
@@ -2371,6 +2446,18 @@ wheels = [
 ]
 
 [[package]]
+name = "tinycss2"
+version = "1.4.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "webencodings" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7a/fd/7a5ee21fd08ff70d3d33a5781c255cbe779659bd03278feb98b19ee550f4/tinycss2-1.4.0.tar.gz", hash = "sha256:10c0972f6fc0fbee87c3edb76549357415e94548c1ae10ebccdea16fb404a9b7", size = 87085, upload-time = "2024-10-24T14:58:29.895Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e6/34/ebdc18bae6aa14fbee1a08b63c015c72b64868ff7dae68808ab500c492e2/tinycss2-1.4.0-py3-none-any.whl", hash = "sha256:3a49cf47b7675da0b15d0c6e1df8df4ebd96e9394bb905a5775adb0d884c5289", size = 26610, upload-time = "2024-10-24T14:58:28.029Z" },
+]
+
+[[package]]
 name = "tomli"
 version = "2.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -2515,6 +2602,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/6c/63/53559446a878410fc5a5974feb13d31d78d752eb18aeba59c7fef1af7598/wcwidth-0.2.13.tar.gz", hash = "sha256:72ea0c06399eb286d978fdedb6923a9eb47e1c486ce63e9b4e64fc18303972b5", size = 101301, upload-time = "2024-01-06T02:10:57.829Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/fd/84/fd2ba7aafacbad3c4201d395674fc6348826569da3c0937e75505ead3528/wcwidth-0.2.13-py2.py3-none-any.whl", hash = "sha256:3da69048e4540d84af32131829ff948f1e022c1c6bdb8d6102117aac784f6859", size = 34166, upload-time = "2024-01-06T02:10:55.763Z" },
+]
+
+[[package]]
+name = "webencodings"
+version = "0.5.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/0b/02/ae6ceac1baeda530866a85075641cec12989bd8d31af6d5ab4a3e8c92f47/webencodings-0.5.1.tar.gz", hash = "sha256:b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923", size = 9721, upload-time = "2017-04-05T20:21:34.189Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f4/24/2a3e3df732393fed8b3ebf2ec078f05546de641fe1b667ee316ec1dcf3b7/webencodings-0.5.1-py2.py3-none-any.whl", hash = "sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78", size = 11774, upload-time = "2017-04-05T20:21:32.581Z" },
 ]
 
 [[package]]

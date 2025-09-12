@@ -12,6 +12,7 @@ requires-python = ">=3.10"
 dependencies = [
     "datamol>=0.12.5",
     "geoalchemy2>=0.18.0",
+    "mkdocs-material[imaging]>=9.6.19",
     "psycopg[binary]>=3.2.9",
     "rdkit>=2025.3.6",
     "sqlalchemy>=2.0.43",
@@ -44,7 +45,9 @@ dev = [
     "pytest-cov>=7.0.0",
 ]
 docs = [
+    "griffe-typingdoc>=0.2.9",
     "mkdocs>=1.6.1",
-    "mkdocs-material>=9.6.2",
+    "mkdocs-material[imaging]>=9.6.2",
     "mkdocstrings[python]>=0.28.0",
+    "pymdown-extensions>=10.16.1",
 ]
