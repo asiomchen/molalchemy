@@ -92,6 +92,7 @@ nav:
   - Contributing: contributing.md
 
 markdown_extensions:
+  - admonition
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -106,4 +107,6 @@ extra:
     link: https://github.com/asiomchen/chemschema
   - icon: fontawesome/brands/linkedin
     link: https://www.linkedin.com/in/anton-siomchen/
+  - icon: fontawesome/brands/docker
+    link: https://hub.docker.com/
   
