@@ -84,8 +84,11 @@ plugins:
 nav:
   - ChemSchema: index.md
   - API:
-    - chemschema.bingo.types: api/chemschema.bingo.types.md
-    
+    - chemschema.bingo:
+        - bingo.types: api/bingo/types.md
+        - bingo.functions: api/bingo/functions.md
+        - bingo.index: api/bingo/db_index.md
+
   - Contributing: contributing.md
 
 markdown_extensions:
