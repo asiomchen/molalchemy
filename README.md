@@ -10,7 +10,10 @@
 
 **Extensions for SQLAlchemy to work with chemical cartridges**
 
-ChemSchema provides seamless integration between SQLAlchemy and chemical databases, enabling powerful chemical structure storage, indexing, and querying capabilities. The library supports multiple chemical cartridges and provides a unified API for chemical database operations.
+ChemSchema provides seamless integration between python and chemical databases, enabling powerful chemical structure storage, indexing, and querying capabilities. The library supports most popular chemical cartridges (Bingo PostgreSQL & RDKit PostgreSQL) and provides a unified API for chemical database operations.
+
+**This project was originally supposed to be a part of RDKit UGM 2025 hackathon but COVID had other plans for me. Currently it is in alpha stage as a proof of concept. Contributions are welcome!**
+
 
 ## 🚀 Features
 
@@ -18,8 +21,7 @@ ChemSchema provides seamless integration between SQLAlchemy and chemical databas
 - **Chemical Cartridge Integration**: Support for Bingo and RDKit PostgreSQL cartridges
 - **Substructure Search**: Efficient substructure and similarity searching
 - **Chemical Indexing**: High-performance chemical structure indexing
-- **SMARTS Support**: SMARTS pattern matching and querying
-- **Type Safety**: Full type hints and mypy compatibility
+- **Typing**: As much type hints as possible - no need to remember yet another abstract function name
 - **Easy Integration**: Drop-in replacement for standard SQLAlchemy types
 
 ## 📦 Installation
@@ -40,7 +42,7 @@ uv add chemschema
 
 ChemSchema requires:
 - Python 3.10+
-- PostgreSQL with chemical cartridge (Bingo or RDKit)
+- Running PostgreSQL with chemical cartridge (Bingo or RDKit)
 - SQLAlchemy 2.0+
 
 ## 🔧 Quick Start
@@ -81,7 +83,7 @@ benzene_substructures = session.query(Molecule).filter(
 
 # SMARTS pattern matching
 amines = session.query(Molecule).filter(
-    Molecule.structure.smarts('[NX3;H2,H1;!$(NC=O)]')
+    Molecule.structure.has_smarts('[NX3;H2,H1;!$(NC=O)]')
 ).all()
 
 # Exact structure match
@@ -134,18 +136,16 @@ class Molecule(Base):
 
 ### Custom Functions
 
+bingo_func proovides all static methods for functional-style queries. Under the hood it uses SQLAlchemy's `func` to call the corresponding database functions. But provides type hints and syntax highlighting in IDEs.
+
 ```python
 from chemschema.bingo import bingo_func
 
 # Use Bingo functions directly
 molecular_weight = session.query(
-    bingo_func.mass(Molecule.structure)
+    bingo_func.get_mass(Molecule.structure)
 ).scalar()
 
-fingerprint = session.query(
-    bingo_func.fingerprint(Molecule.structure, 'sim')
-).scalar()
-```
 
 ## 🧪 Development
 
@@ -211,8 +211,9 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 ## 📧 Contact
 
 - **Author**: Anton Siomchen
-- **Email**: 41703271+asiomchen@users.noreply.github.com
+- **Email**: anton.siomchen@gmail.com
 - **GitHub**: [@asiomchen](https://github.com/asiomchen)
+- **LinkedIn**: [Anton Siomchen](https://www.linkedin.com/in/anton-siomchen/)
 
 ---
 
