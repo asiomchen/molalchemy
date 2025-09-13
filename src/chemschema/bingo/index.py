@@ -34,18 +34,23 @@ class BingoMolIndex(Index):
 
     Examples
     --------
-    >>> from sqlalchemy import Column, String, Table, MetaData
+    >>> from sqlalchemy import Integer
+    >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
     >>> from chemschema.bingo.index import BingoMolIndex
     >>> from chemschema.bingo.types import BingoMol
     >>>
-    >>> metadata = MetaData()
-    >>> molecules_table = Table(
-    ...     'molecules',
-    ...     metadata,
-    ...     Column('id', Integer, primary_key=True),
-    ...     Column('structure', BingoMol),
-    ...     BingoMolIndex('idx_mol_structure', 'structure')
-    ... )
+    >>> class Base(DeclarativeBase):
+    ...     pass
+    >>>
+    >>> class Molecule(Base):
+    ...     __tablename__ = 'molecules'
+    ...
+    ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ...     structure: Mapped[BingoMol] = mapped_column(BingoMol)
+    ...
+    ...     __table_args__ = (
+    ...         BingoMolIndex('idx_mol_structure', 'structure'),
+    ...     )
 
     Notes
     -----
@@ -82,18 +87,23 @@ class BingoBinaryMolIndex(Index):
 
     Examples
     --------
-    >>> from sqlalchemy import Column, String, Table, MetaData
+    >>> from sqlalchemy import Integer
+    >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
     >>> from chemschema.bingo.index import BingoBinaryMolIndex
     >>> from chemschema.bingo.types import BingoBinaryMol
     >>>
-    >>> metadata = MetaData()
-    >>> molecules_table = Table(
-    ...     'molecules',
-    ...     metadata,
-    ...     Column('id', Integer, primary_key=True),
-    ...     Column('structure_bin', BingoBinaryMol),
-    ...     BingoBinaryMolIndex('idx_mol_structure_bin', 'structure_bin')
-    ... )
+    >>> class Base(DeclarativeBase):
+    ...     pass
+    >>>
+    >>> class Molecule(Base):
+    ...     __tablename__ = 'molecules'
+    ...
+    ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ...     structure_bin: Mapped[BingoBinaryMol] = mapped_column(BingoBinaryMol)
+    ...
+    ...     __table_args__ = (
+    ...         BingoBinaryMolIndex('idx_mol_structure_bin', 'structure_bin'),
+    ...     )
 
     Notes
     -----
@@ -131,18 +141,23 @@ class BingoRxnIndex(Index):
 
     Examples
     --------
-    >>> from sqlalchemy import Column, String, Table, MetaData
+    >>> from sqlalchemy import Integer
+    >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
     >>> from chemschema.bingo.index import BingoRxnIndex
     >>> from chemschema.bingo.types import BingoRxn
     >>>
-    >>> metadata = MetaData()
-    >>> reactions_table = Table(
-    ...     'reactions',
-    ...     metadata,
-    ...     Column('id', Integer, primary_key=True),
-    ...     Column('reaction', BingoRxn),
-    ...     BingoRxnIndex('idx_reaction_structure', 'reaction')
-    ... )
+    >>> class Base(DeclarativeBase):
+    ...     pass
+    >>>
+    >>> class Reaction(Base):
+    ...     __tablename__ = 'reactions'
+    ...
+    ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ...     reaction: Mapped[BingoRxn] = mapped_column(BingoRxn)
+    ...
+    ...     __table_args__ = (
+    ...         BingoRxnIndex('idx_reaction_structure', 'reaction'),
+    ...     )
 
     Notes
     -----
@@ -180,18 +195,23 @@ class BingoBinaryRxnIndex(Index):
 
     Examples
     --------
-    >>> from sqlalchemy import Column, String, Table, MetaData
+    >>> from sqlalchemy import Integer
+    >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
     >>> from chemschema.bingo.index import BingoBinaryRxnIndex
     >>> from chemschema.bingo.types import BingoBinaryRxn
     >>>
-    >>> metadata = MetaData()
-    >>> reactions_table = Table(
-    ...     'reactions',
-    ...     metadata,
-    ...     Column('id', Integer, primary_key=True),
-    ...     Column('reaction_bin', BingoBinaryRxn),
-    ...     BingoBinaryRxnIndex('idx_reaction_structure_bin', 'reaction_bin')
-    ... )
+    >>> class Base(DeclarativeBase):
+    ...     pass
+    >>>
+    >>> class Reaction(Base):
+    ...     __tablename__ = 'reactions'
+    ...
+    ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ...     reaction_bin: Mapped[BingoBinaryRxn] = mapped_column(BingoBinaryRxn)
+    ...
+    ...     __table_args__ = (
+    ...         BingoBinaryRxnIndex('idx_reaction_structure_bin', 'reaction_bin'),
+    ...     )
 
     Notes
     -----
