@@ -4,11 +4,12 @@ The `chemschema.bingo.index` module provides specialized SQLAlchemy Index classe
 
 These index classes enable efficient molecular and reaction similarity searching, substructure matching, and other chemical queries by leveraging the Bingo cartridge's optimized indexing capabilities.
 
-## `chemschema.bingo.index`
+## Index Classes
 
 ::: chemschema.bingo.index
     options:
       heading_level: 3
+      show_source: false
       show_bases: true
       show_root_heading: false
       members_order: source

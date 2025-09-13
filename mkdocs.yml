@@ -88,6 +88,10 @@ nav:
         - bingo.types: api/bingo/types.md
         - bingo.functions: api/bingo/functions.md
         - bingo.index: api/bingo/db_index.md
+    - chemschema.rdkit:
+        - rdkit.types: api/rdkit/types.md
+        - rdkit.functions: api/rdkit/functions.md
+        - rdkit.index: api/rdkit/db_index.md
 
   - Contributing: contributing.md
 

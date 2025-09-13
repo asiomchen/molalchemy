@@ -23,6 +23,30 @@ class BingoMol(UserDefinedType):
         Indicates that this type can be safely cached.
     comparator_factory : type
         Factory class for creating molecular comparators.
+
+    Examples
+    --------
+    >>> from sqlalchemy import Integer, String
+    >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+    >>> from chemschema.bingo.types import BingoMol
+    >>>
+    >>> class Base(DeclarativeBase):
+    ...     pass
+    >>>
+    >>> class Molecule(Base):
+    ...     __tablename__ = 'molecules'
+    ...
+    ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ...     smiles: Mapped[str] = mapped_column(BingoMol)
+    ...     name: Mapped[str] = mapped_column(String(100))
+    >>>
+    >>> # Usage in queries
+    >>> from chemschema.bingo.functions import bingo_func
+    >>>
+    >>> # Find molecules containing benzene ring
+    >>> benzene_derivatives = session.query(Molecule).filter(
+    ...     bingo_func.has_substructure(Molecule.smiles, "c1ccccc1")
+    ... ).all()
     """
 
     cache_ok = True
@@ -57,6 +81,39 @@ class BingoBinaryMol(UserDefinedType):
         Whether to preserve atomic coordinates in the binary format.
     return_type : str
         Format for returning data from the database.
+
+    Examples
+    --------
+    >>> from sqlalchemy import Integer, String
+    >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+    >>> from chemschema.bingo.types import BingoBinaryMol
+    >>>
+    >>> class Base(DeclarativeBase):
+    ...     pass
+    >>>
+    >>> class Molecule(Base):
+    ...     __tablename__ = 'molecules'
+    ...
+    ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ...     structure: Mapped[bytes] = mapped_column(
+    ...         BingoBinaryMol(preserve_pos=True, return_type="smiles")
+    ...     )
+    ...     name: Mapped[str] = mapped_column(String(100))
+    >>>
+    >>> # Different return format configurations
+    >>> class MoleculeWithMolfile(Base):
+    ...     __tablename__ = 'molecules_molfile'
+    ...
+    ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ...     structure: Mapped[bytes] = mapped_column(
+    ...         BingoBinaryMol(preserve_pos=True, return_type="molfile")
+    ...     )
+    >>>
+    >>> # Usage: When inserting SMILES, it's automatically converted to binary
+    >>> # When querying, it's automatically converted back to SMILES
+    >>> mol = Molecule(structure="CCO", name="ethanol")
+    >>> session.add(mol)
+    >>> session.commit()
     """
 
     cache_ok = True
@@ -156,12 +213,53 @@ class BingoReaction(UserDefinedType):
         Indicates that this type can be safely cached.
     comparator_factory : type
         Factory class for creating reaction comparators.
+
+    Examples
+    --------
+    >>> from sqlalchemy import Integer, String
+    >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+    >>> from chemschema.bingo.types import BingoReaction
+    >>>
+    >>> class Base(DeclarativeBase):
+    ...     pass
+    >>>
+    >>> class Reaction(Base):
+    ...     __tablename__ = 'reactions'
+    ...
+    ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ...     reaction_smiles: Mapped[str] = mapped_column(BingoReaction)
+    ...     name: Mapped[str] = mapped_column(String(200))
+    >>>
+    >>> # Usage in queries
+    >>> from chemschema.bingo.functions import bingo_rxn_func
+    >>>
+    >>> # Find reactions with specific substructure
+    >>> oxidation_reactions = session.query(Reaction).filter(
+    ...     bingo_rxn_func.has_reaction_substructure(
+    ...         Reaction.reaction_smiles,
+    ...         "[OH]>>[O]"
+    ...     )
+    ... ).all()
+    >>>
+    >>> # Insert a reaction
+    >>> rxn = Reaction(
+    ...     reaction_smiles="CCO>>CC=O",
+    ...     name="ethanol oxidation"
+    ... )
+    >>> session.add(rxn)
     """
 
     cache_ok = True
     comparator_factory = BingoRxnComparator
 
     def get_col_spec(self):
+        """Get the column specification for this type.
+
+        Returns
+        -------
+        str
+            The PostgreSQL column type specification ("varchar").
+        """
         return "varchar"
 
 
@@ -178,10 +276,50 @@ class BingoBinaryReaction(UserDefinedType):
         Indicates that this type can be safely cached.
     comparator_factory : type
         Factory class for creating reaction comparators.
+
+    Examples
+    --------
+    >>> from sqlalchemy import Integer, String
+    >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+    >>> from chemschema.bingo.types import BingoBinaryReaction
+    >>>
+    >>> class Base(DeclarativeBase):
+    ...     pass
+    >>>
+    >>> class Reaction(Base):
+    ...     __tablename__ = 'reactions_binary'
+    ...
+    ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ...     reaction_data: Mapped[bytes] = mapped_column(BingoBinaryReaction)
+    ...     name: Mapped[str] = mapped_column(String(200))
+    >>>
+    >>> # Usage: Binary storage provides faster searching and less storage space
+    >>> # Input as reaction SMILES, stored as binary, retrieved as binary
+    >>> from chemschema.bingo.functions import bingo_rxn_func
+    >>>
+    >>> # Convert to binary format when inserting
+    >>> rxn = Reaction(name="hydrogenation")
+    >>> # The reaction data would be converted using bingo_rxn_func.to_binary()
+    >>> # during insertion
+    >>>
+    >>> # Search operations work directly on binary data
+    >>> results = session.query(Reaction).filter(
+    ...     bingo_rxn_func.has_reaction_substructure(
+    ...         Reaction.reaction_data,
+    ...         "C=C>>CC"
+    ...     )
+    ... ).all()
     """
 
     cache_ok = True
     comparator_factory = BingoRxnComparator
 
     def get_col_spec(self):
+        """Get the column specification for this type.
+
+        Returns
+        -------
+        str
+            The PostgreSQL column type specification ("bytea").
+        """
         return "bytea"
