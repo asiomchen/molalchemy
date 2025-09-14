@@ -1,7 +1,7 @@
-# ChemSchema
-
 ![ChemSchema Logo](./img/logo-full.svg)
-
+<p align="center">
+    <em>ChemSchema - Making chemical databases as easy as regular databases! 🧪✨</em>
+</p>
 [![pypi version](https://img.shields.io/pypi/v/chemschema.svg)](https://pypi.org/project/chemschema/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/chemschema)
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/chemschema?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/chemschema)
@@ -38,11 +38,19 @@ ChemSchema provides seamless integration between python and chemical databases, 
 pip install chemschema
 ```
 
-### Using uv (recommended for development)
+### From source
 
 ```bash
-uv add chemschema
+pip install git+https://github.com/asiomchen/chemschema.git
+
+# or clone the repo and install
+git clone https://github.com/asiomchen/chemschema.git
+cd chemschema
+pip install .
 ```
+
+
+
 
 ### Prerequisites
 
@@ -292,8 +300,8 @@ This project uses modern Python development tools:
 - **[📋 Project Roadmap](ROADMAP.md)** - Development phases, timeline, and contribution opportunities
 - **[🤝 Contributing Guide](CONTRIBUTING.md)** - How to contribute to the project
 - **[🔧 API Reference](https://chemschema.readthedocs.io/)** - Complete API documentation
-- **[🐳 Bingo Manual](docs/bingo-postgres-manual.md)** - Bingo PostgreSQL cartridge guide
-- **[⚛️ RDKit Manual](docs/rdkit-postgres-manual.md)** - RDKit PostgreSQL cartridge guide
+- **[🐳 Bingo Manual](https://lifescience.opensource.epam.com/bingo/user-manual-postgres.html)** - Bingo PostgreSQL cartridge guide
+- **[⚛️ RDKit Manual](https://www.rdkit.org/docs/Cartridge.html)** - RDKit PostgreSQL cartridge guide
 
 ## 🤝 Contributing
 

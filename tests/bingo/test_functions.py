@@ -1,6 +1,6 @@
 """Tests for bingo functions."""
 
-from sqlalchemy import Column, Integer, String, MetaData, Table, text
+from sqlalchemy import Column, Integer, String, MetaData, Table
 from sqlalchemy.sql import select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -25,19 +25,23 @@ class TestBingoFunc:
 
     def test_bingo_func_attributes(self):
         """Test bingo_func class attributes."""
-        assert bingo_func.name == "bingo"
-        assert bingo_func.mol_type_name == "bingo.molecule"
-        assert bingo_func.fingerprint_type_name == "bingo.fingerprint"
+        # bingo_func is a collection of static methods, no class attributes needed
+        assert hasattr(bingo_func, "has_substructure")
+        assert hasattr(bingo_func, "matches_smarts")
+        assert hasattr(bingo_func, "equals")
+        assert hasattr(bingo_func, "similarity")
 
-    def test_substructure_function(self):
-        """Test substructure function generates correct SQL."""
+    def test_has_substructure_function(self):
+        """Test has_substructure function generates correct SQL."""
         query = "c1ccccc1"
         parameters = ""
 
-        result = bingo_func.substructure(self.mol_column, query, parameters)
+        result = bingo_func.has_substructure(self.mol_column, query, parameters)
 
-        # Should return a text() expression
-        assert isinstance(result, type(text("")))
+        # Should return a binary expression (column @ operator)
+        assert hasattr(result, "left")
+        assert hasattr(result, "right")
+        assert hasattr(result, "operator")
 
         # Check the generated SQL string
         sql_str = str(result)
@@ -46,24 +50,24 @@ class TestBingoFunc:
         assert "bingo.sub" in sql_str
         assert query in sql_str
 
-    def test_substructure_with_parameters(self):
-        """Test substructure function with parameters."""
+    def test_has_substructure_with_parameters(self):
+        """Test has_substructure function with parameters."""
         query = "c1ccccc1"
         parameters = "max=5"
 
-        result = bingo_func.substructure(self.mol_column, query, parameters)
+        result = bingo_func.has_substructure(self.mol_column, query, parameters)
         sql_str = str(result)
 
         assert query in sql_str
         assert parameters in sql_str
         assert "bingo.sub" in sql_str
 
-    def test_smarts_function(self):
+    def test_matches_smarts_function(self):
         """Test SMARTS function generates correct SQL."""
         query = "[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1"
         parameters = ""
 
-        result = bingo_func.smarts(self.mol_column, query, parameters)
+        result = bingo_func.matches_smarts(self.mol_column, query, parameters)
         sql_str = str(result)
 
         assert "test_compounds.structure" in sql_str
@@ -71,12 +75,12 @@ class TestBingoFunc:
         assert "bingo.smarts" in sql_str
         assert query in sql_str
 
-    def test_smarts_with_parameters(self):
+    def test_matches_smarts_with_parameters(self):
         """Test SMARTS function with parameters."""
         query = "[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1"
         parameters = "timeout=1000"
 
-        result = bingo_func.smarts(self.mol_column, query, parameters)
+        result = bingo_func.matches_smarts(self.mol_column, query, parameters)
         sql_str = str(result)
 
         assert query in sql_str
@@ -119,7 +123,7 @@ class TestBingoFunc:
         sql_str = str(result)
 
         assert "test_compounds.structure" in sql_str
-        assert "@" in sql_str
+        assert "%" in sql_str  # similarity uses % operator, not @
         assert "bingo.sim" in sql_str
         assert query in sql_str
         assert str(bottom) in sql_str
@@ -147,35 +151,6 @@ class TestBingoFunc:
         sql_str = str(result)
 
         assert metric in sql_str
-        assert "bingo.sim" in sql_str
-
-
-class TestBingoFuncWithStringColumns:
-    """Test bingo_func with string column names."""
-
-    def test_equals_with_string_column(self):
-        """Test equals function with string column name."""
-        query = "CCO"
-        parameters = ""
-        column_name = "molecules.structure"
-
-        result = bingo_func.equals(column_name, query, parameters)
-        sql_str = str(result)
-
-        assert column_name in sql_str
-        assert "@" in sql_str
-        assert "bingo.exact" in sql_str
-        assert query in sql_str
-
-    def test_similarity_with_string_column(self):
-        """Test similarity function with string column name."""
-        query = "CCO"
-        column_name = "compounds.mol"
-
-        result = bingo_func.similarity(column_name, query)
-        sql_str = str(result)
-
-        assert column_name in sql_str
         assert "bingo.sim" in sql_str
 
 
@@ -218,7 +193,7 @@ class TestBingoFuncWithORM:
         result = bingo_func.similarity(self.Compound.structure, query)
         sql_str = str(result)
 
-        assert "@" in sql_str
+        assert "%" in sql_str  # similarity uses % operator, not @
         assert "bingo.sim" in sql_str
         assert query in sql_str
         assert "compounds.structure" in sql_str
@@ -238,12 +213,14 @@ class TestBingoFuncIntegration:
             Column("structure", BingoMol()),
         )
 
-    def test_substructure_in_where_clause(self):
-        """Test using substructure function in WHERE clause."""
+    def test_has_substructure_in_where_clause(self):
+        """Test using has_substructure function in WHERE clause."""
         query = "c1ccccc1"
 
         # Create a query using the function
-        substructure_expr = bingo_func.substructure(self.test_table.c.structure, query)
+        substructure_expr = bingo_func.has_substructure(
+            self.test_table.c.structure, query
+        )
 
         stmt = select(self.test_table).where(substructure_expr)
 
@@ -259,7 +236,7 @@ class TestBingoFuncIntegration:
         benzene = "c1ccccc1"
         ethanol = "CCO"
 
-        substructure_expr = bingo_func.substructure(
+        substructure_expr = bingo_func.has_substructure(
             self.test_table.c.structure, benzene
         )
         equals_expr = bingo_func.equals(self.test_table.c.structure, ethanol)

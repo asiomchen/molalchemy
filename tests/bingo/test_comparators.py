@@ -21,12 +21,12 @@ class TestBingoMolComparator:
         )
         self.mol_column = self.test_table.c.mol
 
-    def test_substructure_query_generation(self):
-        """Test substructure query generation."""
+    def test_has_substructure_query_generation(self):
+        """Test has_substructure query generation."""
         query = "c1ccccc1"  # benzene
         parameters = ""
 
-        result = self.mol_column.substructure(query, parameters)
+        result = self.mol_column.has_substructure(query, parameters)
 
         # Check that the result is a proper SQLAlchemy expression
         assert hasattr(result, "left")
@@ -39,26 +39,26 @@ class TestBingoMolComparator:
         assert "bingo.sub" in compiled
         assert query in compiled
 
-    def test_substructure_with_parameters(self):
-        """Test substructure query with parameters."""
+    def test_has_substructure_with_parameters(self):
+        """Test has_substructure query with parameters."""
         query = "c1ccccc1"
         parameters = "max=5"
 
-        result = self.mol_column.substructure(query, parameters)
+        result = self.mol_column.has_substructure(query, parameters)
         compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
 
         assert query in compiled
         assert parameters in compiled
         assert "bingo.sub" in compiled
 
-    def test_smarts_query_generation(self):
+    def test_has_smarts_query_generation(self):
         """Test SMARTS query generation."""
         query = (
             "[#6]1-[#6]-[#6]-[#6]-[#6]-[#6]-1"  # benzene SMARTS (using - instead of :)
         )
         parameters = ""
 
-        result = self.mol_column.smarts(query, parameters)
+        result = self.mol_column.has_smarts(query, parameters)
         compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
 
         assert "@" in compiled
@@ -66,12 +66,12 @@ class TestBingoMolComparator:
         # Check that the query appears in some form (may be escaped)
         assert "[#6]1" in compiled or query in compiled
 
-    def test_smarts_with_parameters(self):
+    def test_has_smarts_with_parameters(self):
         """Test SMARTS query with parameters."""
         query = "[#6]1-[#6]-[#6]-[#6]-[#6]-[#6]-1"
         parameters = "max=10"
 
-        result = self.mol_column.smarts(query, parameters)
+        result = self.mol_column.has_smarts(query, parameters)
         compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
 
         # Check that the query appears in some form and parameters are present
@@ -108,11 +108,11 @@ class TestBingoMolComparator:
         query = "CCO"
 
         # Test with empty string
-        result1 = self.mol_column.substructure(query, "")
+        result1 = self.mol_column.has_substructure(query, "")
         compiled1 = str(result1.compile(compile_kwargs={"literal_binds": True}))
 
         # Test with default (should be empty string)
-        result2 = self.mol_column.substructure(query)
+        result2 = self.mol_column.has_substructure(query)
         compiled2 = str(result2.compile(compile_kwargs={"literal_binds": True}))
 
         # Both should be equivalent
@@ -124,7 +124,7 @@ class TestBingoMolComparator:
             "CC(=O)N[C@@H](CC1=CC=CC=C1)C(=O)O"  # phenylalanine with stereochemistry
         )
 
-        result = self.mol_column.substructure(query)
+        result = self.mol_column.has_substructure(query)
         # Should not raise any exceptions when compiling
         compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
         assert query in compiled
@@ -145,22 +145,22 @@ class TestBingoMolComparatorWithBinaryType:
         )
         self.mol_column = self.test_table.c.mol
 
-    def test_binary_mol_substructure(self):
-        """Test substructure works with binary mol type."""
+    def test_binary_mol_has_substructure(self):
+        """Test has_substructure works with binary mol type."""
         query = "c1ccccc1"
 
-        result = self.mol_column.substructure(query)
+        result = self.mol_column.has_substructure(query)
         compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
 
         assert "@" in compiled
         assert "bingo.sub" in compiled
         assert query in compiled
 
-    def test_binary_mol_smarts(self):
+    def test_binary_mol_has_smarts(self):
         """Test SMARTS works with binary mol type."""
         query = "[#6]1-[#6]-[#6]-[#6]-[#6]-[#6]-1"
 
-        result = self.mol_column.smarts(query)
+        result = self.mol_column.has_smarts(query)
         compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
 
         assert "@" in compiled
@@ -193,12 +193,12 @@ class TestBingoComparatorInQueries:
             Column("structure", BingoMol()),
         )
 
-    def test_substructure_in_select_query(self):
-        """Test substructure comparator in SELECT query."""
+    def test_has_substructure_in_select_query(self):
+        """Test has_substructure comparator in SELECT query."""
         query = "c1ccccc1"
 
         stmt = select(self.test_table).where(
-            self.test_table.c.structure.substructure(query)
+            self.test_table.c.structure.has_substructure(query)
         )
 
         # Should compile without errors
@@ -215,7 +215,7 @@ class TestBingoComparatorInQueries:
         ethanol = "CCO"
 
         stmt = select(self.test_table).where(
-            self.test_table.c.structure.substructure(benzene)
+            self.test_table.c.structure.has_substructure(benzene)
             | self.test_table.c.structure.equals(ethanol)
         )
 

@@ -8,7 +8,6 @@ from .test_comparators import (
 )
 from .test_functions import (
     TestBingoFunc,
-    TestBingoFuncWithStringColumns,
     TestBingoFuncWithORM,
     TestBingoFuncIntegration,
 )
@@ -32,7 +31,6 @@ __all__ = [
     "TestBingoMolComparatorWithBinaryType",
     "TestBingoComparatorInQueries",
     "TestBingoFunc",
-    "TestBingoFuncWithStringColumns",
     "TestBingoFuncWithORM",
     "TestBingoFuncIntegration",
     "TestBingoMolIndex",

@@ -42,12 +42,12 @@ class TestBingoQueryIntegration:
 
         # Query using comparator
         stmt1 = select(self.compounds).where(
-            self.compounds.c.structure.substructure(benzene)
+            self.compounds.c.structure.has_substructure(benzene)
         )
 
         # Query using function
         stmt2 = select(self.compounds).where(
-            bingo_func.substructure(self.compounds.c.structure, benzene)
+            bingo_func.has_substructure(self.compounds.c.structure, benzene)
         )
 
         # Both should compile successfully
@@ -81,8 +81,8 @@ class TestBingoQueryIntegration:
         )
         stmt = select(self.compounds).where(
             or_(
-                self.compounds.c.structure.substructure(benzene),
-                self.compounds.c.structure.smarts(aspirin_smarts),
+                self.compounds.c.structure.has_substructure(benzene),
+                self.compounds.c.structure.has_smarts(aspirin_smarts),
             )
         )
 
@@ -98,7 +98,7 @@ class TestBingoQueryIntegration:
         parameters = "max=5"
 
         stmt = select(self.compounds).where(
-            self.compounds.c.structure.substructure(query, parameters)
+            self.compounds.c.structure.has_substructure(query, parameters)
         )
 
         compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
@@ -112,7 +112,7 @@ class TestBingoQueryIntegration:
         benzene = "c1ccccc1"
 
         stmt = select(self.binary_compounds).where(
-            self.binary_compounds.c.structure.substructure(benzene)
+            self.binary_compounds.c.structure.has_substructure(benzene)
         )
 
         compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
@@ -140,7 +140,7 @@ class TestBingoQueryIntegration:
                     suppliers, self.compounds.c.id == suppliers.c.compound_id
                 )
             )
-            .where(self.compounds.c.structure.substructure(benzene))
+            .where(self.compounds.c.structure.has_substructure(benzene))
         )
 
         compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
@@ -188,12 +188,12 @@ class TestBingoORMIntegration:
 
         # Using comparator
         stmt1 = select(self.Compound).where(
-            self.Compound.structure.substructure(benzene)
+            self.Compound.structure.has_substructure(benzene)
         )
 
         # Using function
         stmt2 = select(self.Compound).where(
-            bingo_func.substructure(self.Compound.structure, benzene)
+            bingo_func.has_substructure(self.Compound.structure, benzene)
         )
 
         compiled1 = str(stmt1.compile(compile_kwargs={"literal_binds": True}))
@@ -224,7 +224,7 @@ class TestBingoORMIntegration:
 
         stmt = select(self.Compound).where(
             and_(
-                self.Compound.structure.substructure(benzene),
+                self.Compound.structure.has_substructure(benzene),
                 bingo_func.similarity(self.Compound.structure, ethanol, 0.5),
             )
         )
@@ -240,7 +240,7 @@ class TestBingoORMIntegration:
         benzene = "c1ccccc1"
 
         stmt = select(self.BinaryCompound).where(
-            self.BinaryCompound.structure.substructure(benzene)
+            self.BinaryCompound.structure.has_substructure(benzene)
         )
 
         compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
@@ -274,7 +274,7 @@ class TestBingoQueryVariations:
 
         for smiles in special_smiles:
             stmt = select(self.compounds).where(
-                self.compounds.c.structure.substructure(smiles)
+                self.compounds.c.structure.has_substructure(smiles)
             )
 
             # Should compile without errors
@@ -295,7 +295,7 @@ class TestBingoQueryVariations:
 
         for params in parameter_sets:
             stmt = select(self.compounds).where(
-                self.compounds.c.structure.substructure(query, params)
+                self.compounds.c.structure.has_substructure(query, params)
             )
 
             compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
@@ -312,8 +312,8 @@ class TestBingoQueryVariations:
 
         stmt = select(self.compounds).where(
             or_(
-                self.compounds.c.structure.substructure(benzene),
-                self.compounds.c.structure.smarts(benzene_smarts),
+                self.compounds.c.structure.has_substructure(benzene),
+                self.compounds.c.structure.has_smarts(benzene_smarts),
                 self.compounds.c.structure.equals(ethanol),
             )
         )
@@ -332,8 +332,12 @@ class TestBingoQueryVariations:
         benzene_smarts = "[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1"
         ethanol = "CCO"
 
-        substructure_expr = bingo_func.substructure(self.compounds.c.structure, benzene)
-        smarts_expr = bingo_func.smarts(self.compounds.c.structure, benzene_smarts)
+        substructure_expr = bingo_func.has_substructure(
+            self.compounds.c.structure, benzene
+        )
+        smarts_expr = bingo_func.matches_smarts(
+            self.compounds.c.structure, benzene_smarts
+        )
         equals_expr = bingo_func.equals(self.compounds.c.structure, ethanol)
         similarity_expr = bingo_func.similarity(
             self.compounds.c.structure, ethanol, 0.7
