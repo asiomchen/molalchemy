@@ -1,6 +1,6 @@
 # ChemSchema
 
-![ChemSchema Logo](docs/logo.png)
+![ChemSchema Logo](docs/img/logo-full.svg)
 
 [![pypi version](https://img.shields.io/pypi/v/chemschema.svg)](https://pypi.org/project/chemschema/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/chemschema)

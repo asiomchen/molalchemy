@@ -82,6 +82,10 @@ class BingoBinaryMol(UserDefinedType):
     return_type : str
         Format for returning data from the database.
 
+    Warnings
+    --------
+    When `preserve_pos=True`, only inputs with present atomic coordinates should be used, otherwise an error will occur during conversion.
+
     Examples
     --------
     >>> from sqlalchemy import Integer, String
@@ -131,12 +135,16 @@ class BingoBinaryMol(UserDefinedType):
         preserve_pos : bool, default False
             Whether to preserve atomic coordinates when converting to binary format.
             If `True`, coordinates are stored; if `False`, they are discarded.
-        return_type : {"smiles", "molfile", "cml", "bytes"}, default `"smiles"`
+        return_type : Literal["smiles", "molfile", "cml", "bytes"]
             The format to return when reading data from the database:
-            - "smiles": Return as SMILES string
-            - "molfile": Return as MDL Molfile format
-            - "cml": Return as Chemical Markup Language format
-            - "bytes": Return raw binary data
+
+            - `"smiles"`: Return as SMILES string
+
+            - `"molfile"`: Return as MDL Molfile format
+
+            - `"cml"`: Return as Chemical Markup Language format
+
+            - `"bytes"`: Return raw binary data
         """
         self.preserve_pos = preserve_pos
         self.return_type = return_type

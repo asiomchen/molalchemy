@@ -1,16 +1,25 @@
 # ChemSchema
 
-![ChemSchema Logo](docs/logo.png)
+![ChemSchema Logo](./img/logo-full.svg)
 
-[![python versions](https://shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)]()
 [![pypi version](https://img.shields.io/pypi/v/chemschema.svg)](https://pypi.org/project/chemschema/)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/chemschema)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/chemschema?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/chemschema)
 [![license](https://img.shields.io/github/license/asiomchen/chemschema)](LICENSE)
+[![python versions](https://shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)]()
+![Codecov (with branch)](https://img.shields.io/codecov/c/github/asiomchen/chemschema/main)
 [![powered by rdkit](https://img.shields.io/badge/Powered%20by-RDKit-3838ff.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEXc3NwUFP8UPP9kZP+MjP+0tP////9ZXZotAAAAAXRSTlMAQObYZgAAAAFiS0dEBmFmuH0AAAAHdElNRQfmAwsPGi+MyC9RAAAAQElEQVQI12NgQABGQUEBMENISUkRLKBsbGwEEhIyBgJFsICLC0iIUdnExcUZwnANQWfApKCK4doRBsKtQFgKAQC5Ww1JEHSEkAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wMy0xMVQxNToyNjo0NyswMDowMDzr2J4AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDMtMTFUMTU6MjY6NDcrMDA6MDBNtmAiAAAAAElFTkSuQmCC)](https://www.rdkit.org/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-306998?logo=python&logoColor=white)](https://www.sqlalchemy.org/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
 
 **Extensions for SQLAlchemy to work with chemical cartridges**
 
-ChemSchema provides seamless integration between SQLAlchemy and chemical databases, enabling powerful chemical structure storage, indexing, and querying capabilities. The library supports multiple chemical cartridges and provides a unified API for chemical database operations.
+ChemSchema provides seamless integration between python and chemical databases, enabling powerful chemical structure storage, indexing, and querying capabilities. The library supports popular chemical cartridges (Bingo PostgreSQL & RDKit PostgreSQL) and provides a unified API for chemical database operations.
+
+
+**This project was originally supposed to be a part of RDKit UGM 2025 hackathon, but COVID had other plans for me. Currently it is in alpha stage as a proof of concept. Contributions are welcome!**
+
 
 ## 🚀 Features
 
@@ -18,8 +27,7 @@ ChemSchema provides seamless integration between SQLAlchemy and chemical databas
 - **Chemical Cartridge Integration**: Support for Bingo and RDKit PostgreSQL cartridges
 - **Substructure Search**: Efficient substructure and similarity searching
 - **Chemical Indexing**: High-performance chemical structure indexing
-- **SMARTS Support**: SMARTS pattern matching and querying
-- **Type Safety**: Full type hints and mypy compatibility
+- **Typing**: As much type hints as possible - no need to remember yet another abstract function name
 - **Easy Integration**: Drop-in replacement for standard SQLAlchemy types
 
 ## 📦 Installation
@@ -40,7 +48,7 @@ uv add chemschema
 
 ChemSchema requires:
 - Python 3.10+
-- PostgreSQL with chemical cartridge (Bingo or RDKit)
+- Running PostgreSQL with chemical cartridge (Bingo or RDKit)
 - SQLAlchemy 2.0+
 
 ## 🔧 Quick Start
@@ -48,17 +56,19 @@ ChemSchema requires:
 ### Basic Usage
 
 ```python
-from sqlalchemy import create_engine, Column, Integer
-from sqlalchemy.ext.declarative import declarative_base
-from chemschema.bingo import BingoMol
+from sqlalchemy import Integer, String, create_engine
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
+from chemschema.bingo.types import BingoMol
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 class Molecule(Base):
     __tablename__ = 'molecules'
     
-    id = Column(Integer, primary_key=True)
-    structure = Column(BingoMol)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    structure: Mapped[str] = mapped_column(BingoMol)
+    name: Mapped[str] = mapped_column(String(100))
 
 # Create engine and tables
 engine = create_engine('postgresql://user:password@localhost/chemdb')
@@ -69,25 +79,36 @@ Base.metadata.create_all(engine)
 
 ```python
 from sqlalchemy.orm import sessionmaker
-from chemschema.bingo import BingoMol
+from chemschema.bingo.functions import bingo_func
 
 Session = sessionmaker(bind=engine)
 session = Session()
 
 # Substructure search
 benzene_substructures = session.query(Molecule).filter(
-    Molecule.structure.substructure('c1ccccc1')
+    bingo_func.has_substructure(Molecule.structure, 'c1ccccc1')
 ).all()
 
 # SMARTS pattern matching
 amines = session.query(Molecule).filter(
-    Molecule.structure.smarts('[NX3;H2,H1;!$(NC=O)]')
+    bingo_func.matches_smarts(Molecule.structure, '[NX3;H2,H1;!$(NC=O)]')
 ).all()
 
 # Exact structure match
 exact_match = session.query(Molecule).filter(
-    Molecule.structure.equals('CCO')
+    bingo_func.equals(Molecule.structure, 'CCO')
 ).first()
+
+# Similarity search
+similar_molecules = session.query(Molecule).filter(
+    bingo_func.similarity(Molecule.structure, 'CCO', bottom=0.7)
+).all()
+
+# Calculate molecular properties
+molecular_weights = session.query(
+    Molecule.name,
+    bingo_func.get_weight(Molecule.structure)
+).all()
 ```
 
 ## 🏗️ Supported Cartridges
@@ -95,21 +116,38 @@ exact_match = session.query(Molecule).filter(
 ### Bingo Cartridge
 
 ```python
-from chemschema.bingo import (
-    BingoMol,           # Text-based molecule storage
-    BingoBinaryMol,     # Binary molecule storage  
-    BingoReaction,      # Reaction storage
-    BingoMolIndex,      # Molecule indexing
-    bingo_func          # Bingo functions
+from chemschema.bingo.types import (
+    BingoMol,              # Text-based molecule storage (SMILES/Molfile)
+    BingoBinaryMol,        # Binary molecule storage with format conversion
+    BingoReaction,         # Reaction storage (reaction SMILES/Rxnfile)
+    BingoBinaryReaction    # Binary reaction storage
+)
+from chemschema.bingo.index import (
+    BingoMolIndex,         # Molecule indexing
+    BingoBinaryMolIndex,   # Binary molecule indexing
+    BingoRxnIndex,         # Reaction indexing
+    BingoBinaryRxnIndex    # Binary reaction indexing
+)
+from chemschema.bingo.functions import (
+    bingo_func,            # Molecule functions
+    bingo_rxn_func         # Reaction functions
 )
 ```
 
-### RDKit Cartridge (Coming Soon)
+### RDKit Cartridge
 
 ```python
-from chemschema.rdkit import (
-    RDKitMol,          # RDKit molecule type
-    # More types coming...
+from chemschema.rdkit.types import (
+    RDKitMol,              # RDKit molecule type
+    # Additional types available...
+)
+from chemschema.rdkit.index import (
+    RDKitMolIndex,         # RDKit molecule indexing
+    # Additional indices available...
+)
+from chemschema.rdkit.functions import (
+    rdkit_func,            # RDKit functions
+    # More function collections...
 )
 ```
 
@@ -118,13 +156,15 @@ from chemschema.rdkit import (
 ### Chemical Indexing
 
 ```python
-from chemschema.bingo import BingoMolIndex
+from chemschema.bingo.index import BingoMolIndex
+from chemschema.bingo.types import BingoMol
 
 class Molecule(Base):
     __tablename__ = 'molecules'
     
-    id = Column(Integer, primary_key=True)
-    structure = Column(BingoMol)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    structure: Mapped[str] = mapped_column(BingoMol)
+    name: Mapped[str] = mapped_column(String(100))
     
     # Add chemical index for faster searching
     __table_args__ = (
@@ -132,20 +172,79 @@ class Molecule(Base):
     )
 ```
 
-### Custom Functions
+### Binary Storage with Format Conversion
 
 ```python
-from chemschema.bingo import bingo_func
+from chemschema.bingo.types import BingoBinaryMol
 
-# Use Bingo functions directly
-molecular_weight = session.query(
-    bingo_func.mass(Molecule.structure)
-).scalar()
-
-fingerprint = session.query(
-    bingo_func.fingerprint(Molecule.structure, 'sim')
-).scalar()
+class OptimizedMolecule(Base):
+    __tablename__ = 'optimized_molecules'
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    # Store as binary, return as SMILES
+    structure: Mapped[bytes] = mapped_column(
+        BingoBinaryMol(preserve_pos=False, return_type="smiles")
+    )
+    # Store as binary, return as Molfile (with coordinates)
+    structure_3d: Mapped[bytes] = mapped_column(
+        BingoBinaryMol(preserve_pos=True, return_type="molfile")
+    )
 ```
+
+### Reaction Storage and Searching
+
+```python
+from chemschema.bingo.types import BingoReaction
+from chemschema.bingo.functions import bingo_rxn_func
+from chemschema.bingo.index import BingoRxnIndex
+
+class ChemicalReaction(Base):
+    __tablename__ = 'reactions'
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    reaction_smiles: Mapped[str] = mapped_column(BingoReaction)
+    name: Mapped[str] = mapped_column(String(200))
+    
+    __table_args__ = (
+        BingoRxnIndex('rxn_idx', 'reaction_smiles'),
+    )
+
+# Search for oxidation reactions
+oxidations = session.query(ChemicalReaction).filter(
+    bingo_rxn_func.has_reaction_substructure(
+        ChemicalReaction.reaction_smiles,
+        "[C:1]-[OH:2]>>[C:1]=[O:2]"
+    )
+).all()
+```
+
+### Using Chemical Functions
+
+`bingo_func` provides all static methods for functional-style queries. Under the hood it uses SQLAlchemy's `func` to call the corresponding database functions, but provides type hints and syntax highlighting in IDEs.
+
+```python
+from chemschema.bingo.functions import bingo_func
+
+# Calculate molecular properties
+results = session.query(
+    Molecule.name,
+    bingo_func.get_weight(Molecule.structure).label('molecular_weight'),
+    bingo_func.gross_formula(Molecule.structure).label('formula'),
+    bingo_func.to_canonical(Molecule.structure).label('canonical_smiles')
+).all()
+
+# Validate molecular structures
+invalid_molecules = session.query(Molecule).filter(
+    bingo_func.check_molecule(Molecule.structure).isnot(None)
+).all()
+
+# Format conversions
+inchi_keys = session.query(
+    Molecule.id,
+    bingo_func.to_inchikey(Molecule.structure).label('inchikey')
+).all()
+```
+
 
 ## 🧪 Development
 
@@ -190,13 +289,22 @@ This project uses modern Python development tools:
 
 ## 📚 Documentation
 
-- [API Reference](https://chemschema.readthedocs.io/)
-- [User Guide](docs/user_guide.md)
-- [Examples](examples/)
+- **[📋 Project Roadmap](ROADMAP.md)** - Development phases, timeline, and contribution opportunities
+- **[🤝 Contributing Guide](CONTRIBUTING.md)** - How to contribute to the project
+- **[🔧 API Reference](https://chemschema.readthedocs.io/)** - Complete API documentation
+- **[🐳 Bingo Manual](docs/bingo-postgres-manual.md)** - Bingo PostgreSQL cartridge guide
+- **[⚛️ RDKit Manual](docs/rdkit-postgres-manual.md)** - RDKit PostgreSQL cartridge guide
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and development process.
+We welcome contributions! ChemSchema offers many opportunities for developers interested in chemical informatics:
+
+- **🔰 New to the project?** Check out [good first issues](https://github.com/asiomchen/chemschema/labels/good%20first%20issue)
+- **� Chemical expertise?** Help complete RDKit integration or add ChemAxon support  
+- **🐳 DevOps skills?** Optimize our Docker containers and CI/CD pipeline
+- **📚 Love documentation?** Create tutorials and improve API docs
+
+Read our **[Contributing Guide](CONTRIBUTING.md)** for detailed instructions on getting started.
 
 ## 📄 License
 
@@ -210,7 +318,10 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 ## 📧 Contact
 
+- **Author**: Anton Siomchen
+- **Email**: anton.siomchen+chemschema@gmail.com
 - **GitHub**: [@asiomchen](https://github.com/asiomchen)
+- **LinkedIn**: [Anton Siomchen](https://www.linkedin.com/in/anton-siomchen/)
 
 ---
 
