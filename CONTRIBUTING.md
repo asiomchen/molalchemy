@@ -124,6 +124,7 @@ uv run pytest tests/ -v
 ```
 
 #### 2. **Code Style and Quality**
+
 We use modern Python tooling for code quality:
 
 ```bash
@@ -131,8 +132,24 @@ We use modern Python tooling for code quality:
 uv run ruff format .
 
 # Lint code
-uv run ruff check .
+uv run ruff check --fix .
 ```
+
+We also us `pre-commit` hooks to automate checks:
+
+```bash
+# Install pre-commit hooks
+pre-commit install
+```
+
+If you want to install hooks faster we recommend using `pre-commit-uv`:
+
+```bash
+uv tool install pre-commit --with pre-commit-uv --force-reinstall
+```
+
+Then you can continue using `pre-commit` as usual, but all hooks will run in the virtual environment created by `uv`.
+
 
 #### 3. **Testing Requirements**
 

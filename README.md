@@ -15,9 +15,10 @@
 
 **Extensions for SQLAlchemy to work with chemical cartridges**
 
-ChemSchema provides seamless integration between python and chemical databases, enabling powerful chemical structure storage, indexing, and querying capabilities. The library supports most popular chemical cartridges (Bingo PostgreSQL & RDKit PostgreSQL) and provides a unified API for chemical database operations.
+ChemSchema provides seamless integration between python and chemical databases, enabling powerful chemical structure storage, indexing, and querying capabilities. The library supports popular chemical cartridges (Bingo PostgreSQL & RDKit PostgreSQL) and provides a unified API for chemical database operations.
 
-**This project was originally supposed to be a part of RDKit UGM 2025 hackathon but COVID had other plans for me. Currently it is in alpha stage as a proof of concept. Contributions are welcome!**
+
+**This project was originally supposed to be a part of RDKit UGM 2025 hackathon, but COVID had other plans for me. Currently it is in alpha stage as a proof of concept. Contributions are welcome!**
 
 
 ## 🚀 Features
@@ -288,14 +289,22 @@ This project uses modern Python development tools:
 
 ## 📚 Documentation
 
-- [API Reference](https://chemschema.readthedocs.io/) - Complete API documentation
-- [Bingo Manual](docs/bingo-postgres-manual.md) - Bingo PostgreSQL cartridge guide
-- [RDKit Manual](docs/rdkit-postgres-manual.md) - RDKit PostgreSQL cartridge guide
-- [Contributing Guide](docs/contributing.md) - Development and contribution guidelines
+- **[📋 Project Roadmap](ROADMAP.md)** - Development phases, timeline, and contribution opportunities
+- **[🤝 Contributing Guide](CONTRIBUTING.md)** - How to contribute to the project
+- **[🔧 API Reference](https://chemschema.readthedocs.io/)** - Complete API documentation
+- **[🐳 Bingo Manual](docs/bingo-postgres-manual.md)** - Bingo PostgreSQL cartridge guide
+- **[⚛️ RDKit Manual](docs/rdkit-postgres-manual.md)** - RDKit PostgreSQL cartridge guide
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [Contributing Guide](docs/contributing.md) for details on our code of conduct and development process.
+We welcome contributions! ChemSchema offers many opportunities for developers interested in chemical informatics:
+
+- **🔰 New to the project?** Check out [good first issues](https://github.com/asiomchen/chemschema/labels/good%20first%20issue)
+- **� Chemical expertise?** Help complete RDKit integration or add ChemAxon support  
+- **🐳 DevOps skills?** Optimize our Docker containers and CI/CD pipeline
+- **📚 Love documentation?** Create tutorials and improve API docs
+
+Read our **[Contributing Guide](CONTRIBUTING.md)** for detailed instructions on getting started.
 
 ## 📄 License
 
@@ -310,7 +319,7 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 ## 📧 Contact
 
 - **Author**: Anton Siomchen
-- **Email**: anton.siomchen@gmail.com
+- **Email**: anton.siomchen+chemschema@gmail.com
 - **GitHub**: [@asiomchen](https://github.com/asiomchen)
 - **LinkedIn**: [Anton Siomchen](https://www.linkedin.com/in/anton-siomchen/)
 
