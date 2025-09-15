@@ -37,3 +37,13 @@ class rdkit_rxn_func:
     @staticmethod
     def has_smarts(rxn_column: ColumnElement, pattern: str) -> ColumnElement[bool]:
         return func.substruct(rxn_column, rdkit_rxn_func.reaction_from_smarts(pattern))
+
+    @staticmethod
+    def equals(rxn_column: ColumnElement, smarts_query: str) -> ColumnElement[bool]:
+        return func.reaction_eq(
+            rxn_column, rdkit_rxn_func.reaction_from_smarts(smarts_query)
+        )
+
+    @staticmethod
+    def to_binary(rxn_column: ColumnElement, **kwargs) -> ClauseElement:
+        return func.reaction_send(rxn_column, **kwargs)

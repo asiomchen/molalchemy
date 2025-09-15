@@ -1,6 +1,6 @@
 from sqlalchemy.types import UserDefinedType
 from molalchemy.rdkit.comparators import RdkitMolComparator, RdkitFPComparator
-from .functions import rdkit_func
+from .functions import rdkit_func, rdkit_rxn_func
 from typing import Literal
 
 
@@ -84,9 +84,9 @@ class RdkitReaction(UserDefinedType):
     def column_expression(self, colexpr):
         # For mol return type, we want the binary representation
         if self.return_type == "mol":
-            return rdkit_func.to_binary(colexpr, type_=self)
+            return rdkit_rxn_func.to_binary(colexpr, type_=self)
         elif self.return_type == "bytes":
-            return rdkit_func.to_binary(colexpr, type_=self)
+            return rdkit_rxn_func.to_binary(colexpr, type_=self)
         else:  # smiles
             return colexpr
 
