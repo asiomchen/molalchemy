@@ -8,7 +8,7 @@ authors = [
     { name = "Anton Siomchen", email = "41703271+asiomchen@users.noreply.github.com" }
 ]
 
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.14"
 dependencies = [
     "datamol>=0.12.5",
     "geoalchemy2>=0.18.0",
@@ -17,7 +17,7 @@ dependencies = [
     "rdkit>=2025.3.6",
     "sqlalchemy>=2.0.43",
 ]
-keywords = ["chemistry"]
+keywords = ["chemistry", "cheminformatics", "molecules", "reactions", "databases"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
@@ -28,6 +28,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
 ]
 [project.urls]
