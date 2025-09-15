@@ -123,7 +123,7 @@ def create_proxy_file(
     rxn_methods : List[Dict[str, Any]]
         List of reaction comparator methods.
     """
-    proxy_path = Path("src/chemschema/bingo/proxy.py")
+    proxy_path = Path("src/molalchemy/bingo/proxy.py")
 
     # Generate file header
     header = '''"""
@@ -185,7 +185,7 @@ Do not edit manually - use the update_proxy_stubs.py script instead.
 def main():
     """Main function to create proxy stubs from comparators."""
     # Read the comparators file
-    comparators_path = Path("src/chemschema/bingo/comparators.py")
+    comparators_path = Path("src/molalchemy/bingo/comparators.py")
 
     if not comparators_path.exists():
         print(f"Error: {comparators_path} not found!")

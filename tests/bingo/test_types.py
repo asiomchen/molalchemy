@@ -2,8 +2,8 @@
 
 from sqlalchemy import Column, Integer, String, MetaData, Table
 
-from chemschema.bingo.types import BingoMol, BingoBinaryMol
-from chemschema.bingo.comparators import BingoMolComparator
+from molalchemy.bingo.types import BingoMol, BingoBinaryMol
+from molalchemy.bingo.comparators import BingoMolComparator
 
 
 class TestBingoMol:

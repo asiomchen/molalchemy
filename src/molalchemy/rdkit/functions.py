@@ -1,6 +1,5 @@
 from sqlalchemy.sql import func, cast
 from sqlalchemy.sql.elements import ClauseElement, ColumnElement
-from .types import CString
 
 
 class rdkit_func:
@@ -18,6 +17,9 @@ class rdkit_func:
 
     @staticmethod
     def mol_from_smiles(smiles: str, **kwargs) -> ClauseElement:
+        # Import CString here to avoid circular import
+        from .types import CString
+
         return func.mol_from_smiles(cast(smiles, CString), **kwargs)
 
     @staticmethod

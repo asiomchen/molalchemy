@@ -3,7 +3,7 @@
 from sqlalchemy import Column, Integer, String, MetaData, Table
 from sqlalchemy.sql import select
 
-from chemschema.bingo.types import BingoMol, BingoBinaryMol
+from molalchemy.bingo.types import BingoMol, BingoBinaryMol
 
 
 class TestBingoMolComparator:

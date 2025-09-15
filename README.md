@@ -1,13 +1,13 @@
-![ChemSchema Logo](docs/img/logo-full.svg)
+![molalchemy Logo](docs/img/logo-full.svg)
 <p align="center">
-    <em>ChemSchema - Making chemical databases as easy as regular databases! 🧪✨</em>
+    <em>molalchemy - Making chemical databases as easy as regular databases! 🧪✨</em>
 </p>
-[![pypi version](https://img.shields.io/pypi/v/chemschema.svg)](https://pypi.org/project/chemschema/)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/chemschema)
-[![PyPI Downloads](https://static.pepy.tech/personalized-badge/chemschema?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/chemschema)
-[![license](https://img.shields.io/github/license/asiomchen/chemschema)](LICENSE)
+[![pypi version](https://img.shields.io/pypi/v/molalchemy.svg)](https://pypi.org/project/molalchemy/)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/molalchemy)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/molalchemy?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/molalchemy)
+[![license](https://img.shields.io/github/license/asiomchen/molalchemy)](LICENSE)
 [![python versions](https://shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)]()
-![Codecov (with branch)](https://img.shields.io/codecov/c/github/asiomchen/chemschema/main)
+![Codecov (with branch)](https://img.shields.io/codecov/c/github/asiomchen/molalchemy/main)
 [![powered by rdkit](https://img.shields.io/badge/Powered%20by-RDKit-3838ff.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEXc3NwUFP8UPP9kZP+MjP+0tP////9ZXZotAAAAAXRSTlMAQObYZgAAAAFiS0dEBmFmuH0AAAAHdElNRQfmAwsPGi+MyC9RAAAAQElEQVQI12NgQABGQUEBMENISUkRLKBsbGwEEhIyBgJFsICLC0iIUdnExcUZwnANQWfApKCK4doRBsKtQFgKAQC5Ww1JEHSEkAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wMy0xMVQxNToyNjo0NyswMDowMDzr2J4AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDMtMTFUMTU6MjY6NDcrMDA6MDBNtmAiAAAAAElFTkSuQmCC)](https://www.rdkit.org/)
 [![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-306998?logo=python&logoColor=white)](https://www.sqlalchemy.org/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
@@ -15,7 +15,7 @@
 
 **Extensions for SQLAlchemy to work with chemical cartridges**
 
-ChemSchema provides seamless integration between python and chemical databases, enabling powerful chemical structure storage, indexing, and querying capabilities. The library supports popular chemical cartridges (Bingo PostgreSQL & RDKit PostgreSQL) and provides a unified API for chemical database operations.
+molalchemy provides seamless integration between python and chemical databases, enabling powerful chemical structure storage, indexing, and querying capabilities. The library supports popular chemical cartridges (Bingo PostgreSQL & RDKit PostgreSQL) and provides a unified API for chemical database operations.
 
 
 **This project was originally supposed to be a part of RDKit UGM 2025 hackathon, but COVID had other plans for me. Currently it is in alpha stage as a proof of concept. Contributions are welcome!**
@@ -35,17 +35,17 @@ ChemSchema provides seamless integration between python and chemical databases, 
 ### Using pip
 
 ```bash
-pip install chemschema
+pip install molalchemy
 ```
 
 ### From source
 
 ```bash
-pip install git+https://github.com/asiomchen/chemschema.git
+pip install git+https://github.com/asiomchen/molalchemy.git
 
 # or clone the repo and install
-git clone https://github.com/asiomchen/chemschema.git
-cd chemschema
+git clone https://github.com/asiomchen/molalchemy.git
+cd molalchemy
 pip install .
 ```
 
@@ -54,7 +54,7 @@ pip install .
 
 ### Prerequisites
 
-ChemSchema requires:
+molalchemy requires:
 - Python 3.10+
 - Running PostgreSQL with chemical cartridge (Bingo or RDKit)
 - SQLAlchemy 2.0+
@@ -66,7 +66,7 @@ ChemSchema requires:
 ```python
 from sqlalchemy import Integer, String, create_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
-from chemschema.bingo.types import BingoMol
+from molalchemy.bingo.types import BingoMol
 
 class Base(DeclarativeBase):
     pass
@@ -87,7 +87,7 @@ Base.metadata.create_all(engine)
 
 ```python
 from sqlalchemy.orm import sessionmaker
-from chemschema.bingo.functions import bingo_func
+from molalchemy.bingo.functions import bingo_func
 
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -124,19 +124,19 @@ molecular_weights = session.query(
 ### Bingo Cartridge
 
 ```python
-from chemschema.bingo.types import (
+from molalchemy.bingo.types import (
     BingoMol,              # Text-based molecule storage (SMILES/Molfile)
     BingoBinaryMol,        # Binary molecule storage with format conversion
     BingoReaction,         # Reaction storage (reaction SMILES/Rxnfile)
     BingoBinaryReaction    # Binary reaction storage
 )
-from chemschema.bingo.index import (
+from molalchemy.bingo.index import (
     BingoMolIndex,         # Molecule indexing
     BingoBinaryMolIndex,   # Binary molecule indexing
     BingoRxnIndex,         # Reaction indexing
     BingoBinaryRxnIndex    # Binary reaction indexing
 )
-from chemschema.bingo.functions import (
+from molalchemy.bingo.functions import (
     bingo_func,            # Molecule functions
     bingo_rxn_func         # Reaction functions
 )
@@ -145,15 +145,15 @@ from chemschema.bingo.functions import (
 ### RDKit Cartridge
 
 ```python
-from chemschema.rdkit.types import (
+from molalchemy.rdkit.types import (
     RDKitMol,              # RDKit molecule type
     # Additional types available...
 )
-from chemschema.rdkit.index import (
+from molalchemy.rdkit.index import (
     RDKitMolIndex,         # RDKit molecule indexing
     # Additional indices available...
 )
-from chemschema.rdkit.functions import (
+from molalchemy.rdkit.functions import (
     rdkit_func,            # RDKit functions
     # More function collections...
 )
@@ -164,8 +164,8 @@ from chemschema.rdkit.functions import (
 ### Chemical Indexing
 
 ```python
-from chemschema.bingo.index import BingoMolIndex
-from chemschema.bingo.types import BingoMol
+from molalchemy.bingo.index import BingoMolIndex
+from molalchemy.bingo.types import BingoMol
 
 class Molecule(Base):
     __tablename__ = 'molecules'
@@ -183,7 +183,7 @@ class Molecule(Base):
 ### Binary Storage with Format Conversion
 
 ```python
-from chemschema.bingo.types import BingoBinaryMol
+from molalchemy.bingo.types import BingoBinaryMol
 
 class OptimizedMolecule(Base):
     __tablename__ = 'optimized_molecules'
@@ -202,9 +202,9 @@ class OptimizedMolecule(Base):
 ### Reaction Storage and Searching
 
 ```python
-from chemschema.bingo.types import BingoReaction
-from chemschema.bingo.functions import bingo_rxn_func
-from chemschema.bingo.index import BingoRxnIndex
+from molalchemy.bingo.types import BingoReaction
+from molalchemy.bingo.functions import bingo_rxn_func
+from molalchemy.bingo.index import BingoRxnIndex
 
 class ChemicalReaction(Base):
     __tablename__ = 'reactions'
@@ -231,7 +231,7 @@ oxidations = session.query(ChemicalReaction).filter(
 `bingo_func` provides all static methods for functional-style queries. Under the hood it uses SQLAlchemy's `func` to call the corresponding database functions, but provides type hints and syntax highlighting in IDEs.
 
 ```python
-from chemschema.bingo.functions import bingo_func
+from molalchemy.bingo.functions import bingo_func
 
 # Calculate molecular properties
 results = session.query(
@@ -260,8 +260,8 @@ inchi_keys = session.query(
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/asiomchen/chemschema.git
-cd chemschema
+git clone https://github.com/asiomchen/molalchemy.git
+cd molalchemy
 ```
 
 2. Install dependencies:
@@ -284,7 +284,7 @@ uv run pytest
 uv run pytest tests/bingo/
 
 # Run with coverage
-uv run pytest --cov=chemschema
+uv run pytest --cov=molalchemy
 ```
 
 ### Code Quality
@@ -299,15 +299,15 @@ This project uses modern Python development tools:
 
 - **[📋 Project Roadmap](ROADMAP.md)** - Development phases, timeline, and contribution opportunities
 - **[🤝 Contributing Guide](CONTRIBUTING.md)** - How to contribute to the project
-- **[🔧 API Reference](https://chemschema.readthedocs.io/)** - Complete API documentation
+- **[🔧 API Reference](https://molalchemy.readthedocs.io/)** - Complete API documentation
 - **[🐳 Bingo Manual](https://lifescience.opensource.epam.com/bingo/user-manual-postgres.html)** - Bingo PostgreSQL cartridge guide
 - **[⚛️ RDKit Manual](https://www.rdkit.org/docs/Cartridge.html)** - RDKit PostgreSQL cartridge guide
 
 ## 🤝 Contributing
 
-We welcome contributions! ChemSchema offers many opportunities for developers interested in chemical informatics:
+We welcome contributions! molalchemy offers many opportunities for developers interested in chemical informatics:
 
-- **🔰 New to the project?** Check out [good first issues](https://github.com/asiomchen/chemschema/labels/good%20first%20issue)
+- **🔰 New to the project?** Check out [good first issues](https://github.com/asiomchen/molalchemy/labels/good%20first%20issue)
 - **� Chemical expertise?** Help complete RDKit integration or add ChemAxon support  
 - **🐳 DevOps skills?** Optimize our Docker containers and CI/CD pipeline
 - **📚 Love documentation?** Create tutorials and improve API docs
@@ -327,10 +327,10 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 ## 📧 Contact
 
 - **Author**: Anton Siomchen
-- **Email**: anton.siomchen+chemschema@gmail.com
+- **Email**: anton.siomchen+molalchemy@gmail.com
 - **GitHub**: [@asiomchen](https://github.com/asiomchen)
 - **LinkedIn**: [Anton Siomchen](https://www.linkedin.com/in/anton-siomchen/)
 
 ---
 
-**ChemSchema** - Making chemical databases as easy as regular databases! 🧪✨
+**molalchemy** - Making chemical databases as easy as regular databases! 🧪✨

@@ -15,7 +15,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/"><title
-     id="title26">chemschema</title><sodipodi:namedview
+     id="title26">molalchemy</title><sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#000000"
      borderopacity="0"
@@ -30,7 +30,7 @@
      showgrid="false"
      inkscape:zoom="0.1767767"
      inkscape:cx="1414.2136"
-     inkscape:cy="-48.083261"
+     inkscape:cy="857.01342"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
@@ -45,7 +45,7 @@
        inkscape:locked="false" /></sodipodi:namedview><metadata
      id="metadata12"><rdf:RDF><cc:Work
          rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>chemschema</dc:title><dc:creator><cc:Agent><dc:title>Anton Siomchen</dc:title></cc:Agent></dc:creator></cc:Work></rdf:RDF></metadata><defs
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>molalchemy</dc:title><dc:creator><cc:Agent><dc:title>Anton Siomchen</dc:title></cc:Agent></dc:creator></cc:Work></rdf:RDF></metadata><defs
      id="defs10"><rect
        x="3280"
        y="656"
@@ -92,4 +92,4 @@
      transform="matrix(10.59348,0,0,10.59348,-228.16907,-259.05343)"><tspan
        x="97.226562"
        y="79.048018"
-       id="tspan1">ChemSchema</tspan></text></svg>
+       id="tspan1">MolAlchemy</tspan></text></svg>

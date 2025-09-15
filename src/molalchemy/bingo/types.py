@@ -5,7 +5,7 @@ chemical molecules and reactions in PostgreSQL using the Bingo cartridge.
 """
 
 from sqlalchemy.types import UserDefinedType
-from chemschema.bingo.comparators import BingoMolComparator, BingoRxnComparator
+from molalchemy.bingo.comparators import BingoMolComparator, BingoRxnComparator
 from .functions import bingo_func
 from typing import Literal
 
@@ -28,7 +28,7 @@ class BingoMol(UserDefinedType):
     --------
     >>> from sqlalchemy import Integer, String
     >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-    >>> from chemschema.bingo.types import BingoMol
+    >>> from molalchemy.bingo.types import BingoMol
     >>>
     >>> class Base(DeclarativeBase):
     ...     pass
@@ -41,7 +41,7 @@ class BingoMol(UserDefinedType):
     ...     name: Mapped[str] = mapped_column(String(100))
     >>>
     >>> # Usage in queries
-    >>> from chemschema.bingo.functions import bingo_func
+    >>> from molalchemy.bingo.functions import bingo_func
     >>>
     >>> # Find molecules containing benzene ring
     >>> benzene_derivatives = session.query(Molecule).filter(
@@ -90,7 +90,7 @@ class BingoBinaryMol(UserDefinedType):
     --------
     >>> from sqlalchemy import Integer, String
     >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-    >>> from chemschema.bingo.types import BingoBinaryMol
+    >>> from molalchemy.bingo.types import BingoBinaryMol
     >>>
     >>> class Base(DeclarativeBase):
     ...     pass
@@ -226,7 +226,7 @@ class BingoReaction(UserDefinedType):
     --------
     >>> from sqlalchemy import Integer, String
     >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-    >>> from chemschema.bingo.types import BingoReaction
+    >>> from molalchemy.bingo.types import BingoReaction
     >>>
     >>> class Base(DeclarativeBase):
     ...     pass
@@ -239,7 +239,7 @@ class BingoReaction(UserDefinedType):
     ...     name: Mapped[str] = mapped_column(String(200))
     >>>
     >>> # Usage in queries
-    >>> from chemschema.bingo.functions import bingo_rxn_func
+    >>> from molalchemy.bingo.functions import bingo_rxn_func
     >>>
     >>> # Find reactions with specific substructure
     >>> oxidation_reactions = session.query(Reaction).filter(
@@ -289,7 +289,7 @@ class BingoBinaryReaction(UserDefinedType):
     --------
     >>> from sqlalchemy import Integer, String
     >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-    >>> from chemschema.bingo.types import BingoBinaryReaction
+    >>> from molalchemy.bingo.types import BingoBinaryReaction
     >>>
     >>> class Base(DeclarativeBase):
     ...     pass
@@ -303,7 +303,7 @@ class BingoBinaryReaction(UserDefinedType):
     >>>
     >>> # Usage: Binary storage provides faster searching and less storage space
     >>> # Input as reaction SMILES, stored as binary, retrieved as binary
-    >>> from chemschema.bingo.functions import bingo_rxn_func
+    >>> from molalchemy.bingo.functions import bingo_rxn_func
     >>>
     >>> # Convert to binary format when inserting
     >>> rxn = Reaction(name="hydrogenation")

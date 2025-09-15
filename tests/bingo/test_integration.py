@@ -4,9 +4,9 @@ import re
 from sqlalchemy import Column, Integer, String, MetaData, Table, select, and_, or_
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from chemschema.bingo.types import BingoMol, BingoBinaryMol
-from chemschema.bingo.functions import bingo_func
-from chemschema.bingo.index import BingoMolIndex, BingoBinaryMolIndex
+from molalchemy.bingo.types import BingoMol, BingoBinaryMol
+from molalchemy.bingo.functions import bingo_func
+from molalchemy.bingo.index import BingoMolIndex, BingoBinaryMolIndex
 
 
 class TestBingoQueryIntegration:

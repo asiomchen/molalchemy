@@ -1,12 +1,12 @@
 # Chemical Functions
 
-The `chemschema.bingo.functions` module provides collections of Bingo PostgreSQL functions for molecular and reaction structure search and analysis.
+The `molalchemy.bingo.functions` module provides collections of Bingo PostgreSQL functions for molecular and reaction structure search and analysis.
 
 These function classes wrap Bingo PostgreSQL functions, enabling various chemical structure operations including substructure search, exact matching, similarity search, format conversions, and chemical property calculations directly from SQLAlchemy queries.
 
 ## Function Classes
 
-::: chemschema.bingo.functions
+::: molalchemy.bingo.functions
     options:
       heading_level: 3
       show_source: false

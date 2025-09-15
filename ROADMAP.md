@@ -1,10 +1,10 @@
-# ChemSchema Project Roadmap
+# molalchemy Project Roadmap
 
-This document outlines the development roadmap for ChemSchema, a SQLAlchemy extension for working with chemical cartridges in PostgreSQL. The roadmap is organized by development phases and includes specific opportunities for contributors.
+This document outlines the development roadmap for molalchemy, a SQLAlchemy extension for working with chemical cartridges in PostgreSQL. The roadmap is organized by development phases and includes specific opportunities for contributors.
 
 ## 🎯 Project Vision
 
-ChemSchema aims to be the **definitive Python library** for chemical database operations, providing:
+molalchemy aims to be the **definitive Python library** for chemical database operations, providing:
 - Seamless integration between Python and chemical databases
 - Support for all major chemical cartridges (Bingo, RDKit, ChemAxon, etc.)
 - Type-safe, modern SQLAlchemy 2.0+ API with full IDE support (type hints, autocompletion)
@@ -51,8 +51,8 @@ ChemSchema aims to be the **definitive Python library** for chemical database op
 We maintain Docker containers for each supported cartridge to ensure easy deployment and consistent environments.
 
 #### **Existing Containers**
-- `chemschema/bingo-postgres` - PostgreSQL with Bingo cartridge
-- `chemschema/rdkit-postgres` - PostgreSQL with RDKit cartridge
+- `molalchemy/bingo-postgres` - PostgreSQL with Bingo cartridge
+- `molalchemy/rdkit-postgres` - PostgreSQL with RDKit cartridge
 
 
 
@@ -70,8 +70,8 @@ We maintain Docker containers for each supported cartridge to ensure easy deploy
 
 ```bash
 # Clone and setup
-git clone https://github.com/asiomchen/chemschema.git
-cd chemschema
+git clone https://github.com/asiomchen/molalchemy.git
+cd molalchemy
 uv sync
 
 # Start development database
@@ -109,7 +109,7 @@ uv run mkdocs serve
 ## 🤝 How to Contribute
 
 ### **Getting Started**
-1. Check the [issues page](https://github.com/asiomchen/chemschema/issues) for good first issues
+1. Check the [issues page](https://github.com/asiomchen/molalchemy/issues) for good first issues
 2. Read the [Contributing Guide](contributing.md)
 3. Join discussions in GitHub Discussions
 4. Set up your development environment
@@ -124,10 +124,10 @@ uv run mkdocs serve
 ### **Support**
 - GitHub Discussions for questions
 - GitHub Issues for bugs and features
-- Direct contact: anton.siomchen+chemschema@gmail.com
+- Direct contact: anton.siomchen+molalchemy@gmail.com
 
 ---
 
-**ChemSchema** - Making chemical databases as easy as regular databases! 🧪✨
+**molalchemy** - Making chemical databases as easy as regular databases! 🧪✨
 
 *Last updated: September 2025*

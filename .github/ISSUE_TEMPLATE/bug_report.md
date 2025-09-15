@@ -1,6 +1,6 @@
 ---
 name: 🐛 Bug Report
-about: Create a report to help us improve ChemSchema
+about: Create a report to help us improve molalchemy
 title: '[BUG] '
 labels: ['bug']
 assignees: ''
@@ -25,13 +25,13 @@ What actually happened instead.
 **Minimal code example:**
 ```python
 # Provide a minimal code example that reproduces the issue
-from chemschema.bingo.types import BingoMol
+from molalchemy.bingo.types import BingoMol
 # ... rest of the code
 ```
 
 ## 🌍 Environment
 
-**ChemSchema version:**
+**molalchemy version:**
 - Version: [e.g. 0.1.0]
 
 **Python environment:**

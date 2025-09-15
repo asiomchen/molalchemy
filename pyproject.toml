@@ -1,5 +1,5 @@
 [project]
-name = "chemschema"
+name = "molalchemy"
 version = "0.0.1"
 description = "Extensions for SQLAlchemy to work with chemical cartridges"
 license = {text = "Apache-2.0"}
@@ -31,8 +31,8 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
 ]
 [project.urls]
-homepage = "https://github.com/asiomchen/chemschema"
-repository = "https://github.com/asiomchen/chemschema"
+homepage = "https://github.com/asiomchen/molalchemy"
+repository = "https://github.com/asiomchen/molalchemy"
 
 [build-system]
 requires = ["uv_build>=0.8.13,<0.9.0"]

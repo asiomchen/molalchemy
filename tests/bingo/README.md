@@ -1,6 +1,6 @@
 # Bingo Query Structure Tests
 
-This directory contains comprehensive tests for the Bingo query structure components in ChemSchema.
+This directory contains comprehensive tests for the Bingo query structure components in MolAlchemy.
 
 ## Test Coverage
 
@@ -58,7 +58,7 @@ tests/bingo/
 pytest tests/bingo/ -v
 
 # Run with coverage
-pytest tests/bingo/ --cov=src/chemschema/bingo --cov-report=term-missing
+pytest tests/bingo/ --cov=src/molalchemy/bingo --cov-report=term-missing
 
 # Run specific test file
 pytest tests/bingo/test_types.py -v

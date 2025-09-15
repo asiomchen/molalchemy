@@ -36,8 +36,8 @@ class BingoMolIndex(Index):
     --------
     >>> from sqlalchemy import Integer
     >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-    >>> from chemschema.bingo.index import BingoMolIndex
-    >>> from chemschema.bingo.types import BingoMol
+    >>> from molalchemy.bingo.index import BingoMolIndex
+    >>> from molalchemy.bingo.types import BingoMol
     >>>
     >>> class Base(DeclarativeBase):
     ...     pass
@@ -89,8 +89,8 @@ class BingoBinaryMolIndex(Index):
     --------
     >>> from sqlalchemy import Integer
     >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-    >>> from chemschema.bingo.index import BingoBinaryMolIndex
-    >>> from chemschema.bingo.types import BingoBinaryMol
+    >>> from molalchemy.bingo.index import BingoBinaryMolIndex
+    >>> from molalchemy.bingo.types import BingoBinaryMol
     >>>
     >>> class Base(DeclarativeBase):
     ...     pass
@@ -143,8 +143,8 @@ class BingoRxnIndex(Index):
     --------
     >>> from sqlalchemy import Integer
     >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-    >>> from chemschema.bingo.index import BingoRxnIndex
-    >>> from chemschema.bingo.types import BingoRxn
+    >>> from molalchemy.bingo.index import BingoRxnIndex
+    >>> from molalchemy.bingo.types import BingoRxn
     >>>
     >>> class Base(DeclarativeBase):
     ...     pass
@@ -197,8 +197,8 @@ class BingoBinaryRxnIndex(Index):
     --------
     >>> from sqlalchemy import Integer
     >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-    >>> from chemschema.bingo.index import BingoBinaryRxnIndex
-    >>> from chemschema.bingo.types import BingoBinaryRxn
+    >>> from molalchemy.bingo.index import BingoBinaryRxnIndex
+    >>> from molalchemy.bingo.types import BingoBinaryRxn
     >>>
     >>> class Base(DeclarativeBase):
     ...     pass

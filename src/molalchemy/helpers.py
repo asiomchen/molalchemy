@@ -1,10 +1,10 @@
-from chemschema.bingo import (
+from molalchemy.bingo import (
     BingoBinaryMol,
     BingoMol,
     BingoReaction,
     BingoBinaryReaction,
 )
-from chemschema.bingo.proxy import BingoRxnProxy, BingoMolProxy
+from molalchemy.bingo.proxy import BingoRxnProxy, BingoMolProxy
 from sqlalchemy import Column
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 
@@ -20,20 +20,20 @@ def bingo_col(column: Column | InstrumentedAttribute) -> BingoMolProxy:
     Parameters
     ----------
     column : sqlalchemy.Column | sqlalchemy.orm.attributes.InstrumentedAttribute
-        A SQLAlchemy column that should be of type `chemschema.bingo.types.BingoMol`
-        or `chemschema.bingo.types.BingoBinaryMol`.
+        A SQLAlchemy column that should be of type `molalchemy.bingo.types.BingoMol`
+        or `molalchemy.bingo.types.BingoBinaryMol`.
 
     Returns
     -------
-    chemschema.bingo.proxy.BingoMolProxy
+    molalchemy.bingo.proxy.BingoMolProxy
         A proxy object for performing Bingo molecule operations on the column.
 
     Raises
     ------
     TypeError
         If the column is not a SQLAlchemy Column or InstrumentedAttribute, or if
-        the column type is not `chemschema.bingo.types.BingoMol` or
-        `chemschema.bingo.types.BingoBinaryMol`.
+        the column type is not `molalchemy.bingo.types.BingoMol` or
+        `molalchemy.bingo.types.BingoBinaryMol`.
     """
     if isinstance(column, (InstrumentedAttribute, Column)):
         if isinstance(column.type, BingoMol) or isinstance(column.type, BingoBinaryMol):
@@ -57,20 +57,20 @@ def bingo_rxn_col(column: Column | InstrumentedAttribute) -> BingoRxnProxy:
     Parameters
     ----------
     column : sqlalchemy.Column
-        A SQLAlchemy column that should be of type `chemschema.bingo.types.BingoReaction`
-        or `chemschema.bingo.types.BingoBinaryReaction`.
+        A SQLAlchemy column that should be of type `molalchemy.bingo.types.BingoReaction`
+        or `molalchemy.bingo.types.BingoBinaryReaction`.
 
     Returns
     -------
-    chemschema.bingo.proxy.BingoRxnProxy
+    molalchemy.bingo.proxy.BingoRxnProxy
         A proxy object for performing Bingo reaction operations on the column.
 
     Raises
     ------
     TypeError
         If the column is not a SQLAlchemy Column or InstrumentedAttribute, or if
-        the column type is not `chemschema.bingo.types.BingoReaction` or
-        `chemschema.bingo.types.BingoBinaryReaction`.
+        the column type is not `molalchemy.bingo.types.BingoReaction` or
+        `molalchemy.bingo.types.BingoBinaryReaction`.
     """
     if isinstance(column, (InstrumentedAttribute, Column)):
         if isinstance(column.type, BingoReaction) or isinstance(

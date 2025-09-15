@@ -4,8 +4,8 @@ from sqlalchemy import Column, Integer, String, MetaData, Table
 from sqlalchemy.sql import select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from chemschema.bingo.functions import bingo_func
-from chemschema.bingo.types import BingoMol
+from molalchemy.bingo.functions import bingo_func
+from molalchemy.bingo.types import BingoMol
 
 
 class TestBingoFunc:

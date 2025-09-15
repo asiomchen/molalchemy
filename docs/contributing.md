@@ -1,6 +1,6 @@
-# Contributing to ChemSchema
+# Contributing to MolAlchemy
 
-Welcome to ChemSchema! We're excited to have you contribute to making chemical databases more accessible in Python. This guide will help you get started with contributing to the project.
+Welcome to MolAlchemy! We're excited to have you contribute to making chemical databases more accessible in Python. This guide will help you get started with contributing to the project.
 
 ## 🚀 Quick Start for Contributors
 
@@ -14,8 +14,8 @@ Welcome to ChemSchema! We're excited to have you contribute to making chemical d
 
 ```bash
 # 1. Fork and clone the repository
-git clone https://github.com/asiomchen/chemschema.git
-cd chemschema
+git clone https://github.com/asiomchen/molalchemy.git
+cd molalchemy
 
 # 2. Install dependencies with uv
 uv sync
@@ -41,14 +41,14 @@ Many RDKit PostgreSQL functions are not yet wrapped in our Python API. This is a
 
 **Steps:**
 1. Research the PostgreSQL function in RDKit docs
-2. Add the function to `src/chemschema/rdkit/functions.py`
+2. Add the function to `src/molalchemy/rdkit/functions.py`
 3. Add type hints and docstrings
 4. Create comprehensive tests
 5. Add usage examples
 
 #### Performance Benchmarking
 
-Create benchmarks to measure and track ChemSchema performance over time.
+Create benchmarks to measure and track MolAlchemy performance over time.
 
 **Tasks:**
 - Design realistic chemical database scenarios
@@ -61,7 +61,7 @@ Create benchmarks to measure and track ChemSchema performance over time.
 Improve error messages and create custom exception classes for better debugging.
 
 **Tasks:**
-- Create ChemSchema-specific exception hierarchy
+- Create MolAlchemy-specific exception hierarchy
 - Improve error message clarity
 - Add error handling guides
 - Test error scenarios
@@ -71,7 +71,7 @@ Improve error messages and create custom exception classes for better debugging.
 Improve error messages and create custom exception classes for better debugging.
 
 **Tasks:**
-- Create ChemSchema-specific exception hierarchy
+- Create MolAlchemy-specific exception hierarchy
 - Improve error message clarity
 - Add error handling guides
 - Test error scenarios
@@ -84,7 +84,7 @@ Improve error messages and create custom exception classes for better debugging.
 Add support for ChemAxon's JChem PostgreSQL cartridge.
 
 **This is a major contribution that would:**
-- Significantly expand ChemSchema's capabilities
+- Significantly expand MolAlchemy's capabilities
 - Require learning JChem APIs
 - Need comprehensive testing
 - Require detailed documentation
@@ -144,7 +144,7 @@ uv run pytest tests/bingo/ -v
 uv run pytest tests/rdkit/ -v
 
 # Run with coverage
-uv run pytest tests/ --cov=src/chemschema --cov-report=term-missing
+uv run pytest tests/ --cov=src/molalchemy --cov-report=term-missing
 
 # Test specific function
 uv run pytest tests/bingo/test_functions.py::test_substructure -v
@@ -258,8 +258,8 @@ Brief description of changes
 
 ### Project Structure
 ```
-chemschema/
-├── src/chemschema/          # Main package
+molalchemy/
+├── src/molalchemy/          # Main package
 │   ├── bingo/              # Bingo cartridge integration
 │   │   ├── types.py        # SQLAlchemy types
 │   │   ├── functions.py    # Database functions
@@ -410,7 +410,7 @@ docker-compose up --build -d
 ### Where to Get Help
 - **GitHub Discussions** - General questions and design discussions
 - **GitHub Issues** - Bug reports and feature requests
-- **Direct Contact** - anton.siomchen+chemschema@gmail.com for complex questions
+- **Direct Contact** - anton.siomchen+molalchemy@gmail.com for complex questions
 
 ### How to Ask Good Questions
 1. **Provide context** - What are you trying to achieve?
@@ -423,8 +423,8 @@ docker-compose up --build -d
 
 ## 📞 Contact
 
-- **Project Lead**: Anton Siomchen anton.siomchen+chemschema@gmail.com
+- **Project Lead**: Anton Siomchen anton.siomchen+molalchemy@gmail.com
 - **GitHub**: [@asiomchen](https://github.com/asiomchen)
 - **LinkedIn**: [Anton Siomchen](https://www.linkedin.com/in/anton-siomchen/)
 
-Thank you for contributing to ChemSchema! Together, we're making chemical databases more accessible to everyone. 🧪✨
+Thank you for contributing to MolAlchemy! Together, we're making chemical databases more accessible to everyone. 🧪✨

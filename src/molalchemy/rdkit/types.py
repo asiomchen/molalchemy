@@ -1,5 +1,5 @@
 from sqlalchemy.types import UserDefinedType
-from chemschema.rdkit.comparators import RdkitMolComparator, RdkitFPComparator
+from molalchemy.rdkit.comparators import RdkitMolComparator, RdkitFPComparator
 from .functions import rdkit_func
 from typing import Literal
 

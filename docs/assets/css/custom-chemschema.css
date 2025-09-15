@@ -1,84 +1,84 @@
 /* Light mode colors */
 :root {
-  --chemschema-primary: #138c53;
-  --chemschema-secondary: #343a40;
-  --chemschema-light-bg: #138c53;
-  --chemschema-light-accent: #343a40;
+  --molalchemy-primary: #138c53;
+  --molalchemy-secondary: #343a40;
+  --molalchemy-light-bg: #138c53;
+  --molalchemy-light-accent: #343a40;
 
   /* Primary color shades */
-  --md-primary-fg-color: var(--chemschema-primary);
-  --md-primary-fg-color--light: var(--chemschema-primary);
-  --md-primary-fg-color--dark: var(--chemschema-primary);
-  --md-primary-bg-color: var(--chemschema-secondary);
-  --md-primary-bg-color--light: var(--chemschema-secondary);
-  --md-text-link-color: var(--chemschema-secondary);
+  --md-primary-fg-color: var(--molalchemy-primary);
+  --md-primary-fg-color--light: var(--molalchemy-primary);
+  --md-primary-fg-color--dark: var(--molalchemy-primary);
+  --md-primary-bg-color: var(--molalchemy-secondary);
+  --md-primary-bg-color--light: var(--molalchemy-secondary);
+  --md-text-link-color: var(--molalchemy-secondary);
 
   /* Accent color shades */
-  --md-accent-fg-color: var(--chemschema-secondary);
-  --md-accent-fg-color--transparent: var(--chemschema-secondary);
-  --md-accent-bg-color: var(--chemschema-secondary);
-  --md-accent-bg-color--light: var(--chemschema-secondary);
+  --md-accent-fg-color: var(--molalchemy-secondary);
+  --md-accent-fg-color--transparent: var(--molalchemy-secondary);
+  --md-accent-bg-color: var(--molalchemy-secondary);
+  --md-accent-bg-color--light: var(--molalchemy-secondary);
 
   /* Code block colors for light mode */
   --md-code-bg-color: hsla(0, 0%, 96%, 1);
   --md-code-fg-color: hsla(200, 18%, 26%, 1);
 
   /* Footer */
-  --md-footer-bg-color: var(--chemschema-primary);
-  --md-footer-fg-color: var(--chemschema-secondary);
-  --md-footer-fg-color--light: var(--chemschema-secondary);
-  --md-footer-fg-color--lighter: var(--chemschema-secondary);
+  --md-footer-bg-color: var(--molalchemy-primary);
+  --md-footer-fg-color: var(--molalchemy-secondary);
+  --md-footer-fg-color--light: var(--molalchemy-secondary);
+  --md-footer-fg-color--lighter: var(--molalchemy-secondary);
 }
 
 /* Dark mode colors */
 [data-md-color-scheme="slate"] {
-  --chemschema-primary: #138c53;
-  --chemschema-secondary: #343a40;
-  --chemschema-dark-bg: #138c53;
-  --chemschema-dark-accent: #343a40;
+  --molalchemy-primary: #138c53;
+  --molalchemy-secondary: #343a40;
+  --molalchemy-dark-bg: #138c53;
+  --molalchemy-dark-accent: #343a40;
 
   /* Primary color shades for dark mode */
-  --md-primary-fg-color: var(--chemschema-primary);
-  --md-primary-fg-color--light: var(--chemschema-primary);
-  --md-primary-fg-color--dark: var(--chemschema-primary);
-  --md-primary-bg-color: var(--chemschema-secondary);
-  --md-primary-bg-color--light: var(--chemschema-secondary);
-  --md-text-link-color: var(--chemschema-primary);
+  --md-primary-fg-color: var(--molalchemy-primary);
+  --md-primary-fg-color--light: var(--molalchemy-primary);
+  --md-primary-fg-color--dark: var(--molalchemy-primary);
+  --md-primary-bg-color: var(--molalchemy-secondary);
+  --md-primary-bg-color--light: var(--molalchemy-secondary);
+  --md-text-link-color: var(--molalchemy-primary);
 
   /* Accent color shades for dark mode */
-  --md-accent-fg-color: var(--chemschema-primary);
-  --md-accent-fg-color--transparent: var(--chemschema-primary);
-  --md-accent-bg-color: var(--chemschema-primary);
-  --md-accent-bg-color--light: var(--chemschema-primary);
+  --md-accent-fg-color: var(--molalchemy-primary);
+  --md-accent-fg-color--transparent: var(--molalchemy-primary);
+  --md-accent-bg-color: var(--molalchemy-primary);
+  --md-accent-bg-color--light: var(--molalchemy-primary);
 
   /* Code block colors for dark mode */
   --md-code-bg-color: hsla(0, 0%, 15%, 1);
   --md-code-fg-color: hsla(0, 0%, 85%, 1);
 
   /* Footer for dark mode */
-  --md-footer-bg-color: var(--chemschema-primary);
-  --md-footer-fg-color: var(--chemschema-secondary);
-  --md-footer-fg-color--light: var(--chemschema-secondary);
-  --md-footer-fg-color--lighter: var(--chemschema-secondary);
+  --md-footer-bg-color: var(--molalchemy-primary);
+  --md-footer-fg-color: var(--molalchemy-secondary);
+  --md-footer-fg-color--light: var(--molalchemy-secondary);
+  --md-footer-fg-color--lighter: var(--molalchemy-secondary);
 }
 
 /* Header styling for both modes */
 .md-header {
-  background-image: linear-gradient(to right, var(--chemschema-primary), var(--chemschema-secondary));
+  background-image: linear-gradient(to right, var(--molalchemy-primary), var(--molalchemy-secondary));
 }
 
 .md-footer {
-  background-image: linear-gradient(to right, var(--chemschema-primary), var(--chemschema-secondary));
+  background-image: linear-gradient(to right, var(--molalchemy-primary), var(--molalchemy-secondary));
 }
 
 /* Tabs styling for light mode */
 .md-tabs {
-  background-image: linear-gradient(to right, var(--chemschema-light-bg, #F4F6F9), var(--chemschema-light-accent, #d1e2c3));
+  background-image: linear-gradient(to right, var(--molalchemy-light-bg, #F4F6F9), var(--molalchemy-light-accent, #d1e2c3));
 }
 
 /* Tabs styling for dark mode */
 [data-md-color-scheme="slate"] .md-tabs {
-  background-image: linear-gradient(to right, var(--chemschema-dark-bg), var(--chemschema-dark-accent));
+  background-image: linear-gradient(to right, var(--molalchemy-dark-bg), var(--molalchemy-dark-accent));
 }
 
 .md-header__topic {
@@ -145,12 +145,12 @@
 }
 
 [data-md-color-scheme="slate"] .md-tabs__link--active {
-  color: var(--chemschema-primary);
+  color: var(--molalchemy-primary);
 }
 
 /* Ensure proper contrast for links in dark mode */
 [data-md-color-scheme="slate"] .md-content a {
-  color: var(--chemschema-primary);
+  color: var(--molalchemy-primary);
 }
 
 [data-md-color-scheme="slate"] .md-content a:hover {
