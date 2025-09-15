@@ -102,7 +102,6 @@ class RdkitReaction(UserDefinedType):
         from rdkit import Chem
 
         del dialect
-        print(f"Processing value: {value} of type {type(value)}")
         if value is None:
             return None
         if self.return_type == "mol":

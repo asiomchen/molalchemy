@@ -9,15 +9,15 @@ from molalchemy.bingo.types import (
 import pytest
 
 
-@pytest.fixture
-@pytest.mark.parametrize("column_type", [BingoMol, BingoBinaryMol])
-def good_bingo_mol_col(column_type):
+@pytest.fixture(params=[BingoMol, BingoBinaryMol])
+def good_bingo_mol_col(request: pytest.FixtureRequest):
+    column_type = request.param
     return Column("structure", column_type)
 
 
-@pytest.fixture
-@pytest.mark.parametrize("column_type", [BingoReaction, BingoBinaryReaction])
-def good_bingo_rxn_col(column_type):
+@pytest.fixture(params=[BingoReaction, BingoBinaryReaction])
+def good_bingo_rxn_col(request: pytest.FixtureRequest):
+    column_type = request.param
     return Column("reaction", column_type)
 
 
