@@ -1,6 +1,11 @@
-from .index import BingoBinaryMolIndex, BingoMolIndex
+from .index import (
+    BingoBinaryMolIndex,
+    BingoMolIndex,
+    BingoBinaryRxnIndex,
+    BingoRxnIndex,
+)
 from .types import BingoBinaryMol, BingoMol, BingoReaction, BingoBinaryReaction
-from .functions import bingo_func
+from .functions import bingo_func, bingo_rxn_func
 from .proxy import BingoMolProxy, BingoRxnProxy
 
 __all__ = [
@@ -9,8 +14,11 @@ __all__ = [
     "BingoMolIndex",
     "BingoBinaryMolIndex",
     "bingo_func",
+    "bingo_rxn_func",
     "BingoMolProxy",
     "BingoRxnProxy",
     "BingoReaction",
     "BingoBinaryReaction",
+    "BingoRxnIndex",
+    "BingoBinaryRxnIndex",
 ]

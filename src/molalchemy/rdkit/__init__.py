@@ -1,11 +1,10 @@
 from .types import (
     RdkitBitFingerprint,
     RdkitMol,
-    CString,
     RdkitSparseFingerprint,
     RdkitReaction,
 )
-from .functions import rdkit_func
+from .functions import rdkit_func, rdkit_rxn_func
 from .index import RdkitIndex
 from .comparators import RdkitMolComparator, RdkitFPComparator
 
@@ -14,8 +13,8 @@ __all__ = [
     "RdkitBitFingerprint",
     "RdkitSparseFingerprint",
     "RdkitReaction",
-    "CString",
     "rdkit_func",
+    "rdkit_rxn_func",
     "RdkitMolComparator",
     "RdkitFPComparator",
     "RdkitIndex",

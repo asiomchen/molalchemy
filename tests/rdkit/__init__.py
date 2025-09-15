@@ -5,7 +5,6 @@ from .test_types import (
     TestRdkitBitFingerprint,
     TestRdkitSparseFingerprint,
     TestRdkitReaction,
-    TestCString,
 )
 from .test_comparators import TestRdkitMolComparator, TestRdkitFPComparator
 from .test_functions import (

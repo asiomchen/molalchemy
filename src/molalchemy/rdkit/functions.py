@@ -1,5 +1,6 @@
 from sqlalchemy.sql import func, cast
 from sqlalchemy.sql.elements import ClauseElement, ColumnElement
+from molalchemy.types import CString
 
 
 class rdkit_func:
@@ -17,9 +18,6 @@ class rdkit_func:
 
     @staticmethod
     def mol_from_smiles(smiles: str, **kwargs) -> ClauseElement:
-        # Import CString here to avoid circular import
-        from .types import CString
-
         return func.mol_from_smiles(cast(smiles, CString), **kwargs)
 
     @staticmethod
@@ -29,3 +27,13 @@ class rdkit_func:
     @staticmethod
     def tanimoto(fp1: ColumnElement, fp2: ColumnElement) -> ClauseElement:
         return func.tanimoto_sml(fp1, fp2)
+
+
+class rdkit_rxn_func:
+    @staticmethod
+    def reaction_from_smarts(smarts: str) -> ClauseElement:
+        return func.reaction_from_smarts(cast(smarts, CString))
+
+    @staticmethod
+    def has_smarts(rxn_column: ColumnElement, pattern: str) -> ColumnElement[bool]:
+        return func.substruct(rxn_column, rdkit_rxn_func.reaction_from_smarts(pattern))

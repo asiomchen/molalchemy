@@ -48,14 +48,6 @@ class RdkitMol(UserDefinedType):
             return str(value)
 
 
-class CString(UserDefinedType):
-    impl = str
-    cache_ok = True
-
-    def get_col_spec(self):
-        return "cstring"
-
-
 class RdkitBitFingerprint(UserDefinedType):
     impl = bytes
     cache_ok = True
