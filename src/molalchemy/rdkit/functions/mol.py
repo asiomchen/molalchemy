@@ -10,6 +10,7 @@ from sqlalchemy.sql import func, cast
 from sqlalchemy import Function
 from sqlalchemy.sql.elements import ClauseElement, ColumnElement
 from molalchemy.types import CString
+from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitSparseFingerprint
 
 
 def equals(mol_column: ColumnElement, query: str) -> ClauseElement:
@@ -24,9 +25,31 @@ def to_binary(mol: ColumnElement, **kwargs) -> Function[bytes]:
     return func.mol_send(mol, **kwargs)
 
 
+def to_json(mol: ColumnElement, **kwargs) -> Function[str]:
+    return func.mol_to_json(mol, **kwargs)
+
+
+def to_cxsmiles(mol: ColumnElement, **kwargs) -> Function[str]:
+    return func.mol_to_cxsmiles(mol, **kwargs)
+
+
+def to_smarts(mol: ColumnElement, **kwargs) -> Function[str]:
+    return func.mol_to_smarts(mol, **kwargs)
+
+
 def mol_from_smiles(smiles: str, **kwargs) -> ClauseElement:
     return func.mol_from_smiles(cast(smiles, CString), **kwargs)
 
 
-def maccs_fp(mol: ColumnElement, **kwargs) -> ClauseElement:
+def maccs_fp(mol: ColumnElement, **kwargs) -> Function[RdkitBitFingerprint]:
     return func.maccs_fp(mol, **kwargs)
+
+
+def morgan_fp(
+    mol: ColumnElement, radius: int = 2, **kwargs
+) -> Function[RdkitSparseFingerprint]:
+    return func.morgan_fp(mol, radius, **kwargs)
+
+
+def torsion_fp(mol: ColumnElement, **kwargs) -> Function[RdkitSparseFingerprint]:
+    return func.torsion_fp(mol, **kwargs)
