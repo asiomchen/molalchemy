@@ -211,13 +211,6 @@ def gross_formula(mol_column: ColumnElement) -> Function[str]:
     Function[str]
         SQLAlchemy function expression returning the gross formula as a string.
 
-    Examples
-    --------
-    >>> # Get gross formulas of all molecules
-    >>> session.query(
-    ...     MoleculeTable.id,
-    ...     bingo_func.gross_formula(MoleculeTable.structure)
-    ... )
     """
     return func.Bingo.Gross(mol_column)
 
@@ -237,12 +230,6 @@ def check_molecule(mol_column: ColumnElement) -> Function[str | None]:
         SQLAlchemy function expression returning None for valid molecules,
         or an error message string for invalid molecules.
 
-    Examples
-    --------
-    >>> # Find invalid molecules in the table
-    >>> invalid_mols = session.query(MoleculeTable).filter(
-    ...     bingo_func.check_molecule(MoleculeTable.structure).isnot(None)
-    ... )
     """
     return func.Bingo.CheckMolecule(mol_column)
 
@@ -261,13 +248,6 @@ def to_canonical(mol_column: ColumnElement) -> Function[str]:
     Function[str]
         SQLAlchemy function expression returning canonical SMILES strings.
 
-    Examples
-    --------
-    >>> # Get canonical SMILES for all molecules
-    >>> session.query(
-    ...     MoleculeTable.id,
-    ...     bingo_func.to_canonical(MoleculeTable.structure)
-    ... )
     """
     return func.Bingo.CanSMILES(mol_column)
 
@@ -285,14 +265,6 @@ def to_inchi(mol_column: ColumnElement) -> Function[str]:
     -------
     Function[str]
         SQLAlchemy function expression returning InChI strings.
-
-    Examples
-    --------
-    >>> # Get InChI for all molecules
-    >>> session.query(
-    ...     MoleculeTable.id,
-    ...     bingo_func.to_inchi(MoleculeTable.structure)
-    ... )
     """
     return func.bingo.InChI(mol_column)
 
@@ -310,14 +282,6 @@ def to_inchikey(mol_column: ColumnElement) -> Function[str]:
     -------
     Function[str]
         SQLAlchemy function expression returning InChIKey strings.
-
-    Examples
-    --------
-    >>> # Get InChIKey for all molecules
-    >>> session.query(
-    ...     MoleculeTable.id,
-    ...     bingo_func.to_inchikey(MoleculeTable.structure)
-    ... )
     """
     return func.Bingo.InChIKey(mol_column)
 
@@ -338,14 +302,6 @@ def to_binary(mol_column: ColumnElement, preserve_pos: bool = True) -> Function[
     -------
     Function[bytes]
         SQLAlchemy function expression returning binary data.
-
-    Examples
-    --------
-    >>> # Convert molecules to compact binary format
-    >>> session.query(
-    ...     MoleculeTable.id,
-    ...     bingo_func.to_binary(MoleculeTable.structure)
-    ... )
     """
     return func.Bingo.CompactMolecule(mol_column, preserve_pos)
 
@@ -364,13 +320,6 @@ def to_smiles(mol_column: ColumnElement) -> Function[str]:
     Function[str]
         SQLAlchemy function expression returning SMILES strings.
 
-    Examples
-    --------
-    >>> # Get SMILES for all molecules
-    >>> session.query(
-    ...     MoleculeTable.id,
-    ...     bingo_func.to_smiles(MoleculeTable.structure)
-    ... )
     """
     return func.Bingo.SMILES(mol_column)
 
@@ -389,13 +338,6 @@ def to_molfile(mol_column: ColumnElement) -> Function[str]:
     Function[str]
         SQLAlchemy function expression returning Molfile strings with 2D coordinates.
 
-    Examples
-    --------
-    >>> # Get Molfile for all molecules
-    >>> session.query(
-    ...     MoleculeTable.id,
-    ...     bingo_func.to_molfile(MoleculeTable.structure)
-    ... )
     """
     return func.Bingo.Molfile(mol_column)
 
@@ -414,12 +356,5 @@ def to_cml(mol_column: ColumnElement) -> Function[str]:
     Function[str]
         SQLAlchemy function expression returning CML strings.
 
-    Examples
-    --------
-    >>> # Get CML for all molecules
-    >>> session.query(
-    ...     MoleculeTable.id,
-    ...     bingo_func.to_cml(MoleculeTable.structure)
-    ... )
     """
     return func.Bingo.CML(mol_column)
