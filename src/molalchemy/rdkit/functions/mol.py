@@ -6,11 +6,15 @@ various chemical reaction operations including reaction substructure search, exa
 and format conversions.
 """
 
+from __future__ import annotations
 from sqlalchemy.sql import func, cast
 from sqlalchemy import Function
 from sqlalchemy.sql.elements import ClauseElement, ColumnElement
 from molalchemy.types import CString
-from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitSparseFingerprint
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitSparseFingerprint
 
 
 def equals(mol_column: ColumnElement, query: str) -> ClauseElement:
@@ -41,15 +45,15 @@ def mol_from_smiles(smiles: str, **kwargs) -> ClauseElement:
     return func.mol_from_smiles(cast(smiles, CString), **kwargs)
 
 
-def maccs_fp(mol: ColumnElement, **kwargs) -> Function[RdkitBitFingerprint]:
+def maccs_fp(mol: ColumnElement, **kwargs) -> Function["RdkitBitFingerprint"]:
     return func.maccs_fp(mol, **kwargs)
 
 
 def morgan_fp(
     mol: ColumnElement, radius: int = 2, **kwargs
-) -> Function[RdkitSparseFingerprint]:
+) -> Function["RdkitSparseFingerprint"]:
     return func.morgan_fp(mol, radius, **kwargs)
 
 
-def torsion_fp(mol: ColumnElement, **kwargs) -> Function[RdkitSparseFingerprint]:
+def torsion_fp(mol: ColumnElement, **kwargs) -> Function["RdkitSparseFingerprint"]:
     return func.torsion_fp(mol, **kwargs)
