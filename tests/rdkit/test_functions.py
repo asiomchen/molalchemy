@@ -5,7 +5,7 @@ from sqlalchemy.sql import select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from molalchemy.rdkit.types import RdkitMol, RdkitBitFingerprint
-from molalchemy.rdkit.functions import rdkit_func
+from molalchemy.rdkit import functions as rdkit_func
 
 
 class TestRdkitFunc:
@@ -29,7 +29,7 @@ class TestRdkitFunc:
         """Test equals function generates correct SQL."""
         query = "CCO"
 
-        result = rdkit_func.equals(self.mol_column, query)
+        result = rdkit_func.mol.equals(self.mol_column, query)
 
         # Should return a binary expression (column @= operator)
         assert hasattr(result, "left")
@@ -47,7 +47,7 @@ class TestRdkitFunc:
         """Test has_substructure function generates correct SQL."""
         query = "c1ccccc1"
 
-        result = rdkit_func.has_substructure(self.mol_column, query)
+        result = rdkit_func.mol.has_substructure(self.mol_column, query)
 
         # Should return a binary expression (column @> operator)
         assert hasattr(result, "left")
@@ -63,7 +63,7 @@ class TestRdkitFunc:
 
     def test_to_binary_function(self):
         """Test to_binary function generates correct SQL."""
-        result = rdkit_func.to_binary(self.mol_column)
+        result = rdkit_func.mol.to_binary(self.mol_column)
 
         # Should return a function call
         sql_str = str(result)
@@ -74,7 +74,7 @@ class TestRdkitFunc:
         """Test mol_from_smiles function generates correct SQL."""
         smiles = "CCO"
 
-        result = rdkit_func.mol_from_smiles(smiles)
+        result = rdkit_func.mol.mol_from_smiles(smiles)
 
         # Should return a function call
         sql_str = str(result)
@@ -84,7 +84,7 @@ class TestRdkitFunc:
 
     def test_maccs_fp_function(self):
         """Test maccs_fp function generates correct SQL."""
-        result = rdkit_func.maccs_fp(self.mol_column)
+        result = rdkit_func.mol.maccs_fp(self.mol_column)
 
         # Should return a function call
         sql_str = str(result)
@@ -96,7 +96,7 @@ class TestRdkitFunc:
         fp1 = b"fingerprint1"
         fp2 = b"fingerprint2"
 
-        result = rdkit_func.tanimoto(fp1, fp2)
+        result = rdkit_func.fp.tanimoto(fp1, fp2)
 
         # Should return a function call
         sql_str = str(result)
@@ -128,7 +128,7 @@ class TestRdkitFuncWithORM:
         """Test equals function with ORM column."""
         query = "CCO"
 
-        result = rdkit_func.equals(self.Compound.structure, query)
+        result = rdkit_func.mol.equals(self.Compound.structure, query)
         sql_str = str(result)
 
         assert "@=" in sql_str
@@ -139,7 +139,7 @@ class TestRdkitFuncWithORM:
         """Test has_substructure function with ORM column."""
         query = "c1ccccc1"
 
-        result = rdkit_func.has_substructure(self.Compound.structure, query)
+        result = rdkit_func.mol.has_substructure(self.Compound.structure, query)
         sql_str = str(result)
 
         assert "@>" in sql_str
@@ -148,7 +148,7 @@ class TestRdkitFuncWithORM:
 
     def test_maccs_fp_with_orm_column(self):
         """Test maccs_fp function with ORM column."""
-        result = rdkit_func.maccs_fp(self.Compound.structure)
+        result = rdkit_func.mol.maccs_fp(self.Compound.structure)
         sql_str = str(result)
 
         assert "maccs_fp" in sql_str
@@ -175,7 +175,7 @@ class TestRdkitFuncIntegration:
         query = "c1ccccc1"
 
         # Create a query using the function
-        substructure_expr = rdkit_func.has_substructure(
+        substructure_expr = rdkit_func.mol.has_substructure(
             self.test_table.c.structure, query
         )
         stmt = select(self.test_table).where(substructure_expr)
@@ -191,10 +191,10 @@ class TestRdkitFuncIntegration:
         benzene = "c1ccccc1"
         ethanol = "CCO"
 
-        substructure_expr = rdkit_func.has_substructure(
+        substructure_expr = rdkit_func.mol.has_substructure(
             self.test_table.c.structure, benzene
         )
-        equals_expr = rdkit_func.equals(self.test_table.c.structure, ethanol)
+        equals_expr = rdkit_func.mol.equals(self.test_table.c.structure, ethanol)
 
         stmt = select(self.test_table).where(substructure_expr | equals_expr)
 
@@ -208,9 +208,9 @@ class TestRdkitFuncIntegration:
         """Test molecular conversion functions in query."""
         smiles = "CCO"
 
-        mol_expr = rdkit_func.mol_from_smiles(smiles)
-        binary_expr = rdkit_func.to_binary(self.test_table.c.structure)
-        fp_expr = rdkit_func.maccs_fp(self.test_table.c.structure)
+        mol_expr = rdkit_func.mol.mol_from_smiles(smiles)
+        binary_expr = rdkit_func.mol.to_binary(self.test_table.c.structure)
+        fp_expr = rdkit_func.mol.maccs_fp(self.test_table.c.structure)
 
         stmt = select(
             self.test_table.c.id,
@@ -232,8 +232,8 @@ class TestRdkitFuncIntegration:
         fp1 = b"fingerprint1"
         fp2 = b"fingerprint2"
 
-        tanimoto_expr = rdkit_func.tanimoto(fp1, fp2)
-        maccs_expr = rdkit_func.maccs_fp(self.test_table.c.structure)
+        tanimoto_expr = rdkit_func.fp.tanimoto(fp1, fp2)
+        maccs_expr = rdkit_func.mol.maccs_fp(self.test_table.c.structure)
 
         stmt = select(
             self.test_table.c.id,

@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String, MetaData, Table
 from sqlalchemy.sql import select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from molalchemy.bingo.functions import bingo_func
+from molalchemy.bingo import functions as bingo_func
 from molalchemy.bingo.types import BingoMol
 
 
@@ -23,20 +23,12 @@ class TestBingoFunc:
         )
         self.mol_column = self.test_table.c.structure
 
-    def test_bingo_func_attributes(self):
-        """Test bingo_func class attributes."""
-        # bingo_func is a collection of static methods, no class attributes needed
-        assert hasattr(bingo_func, "has_substructure")
-        assert hasattr(bingo_func, "matches_smarts")
-        assert hasattr(bingo_func, "equals")
-        assert hasattr(bingo_func, "similarity")
-
     def test_has_substructure_function(self):
         """Test has_substructure function generates correct SQL."""
         query = "c1ccccc1"
         parameters = ""
 
-        result = bingo_func.has_substructure(self.mol_column, query, parameters)
+        result = bingo_func.mol.has_substructure(self.mol_column, query, parameters)
 
         # Should return a binary expression (column @ operator)
         assert hasattr(result, "left")
@@ -55,7 +47,7 @@ class TestBingoFunc:
         query = "c1ccccc1"
         parameters = "max=5"
 
-        result = bingo_func.has_substructure(self.mol_column, query, parameters)
+        result = bingo_func.mol.has_substructure(self.mol_column, query, parameters)
         sql_str = str(result)
 
         assert query in sql_str
@@ -67,7 +59,7 @@ class TestBingoFunc:
         query = "[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1"
         parameters = ""
 
-        result = bingo_func.matches_smarts(self.mol_column, query, parameters)
+        result = bingo_func.mol.matches_smarts(self.mol_column, query, parameters)
         sql_str = str(result)
 
         assert "test_compounds.structure" in sql_str
@@ -80,7 +72,7 @@ class TestBingoFunc:
         query = "[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1"
         parameters = "timeout=1000"
 
-        result = bingo_func.matches_smarts(self.mol_column, query, parameters)
+        result = bingo_func.mol.matches_smarts(self.mol_column, query, parameters)
         sql_str = str(result)
 
         assert query in sql_str
@@ -92,7 +84,7 @@ class TestBingoFunc:
         query = "CCO"
         parameters = ""
 
-        result = bingo_func.equals(self.mol_column, query, parameters)
+        result = bingo_func.mol.equals(self.mol_column, query, parameters)
         sql_str = str(result)
 
         assert "test_compounds.structure" in sql_str
@@ -105,7 +97,7 @@ class TestBingoFunc:
         query = "CCO"
         parameters = "stereo=1"
 
-        result = bingo_func.equals(self.mol_column, query, parameters)
+        result = bingo_func.mol.equals(self.mol_column, query, parameters)
         sql_str = str(result)
 
         assert query in sql_str
@@ -119,7 +111,7 @@ class TestBingoFunc:
         top = 1.0
         metric = "Tanimoto"
 
-        result = bingo_func.similarity(self.mol_column, query, bottom, top, metric)
+        result = bingo_func.mol.similarity(self.mol_column, query, bottom, top, metric)
         sql_str = str(result)
 
         assert "test_compounds.structure" in sql_str
@@ -134,7 +126,7 @@ class TestBingoFunc:
         """Test similarity function with default parameters."""
         query = "CCO"
 
-        result = bingo_func.similarity(self.mol_column, query)
+        result = bingo_func.mol.similarity(self.mol_column, query)
         sql_str = str(result)
 
         assert "0.0" in sql_str  # default bottom
@@ -147,7 +139,7 @@ class TestBingoFunc:
         query = "CCO"
         metric = "Dice"
 
-        result = bingo_func.similarity(self.mol_column, query, metric=metric)
+        result = bingo_func.mol.similarity(self.mol_column, query, metric=metric)
         sql_str = str(result)
 
         assert metric in sql_str
@@ -177,7 +169,7 @@ class TestBingoFuncWithORM:
         query = "CCO"
 
         # This should work with get_column_name utility
-        result = bingo_func.equals(self.Compound.structure, query)
+        result = bingo_func.mol.equals(self.Compound.structure, query)
         sql_str = str(result)
 
         assert "@" in sql_str
@@ -190,7 +182,7 @@ class TestBingoFuncWithORM:
         """Test similarity function with ORM column."""
         query = "CCO"
 
-        result = bingo_func.similarity(self.Compound.structure, query)
+        result = bingo_func.mol.similarity(self.Compound.structure, query)
         sql_str = str(result)
 
         assert "%" in sql_str  # similarity uses % operator, not @
@@ -218,7 +210,7 @@ class TestBingoFuncIntegration:
         query = "c1ccccc1"
 
         # Create a query using the function
-        substructure_expr = bingo_func.has_substructure(
+        substructure_expr = bingo_func.mol.has_substructure(
             self.test_table.c.structure, query
         )
 
@@ -236,10 +228,10 @@ class TestBingoFuncIntegration:
         benzene = "c1ccccc1"
         ethanol = "CCO"
 
-        substructure_expr = bingo_func.has_substructure(
+        substructure_expr = bingo_func.mol.has_substructure(
             self.test_table.c.structure, benzene
         )
-        equals_expr = bingo_func.equals(self.test_table.c.structure, ethanol)
+        equals_expr = bingo_func.mol.equals(self.test_table.c.structure, ethanol)
 
         # Combine using text() expressions properly with or_()
         from sqlalchemy import or_
