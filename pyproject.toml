@@ -48,6 +48,7 @@ dev = [
 docs = [
     "griffe-typingdoc>=0.2.9",
     "mkdocs>=1.6.1",
+    "mkdocs-jupyter>=0.25.1",
     "mkdocs-material[imaging]>=9.6.2",
     "mkdocstrings[python]>=0.28.0",
     "pymdown-extensions>=10.16.1",

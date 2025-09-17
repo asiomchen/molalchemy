@@ -54,10 +54,12 @@ pip install .
 
 ### Prerequisites
 
-molalchemy requires:
 - Python 3.10+
-- Running PostgreSQL with chemical cartridge (Bingo or RDKit)
+
 - SQLAlchemy 2.0+
+
+- Running PostgreSQL with chemical cartridge (Bingo or RDKit) (see `docker-compose.yaml` for a ready-to-use setup)
+
 
 ## 🔧 Quick Start
 

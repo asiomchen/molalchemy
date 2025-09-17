@@ -82,12 +82,16 @@ plugins:
             - https://docs.python.org/objects.inv
             - https://www.rdkit.org/docs/objects.inv
             - http://docs.sqlalchemy.org/en/stable/objects.inv
-  # - mkdocs-jupyter:
-  #     execute: false
-  #     include: ["*.ipynb"]
+  - mkdocs-jupyter:
+      execute: false
+      include: ["*.ipynb"]
 
 nav:
   - molalchemy: index.md
+  - Tutorials:
+    - RDkit - SQLAlchemy ORM: tutorials/01_Getting_Started_rdkit_ORM.ipynb
+    - RDkit - SQLAlchemy Core: tutorials/02_Getting_Started_rdkit_Core.ipynb
+    - Contributing: tutorials/contribute.md
   - API:
     - molalchemy.bingo:
         - bingo.types: api/bingo/types.md

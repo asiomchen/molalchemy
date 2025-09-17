@@ -1,6 +1,6 @@
-![MolAlchemy Logo](./img/logo-full.svg)
+![molalchemy Logo](docs/img/logo-full.svg)
 <p align="center">
-    <em>MolAlchemy - Making chemical databases as easy as regular databases! 🧪✨</em>
+    <em>molalchemy - Making chemical databases as easy as regular databases! 🧪✨</em>
 </p>
 [![pypi version](https://img.shields.io/pypi/v/molalchemy.svg)](https://pypi.org/project/molalchemy/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/molalchemy)
@@ -15,7 +15,7 @@
 
 **Extensions for SQLAlchemy to work with chemical cartridges**
 
-MolAlchemy provides seamless integration between python and chemical databases, enabling powerful chemical structure storage, indexing, and querying capabilities. The library supports popular chemical cartridges (Bingo PostgreSQL & RDKit PostgreSQL) and provides a unified API for chemical database operations.
+molalchemy provides seamless integration between python and chemical databases, enabling powerful chemical structure storage, indexing, and querying capabilities. The library supports popular chemical cartridges (Bingo PostgreSQL & RDKit PostgreSQL) and provides a unified API for chemical database operations.
 
 
 **This project was originally supposed to be a part of RDKit UGM 2025 hackathon, but COVID had other plans for me. Currently it is in alpha stage as a proof of concept. Contributions are welcome!**
@@ -54,10 +54,12 @@ pip install .
 
 ### Prerequisites
 
-MolAlchemy requires:
 - Python 3.10+
-- Running PostgreSQL with chemical cartridge (Bingo or RDKit)
+
 - SQLAlchemy 2.0+
+
+- Running PostgreSQL with chemical cartridge (Bingo or RDKit) (see `docker-compose.yaml` for a ready-to-use setup)
+
 
 ## 🔧 Quick Start
 
@@ -305,7 +307,7 @@ This project uses modern Python development tools:
 
 ## 🤝 Contributing
 
-We welcome contributions! MolAlchemy offers many opportunities for developers interested in chemical informatics:
+We welcome contributions! molalchemy offers many opportunities for developers interested in chemical informatics:
 
 - **🔰 New to the project?** Check out [good first issues](https://github.com/asiomchen/molalchemy/labels/good%20first%20issue)
 - **� Chemical expertise?** Help complete RDKit integration or add ChemAxon support  
@@ -333,4 +335,4 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 ---
 
-**MolAlchemy** - Making chemical databases as easy as regular databases! 🧪✨
+**molalchemy** - Making chemical databases as easy as regular databases! 🧪✨

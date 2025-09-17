@@ -1,6 +1,0 @@
-paths = ["src", "tests"]
-max-complexity-allowed = 10
-quiet = false
-ignore-complexity = false
-details = "normal"
-sort = "asc"
