@@ -5,31 +5,31 @@ This document outlines the development roadmap for molalchemy, a SQLAlchemy exte
 ## 🎯 Project Vision
 
 molalchemy aims to be the **definitive Python library** for chemical database operations, providing:
-- Seamless integration between Python and chemical databases
-- Support for all major chemical cartridges (Bingo, RDKit, ChemAxon, etc.)
+- Integration between Python and chemical databases
+- Support for all major chemical cartridges (Bingo, RDKit)
 - Type-safe, modern SQLAlchemy 2.0+ API with full IDE support (type hints, autocompletion)
 - Production-ready Docker containers for easy deployment
 - Comprehensive documentation and examples
 
 ## 📊 Current Status
 
-- **Bingo PostgreSQL Integration** (95% complete)
+- **Bingo PostgreSQL Integration**
   - ✅ All data types (`BingoMol`, `BingoBinaryMol`, `BingoReaction`, `BingoBinaryReaction`)
   - ✅ Chemical indices (`BingoMolIndex`, etc.)
-  - ✅ Function library (`mol`, `rxn`), some conversion and export functions missing
+  - ❌ Function library (`mol`, `rxn`), some conversion and export functions missing
   - ❌ Full documentation with examples
 
-- **RDKit PostgreSQL Integration** (75% complete)
+- **RDKit PostgreSQL Integration**
   - ✅ Core data types (`RdkitMol`, fingerprint types)
   - ✅ Basic function library
   - ❌ Missing: Complete function set, tests, documentation
 
 - **Infrastructure**
   - ✅ Modern development setup (uv, ruff, pytest, pre-commit)
-  - ✅ Docker containers for Bingo and RDKit
+  - 🚧 Docker containers for Bingo and RDKit
   - ✅ CI/CD pipeline setup
-  - ✅ Documentation framework (MkDocs + mkdocstrings)
-  - 🚧
+  - 🚧 Documentation framework (MkDocs + mkdocstrings)
+
 
 ### 🚧 **In Progress**
 - Documentation enhancements
@@ -37,10 +37,26 @@ molalchemy aims to be the **definitive Python library** for chemical database op
 - Docker image optimization
 
 ### ❌ **Not Started**
-- ChemAxon cartridge integration
-- SQLite RDKit support (including custom builds)
+- ChemAxon cartridge integration (closed source, requires license)
+- NextMove Author integration (closed source, requires license)
+- SQLite RDKit support (including custom builds or custom event listeners)
 - Performance benchmarking
 - Advanced chemical operations
+
+---
+
+## To be discussed
+
+### How to handle functions
+
+Currently both Bingo and Rdkit functions under the hood just use SQLAlchemy's `func` to call the underlying SQL functions.
+Wrapping them in Python functions allows for type hints and better IDE support. However, this approach is not the prefered SQLAlchemy way, it expects the functions to be registedred using `sqlalchemy.sql.functions.Function`, which allows to e.g define the expected return type and provides some internal validation(i guess?)
+
+Also, for now, I splitted the functions module into the separte namespace modules based on the function's input type (e.g `mol`, `rxn`, `fp`), which makes it easier to find the functions, but clutters the top-level namespace. Maybe it would be better to have a flat structure with all functions in one module?
+
+### Multi-dialect support
+
+Currently the library is tightly coupled to PostgreSQL, as RDkit extension is only available for PostgreSQL. But technically for Bingo and some other closed source cartridges (e.g ChemAxon) it would be possible to support other databases (e.g MySQL, Oracle).
 
 ---
 
@@ -51,8 +67,8 @@ molalchemy aims to be the **definitive Python library** for chemical database op
 We maintain Docker containers for each supported cartridge to ensure easy deployment and consistent environments.
 
 #### **Existing Containers**
-- `molalchemy/bingo-postgres` - PostgreSQL with Bingo cartridge
-- `molalchemy/rdkit-postgres` - PostgreSQL with RDKit cartridge
+- PostgreSQL with Bingo cartridge
+- PostgreSQL with RDKit cartridge
 
 
 
@@ -78,7 +94,7 @@ uv sync
 docker-compose up bingo  # or rdkit
 
 # Run tests
-uv run pytest tests/
+make test
 
 # Start documentation server
 uv run mkdocs serve
