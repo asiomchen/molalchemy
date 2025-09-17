@@ -9,19 +9,20 @@ and format conversions.
 from __future__ import annotations
 from sqlalchemy.sql import func, cast
 from sqlalchemy import Function
-from sqlalchemy.sql.elements import ClauseElement, ColumnElement
+from sqlalchemy.sql.elements import ColumnElement
 from molalchemy.types import CString
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitSparseFingerprint
+from molalchemy.rdkit.types import RdkitMol
+from sqlalchemy import BinaryExpression
 
 
-def equals(mol_column: ColumnElement, query: str) -> ClauseElement:
+from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitSparseFingerprint
+
+
+def equals(mol_column: ColumnElement, query: str) -> BinaryExpression:
     return mol_column.op("@=")(query)
 
 
-def has_substructure(mol_column: ColumnElement, query: str) -> ClauseElement:
+def has_substructure(mol_column: ColumnElement, query: str) -> BinaryExpression:
     return mol_column.op("@>")(query)
 
 
@@ -41,11 +42,11 @@ def to_smarts(mol: ColumnElement, **kwargs) -> Function[str]:
     return func.mol_to_smarts(mol, **kwargs)
 
 
-def mol_from_smiles(smiles: str, **kwargs) -> ClauseElement:
+def mol_from_smiles(smiles: str, **kwargs) -> Function[RdkitMol]:
     return func.mol_from_smiles(cast(smiles, CString), **kwargs)
 
 
-def maccs_fp(mol: ColumnElement, **kwargs) -> Function["RdkitBitFingerprint"]:
+def maccs_fp(mol: ColumnElement, **kwargs) -> Function[RdkitBitFingerprint]:
     return func.maccs_fp(mol, **kwargs)
 
 
