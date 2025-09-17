@@ -74,16 +74,21 @@ class BingoBinaryMol(UserDefinedType):
     formats and the binary storage format, with options for preserving
     atomic coordinates and specifying the return format for queries.
 
-    Attributes
-    ----------
-    cache_ok : bool
-        Indicates that this type can be safely cached.
-    comparator_factory : type
-        Factory class for creating molecular comparators.
-    preserve_pos : bool
-        Whether to preserve atomic coordinates in the binary format.
-    return_type : str
-        Format for returning data from the database.
+    Parameters
+        ----------
+    preserve_pos : bool, default False
+        Whether to preserve atomic coordinates when converting to binary format.
+        If `True`, coordinates are stored; if `False`, they are discarded.
+    return_type : Literal["smiles", "molfile", "cml", "bytes"]
+        The format to return when reading data from the database:
+
+        - `"smiles"`: Return as SMILES string
+
+        - `"molfile"`: Return as MDL Molfile format
+
+        - `"cml"`: Return as Chemical Markup Language format
+
+        - `"bytes"`: Return raw binary data
 
     Warnings
     --------
@@ -131,24 +136,6 @@ class BingoBinaryMol(UserDefinedType):
         preserve_pos: bool = False,
         return_type: Literal["smiles", "molfile", "cml", "bytes"] = "smiles",
     ):
-        """Initialize the BingoBinaryMol type.
-
-        Parameters
-        ----------
-        preserve_pos : bool, default False
-            Whether to preserve atomic coordinates when converting to binary format.
-            If `True`, coordinates are stored; if `False`, they are discarded.
-        return_type : Literal["smiles", "molfile", "cml", "bytes"]
-            The format to return when reading data from the database:
-
-            - `"smiles"`: Return as SMILES string
-
-            - `"molfile"`: Return as MDL Molfile format
-
-            - `"cml"`: Return as Chemical Markup Language format
-
-            - `"bytes"`: Return raw binary data
-        """
         self.preserve_pos = preserve_pos
         self.return_type = return_type
         super().__init__()
@@ -164,38 +151,9 @@ class BingoBinaryMol(UserDefinedType):
         return "bytea"
 
     def bind_expression(self, bindvalue):
-        """Convert input value to binary format for database storage.
-
-        Parameters
-        ----------
-        bindvalue : Any
-            The input value to be converted (typically a SMILES string or Molfile).
-
-        Returns
-        -------
-        Any
-            SQL expression that converts the input to Bingo binary format.
-        """
         return bingo_func.mol.to_binary(bindvalue, self.preserve_pos)
 
     def column_expression(self, col):
-        """Convert binary column data to the specified return format.
-
-        Parameters
-        ----------
-        col : Any
-            The database column containing binary molecular data.
-
-        Returns
-        -------
-        Any
-            SQL expression that converts the binary data to the specified format.
-
-        Raises
-        ------
-        ValueError
-            If return_type is not one of the supported formats.
-        """
         if self.return_type == "smiles":
             return bingo_func.mol.to_smiles(col)
         elif self.return_type == "molfile":
@@ -218,12 +176,6 @@ class BingoReaction(UserDefinedType):
     storage type and provides reaction comparison capabilities through
     BingoRxnComparator.
 
-    Attributes
-    ----------
-    cache_ok : bool
-        Indicates that this type can be safely cached.
-    comparator_factory : type
-        Factory class for creating reaction comparators.
 
     Examples
     --------
@@ -281,12 +233,6 @@ class BingoBinaryReaction(UserDefinedType):
     format in PostgreSQL. It provides storage efficiency and fast comparison
     operations for reaction data.
 
-    Attributes
-    ----------
-    cache_ok : bool
-        Indicates that this type can be safely cached.
-    comparator_factory : type
-        Factory class for creating reaction comparators.
 
     Examples
     --------

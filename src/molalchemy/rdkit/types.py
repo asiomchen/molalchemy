@@ -35,13 +35,6 @@ class RdkitMol(UserDefinedType):
     comparator_factory = RdkitMolComparator
 
     def __init__(self, return_type: Literal["smiles", "bytes", "mol"] = "smiles"):
-        """Initialize the RdkitMol type.
-
-        Parameters
-        ----------
-        return_type : Literal["smiles", "bytes", "mol"], default "smiles"
-            The format in which to return molecule data from the database.
-        """
         super().__init__()
         self.return_type = return_type
 
