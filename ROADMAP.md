@@ -16,7 +16,7 @@ molalchemy aims to be the **definitive Python library** for chemical database op
 - **Bingo PostgreSQL Integration** (95% complete)
   - ✅ All data types (`BingoMol`, `BingoBinaryMol`, `BingoReaction`, `BingoBinaryReaction`)
   - ✅ Chemical indices (`BingoMolIndex`, etc.)
-  - ❌ Function library (`bingo_func`, `bingo_rxn_func`), some conversion and export functions missing
+  - ✅ Function library (`mol`, `rxn`), some conversion and export functions missing
   - ❌ Full documentation with examples
 
 - **RDKit PostgreSQL Integration** (75% complete)

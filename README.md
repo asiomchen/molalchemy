@@ -89,35 +89,35 @@ Base.metadata.create_all(engine)
 
 ```python
 from sqlalchemy.orm import sessionmaker
-from molalchemy.bingo.functions import bingo_func
+from molalchemy.bingo.functions import mol
 
 Session = sessionmaker(bind=engine)
 session = Session()
 
 # Substructure search
 benzene_substructures = session.query(Molecule).filter(
-    bingo_func.has_substructure(Molecule.structure, 'c1ccccc1')
+    mol.has_substructure(Molecule.structure, 'c1ccccc1')
 ).all()
 
 # SMARTS pattern matching
 amines = session.query(Molecule).filter(
-    bingo_func.matches_smarts(Molecule.structure, '[NX3;H2,H1;!$(NC=O)]')
+    mol.matches_smarts(Molecule.structure, '[NX3;H2,H1;!$(NC=O)]')
 ).all()
 
 # Exact structure match
 exact_match = session.query(Molecule).filter(
-    bingo_func.equals(Molecule.structure, 'CCO')
+    mol.equals(Molecule.structure, 'CCO')
 ).first()
 
 # Similarity search
 similar_molecules = session.query(Molecule).filter(
-    bingo_func.similarity(Molecule.structure, 'CCO', bottom=0.7)
+    mol.similarity(Molecule.structure, 'CCO', bottom=0.7)
 ).all()
 
 # Calculate molecular properties
 molecular_weights = session.query(
     Molecule.name,
-    bingo_func.get_weight(Molecule.structure)
+    mol.get_weight(Molecule.structure)
 ).all()
 ```
 
@@ -139,8 +139,8 @@ from molalchemy.bingo.index import (
     BingoBinaryRxnIndex    # Binary reaction indexing
 )
 from molalchemy.bingo.functions import (
-    bingo_func,            # Molecule functions
-    bingo_rxn_func         # Reaction functions
+    mol,                   # Molecule functions
+    rxn                    # Reaction functions
 )
 ```
 
@@ -156,8 +156,9 @@ from molalchemy.rdkit.index import (
     # Additional indices available...
 )
 from molalchemy.rdkit.functions import (
-    rdkit_func,            # RDKit functions
-    # More function collections...
+    mol,                   # RDKit molecule functions
+    fp,                    # Fingerprint functions
+    rxn                    # Reaction functions
 )
 ```
 
@@ -205,7 +206,7 @@ class OptimizedMolecule(Base):
 
 ```python
 from molalchemy.bingo.types import BingoReaction
-from molalchemy.bingo.functions import bingo_rxn_func
+from molalchemy.bingo.functions import rxn
 from molalchemy.bingo.index import BingoRxnIndex
 
 class ChemicalReaction(Base):
@@ -221,7 +222,7 @@ class ChemicalReaction(Base):
 
 # Search for oxidation reactions
 oxidations = session.query(ChemicalReaction).filter(
-    bingo_rxn_func.has_reaction_substructure(
+    rxn.has_reaction_substructure(
         ChemicalReaction.reaction_smiles,
         "[C:1]-[OH:2]>>[C:1]=[O:2]"
     )
@@ -230,28 +231,28 @@ oxidations = session.query(ChemicalReaction).filter(
 
 ### Using Chemical Functions
 
-`bingo_func` provides all static methods for functional-style queries. Under the hood it uses SQLAlchemy's `func` to call the corresponding database functions, but provides type hints and syntax highlighting in IDEs.
+`mol` provides all static methods for functional-style queries. Under the hood it uses SQLAlchemy's `func` to call the corresponding database functions, but provides type hints and syntax highlighting in IDEs.
 
 ```python
-from molalchemy.bingo.functions import bingo_func
+from molalchemy.bingo.functions import mol
 
 # Calculate molecular properties
 results = session.query(
     Molecule.name,
-    bingo_func.get_weight(Molecule.structure).label('molecular_weight'),
-    bingo_func.gross_formula(Molecule.structure).label('formula'),
-    bingo_func.to_canonical(Molecule.structure).label('canonical_smiles')
+    mol.get_weight(Molecule.structure).label('molecular_weight'),
+    mol.gross_formula(Molecule.structure).label('formula'),
+    mol.to_canonical(Molecule.structure).label('canonical_smiles')
 ).all()
 
 # Validate molecular structures
 invalid_molecules = session.query(Molecule).filter(
-    bingo_func.check_molecule(Molecule.structure).isnot(None)
+    mol.check_molecule(Molecule.structure).isnot(None)
 ).all()
 
 # Format conversions
 inchi_keys = session.query(
     Molecule.id,
-    bingo_func.to_inchikey(Molecule.structure).label('inchikey')
+    mol.to_inchikey(Molecule.structure).label('inchikey')
 ).all()
 ```
 
