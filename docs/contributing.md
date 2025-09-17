@@ -1,6 +1,6 @@
-# Contributing to MolAlchemy
+# Contributing to molalchemy
 
-Welcome to MolAlchemy! We're excited to have you contribute to making chemical databases more accessible in Python. This guide will help you get started with contributing to the project.
+Welcome to molalchemy! We're excited to have you contribute to making chemical databases more accessible in Python. This guide will help you get started with contributing to the project.
 
 ## 🚀 Quick Start for Contributors
 
@@ -48,7 +48,7 @@ Many RDKit PostgreSQL functions are not yet wrapped in our Python API. This is a
 
 #### Performance Benchmarking
 
-Create benchmarks to measure and track MolAlchemy performance over time.
+Create benchmarks to measure and track molalchemy performance over time.
 
 **Tasks:**
 - Design realistic chemical database scenarios
@@ -61,7 +61,7 @@ Create benchmarks to measure and track MolAlchemy performance over time.
 Improve error messages and create custom exception classes for better debugging.
 
 **Tasks:**
-- Create MolAlchemy-specific exception hierarchy
+- Create molalchemy-specific exception hierarchy
 - Improve error message clarity
 - Add error handling guides
 - Test error scenarios
@@ -71,7 +71,7 @@ Improve error messages and create custom exception classes for better debugging.
 Improve error messages and create custom exception classes for better debugging.
 
 **Tasks:**
-- Create MolAlchemy-specific exception hierarchy
+- Create molalchemy-specific exception hierarchy
 - Improve error message clarity
 - Add error handling guides
 - Test error scenarios
@@ -84,7 +84,7 @@ Improve error messages and create custom exception classes for better debugging.
 Add support for ChemAxon's JChem PostgreSQL cartridge.
 
 **This is a major contribution that would:**
-- Significantly expand MolAlchemy's capabilities
+- Significantly expand molalchemy's capabilities
 - Require learning JChem APIs
 - Need comprehensive testing
 - Require detailed documentation
@@ -124,6 +124,7 @@ uv run pytest tests/ -v
 ```
 
 #### 2. **Code Style and Quality**
+
 We use modern Python tooling for code quality:
 
 ```bash
@@ -131,8 +132,24 @@ We use modern Python tooling for code quality:
 uv run ruff format .
 
 # Lint code
-uv run ruff check .
+uv run ruff check --fix .
 ```
+
+We also us `pre-commit` hooks to automate checks:
+
+```bash
+# Install pre-commit hooks
+pre-commit install
+```
+
+If you want to install hooks faster we recommend using `pre-commit-uv`:
+
+```bash
+uv tool install pre-commit --with pre-commit-uv --force-reinstall
+```
+
+Then you can continue using `pre-commit` as usual, but all hooks will run in the virtual environment created by `uv`.
+
 
 #### 3. **Testing Requirements**
 
@@ -427,4 +444,4 @@ docker-compose up --build -d
 - **GitHub**: [@asiomchen](https://github.com/asiomchen)
 - **LinkedIn**: [Anton Siomchen](https://www.linkedin.com/in/anton-siomchen/)
 
-Thank you for contributing to MolAlchemy! Together, we're making chemical databases more accessible to everyone. 🧪✨
+Thank you for contributing to molalchemy! Together, we're making chemical databases more accessible to everyone. 🧪✨
