@@ -6,11 +6,11 @@ various chemical reaction operations including reaction substructure search, exa
 and format conversions.
 """
 
-from sqlalchemy import text
-from sqlalchemy.sql import ColumnElement
-from sqlalchemy.sql import func
-from sqlalchemy.sql.functions import Function
 from typing import Literal
+
+from sqlalchemy import text
+from sqlalchemy.sql import ColumnElement, func
+from sqlalchemy.sql.functions import Function
 
 _AAM_STRATEGIES = Literal["CLEAR", "DISCARD", "ALTER", "KEEP"]
 

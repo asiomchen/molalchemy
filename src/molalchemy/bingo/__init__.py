@@ -1,11 +1,11 @@
 from .index import (
     BingoBinaryMolIndex,
-    BingoMolIndex,
     BingoBinaryRxnIndex,
+    BingoMolIndex,
     BingoRxnIndex,
 )
-from .types import BingoBinaryMol, BingoMol, BingoReaction, BingoBinaryReaction
 from .proxy import BingoMolProxy, BingoRxnProxy
+from .types import BingoBinaryMol, BingoBinaryReaction, BingoMol, BingoReaction
 
 __all__ = [
     "BingoMol",

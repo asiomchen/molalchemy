@@ -4,10 +4,13 @@ This module provides SQLAlchemy UserDefinedType classes for working with
 chemical molecules and reactions in PostgreSQL using the Bingo cartridge.
 """
 
-from sqlalchemy.types import UserDefinedType
-from molalchemy.bingo.comparators import BingoMolComparator, BingoRxnComparator
-from . import functions as bingo_func
 from typing import Literal
+
+from sqlalchemy.types import UserDefinedType
+
+from molalchemy.bingo.comparators import BingoMolComparator, BingoRxnComparator
+
+from . import functions as bingo_func
 
 
 class BingoMol(UserDefinedType):

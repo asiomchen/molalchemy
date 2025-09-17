@@ -1,12 +1,13 @@
-from molalchemy.bingo import (
-    BingoBinaryMol,
-    BingoMol,
-    BingoReaction,
-    BingoBinaryReaction,
-)
-from molalchemy.bingo.proxy import BingoRxnProxy, BingoMolProxy
 from sqlalchemy import Column
 from sqlalchemy.orm.attributes import InstrumentedAttribute
+
+from molalchemy.bingo import (
+    BingoBinaryMol,
+    BingoBinaryReaction,
+    BingoMol,
+    BingoReaction,
+)
+from molalchemy.bingo.proxy import BingoMolProxy, BingoRxnProxy
 
 
 def bingo_col(column: Column | InstrumentedAttribute) -> BingoMolProxy:

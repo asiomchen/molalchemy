@@ -7,15 +7,13 @@ and format conversions.
 """
 
 from __future__ import annotations
-from sqlalchemy.sql import func, cast
-from sqlalchemy import Function
+
+from sqlalchemy import BinaryExpression, Function
+from sqlalchemy.sql import cast, func
 from sqlalchemy.sql.elements import ColumnElement
+
+from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitSparseFingerprint
 from molalchemy.types import CString
-from molalchemy.rdkit.types import RdkitMol
-from sqlalchemy import BinaryExpression
-
-
-from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitSparseFingerprint
 
 
 def equals(mol_column: ColumnElement, query: str) -> BinaryExpression:

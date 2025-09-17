@@ -4,9 +4,11 @@ This module provides SQLAlchemy UserDefinedType implementations for working with
 chemical data stored in PostgreSQL using the RDKit cartridge.
 """
 
-from sqlalchemy.types import UserDefinedType
-from molalchemy.rdkit.comparators import RdkitMolComparator, RdkitFPComparator
 from typing import Literal
+
+from sqlalchemy.types import UserDefinedType
+
+from molalchemy.rdkit.comparators import RdkitFPComparator, RdkitMolComparator
 
 
 class RdkitMol(UserDefinedType):

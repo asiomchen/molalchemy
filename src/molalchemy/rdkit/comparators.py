@@ -1,5 +1,6 @@
-from sqlalchemy.types import UserDefinedType
 from typing import Literal
+
+from sqlalchemy.types import UserDefinedType
 
 
 class RdkitMolComparator(UserDefinedType.Comparator):

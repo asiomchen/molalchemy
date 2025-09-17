@@ -6,8 +6,9 @@ various chemical reaction operations including reaction substructure search, exa
 and format conversions.
 """
 
-from sqlalchemy.sql import func, cast
+from sqlalchemy.sql import cast, func
 from sqlalchemy.sql.elements import ClauseElement, ColumnElement
+
 from molalchemy.types import CString
 
 

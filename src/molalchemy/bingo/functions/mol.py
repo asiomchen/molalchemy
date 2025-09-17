@@ -7,12 +7,13 @@ similarity search, and format conversions.
 """
 
 from __future__ import annotations
+
+from typing import TYPE_CHECKING, Literal
+
 from sqlalchemy import text
-from sqlalchemy.sql import ColumnElement
-from sqlalchemy.sql import func
-from sqlalchemy.sql.functions import Function
-from typing import Literal, TYPE_CHECKING
+from sqlalchemy.sql import ColumnElement, func
 from sqlalchemy.sql.elements import BinaryExpression
+from sqlalchemy.sql.functions import Function
 
 if TYPE_CHECKING:
     from molalchemy.bingo.types import BingoBinaryMol

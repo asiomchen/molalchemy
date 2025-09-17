@@ -1,5 +1,5 @@
+from .comparators import RdkitFPComparator, RdkitMolComparator
 from .index import RdkitIndex
-from .comparators import RdkitMolComparator, RdkitFPComparator
 
 __all__ = [
     "RdkitMolComparator",
