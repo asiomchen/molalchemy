@@ -102,7 +102,9 @@ nav:
         - rdkit.functions: api/rdkit/functions.md
         - rdkit.index: api/rdkit/db_index.md
 
-  - Contributing: contributing.md
+  - Contributing: CONTRIBUTING.md
+  - Changelog: CHANGELOG.md
+  - Roadmap: ROADMAP.md
 
 markdown_extensions:
   - admonition

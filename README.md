@@ -1,7 +1,11 @@
-![molalchemy Logo](docs/img/logo-full.svg)
+<p align="center">
+  <a href="https://molalchemy.readthedocs.io"><img src="https://raw.githubusercontent.com/asiomchen/molalchemy/refs/heads/wip/docs/img/logo-full.svg" alt="MolAlchemy"></a>
+</p>
 <p align="center">
     <em>molalchemy - Making chemical databases as easy as regular databases! 🧪✨</em>
 </p>
+
+
 [![pypi version](https://img.shields.io/pypi/v/molalchemy.svg)](https://pypi.org/project/molalchemy/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/molalchemy)
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/molalchemy?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/molalchemy)

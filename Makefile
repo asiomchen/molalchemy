@@ -5,6 +5,6 @@ test:
 
 sync-docs:
 	@cp README.md docs/index.md
-	@cp CHANGELOG.md docs/changelog.md
-	@cp ROADMAP.md docs/roadmap.md
-	@cp CONTRIBUTING.md docs/contributing.md
+	@cp CHANGELOG.md docs/
+	@cp ROADMAP.md docs/
+	@cp CONTRIBUTING.md docs/
