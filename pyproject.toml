@@ -11,7 +11,6 @@ authors = [
 requires-python = ">=3.10,<3.14"
 dependencies = [
     "datamol>=0.12.5",
-    "geoalchemy2>=0.18.0",
     "loguru>=0.7.3",
     "mkdocs-material[imaging]>=9.6.19",
     "psycopg[binary]>=3.2.9",

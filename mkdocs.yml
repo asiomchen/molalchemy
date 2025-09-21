@@ -91,6 +91,7 @@ nav:
   - Tutorials:
     - RDkit - SQLAlchemy ORM: tutorials/01_Getting_Started_rdkit_ORM.ipynb
     - RDkit - SQLAlchemy Core: tutorials/02_Getting_Started_rdkit_Core.ipynb
+    - Bingo - SQLAlchemy ORM: tutorials/01_Getting_Started_bingo_ORM.ipynb
     - Contributing: tutorials/contribute.md
   - API:
     - molalchemy.bingo:

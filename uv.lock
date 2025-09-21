@@ -640,19 +640,6 @@ wheels = [
 ]
 
 [[package]]
-name = "geoalchemy2"
-version = "0.18.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "packaging" },
-    { name = "sqlalchemy" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d3/15/88398e863a9e044e06957d0f214cc5f7ef3c1dee4c540d828bfa6c7d4535/geoalchemy2-0.18.0.tar.gz", hash = "sha256:9a04690cc33fbc580d15c7c028d9b1b1ea08271489730096c7092e1d486c2b7a", size = 239129, upload-time = "2025-07-21T10:51:47.52Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b5/f5/1e36e49d4380d70d58c777953fd3c465b4fb242309b6bd6b88e45ef11bd7/geoalchemy2-0.18.0-py3-none-any.whl", hash = "sha256:ff0fe7339ba535c50845a2c7e8817a20c164364128991d795733b3c5904b1ee1", size = 81248, upload-time = "2025-07-21T10:51:46.291Z" },
-]
-
-[[package]]
 name = "ghp-import"
 version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1403,7 +1390,6 @@ version = "0.0.1"
 source = { editable = "." }
 dependencies = [
     { name = "datamol" },
-    { name = "geoalchemy2" },
     { name = "loguru" },
     { name = "mkdocs-material", extra = ["imaging"] },
     { name = "psycopg", extra = ["binary"] },
@@ -1429,7 +1415,6 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "datamol", specifier = ">=0.12.5" },
-    { name = "geoalchemy2", specifier = ">=0.18.0" },
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "mkdocs-material", extras = ["imaging"], specifier = ">=9.6.19" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2.9" },

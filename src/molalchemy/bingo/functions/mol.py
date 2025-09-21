@@ -97,7 +97,8 @@ def similarity(
     metric: str = "Tanimoto",
 ) -> BinaryExpression:
     """
-    Perform similarity search on a molecule column.
+    Perform similarity search on a molecule column. This should be used in WHERE clauses, as it
+    returns a boolean expression indicating whether the similarity criteria are met.
 
     Parameters
     ----------
@@ -122,6 +123,34 @@ def similarity(
     return mol_column.op("%")(
         text(f"('{query}', {bottom}, {top}, '{metric}')::bingo.sim")
     )
+
+
+def get_similarity(
+    mol_column: ColumnElement,
+    query: str,
+    metric: str = "Tanimoto",
+) -> Function[float]:
+    """
+    Calculate the similarity score between a molecule column and a query molecule.
+    This function returns a float value representing the similarity score.
+
+    Parameters
+    ----------
+    mol_column : ColumnElement
+        SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
+    query : str
+        Query molecule as SMILES or Molfile string for similarity comparison.
+    metric : str, optional
+        Similarity metric to use (default is "Tanimoto").
+        Other options include "Dice", "Cosine", etc.
+
+    Returns
+    -------
+    Function[float]
+        SQLAlchemy function expression returning the similarity score as a float.
+
+    """
+    return func.bingo.getsimilarity(mol_column, query, metric)
 
 
 def has_gross_formula(mol_column: ColumnElement, formula: str):
