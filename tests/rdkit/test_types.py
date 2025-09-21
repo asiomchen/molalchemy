@@ -1,14 +1,16 @@
 """Tests for RDKit types."""
 
-from sqlalchemy import Column, Integer, String, MetaData, Table
+import pytest
+from rdkit import Chem
+from sqlalchemy import Column, Integer, MetaData, String, Table
 
+from molalchemy.rdkit.comparators import RdkitFPComparator, RdkitMolComparator
 from molalchemy.rdkit.types import (
-    RdkitMol,
     RdkitBitFingerprint,
-    RdkitSparseFingerprint,
+    RdkitMol,
     RdkitReaction,
+    RdkitSparseFingerprint,
 )
-from molalchemy.rdkit.comparators import RdkitMolComparator, RdkitFPComparator
 
 
 class TestRdkitMol:
@@ -58,6 +60,29 @@ class TestRdkitMol:
         # Should not raise any exceptions
         assert test_table.c.mol.type.__class__ == RdkitMol
         assert isinstance(test_table.c.mol.type, RdkitMol)
+
+    @pytest.mark.parametrize("return_type", ["smiles", "bytes", "mol"])
+    @pytest.mark.parametrize("value", ["CCO", "c1ccccc1"])
+    def test_result_processor(self, return_type, value):
+        """Test result_processor for different return types and values."""
+        rdkit_mol = RdkitMol(return_type=return_type)
+        processor = rdkit_mol.result_processor(None, None)
+        input_value = value
+        if return_type != "smiles":
+            input_value = Chem.MolFromSmiles(value).ToBinary()
+        processed = processor(input_value)
+
+        if return_type == "smiles":
+            assert processed == value
+        elif return_type == "bytes":
+            mol_bytes = Chem.MolFromSmiles(value).ToBinary()
+            processed = processor(mol_bytes)
+            assert processed == mol_bytes
+        elif return_type == "mol":
+            mol_bytes = Chem.MolFromSmiles(value).ToBinary()
+            processed = processor(mol_bytes)
+            assert isinstance(processed, Chem.Mol)
+            assert Chem.MolToSmiles(processed) == value
 
 
 class TestRdkitBitFingerprint:
