@@ -4,6 +4,7 @@ This module provides SQLAlchemy UserDefinedType implementations for working with
 chemical data stored in PostgreSQL using the RDKit cartridge.
 """
 
+import functools
 from typing import Literal
 
 from sqlalchemy.types import UserDefinedType
@@ -11,7 +12,11 @@ from sqlalchemy.types import UserDefinedType
 from molalchemy.rdkit.comparators import RdkitFPComparator, RdkitMolComparator
 
 
-class RdkitMol(UserDefinedType):
+class RdkitBaseType(UserDefinedType):
+    """Base class for RDKit types."""
+
+
+class RdkitMol(RdkitBaseType):
     """SQLAlchemy type for RDKit molecule data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `mol` type provided by the RDKit cartridge.
@@ -49,29 +54,31 @@ class RdkitMol(UserDefinedType):
         else:  # smiles
             return colexpr
 
-    # for some reason process_result_value is not called, even after setting the type in to_binary
-    # will need to debug this later to allow return_type='mol' to work
-    def process_result_value(self, value, dialect):
-        from rdkit import Chem
+    def result_processor(self, dialect, coltype):
+        del dialect, coltype
 
-        del dialect
-        print(f"Processing value: {value} of type {type(value)}")
-        if value is None:
-            return None
-        if self.return_type == "mol":
-            # If we have bytes from mol_send, create molecule from binary
-            if isinstance(value, (bytes, memoryview)):
-                return Chem.Mol(bytes(value))
-            # If we have a string (shouldn't happen with mol_send but just in case)
-            else:
-                return Chem.MolFromSmiles(str(value))
-        elif self.return_type == "bytes":
-            return bytes(value) if isinstance(value, memoryview) else value
-        else:  # smiles
-            return str(value)
+        def process(value, return_type):
+            from rdkit import Chem
+
+            print(f"Processing value: {value} of type {type(value)}")
+            if value is None:
+                return None
+            if return_type == "mol":
+                # If we have bytes from mol_send, create molecule from binary
+                if isinstance(value, (bytes, memoryview)):
+                    return Chem.Mol(bytes(value))
+                # If we have a string (shouldn't happen with mol_send but just in case)
+                else:
+                    return Chem.MolFromSmiles(str(value))
+            elif return_type == "bytes":
+                return bytes(value) if isinstance(value, memoryview) else value
+            else:  # smiles
+                return str(value)
+
+        return functools.partial(process, return_type=self.return_type)
 
 
-class RdkitBitFingerprint(UserDefinedType):
+class RdkitBitFingerprint(RdkitBaseType):
     """SQLAlchemy type for RDKit bit fingerprint data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `bfp` type provided by the RDKit cartridge,
@@ -86,7 +93,7 @@ class RdkitBitFingerprint(UserDefinedType):
         return "bfp"
 
 
-class RdkitSparseFingerprint(UserDefinedType):
+class RdkitSparseFingerprint(RdkitBaseType):
     """SQLAlchemy type for RDKit sparse fingerprint data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `sfp` type provided by the RDKit cartridge,
@@ -101,7 +108,7 @@ class RdkitSparseFingerprint(UserDefinedType):
         return "sfp"
 
 
-class RdkitReaction(UserDefinedType):
+class RdkitReaction(RdkitBaseType):
     """SQLAlchemy type for RDKit chemical reaction data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `reaction` type provided by the RDKit cartridge.
@@ -138,7 +145,6 @@ class RdkitReaction(UserDefinedType):
     def column_expression(self, colexpr):
         from . import functions as rdkit_func
 
-        # For mol return type, we want the binary representation
         if self.return_type == "mol":
             return rdkit_func.rxn.to_binary(colexpr, type_=self)
         elif self.return_type == "bytes":
@@ -146,17 +152,22 @@ class RdkitReaction(UserDefinedType):
         else:  # smiles
             return colexpr
 
-    def process_result_value(self, value, dialect):
-        from rdkit.Chem import AllChem
+    def result_processor(self, dialect, coltype):
+        del dialect, coltype
 
-        del dialect
-        if value is None:
-            return None
-        if self.return_type == "mol":
-            # If we have bytes from mol_send, create molecule from binary
-            if isinstance(value, (bytes, memoryview)):
-                return AllChem.ChemicalReaction(bytes(value))
-        elif self.return_type == "bytes":
-            return bytes(value) if isinstance(value, memoryview) else value
-        else:  # smiles
-            return str(value)
+        def process(value, return_type):
+            from rdkit.Chem import AllChem
+
+            print(f"Processing value: {value} of type {type(value)}")
+            if value is None:
+                return None
+            if return_type == "mol":
+                # If we have bytes from rxn_send, create reaction from binary
+                if isinstance(value, (bytes, memoryview)):
+                    return AllChem.ChemicalReaction(bytes(value))
+            elif return_type == "bytes":
+                return bytes(value) if isinstance(value, memoryview) else value
+            else:  # smiles
+                return str(value)
+
+        return functools.partial(process, return_type=self.return_type)

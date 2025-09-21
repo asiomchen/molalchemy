@@ -13,7 +13,11 @@ from molalchemy.bingo.comparators import BingoMolComparator, BingoRxnComparator
 from . import functions as bingo_func
 
 
-class BingoMol(UserDefinedType):
+class BingoBaseType(UserDefinedType):
+    """Base class for Bingo types."""
+
+
+class BingoMol(BingoBaseType):
     """SQLAlchemy type for molecule data stored as text (varchar).
 
     This type represents molecules stored as text in PostgreSQL, typically
@@ -66,7 +70,7 @@ class BingoMol(UserDefinedType):
         return "varchar"
 
 
-class BingoBinaryMol(UserDefinedType):
+class BingoBinaryMol(BingoBaseType):
     """SQLAlchemy type for binary molecule data with format conversion.
 
     This type represents molecules stored in Bingo's internal binary format
@@ -168,7 +172,7 @@ class BingoBinaryMol(UserDefinedType):
             )
 
 
-class BingoReaction(UserDefinedType):
+class BingoReaction(BingoBaseType):
     """SQLAlchemy type for chemical reaction data stored as text (varchar).
 
     This type represents chemical reactions stored as text in PostgreSQL,
@@ -226,7 +230,7 @@ class BingoReaction(UserDefinedType):
         return "varchar"
 
 
-class BingoBinaryReaction(UserDefinedType):
+class BingoBinaryReaction(BingoBaseType):
     """SQLAlchemy type for binary chemical reaction data.
 
     This type represents chemical reactions stored in Bingo's internal binary
