@@ -28,7 +28,7 @@ class RdkitMol(RdkitBaseType):
         The format in which to return molecule data from the database:
         - `"smiles"`: Return as SMILES string
         - `"bytes"`: Return as raw bytes
-        - `"mol"`: Return as `rdkit.Chem.Mol` object (currently not functional)
+        - `"mol"`: Return as `rdkit.Chem.Mol` object
     """
 
     impl = bytes
@@ -120,7 +120,7 @@ class RdkitReaction(RdkitBaseType):
         The format in which to return reaction data from the database:
         - `"smiles"`: Return as reaction SMILES string
         - `"bytes"`: Return as raw bytes
-        - `"mol"`: Return as `AllChem.ChemicalReaction` object (currently not functional)
+        - `"mol"`: Return as `AllChem.ChemicalReaction` object
     """
 
     impl = bytes
@@ -158,7 +158,6 @@ class RdkitReaction(RdkitBaseType):
         def process(value, return_type):
             from rdkit.Chem import AllChem
 
-            print(f"Processing value: {value} of type {type(value)}")
             if value is None:
                 return None
             if return_type == "mol":
