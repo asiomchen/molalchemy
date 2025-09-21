@@ -7,6 +7,8 @@ chemical data stored in PostgreSQL using the RDKit cartridge.
 import functools
 from typing import Literal
 
+from rdkit import Chem
+from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
 from molalchemy.rdkit.comparators import RdkitFPComparator, RdkitMolComparator
@@ -31,7 +33,6 @@ class RdkitMol(RdkitBaseType):
         - `"mol"`: Return as `rdkit.Chem.Mol` object
     """
 
-    impl = bytes
     cache_ok = True
 
     def get_col_spec(self):
@@ -54,13 +55,32 @@ class RdkitMol(RdkitBaseType):
         else:  # smiles
             return colexpr
 
+    def bind_processor(self, dialect):
+        del dialect
+
+        def process(value):
+            from rdkit import Chem
+
+            if value is None:
+                return None
+            if isinstance(value, Chem.Mol):
+                return value.ToBinary()
+            return value
+
+        return process
+
+    def bind_expression(self, bindvalue):
+        if hasattr(bindvalue, "value") and isinstance(bindvalue.value, Chem.Mol):
+            return func.mol_from_pkl(bindvalue)
+        else:
+            return bindvalue
+
     def result_processor(self, dialect, coltype):
         del dialect, coltype
 
         def process(value, return_type):
             from rdkit import Chem
 
-            print(f"Processing value: {value} of type {type(value)}")
             if value is None:
                 return None
             if return_type == "mol":
