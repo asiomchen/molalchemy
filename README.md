@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://molalchemy.readthedocs.io"><img src="https://raw.githubusercontent.com/asiomchen/molalchemy/refs/heads/wip/docs/img/logo-full.svg" alt="MolAlchemy"></a>
+  <a href="https://molalchemy.readthedocs.io"><img src="https://raw.githubusercontent.com/asiomchen/molalchemy/refs/heads/main/docs/img/logo-full.svg" alt="MolAlchemy"></a>
 </p>
 <p align="center">
     <em>molalchemy - Making chemical databases as easy as regular databases! 🧪✨</em>
