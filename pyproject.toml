@@ -5,7 +5,7 @@ description = "Extensions for SQLAlchemy to work with chemical cartridges"
 license = {text = "Apache-2.0"}
 readme = "README.md"
 authors = [
-    { name = "Anton Siomchen", email = "41703271+asiomchen@users.noreply.github.com" }
+    { name = "Anton Siomchen", email = "anton.siomchen+molalchemy@gmail.com" }
 ]
 
 requires-python = ">=3.10,<3.14"
