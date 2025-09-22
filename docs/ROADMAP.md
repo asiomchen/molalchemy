@@ -14,14 +14,14 @@ molalchemy aims to be the **definitive Python library** for chemical database op
 ## 📊 Current Status
 
 - **Bingo PostgreSQL Integration**
-  - ✅ All data types (`BingoMol`, `BingoBinaryMol`, `BingoReaction`, `BingoBinaryReaction`)
   - ✅ Chemical indices (`BingoMolIndex`, etc.)
+  - ❌ Most data types (`BingoMol`, `BingoBinaryMol`, `BingoReaction`, `BingoBinaryReaction`) (fingerprints planned)
   - ❌ Function library (`mol`, `rxn`), some conversion and export functions missing
   - ❌ Full documentation with examples
 
 - **RDKit PostgreSQL Integration**
   - ✅ Core data types (`RdkitMol`, fingerprint types)
-  - ✅ Basic function library
+  - ❌ Basic function library
   - ❌ Missing: Complete function set, tests, documentation
 
 - **Infrastructure**
@@ -39,6 +39,7 @@ molalchemy aims to be the **definitive Python library** for chemical database op
 ### ❌ **Not Started**
 - ChemAxon cartridge integration (closed source, requires license)
 - NextMove Author integration (closed source, requires license)
+- Multi-dialect support for Bingo (e.g MySQL, Oracle)
 - SQLite RDKit support (including custom builds or custom event listeners)
 - Performance benchmarking
 - Advanced chemical operations
@@ -53,6 +54,11 @@ Currently both Bingo and Rdkit functions under the hood just use SQLAlchemy's `f
 Wrapping them in Python functions allows for type hints and better IDE support. However, this approach is not the prefered SQLAlchemy way, it expects the functions to be registedred using `sqlalchemy.sql.functions.Function`, which allows to e.g define the expected return type and provides some internal validation(i guess?)
 
 Also, for now, I splitted the functions module into the separte namespace modules based on the function's input type (e.g `mol`, `rxn`, `fp`), which makes it easier to find the functions, but clutters the top-level namespace. Maybe it would be better to have a flat structure with all functions in one module?
+
+Also is it worth to create a common interface with all common functions, so the cartridges can be used interchangeably to some extent?
+
+
+Also now some functions have the name straight from the SQL function (e.g `mol_from_smiles`), while others have more Pythonic names (e.g `tanimoto` instead of `tanimoto_sml`). Should we standardize on one approach?
 
 ### Multi-dialect support
 
@@ -126,7 +132,7 @@ uv run mkdocs serve
 
 ### **Getting Started**
 1. Check the [issues page](https://github.com/asiomchen/molalchemy/issues) for good first issues
-2. Read the [Contributing Guide](contributing.md)
+2. Read the [Contributing Guide](CONTRIBUTING.md)
 3. Join discussions in GitHub Discussions
 4. Set up your development environment
 
