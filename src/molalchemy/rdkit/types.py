@@ -59,28 +59,23 @@ class RdkitMol(RdkitBaseType):
         del dialect
 
         def process(value):
-            from rdkit import Chem
-
             if value is None:
                 return None
-            if isinstance(value, Chem.Mol):
-                return value.ToBinary()
-            return value
+            if isinstance(value, str):
+                value = Chem.MolFromSmiles(value)
+            if not isinstance(value, Chem.Mol):
+                raise ValueError("Value must be a SMILES string or an RDKit Mol object")
+            return value.ToBinary()
 
         return process
 
     def bind_expression(self, bindvalue):
-        if hasattr(bindvalue, "value") and isinstance(bindvalue.value, Chem.Mol):
-            return func.mol_from_pkl(bindvalue)
-        else:
-            return bindvalue
+        return func.mol_from_pkl(bindvalue)
 
     def result_processor(self, dialect, coltype):
         del dialect, coltype
 
         def process(value, return_type):
-            from rdkit import Chem
-
             if value is None:
                 return None
             if return_type == "mol":
