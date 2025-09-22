@@ -27,7 +27,7 @@ molalchemy provides seamless integration between python and chemical databases, 
 
 ## 🚀 Features
 
-- **Chemical Data Types**: Custom SQLAlchemy types for molecules and reactions
+- **Chemical Data Types**: Custom SQLAlchemy types for molecules, reactions and fingerprints
 - **Chemical Cartridge Integration**: Support for Bingo and RDKit PostgreSQL cartridges
 - **Substructure Search**: Efficient substructure and similarity searching
 - **Chemical Indexing**: High-performance chemical structure indexing
@@ -54,76 +54,20 @@ pip install .
 ```
 
 
-
-
 ### Prerequisites
 
 - Python 3.10+
 
 - SQLAlchemy 2.0+
 
-- Running PostgreSQL with chemical cartridge (Bingo or RDKit) (see `docker-compose.yaml` for a ready-to-use setup)
+- rdkit 2024.3.1+
+
+- Running PostgreSQL with chemical cartridge (Bingo or RDKit) (see [`docker-compose.yaml`](docker-compose.yaml) for a ready-to-use setup)
 
 
 ## 🔧 Quick Start
 
-### Basic Usage
-
-```python
-from sqlalchemy import Integer, String, create_engine
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
-from molalchemy.bingo.types import BingoMol
-
-class Base(DeclarativeBase):
-    pass
-
-class Molecule(Base):
-    __tablename__ = 'molecules'
-    
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    structure: Mapped[str] = mapped_column(BingoMol)
-    name: Mapped[str] = mapped_column(String(100))
-
-# Create engine and tables
-engine = create_engine('postgresql://user:password@localhost/chemdb')
-Base.metadata.create_all(engine)
-```
-
-### Chemical Queries
-
-```python
-from sqlalchemy.orm import sessionmaker
-from molalchemy.bingo.functions import mol
-
-Session = sessionmaker(bind=engine)
-session = Session()
-
-# Substructure search
-benzene_substructures = session.query(Molecule).filter(
-    mol.has_substructure(Molecule.structure, 'c1ccccc1')
-).all()
-
-# SMARTS pattern matching
-amines = session.query(Molecule).filter(
-    mol.matches_smarts(Molecule.structure, '[NX3;H2,H1;!$(NC=O)]')
-).all()
-
-# Exact structure match
-exact_match = session.query(Molecule).filter(
-    mol.equals(Molecule.structure, 'CCO')
-).first()
-
-# Similarity search
-similar_molecules = session.query(Molecule).filter(
-    mol.similarity(Molecule.structure, 'CCO', bottom=0.7)
-).all()
-
-# Calculate molecular properties
-molecular_weights = session.query(
-    Molecule.name,
-    mol.get_weight(Molecule.structure)
-).all()
-```
+To learn how to use molalchemy, check out the [Quick Start - RDKit](https://molalchemy.readthedocs.io/en/latest/tutorials/01_Getting_Started_rdkit_ORM/) and [Quick Start - Bingo](https://molalchemy.readthedocs.io/en/latest/tutorials/01_Getting_Started_bingo_ORM/) tutorials in the documentation.
 
 ## 🏗️ Supported Cartridges
 
@@ -156,8 +100,7 @@ from molalchemy.rdkit.types import (
     # Additional types available...
 )
 from molalchemy.rdkit.index import (
-    RDKitMolIndex,         # RDKit molecule indexing
-    # Additional indices available...
+    RDKitIndex,         # RDKit molecule indexing (just GIST index)
 )
 from molalchemy.rdkit.functions import (
     mol,                   # RDKit molecule functions

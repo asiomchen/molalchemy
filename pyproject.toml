@@ -10,11 +10,9 @@ authors = [
 
 requires-python = ">=3.10,<3.14"
 dependencies = [
-    "datamol>=0.12.5",
     "loguru>=0.7.3",
-    "mkdocs-material[imaging]>=9.6.19",
     "psycopg[binary]>=3.2.9",
-    "rdkit>=2025.3.6",
+    "rdkit>=2024.3.1",
     "sqlalchemy>=2.0.43",
 ]
 keywords = ["chemistry", "cheminformatics", "molecules", "reactions", "databases"]

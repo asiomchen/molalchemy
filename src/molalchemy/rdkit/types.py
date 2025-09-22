@@ -22,6 +22,7 @@ class RdkitMol(RdkitBaseType):
     """SQLAlchemy type for RDKit molecule data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `mol` type provided by the RDKit cartridge.
+    By default, SMILES strings are used as input, but `Chem.Mol` objects can also be used, all inputs are converted to binary format prior to sending to the database.
     It supports different return formats for flexibility in working with molecular data.
 
     Parameters
