@@ -286,7 +286,7 @@ def to_inchikey(mol_column: ColumnElement) -> Function[str]:
 
 def to_binary(
     mol_column: ColumnElement, preserve_pos: bool = True
-) -> Function["BingoBinaryMol"]:
+) -> Function[BingoBinaryMol]:
     """
     Convert molecules to Bingo's internal binary format.
 

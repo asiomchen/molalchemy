@@ -81,7 +81,7 @@ class RdkitMol(RdkitBaseType):
                 return None
             if return_type == "mol":
                 # If we have bytes from mol_send, create molecule from binary
-                if isinstance(value, (bytes, memoryview)):
+                if isinstance(value, bytes | memoryview):
                     return Chem.Mol(bytes(value))
                 # If we have a string (shouldn't happen with mol_send but just in case)
                 else:
@@ -178,7 +178,7 @@ class RdkitReaction(RdkitBaseType):
                 return None
             if return_type == "mol":
                 # If we have bytes from rxn_send, create reaction from binary
-                if isinstance(value, (bytes, memoryview)):
+                if isinstance(value, bytes | memoryview):
                     return AllChem.ChemicalReaction(bytes(value))
             elif return_type == "bytes":
                 return bytes(value) if isinstance(value, memoryview) else value

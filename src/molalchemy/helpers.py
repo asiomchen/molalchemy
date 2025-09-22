@@ -36,7 +36,7 @@ def bingo_col(column: Column | InstrumentedAttribute) -> BingoMolProxy:
         the column type is not `molalchemy.bingo.types.BingoMol` or
         `molalchemy.bingo.types.BingoBinaryMol`.
     """
-    if isinstance(column, (InstrumentedAttribute, Column)):
+    if isinstance(column, InstrumentedAttribute | Column):
         if isinstance(column.type, BingoMol) or isinstance(column.type, BingoBinaryMol):
             return column
         else:
@@ -73,7 +73,7 @@ def bingo_rxn_col(column: Column | InstrumentedAttribute) -> BingoRxnProxy:
         the column type is not `molalchemy.bingo.types.BingoReaction` or
         `molalchemy.bingo.types.BingoBinaryReaction`.
     """
-    if isinstance(column, (InstrumentedAttribute, Column)):
+    if isinstance(column, InstrumentedAttribute | Column):
         if isinstance(column.type, BingoReaction) or isinstance(
             column.type, BingoBinaryReaction
         ):

@@ -50,9 +50,9 @@ def maccs_fp(mol: ColumnElement, **kwargs) -> Function[RdkitBitFingerprint]:
 
 def morgan_fp(
     mol: ColumnElement, radius: int = 2, **kwargs
-) -> Function["RdkitSparseFingerprint"]:
+) -> Function[RdkitSparseFingerprint]:
     return func.morgan_fp(mol, radius, **kwargs)
 
 
-def torsion_fp(mol: ColumnElement, **kwargs) -> Function["RdkitSparseFingerprint"]:
+def torsion_fp(mol: ColumnElement, **kwargs) -> Function[RdkitSparseFingerprint]:
     return func.torsion_fp(mol, **kwargs)
