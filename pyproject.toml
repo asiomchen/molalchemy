@@ -29,9 +29,11 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
 ]
+
 [project.urls]
 homepage = "https://github.com/asiomchen/molalchemy"
 repository = "https://github.com/asiomchen/molalchemy"
+documentation = "https://molalchemy.readthedocs.io"
 
 [build-system]
 requires = ["uv_build>=0.8.13,<0.9.0"]
