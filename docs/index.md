@@ -24,6 +24,7 @@ molalchemy provides seamless integration between python and chemical databases, 
 
 **This project was originally supposed to be a part of RDKit UGM 2025 hackathon, but COVID had other plans for me. Currently it is in alpha stage as a proof of concept. Contributions are welcome!**
 
+**To give it a hackathon vibe, I build this PoC in couple hours, so expect some rough edges and missing features.**
 
 ## 🚀 Features
 
@@ -149,33 +150,6 @@ class OptimizedMolecule(Base):
     )
 ```
 
-### Reaction Storage and Searching
-
-```python
-from molalchemy.bingo.types import BingoReaction
-from molalchemy.bingo.functions import rxn
-from molalchemy.bingo.index import BingoRxnIndex
-
-class ChemicalReaction(Base):
-    __tablename__ = 'reactions'
-    
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    reaction_smiles: Mapped[str] = mapped_column(BingoReaction)
-    name: Mapped[str] = mapped_column(String(200))
-    
-    __table_args__ = (
-        BingoRxnIndex('rxn_idx', 'reaction_smiles'),
-    )
-
-# Search for oxidation reactions
-oxidations = session.query(ChemicalReaction).filter(
-    rxn.has_reaction_substructure(
-        ChemicalReaction.reaction_smiles,
-        "[C:1]-[OH:2]>>[C:1]=[O:2]"
-    )
-).all()
-```
-
 ### Using Chemical Functions
 
 `mol` provides all static methods for functional-style queries. Under the hood it uses SQLAlchemy's `func` to call the corresponding database functions, but provides type hints and syntax highlighting in IDEs.
@@ -240,16 +214,15 @@ uv run pytest --cov=molalchemy
 ### Code Quality
 
 This project uses modern Python development tools:
-
+- **uv**: For virtual environment and dependency management
 - **Ruff**: For linting and formatting
-- **mypy**: For type checking
 - **pytest**: For testing
 
 ## 📚 Documentation
 
 - **[📋 Project Roadmap](ROADMAP.md)** - Development phases, timeline, and contribution opportunities
 - **[🤝 Contributing Guide](CONTRIBUTING.md)** - How to contribute to the project
-- **[🔧 API Reference](https://molalchemy.readthedocs.io/)** - Complete API documentation
+- **[🔧 API Reference](https://molalchemy.readthedocs.io/api)** - Complete API documentation
 - **[🐳 Bingo Manual](https://lifescience.opensource.epam.com/bingo/user-manual-postgres.html)** - Bingo PostgreSQL cartridge guide
 - **[⚛️ RDKit Manual](https://www.rdkit.org/docs/Cartridge.html)** - RDKit PostgreSQL cartridge guide
 
