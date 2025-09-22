@@ -79,7 +79,6 @@ Improve error messages and create custom exception classes for better debugging.
 ### 🚀 **Advanced Contributions**
 
 #### 7. ChemAxon Cartridge Integration
-**Time: 4-8 weeks | Skills: Java, PostgreSQL, chemical informatics**
 
 Add support for ChemAxon's JChem PostgreSQL cartridge.
 
@@ -90,12 +89,10 @@ Add support for ChemAxon's JChem PostgreSQL cartridge.
 - Require detailed documentation
 
 #### 8. Advanced Chemical Operations
-**Time: 2-4 weeks | Skills: Chemical informatics, RDKit/Bingo**
 
 Implement higher-level chemical operations like scaffold analysis, fragment operations, or reaction processing.
 
 #### 9. Data Science Integration
-**Time: 2-3 weeks | Skills: Pandas, scikit-learn, Jupyter**
 
 Create pandas accessors and DataFrame operations for chemical data.
 
@@ -117,7 +114,7 @@ uv sync
 source .venv/bin/activate
 
 # Start relevant database
-docker-compose up -d bingo  # or rdkit, or both
+docker-compose up -d bingo  # or rdkit
 
 # Run tests to ensure baseline works
 uv run pytest tests/ -v
@@ -394,8 +391,6 @@ docker-compose up -d bingo
 # RDKit database  
 docker-compose up -d rdkit
 
-# Both databases
-docker-compose up -d
 ```
 
 #### **Connect to Database**
@@ -412,8 +407,8 @@ docker-compose exec rdkit psql -U postgres
 # Remove containers and volumes
 docker-compose down -v
 
-# Rebuild and restart
-docker-compose up --build -d
+# Restart containers
+docker-compose up -d
 ```
 
 ## 🆘 Getting Help
