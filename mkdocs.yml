@@ -1,0 +1,128 @@
+site_name: "MolAlchemy"
+site_description: "A set of tools for handling chemical data in databases and data science workflows"
+repo_url: "https://github.com/asiomchen/molalchemy"
+repo_name: "asiomchen/molalchemy"
+copyright: Copyright 2025
+
+use_directory_urls: true
+docs_dir: "docs"
+
+
+
+theme: 
+  name: material
+  palette:
+  - media: "(prefers-color-scheme)"
+    toggle:
+      icon: material/lightbulb-auto
+      name: Switch to light mode
+  - media: '(prefers-color-scheme: light)'
+    scheme: default
+    primary: green
+    accent: green
+    toggle:
+      icon: material/lightbulb
+      name: Switch to dark mode
+  - media: '(prefers-color-scheme: dark)'
+    scheme: slate
+    primary: green
+    accent: green
+    toggle:
+      icon: material/lightbulb-outline
+      name: Switch to system preference
+  features:
+  - content.code.annotate
+  - content.code.copy
+  # - content.code.select
+  - content.footnote.tooltips
+  - content.tabs.link
+  - content.tooltips
+  - navigation.footer
+  - navigation.indexes
+  - navigation.instant
+  - navigation.instant.prefetch
+  # - navigation.instant.preview
+  - navigation.instant.progress
+  - navigation.path
+  - navigation.tabs
+  - navigation.tabs.sticky
+  - navigation.top
+  - navigation.tracking
+  - search.highlight
+  - search.share
+  - search.suggest
+  - toc.follow
+  icon:
+    repo: fontawesome/brands/github-alt
+  logo: img/icon-white.svg
+  favicon: img/favicon.svg
+  language: en
+
+extra_javascript:
+    - assets/js/readthedocs.js
+
+extra_css:
+  - assets/css/tweak-width.css
+  - assets/css/custom-molalchemy.css
+
+watch:
+  - "src"
+
+plugins:
+  - search
+  - autorefs
+  - social
+  # Other plugin
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+          inventories:
+            - https://docs.python.org/objects.inv
+            - https://www.rdkit.org/docs/objects.inv
+            - http://docs.sqlalchemy.org/en/stable/objects.inv
+  - mkdocs-jupyter:
+      execute: false
+      include: ["*.ipynb"]
+
+nav:
+  - molalchemy: index.md
+  - Tutorials:
+    - RDkit - SQLAlchemy ORM: tutorials/01_Getting_Started_rdkit_ORM.ipynb
+    - RDkit - SQLAlchemy Core: tutorials/02_Getting_Started_rdkit_Core.ipynb
+    - Bingo - SQLAlchemy ORM: tutorials/01_Getting_Started_bingo_ORM.ipynb
+    - Contributing: tutorials/contribute.md
+  - API:
+    - molalchemy.bingo:
+        - bingo.types: api/bingo/types.md
+        - bingo.functions: api/bingo/functions.md
+        - bingo.index: api/bingo/db_index.md
+    - molalchemy.rdkit:
+        - rdkit.types: api/rdkit/types.md
+        - rdkit.functions: api/rdkit/functions.md
+        - rdkit.index: api/rdkit/db_index.md
+
+  - Contributing: CONTRIBUTING.md
+  - Changelog: CHANGELOG.md
+  - Roadmap: ROADMAP.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+extra:
+  social:
+  - icon: fontawesome/brands/github-alt
+    link: https://github.com/asiomchen/molalchemy
+  - icon: fontawesome/brands/linkedin
+    link: https://www.linkedin.com/in/anton-siomchen/
+  - icon: fontawesome/brands/docker
+    link: https://hub.docker.com/
+  

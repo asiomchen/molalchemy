@@ -1,0 +1,158 @@
+/* Light mode colors */
+:root {
+  --molalchemy-primary: #138c53;
+  --molalchemy-secondary: #343a40;
+  --molalchemy-light-bg: #138c53;
+  --molalchemy-light-accent: #343a40;
+
+  /* Primary color shades */
+  --md-primary-fg-color: var(--molalchemy-primary);
+  --md-primary-fg-color--light: var(--molalchemy-primary);
+  --md-primary-fg-color--dark: var(--molalchemy-primary);
+  --md-primary-bg-color: var(--molalchemy-secondary);
+  --md-primary-bg-color--light: var(--molalchemy-secondary);
+  --md-text-link-color: var(--molalchemy-secondary);
+
+  /* Accent color shades */
+  --md-accent-fg-color: var(--molalchemy-secondary);
+  --md-accent-fg-color--transparent: var(--molalchemy-secondary);
+  --md-accent-bg-color: var(--molalchemy-secondary);
+  --md-accent-bg-color--light: var(--molalchemy-secondary);
+
+  /* Code block colors for light mode */
+  --md-code-bg-color: hsla(0, 0%, 96%, 1);
+  --md-code-fg-color: hsla(200, 18%, 26%, 1);
+
+  /* Footer */
+  --md-footer-bg-color: var(--molalchemy-primary);
+  --md-footer-fg-color: var(--molalchemy-secondary);
+  --md-footer-fg-color--light: var(--molalchemy-secondary);
+  --md-footer-fg-color--lighter: var(--molalchemy-secondary);
+}
+
+/* Dark mode colors */
+[data-md-color-scheme="slate"] {
+  --molalchemy-primary: #138c53;
+  --molalchemy-secondary: #343a40;
+  --molalchemy-dark-bg: #138c53;
+  --molalchemy-dark-accent: #343a40;
+
+  /* Primary color shades for dark mode */
+  --md-primary-fg-color: var(--molalchemy-primary);
+  --md-primary-fg-color--light: var(--molalchemy-primary);
+  --md-primary-fg-color--dark: var(--molalchemy-primary);
+  --md-primary-bg-color: var(--molalchemy-secondary);
+  --md-primary-bg-color--light: var(--molalchemy-secondary);
+  --md-text-link-color: var(--molalchemy-primary);
+
+  /* Accent color shades for dark mode */
+  --md-accent-fg-color: var(--molalchemy-primary);
+  --md-accent-fg-color--transparent: var(--molalchemy-primary);
+  --md-accent-bg-color: var(--molalchemy-primary);
+  --md-accent-bg-color--light: var(--molalchemy-primary);
+
+  /* Code block colors for dark mode */
+  --md-code-bg-color: hsla(0, 0%, 15%, 1);
+  --md-code-fg-color: hsla(0, 0%, 85%, 1);
+
+  /* Footer for dark mode */
+  --md-footer-bg-color: var(--molalchemy-primary);
+  --md-footer-fg-color: var(--molalchemy-secondary);
+  --md-footer-fg-color--light: var(--molalchemy-secondary);
+  --md-footer-fg-color--lighter: var(--molalchemy-secondary);
+}
+
+/* Header styling for both modes */
+.md-header {
+  background-image: linear-gradient(to right, var(--molalchemy-primary), var(--molalchemy-secondary));
+}
+
+.md-footer {
+  background-image: linear-gradient(to right, var(--molalchemy-primary), var(--molalchemy-secondary));
+}
+
+/* Tabs styling for light mode */
+.md-tabs {
+  background-image: linear-gradient(to right, var(--molalchemy-light-bg, #F4F6F9), var(--molalchemy-light-accent, #d1e2c3));
+}
+
+/* Tabs styling for dark mode */
+[data-md-color-scheme="slate"] .md-tabs {
+  background-image: linear-gradient(to right, var(--molalchemy-dark-bg), var(--molalchemy-dark-accent));
+}
+
+.md-header__topic {
+  color: rgb(255, 255, 255);
+}
+
+.md-source__repository,
+.md-source__icon,
+.md-search__input,
+.md-search__input::placeholder,
+.md-search__input~.md-search__icon,
+.md-footer__inner.md-grid,
+.md-copyright__highlight,
+.md-copyright,
+.md-footer-meta.md-typeset a,
+.md-version {
+  color: rgb(255, 255, 255) !important;
+}
+
+.md-search__form {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Search input styling for light mode */
+.md-search__input {
+  color: #222222 !important;
+}
+
+/* Search input styling for dark mode */
+[data-md-color-scheme="slate"] .md-search__input {
+  color: #ffffff !important;
+}
+
+[data-md-color-scheme="slate"] .md-search__form {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.md-header__topic {
+  color: rgb(255, 255, 255);
+  font-size: 1.4em;
+}
+
+/* Increase the size of the logo */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 2rem !important;
+}
+
+/* Reduce the margin around the logo */
+.md-header__button.md-logo {
+  margin: 0.4em;
+  padding: 0.4em;
+}
+
+/* Remove the `In` and `Out` block in rendered Jupyter notebooks */
+.md-container .jp-Cell-outputWrapper .jp-OutputPrompt.jp-OutputArea-prompt,
+.md-container .jp-Cell-inputWrapper .jp-InputPrompt.jp-InputArea-prompt {
+  display: none !important;
+}
+
+/* Dark mode adjustments for tab text */
+[data-md-color-scheme="slate"] .md-tabs__link {
+  color: #ffffff;
+}
+
+[data-md-color-scheme="slate"] .md-tabs__link--active {
+  color: var(--molalchemy-primary);
+}
+
+/* Ensure proper contrast for links in dark mode */
+[data-md-color-scheme="slate"] .md-content a {
+  color: var(--molalchemy-primary);
+}
+
+[data-md-color-scheme="slate"] .md-content a:hover {
+  color: #16a466;
+}

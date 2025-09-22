@@ -1,0 +1,55 @@
+[project]
+name = "molalchemy"
+version = "0.0.1"
+description = "Extensions for SQLAlchemy to work with chemical cartridges"
+license = {text = "Apache-2.0"}
+readme = "README.md"
+authors = [
+    { name = "Anton Siomchen", email = "anton.siomchen+molalchemy@gmail.com" }
+]
+
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "loguru>=0.7.3",
+    "psycopg[binary]>=3.2.9",
+    "rdkit>=2024.3.1",
+    "sqlalchemy>=2.0.43",
+]
+keywords = ["chemistry", "cheminformatics", "molecules", "reactions", "databases"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Utilities",
+    "Topic :: Database",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+[project.urls]
+homepage = "https://github.com/asiomchen/molalchemy"
+repository = "https://github.com/asiomchen/molalchemy"
+documentation = "https://molalchemy.readthedocs.io"
+
+[build-system]
+requires = ["uv_build>=0.8.13,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.30.1",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+]
+docs = [
+    "griffe-typingdoc>=0.2.9",
+    "mkdocs>=1.6.1",
+    "mkdocs-jupyter>=0.25.1",
+    "mkdocs-material[imaging]>=9.6.2",
+    "mkdocstrings[python]>=0.28.0",
+    "pymdown-extensions>=10.16.1",
+]

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg6"
+   xml:space="preserve"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"><title
+     id="title26">molalchemy</title><metadata
+     id="metadata12"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>molalchemy</dc:title><dc:creator><cc:Agent><dc:title>Anton Siomchen</dc:title></cc:Agent></dc:creator></cc:Work></rdf:RDF></metadata><defs
+     id="defs10" /><path
+     id="path1225-6"
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.898636;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+     d="m 17.931972,12.866511 c -0.157864,0.772378 -2.50271,1.328174 -5.331828,1.328274 -2.8304402,-1.29e-4 -5.1767502,-0.555507 -5.3327704,-1.328274 v 2.915483 c -0.00135,0.805569 2.3866721,1.45879 5.3327704,1.458729 2.945729,-8.1e-5 5.33318,-0.65326 5.331828,-1.458729 z m -1.872862,1.642553 c 0.424924,4.89e-4 0.769132,0.36275 0.769077,0.809417 5.5e-5,0.446667 -0.344153,0.808929 -0.769077,0.809418 -0.425292,5.6e-5 -0.770071,-0.362365 -0.770018,-0.809418 -5.4e-5,-0.447052 0.344726,-0.809474 0.770018,-0.809417 z" /><path
+     id="path1225"
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.898636;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+     d="M 17.922411,8.875918 C 17.764546,9.648296 15.4197,10.204092 12.590582,10.204192 9.7601423,10.204063 7.4138323,9.648685 7.2578121,8.8759179 v 2.9154831 c -0.00135,0.805569 2.3866721,1.45879 5.3327699,1.458729 2.945729,-8.1e-5 5.33318,-0.65326 5.331829,-1.458729 z m -1.872863,1.642553 c 0.424924,4.89e-4 0.769132,0.36275 0.769078,0.809417 5.4e-5,0.446667 -0.344154,0.808929 -0.769078,0.809417 -0.425291,5.6e-5 -0.77007,-0.362365 -0.770017,-0.809417 -5.4e-5,-0.447052 0.344726,-0.809474 0.770017,-0.809417 z" /><ellipse
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.898636;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+     id="path1225-2-9"
+     cx="12.590417"
+     cy="7.8461189"
+     rx="5.3323655"
+     ry="1.4580605" /><g
+     style="fill:#000000;stroke-width:0.998792;stroke-dasharray:none;shape-rendering:geometricPrecision"
+     id="g26"
+     transform="matrix(0.39816729,0,0,0.39816729,-28.072064,-15.710968)"><path
+       d="M 101.61293,39.617421 75.676967,54.55415 V 84.427609 L 101.61293,99.364338 127.54889,84.427609 V 54.55415 Z m 0,1.395363 24.72815,14.239048 V 83.729927 L 101.61293,97.968975 76.884769,83.729927 V 55.251832 Z m -0.31784,4.852059 -20.055877,11.543459 0.603901,1.078235 20.087656,-11.575172 z M 121.0649,57.94742 v 23.118632 h 1.23958 V 57.94742 Z m -39.190002,22.579514 -0.635685,1.046523 20.055877,11.575172 0.63568,-1.078235 z"
+       fill="#000000"
+       id="path1"
+       style="fill:#ffffff;stroke-width:1.01473;stroke-dasharray:none" /></g></svg>

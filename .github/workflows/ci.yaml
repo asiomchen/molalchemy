@@ -1,0 +1,89 @@
+name: pytest
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: actions-id-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test on Python ${{ matrix.python-version }} - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+      fail-fast: false
+      max-parallel: 4
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.8.13"
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run tests and collect coverage
+        run: uv run pytest --color=yes --disable-pytest-warnings --cov=molalchemy --cov-branch  --cov-report=xml --junitxml=junit.xml -o junit_family=legacy tests/
+
+      - name: Upload coverage to Codecov
+        if: ${{ !cancelled() }} && ${{ matrix.os == 'ubuntu-latest' }} && ${{ matrix.python-version == '3.10' }}
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage.xml
+          verbose: true
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }} && ${{ matrix.os == 'ubuntu-latest' }} && ${{ matrix.python-version == '3.10' }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  build-and-create-signed-release:
+    name: Build distribution📦 & create Github Release
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: test
+    permissions:
+      contents: write
+      id-token: write
+    uses: ./.github/workflows/publish.yaml
+    with:
+      python-version: "3.10"
+      is-draft: true
+  publish:
+    name: Publish to PyPI
+    needs: build-and-create-signed-release
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/molalchemy
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+    steps:
+      - name: Download all the dists
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        
+    env:
+      PYTHONIOENCODING: utf-8
