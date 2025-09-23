@@ -16,43 +16,85 @@ from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitSparseFin
 from molalchemy.types import CString
 
 
-def equals(mol_column: ColumnElement, query: str) -> BinaryExpression:
+def equals(mol_column: ColumnElement[RdkitMol], query: str) -> BinaryExpression:
     return mol_column.op("@=")(query)
 
 
-def has_substructure(mol_column: ColumnElement, query: str) -> BinaryExpression:
+def has_substructure(
+    mol_column: ColumnElement[RdkitMol], query: str
+) -> BinaryExpression:
     return mol_column.op("@>")(query)
 
 
-def to_binary(mol: ColumnElement, **kwargs) -> Function[bytes]:
+def to_binary(mol: ColumnElement[RdkitMol], **kwargs) -> Function[bytes]:
     return func.mol_send(mol, **kwargs)
 
 
-def to_json(mol: ColumnElement, **kwargs) -> Function[str]:
+def to_json(mol: ColumnElement[RdkitMol], **kwargs) -> Function[str]:
     return func.mol_to_json(mol, **kwargs)
 
 
-def to_cxsmiles(mol: ColumnElement, **kwargs) -> Function[str]:
+def to_cxsmiles(mol: ColumnElement[RdkitMol], **kwargs) -> Function[str]:
     return func.mol_to_cxsmiles(mol, **kwargs)
 
 
-def to_smarts(mol: ColumnElement, **kwargs) -> Function[str]:
+def to_smarts(mol: ColumnElement[RdkitMol], **kwargs) -> Function[str]:
     return func.mol_to_smarts(mol, **kwargs)
 
 
-def mol_from_smiles(smiles: str, **kwargs) -> Function[RdkitMol]:
+def to_pkl(mol: ColumnElement[RdkitMol], **kwargs) -> Function[bytes]:
+    return func.mol_to_pkl(mol, **kwargs)
+
+
+def from_smiles(smiles: ColumnElement[str], **kwargs) -> Function[RdkitMol]:
     return func.mol_from_smiles(cast(smiles, CString), **kwargs)
 
 
-def maccs_fp(mol: ColumnElement, **kwargs) -> Function[RdkitBitFingerprint]:
+def from_pkl(pkl: ColumnElement[bytes], **kwargs) -> Function[RdkitMol]:
+    return func.mol_from_pkl(pkl, **kwargs)
+
+
+def maccs_fp(mol: ColumnElement[RdkitMol], **kwargs) -> Function[RdkitBitFingerprint]:
     return func.maccs_fp(mol, **kwargs)
 
 
 def morgan_fp(
-    mol: ColumnElement, radius: int = 2, **kwargs
+    mol: ColumnElement[RdkitMol], radius: int = 2, **kwargs
 ) -> Function[RdkitSparseFingerprint]:
     return func.morgan_fp(mol, radius, **kwargs)
 
 
-def torsion_fp(mol: ColumnElement, **kwargs) -> Function[RdkitSparseFingerprint]:
+def morganbv_fp(
+    mol: ColumnElement[RdkitMol], radius: int = 2, **kwargs
+) -> Function[RdkitBitFingerprint]:
+    return func.morganbv_fp(mol, radius, **kwargs)
+
+
+def torsion_fp(
+    mol: ColumnElement[RdkitMol], **kwargs
+) -> Function[RdkitSparseFingerprint]:
     return func.torsion_fp(mol, **kwargs)
+
+
+def mol_murckoscaffold(mol: ColumnElement[RdkitMol], **kwargs) -> Function[RdkitMol]:
+    return func.mol_murckoscaffold(mol, **kwargs)
+
+
+def mol_tpsa(mol: ColumnElement[RdkitMol], **kwargs) -> Function[float]:
+    return func.mol_tpsa(mol, **kwargs)
+
+
+def mol_logp(mol: ColumnElement[RdkitMol], **kwargs) -> Function[float]:
+    return func.mol_logp(mol, **kwargs)
+
+
+def mol_num_atoms(mol: ColumnElement[RdkitMol], **kwargs) -> Function[int]:
+    return func.mol_num_atoms(mol, **kwargs)
+
+
+def mol_hba(mol: ColumnElement[RdkitMol], **kwargs) -> Function[int]:
+    return func.mol_hba(mol, **kwargs)
+
+
+def mol_hbd(mol: ColumnElement[RdkitMol], **kwargs) -> Function[int]:
+    return func.mol_hbd(mol, **kwargs)

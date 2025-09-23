@@ -74,7 +74,7 @@ class TestRdkitFunc:
         """Test mol_from_smiles function generates correct SQL."""
         smiles = "CCO"
 
-        result = rdkit_func.mol.mol_from_smiles(smiles)
+        result = rdkit_func.mol.from_smiles(smiles)
 
         # Should return a function call
         sql_str = str(result)
@@ -208,7 +208,7 @@ class TestRdkitFuncIntegration:
         """Test molecular conversion functions in query."""
         smiles = "CCO"
 
-        mol_expr = rdkit_func.mol.mol_from_smiles(smiles)
+        mol_expr = rdkit_func.mol.from_smiles(smiles)
         binary_expr = rdkit_func.mol.to_binary(self.test_table.c.structure)
         fp_expr = rdkit_func.mol.maccs_fp(self.test_table.c.structure)
 
