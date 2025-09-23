@@ -63,7 +63,7 @@ pip install .
 
 - rdkit 2024.3.1+
 
-- Running PostgreSQL with chemical cartridge (Bingo or RDKit) (see [`docker-compose.yaml`](docker-compose.yaml) for a ready-to-use setup)
+- Running PostgreSQL with chemical cartridge (Bingo or RDKit) (see [`docker-compose.yaml`](https://github.com/asiomchen/molalchemy/blob/main/docker-compose.yaml) for a ready-to-use setup)
 
 
 ## 🔧 Quick Start

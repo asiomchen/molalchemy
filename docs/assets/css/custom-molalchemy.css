@@ -1,9 +1,9 @@
 /* Light mode colors */
 :root {
   --molalchemy-primary: #138c53;
-  --molalchemy-secondary: #343a40;
+  --molalchemy-secondary: #274729;
   --molalchemy-light-bg: #138c53;
-  --molalchemy-light-accent: #343a40;
+  --molalchemy-light-accent: #274729;
 
   /* Primary color shades */
   --md-primary-fg-color: var(--molalchemy-primary);
