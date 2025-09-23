@@ -1,6 +1,15 @@
 """Tests for RDKit functions."""
 
-from sqlalchemy import Column, Integer, MetaData, String, Table
+import pytest
+from sqlalchemy import (
+    BinaryExpression,
+    Column,
+    Function,
+    Integer,
+    MetaData,
+    String,
+    Table,
+)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.sql import select
 
@@ -74,7 +83,7 @@ class TestRdkitFunc:
         """Test mol_from_smiles function generates correct SQL."""
         smiles = "CCO"
 
-        result = rdkit_func.mol.mol_from_smiles(smiles)
+        result = rdkit_func.mol.from_smiles(smiles)
 
         # Should return a function call
         sql_str = str(result)
@@ -96,11 +105,11 @@ class TestRdkitFunc:
         fp1 = b"fingerprint1"
         fp2 = b"fingerprint2"
 
-        result = rdkit_func.fp.tanimoto(fp1, fp2)
+        result = rdkit_func.fp.tanimoto_sml(fp1, fp2)
 
         # Should return a function call
         sql_str = str(result)
-        assert "tanimoto" in sql_str
+        assert "tanimoto_sml" in sql_str
         # Both fingerprints should be present as bind parameters
         assert ":tanimoto_sml_" in sql_str
 
@@ -208,7 +217,7 @@ class TestRdkitFuncIntegration:
         """Test molecular conversion functions in query."""
         smiles = "CCO"
 
-        mol_expr = rdkit_func.mol.mol_from_smiles(smiles)
+        mol_expr = rdkit_func.mol.from_smiles(smiles)
         binary_expr = rdkit_func.mol.to_binary(self.test_table.c.structure)
         fp_expr = rdkit_func.mol.maccs_fp(self.test_table.c.structure)
 
@@ -232,7 +241,7 @@ class TestRdkitFuncIntegration:
         fp1 = b"fingerprint1"
         fp2 = b"fingerprint2"
 
-        tanimoto_expr = rdkit_func.fp.tanimoto(fp1, fp2)
+        tanimoto_expr = rdkit_func.fp.tanimoto_sml(fp1, fp2)
         maccs_expr = rdkit_func.mol.maccs_fp(self.test_table.c.structure)
 
         stmt = select(
@@ -247,3 +256,29 @@ class TestRdkitFuncIntegration:
         assert "maccs_fp" in compiled
         # Fingerprints should be parameterized
         assert ":tanimoto_sml_" in compiled
+
+
+all_mol_func = [
+    getattr(rdkit_func.mol, f) for f in rdkit_func.mol.__all__ if not f.startswith("_")
+]
+all_fp_func = [
+    getattr(rdkit_func.fp, f) for f in rdkit_func.fp.__all__ if not f.startswith("_")
+]
+all_rxn_func = [
+    getattr(rdkit_func.rxn, f) for f in rdkit_func.rxn.__all__ if not f.startswith("_")
+]
+all_funcs = all_mol_func + all_fp_func + all_rxn_func
+
+
+@pytest.mark.parametrize("func", all_funcs)
+def test_any_function_returns_function_object(func):
+    """Test that any function returns a SQLAlchemy function object."""
+    random_args = ["CCO"] * 10
+    random_columns = [Column("dummy", RdkitMol())] * 10
+    if callable(func):
+        try:
+            result = func(*random_args[: func.__code__.co_argcount])
+            assert isinstance(result, Function)
+        except AttributeError:
+            result = func(*random_columns[: func.__code__.co_argcount])
+            assert isinstance(result, BinaryExpression)

@@ -14,6 +14,17 @@ from sqlalchemy.sql.functions import Function
 
 _AAM_STRATEGIES = Literal["CLEAR", "DISCARD", "ALTER", "KEEP"]
 
+__all__ = [
+    "equals",
+    "has_reaction_smarts",
+    "has_reaction_substructure",
+    "map_atoms",
+    "to_binary",
+    "to_cml",
+    "to_rxnfile",
+    "to_smiles",
+]
+
 
 def equals(rxn_column: ColumnElement, query: str, parameters: str = ""):
     """

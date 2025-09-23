@@ -63,7 +63,7 @@ pip install .
 
 - rdkit 2024.3.1+
 
-- Running PostgreSQL with chemical cartridge (Bingo or RDKit) (see [`docker-compose.yaml`](docker-compose.yaml) for a ready-to-use setup)
+- Running PostgreSQL with chemical cartridge (Bingo or RDKit) (see [`docker-compose.yaml`](https://github.com/asiomchen/molalchemy/blob/main/docker-compose.yaml) for a ready-to-use setup)
 
 
 ## 🔧 Quick Start
@@ -222,7 +222,7 @@ This project uses modern Python development tools:
 
 - **[📋 Project Roadmap](ROADMAP.md)** - Development phases, timeline, and contribution opportunities
 - **[🤝 Contributing Guide](CONTRIBUTING.md)** - How to contribute to the project
-- **[🔧 API Reference](https://molalchemy.readthedocs.io/api)** - Complete API documentation
+- **[🔧 API Reference](https://molalchemy.readthedocs.io/)** - Complete API documentation
 - **[🐳 Bingo Manual](https://lifescience.opensource.epam.com/bingo/user-manual-postgres.html)** - Bingo PostgreSQL cartridge guide
 - **[⚛️ RDKit Manual](https://www.rdkit.org/docs/Cartridge.html)** - RDKit PostgreSQL cartridge guide
 
@@ -231,7 +231,7 @@ This project uses modern Python development tools:
 We welcome contributions! molalchemy offers many opportunities for developers interested in chemical informatics:
 
 - **🔰 New to the project?** Check out [good first issues](https://github.com/asiomchen/molalchemy/labels/good%20first%20issue)
-- **� Chemical expertise?** Help complete RDKit integration or add ChemAxon support  
+- **🔬 Chemical expertise?** Help complete RDKit integration or add ChemAxon support
 - **🐳 DevOps skills?** Optimize our Docker containers and CI/CD pipeline
 - **📚 Love documentation?** Create tutorials and improve API docs
 

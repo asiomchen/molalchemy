@@ -1,6 +1,6 @@
 [project]
 name = "molalchemy"
-version = "0.0.1"
+version = "0.0.2"
 description = "Extensions for SQLAlchemy to work with chemical cartridges"
 license = {text = "Apache-2.0"}
 readme = "README.md"

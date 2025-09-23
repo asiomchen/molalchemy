@@ -8,20 +8,42 @@ similarity search, and format conversions.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 
 from sqlalchemy import text
 from sqlalchemy.sql import ColumnElement, func
 from sqlalchemy.sql.elements import BinaryExpression
 from sqlalchemy.sql.functions import Function
 
-if TYPE_CHECKING:
-    from molalchemy.bingo.types import BingoBinaryMol
+from molalchemy.bingo.types import BingoBinaryMol, BingoMol
 
 _WEIGHT_TYPES = Literal["molecular-weight", "most-abundant-mass", "monoisotopic"]
 
+AnyBingoMol = BingoMol | BingoBinaryMol
 
-def has_substructure(mol_column: ColumnElement, query: str, parameters: str = ""):
+__all__ = [
+    "check_molecule",
+    "equals",
+    "get_similarity",
+    "get_weight",
+    "gross_formula",
+    "has_gross_formula",
+    "has_substructure",
+    "matches_smarts",
+    "similarity",
+    "to_binary",
+    "to_canonical",
+    "to_cml",
+    "to_inchi",
+    "to_inchikey",
+    "to_molfile",
+    "to_smiles",
+]
+
+
+def has_substructure(
+    mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""
+):
     """
     Perform substructure search on a molecule column.
 
@@ -44,7 +66,9 @@ def has_substructure(mol_column: ColumnElement, query: str, parameters: str = ""
     return mol_column.op("@")(text(f"('{query}', '{parameters}')::bingo.sub"))
 
 
-def matches_smarts(mol_column: ColumnElement, query: str, parameters: str = ""):
+def matches_smarts(
+    mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""
+):
     """
     Perform SMARTS pattern matching on a molecule column.
 
@@ -66,7 +90,7 @@ def matches_smarts(mol_column: ColumnElement, query: str, parameters: str = ""):
     return mol_column.op("@")(text(f"('{query}', '{parameters}')::bingo.smarts"))
 
 
-def equals(mol_column: ColumnElement, query: str, parameters: str = ""):
+def equals(mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""):
     """
     Perform exact structure matching on a molecule column.
 
@@ -90,7 +114,7 @@ def equals(mol_column: ColumnElement, query: str, parameters: str = ""):
 
 
 def similarity(
-    mol_column: ColumnElement,
+    mol_column: ColumnElement[AnyBingoMol],
     query: str,
     bottom: float = 0.0,
     top: float = 1.0,
@@ -126,7 +150,7 @@ def similarity(
 
 
 def get_similarity(
-    mol_column: ColumnElement,
+    mol_column: ColumnElement[AnyBingoMol],
     query: str,
     metric: str = "Tanimoto",
 ) -> Function[float]:
@@ -153,7 +177,7 @@ def get_similarity(
     return func.bingo.getsimilarity(mol_column, query, metric)
 
 
-def has_gross_formula(mol_column: ColumnElement, formula: str):
+def has_gross_formula(mol_column: ColumnElement[AnyBingoMol], formula: str):
     """
     Search for molecules with a specific gross formula.
 
@@ -174,7 +198,8 @@ def has_gross_formula(mol_column: ColumnElement, formula: str):
 
 
 def get_weight(
-    mol_column: ColumnElement, weight_type: _WEIGHT_TYPES = "molecular-weight"
+    mol_column: ColumnElement[AnyBingoMol],
+    weight_type: _WEIGHT_TYPES = "molecular-weight",
 ):
     """
     Calculate molecular weight of molecules.
@@ -195,7 +220,7 @@ def get_weight(
     return func.Bingo.getWeight(mol_column, weight_type)
 
 
-def gross_formula(mol_column: ColumnElement) -> Function[str]:
+def gross_formula(mol_column: ColumnElement[AnyBingoMol]) -> Function[str]:
     """
     Calculate the gross formula of molecules.
 
@@ -213,7 +238,7 @@ def gross_formula(mol_column: ColumnElement) -> Function[str]:
     return func.Bingo.Gross(mol_column)
 
 
-def check_molecule(mol_column: ColumnElement) -> Function[str | None]:
+def check_molecule(mol_column: ColumnElement[AnyBingoMol]) -> Function[str | None]:
     """
     Check if molecules are valid and return error messages for invalid ones.
 
@@ -232,7 +257,7 @@ def check_molecule(mol_column: ColumnElement) -> Function[str | None]:
     return func.Bingo.CheckMolecule(mol_column)
 
 
-def to_canonical(mol_column: ColumnElement) -> Function[str]:
+def to_canonical(mol_column: ColumnElement[AnyBingoMol]) -> Function[str]:
     """
     Convert molecules to canonical SMILES format.
 
@@ -250,7 +275,7 @@ def to_canonical(mol_column: ColumnElement) -> Function[str]:
     return func.Bingo.CanSMILES(mol_column)
 
 
-def to_inchi(mol_column: ColumnElement) -> Function[str]:
+def to_inchi(mol_column: ColumnElement[AnyBingoMol]) -> Function[str]:
     """
     Convert molecules to InChI format.
 
@@ -267,7 +292,7 @@ def to_inchi(mol_column: ColumnElement) -> Function[str]:
     return func.bingo.InChI(mol_column)
 
 
-def to_inchikey(mol_column: ColumnElement) -> Function[str]:
+def to_inchikey(mol_column: ColumnElement[AnyBingoMol]) -> Function[str]:
     """
     Convert molecules to InChIKey format.
 
@@ -285,7 +310,7 @@ def to_inchikey(mol_column: ColumnElement) -> Function[str]:
 
 
 def to_binary(
-    mol_column: ColumnElement, preserve_pos: bool = True
+    mol_column: ColumnElement[AnyBingoMol], preserve_pos: bool = True
 ) -> Function[BingoBinaryMol]:
     """
     Convert molecules to Bingo's internal binary format.
@@ -306,7 +331,7 @@ def to_binary(
     return func.Bingo.CompactMolecule(mol_column, preserve_pos)
 
 
-def to_smiles(mol_column: ColumnElement) -> Function[str]:
+def to_smiles(mol_column: ColumnElement[AnyBingoMol]) -> Function[str]:
     """
     Convert molecules to SMILES format.
 
@@ -324,7 +349,7 @@ def to_smiles(mol_column: ColumnElement) -> Function[str]:
     return func.Bingo.SMILES(mol_column)
 
 
-def to_molfile(mol_column: ColumnElement) -> Function[str]:
+def to_molfile(mol_column: ColumnElement[AnyBingoMol]) -> Function[str]:
     """
     Convert molecules to Molfile format.
 
@@ -342,7 +367,7 @@ def to_molfile(mol_column: ColumnElement) -> Function[str]:
     return func.Bingo.Molfile(mol_column)
 
 
-def to_cml(mol_column: ColumnElement) -> Function[str]:
+def to_cml(mol_column: ColumnElement[AnyBingoMol]) -> Function[str]:
     """
     Convert molecules to CML (Chemical Markup Language) format.
 

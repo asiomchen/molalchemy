@@ -1,6 +1,15 @@
 """Tests for bingo functions."""
 
-from sqlalchemy import Column, Integer, MetaData, String, Table
+import pytest
+from sqlalchemy import (
+    BinaryExpression,
+    Column,
+    Function,
+    Integer,
+    MetaData,
+    String,
+    Table,
+)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.sql import select
 
@@ -243,3 +252,27 @@ class TestBingoFuncIntegration:
         assert "bingo.exact" in compiled
         assert benzene in compiled
         assert ethanol in compiled
+
+
+all_mol_func = [
+    getattr(bingo_func.mol, f) for f in bingo_func.mol.__all__ if not f.startswith("_")
+]
+
+all_rxn_func = [
+    getattr(bingo_func.rxn, f) for f in bingo_func.rxn.__all__ if not f.startswith("_")
+]
+all_funcs = all_mol_func + all_rxn_func
+
+
+@pytest.mark.parametrize("func", all_funcs)
+def test_any_function_returns_function_object(func):
+    """Test that any function returns a SQLAlchemy function object."""
+    random_args = ["CCO"] * 10
+    random_columns = [Column("dummy", BingoMol())] * 10
+    if callable(func):
+        try:
+            result = func(*random_args[: func.__code__.co_argcount])
+            assert isinstance(result, Function)
+        except AttributeError:
+            result = func(*random_columns[: func.__code__.co_argcount])
+            assert isinstance(result, BinaryExpression)

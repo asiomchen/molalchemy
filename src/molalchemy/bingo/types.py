@@ -6,11 +6,10 @@ chemical molecules and reactions in PostgreSQL using the Bingo cartridge.
 
 from typing import Literal
 
+from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
 from molalchemy.bingo.comparators import BingoMolComparator, BingoRxnComparator
-
-from . import functions as bingo_func
 
 
 class BingoBaseType(UserDefinedType):
@@ -155,15 +154,15 @@ class BingoBinaryMol(BingoBaseType):
         return "bytea"
 
     def bind_expression(self, bindvalue):
-        return bingo_func.mol.to_binary(bindvalue, self.preserve_pos)
+        return func.Bingo.CompactMolecule(bindvalue, self.preserve_pos)
 
     def column_expression(self, col):
         if self.return_type == "smiles":
-            return bingo_func.mol.to_smiles(col)
+            return func.Bingo.SMILES(col)
         elif self.return_type == "molfile":
-            return bingo_func.mol.to_molfile(col)
+            return func.Bingo.Molfile(col)
         elif self.return_type == "cml":
-            return bingo_func.mol.to_cml(col)
+            return func.Bingo.CML(col)
         elif self.return_type == "bytes":
             return col
         else:
