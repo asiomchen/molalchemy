@@ -2,6 +2,7 @@
 
 import pytest
 from rdkit import Chem
+from rdkit.Chem import AllChem, rdChemReactions
 from sqlalchemy import Column, Integer, MetaData, String, Table
 
 from molalchemy.rdkit.comparators import RdkitFPComparator, RdkitMolComparator
@@ -84,6 +85,31 @@ class TestRdkitMol:
             assert isinstance(processed, Chem.Mol)
             assert Chem.MolToSmiles(processed) == value
 
+    def test_bind_processor(self):
+        """Test bind_processor for different input types."""
+        rdkit_mol = RdkitMol()
+        processor = rdkit_mol.bind_processor(None)
+
+        # Test with SMILES string
+        smiles = "CCO"
+        processed = processor(smiles)
+        assert isinstance(processed, bytes)
+        assert Chem.MolToSmiles(Chem.Mol(processed)) == smiles
+
+        # Test with Chem.Mol object
+        mol = Chem.MolFromSmiles(smiles)
+        processed = processor(mol)
+        assert isinstance(processed, bytes)
+        assert Chem.MolToSmiles(Chem.Mol(processed)) == smiles
+
+        # Test with None
+        processed = processor(None)
+        assert processed is None
+
+        # Test with invalid type
+        with pytest.raises(ValueError):
+            processor(123)  # Invalid type
+
 
 class TestRdkitBitFingerprint:
     """Test RdkitBitFingerprint type."""
@@ -117,6 +143,31 @@ class TestRdkitBitFingerprint:
         # Should not raise any exceptions
         assert test_table.c.fingerprint.type.__class__ == RdkitBitFingerprint
         assert isinstance(test_table.c.fingerprint.type, RdkitBitFingerprint)
+
+    @pytest.mark.parametrize("return_type", ["smiles", "bytes", "mol"])
+    @pytest.mark.parametrize(
+        "value", ["C.C>>CC", "[C:1](=[O:2])O.[N:3]>>[C:1](=[O:2])[N:3]"]
+    )
+    def test_result_processor(self, return_type, value):
+        """Test result_processor for different return types and values."""
+        rdkit_mol = RdkitReaction(return_type=return_type)
+        processor = rdkit_mol.result_processor(None, None)
+        input_value = value
+        if return_type != "smiles":
+            input_value = rdChemReactions.ReactionFromSmarts(value).ToBinary()
+        processed = processor(input_value)
+
+        if return_type == "smiles":
+            assert processed == value
+        elif return_type == "bytes":
+            mol_bytes = rdChemReactions.ReactionFromSmarts(value).ToBinary()
+            processed = processor(mol_bytes)
+            assert processed == mol_bytes
+        elif return_type == "mol":
+            mol_bytes = rdChemReactions.ReactionFromSmarts(value).ToBinary()
+            processed = processor(mol_bytes)
+            assert isinstance(processed, AllChem.ChemicalReaction)
+            assert rdChemReactions.ReactionToSmarts(processed) == value
 
 
 class TestRdkitSparseFingerprint:
