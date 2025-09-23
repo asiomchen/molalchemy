@@ -13,6 +13,18 @@ from sqlalchemy.sql.functions import Function
 from molalchemy.rdkit.types import RdkitReaction
 from molalchemy.types import CString
 
+__all__ = [
+    "equals",
+    "has_smarts",
+    "reaction_from_smarts",
+    "reaction_from_smiles",
+    "reaction_numproducts",
+    "reaction_numreactants",
+    "reaction_to_smarts",
+    "reaction_to_smiles",
+    "to_binary",
+]
+
 
 def has_smarts(rxn_column: ColumnElement, pattern: str) -> ColumnElement[bool]:
     """

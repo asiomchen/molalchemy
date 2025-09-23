@@ -14,6 +14,8 @@ from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitSparseFingerprint
 
 AnyRdkitFingerprint = RdkitBitFingerprint | RdkitSparseFingerprint
 
+__all__ = ["tanimoto_dist", "tanimoto_sml", "tversky_sml"]
+
 
 def tanimoto_sml(
     fp1: ColumnElement[AnyRdkitFingerprint],

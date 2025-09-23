@@ -15,6 +15,31 @@ from sqlalchemy.sql.elements import ColumnElement
 from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitSparseFingerprint
 from molalchemy.types import CString
 
+__all__ = [
+    "equals",
+    "from_pkl",
+    "from_smiles",
+    "has_substructure",
+    "maccs_fp",
+    "mol_hba",
+    "mol_hbd",
+    "mol_logp",
+    "mol_murckoscaffold",
+    "mol_num_atoms",
+    "mol_tpsa",
+    "morgan_fp",
+    "morganbv_fp",
+    "rdkit_fp",
+    "to_binary",
+    "to_cxsmiles",
+    "to_json",
+    "to_pkl",
+    "to_smarts",
+    "to_smiles",
+    "torsion_fp",
+    "torsionbv_fp",
+]
+
 
 def equals(mol_column: ColumnElement[RdkitMol], query: str) -> BinaryExpression:
     """
