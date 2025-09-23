@@ -2,8 +2,8 @@
 Collection of RDKit PostgreSQL functions for molecular structure search and analysis.
 
 This module provides static methods that wrap RDKit PostgreSQL functions for performing
-various chemical reaction operations including reaction substructure search, exact matching,
-and format conversions.
+various molecular operations including substructure search, exact matching, format conversions,
+fingerprint generation, scaffold extraction, and molecular property calculations.
 """
 
 from __future__ import annotations
@@ -97,6 +97,33 @@ def to_binary(mol: ColumnElement[RdkitMol], **kwargs) -> Function[bytes]:
     >>> query = select(to_binary(Molecule.structure))
     """
     return func.mol_send(mol, **kwargs)
+
+
+def to_smiles(mol: ColumnElement[RdkitMol], **kwargs) -> Function[str]:
+    """
+    Convert a molecular structure to SMILES format.
+
+    Converts the molecular structure to SMILES (Simplified Molecular Input Line
+    Entry System) format using the `mol_to_smiles` PostgreSQL function.
+
+    Parameters
+    ----------
+    mol : ColumnElement[molalchemy.rdkit.types.RdkitMol]
+        The molecular structure to convert.
+    **kwargs
+        Additional keyword arguments passed to the PostgreSQL function.
+
+    Returns
+    -------
+    Function[str]
+        SQLAlchemy function that returns the SMILES representation.
+
+    Examples
+    --------
+    >>> from sqlalchemy import select
+    >>> query = select(to_smiles(Molecule.structure))
+    """
+    return func.mol_to_smiles(mol, **kwargs)
 
 
 def to_json(mol: ColumnElement[RdkitMol], **kwargs) -> Function[str]:
@@ -288,6 +315,28 @@ def maccs_fp(mol: ColumnElement[RdkitMol], **kwargs) -> Function[RdkitBitFingerp
     return func.maccs_fp(mol, **kwargs)
 
 
+def rdkit_fp(mol: ColumnElement[RdkitMol], **kwargs) -> Function[RdkitBitFingerprint]:
+    """
+    Generate RDKit fingerprint for a molecular structure.
+
+    Computes the RDKit fingerprint, a topological fingerprint using the
+    `rdkit_fp` PostgreSQL function.
+
+    Parameters
+    ----------
+    mol : ColumnElement[molalchemy.rdkit.types.RdkitMol]
+        The molecular structure to generate fingerprint for.
+    **kwargs
+        Additional keyword arguments passed to the PostgreSQL function.
+
+    Returns
+    -------
+    Function[molalchemy.rdkit.types.RdkitBitFingerprint]
+        SQLAlchemy function that returns the RDKit fingerprint.
+    """
+    return func.rdkit_fp(mol, **kwargs)
+
+
 def morgan_fp(
     mol: ColumnElement[RdkitMol], radius: int = 2, **kwargs
 ) -> Function[RdkitSparseFingerprint]:
@@ -378,6 +427,31 @@ def torsion_fp(
     >>> query = select(torsion_fp(Molecule.structure))
     """
     return func.torsion_fp(mol, **kwargs)
+
+
+def torsionbv_fp(
+    mol: ColumnElement[RdkitMol], **kwargs
+) -> Function[RdkitBitFingerprint]:
+    """
+    Generate torsion bit vector fingerprint for a molecular structure.
+
+    Computes the topological torsion fingerprint as a bit vector using the
+    `torsionbv_fp` PostgreSQL function. This is a fixed-length binary representation
+    of the torsion fingerprint.
+
+    Parameters
+    ----------
+    mol : ColumnElement[molalchemy.rdkit.types.RdkitMol]
+        The molecular structure to generate fingerprint for.
+    **kwargs
+        Additional keyword arguments passed to the PostgreSQL function.
+
+    Returns
+    -------
+    Function[molalchemy.rdkit.types.RdkitBitFingerprint]
+        SQLAlchemy function that returns the torsion bit vector fingerprint.
+    """
+    return func.torsionbv_fp(mol, **kwargs)
 
 
 def mol_murckoscaffold(mol: ColumnElement[RdkitMol], **kwargs) -> Function[RdkitMol]:

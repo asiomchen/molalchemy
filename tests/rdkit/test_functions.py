@@ -96,11 +96,11 @@ class TestRdkitFunc:
         fp1 = b"fingerprint1"
         fp2 = b"fingerprint2"
 
-        result = rdkit_func.fp.tanimoto(fp1, fp2)
+        result = rdkit_func.fp.tanimoto_sml(fp1, fp2)
 
         # Should return a function call
         sql_str = str(result)
-        assert "tanimoto" in sql_str
+        assert "tanimoto_sml" in sql_str
         # Both fingerprints should be present as bind parameters
         assert ":tanimoto_sml_" in sql_str
 
@@ -232,7 +232,7 @@ class TestRdkitFuncIntegration:
         fp1 = b"fingerprint1"
         fp2 = b"fingerprint2"
 
-        tanimoto_expr = rdkit_func.fp.tanimoto(fp1, fp2)
+        tanimoto_expr = rdkit_func.fp.tanimoto_sml(fp1, fp2)
         maccs_expr = rdkit_func.mol.maccs_fp(self.test_table.c.structure)
 
         stmt = select(
