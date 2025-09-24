@@ -1,6 +1,6 @@
 [project]
 name = "molalchemy"
-version = "0.0.2"
+dynamic = ["version"]
 description = "Extensions for SQLAlchemy to work with chemical cartridges"
 license = {text = "Apache-2.0"}
 readme = "README.md"
@@ -36,8 +36,8 @@ repository = "https://github.com/asiomchen/molalchemy"
 documentation = "https://molalchemy.readthedocs.io"
 
 [build-system]
-requires = ["uv_build>=0.8.13,<0.9.0"]
-build-backend = "uv_build"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
@@ -52,4 +52,32 @@ docs = [
     "mkdocs-material[imaging]>=9.6.2",
     "mkdocstrings[python]>=0.28.0",
     "pymdown-extensions>=10.16.1",
+]
+
+
+[tool.hatch]
+build.hooks.vcs.version-file = "src/molalchemy/_version.py"
+version.source = "vcs"  # Get the version from git, eg: 0.0.6.dev0+g1234567
+# Drop the local version part (eg: +g1234567) or pypi will reject package
+version.raw-options.local_scheme = "no-local-version"
+# A manually triggered GitHub release workflow may generate a new tag
+# with .devN suffix. We need to tell setuptools_scm to ignore past tags with
+# this suffix when calculating the version number else it refuses to
+# bump the version number.
+# version.raw-options.git_describe_command = [
+#     "git", "describe", "--dirty", "--tags", "--long",
+#     "--match", "v*.[0-9]",
+#     "--match", "v*.[0-9][0-9]",
+#     "--match", "v*.[0-9][0-9][0-9]",
+# ]
+# version.raw-options.version_scheme = "no-guess-dev"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+]
+
+[tool.hatch.build.targets.wheel]
+include = [
+    "/src",
 ]
