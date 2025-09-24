@@ -6,15 +6,23 @@ various chemical reaction operations including reaction substructure search, exa
 and format conversions.
 """
 
-from typing import Literal
+from typing import Literal, TypeVar
 
-from sqlalchemy import text
+from sqlalchemy import BinaryExpression, text
 from sqlalchemy.sql import ColumnElement, func
 from sqlalchemy.sql.functions import Function
 
+from molalchemy.bingo.types import BingoBinaryReaction, BingoReaction
+
 _AAM_STRATEGIES = Literal["CLEAR", "DISCARD", "ALTER", "KEEP"]
 
+AnyBingoReaction = BingoReaction | BingoBinaryReaction
+
+T = TypeVar("T", bound=AnyBingoReaction)
+
+
 __all__ = [
+    "compact_molecule",
     "equals",
     "has_reaction_smarts",
     "has_reaction_substructure",
@@ -26,7 +34,9 @@ __all__ = [
 ]
 
 
-def equals(rxn_column: ColumnElement, query: str, parameters: str = ""):
+def equals(
+    rxn_column: ColumnElement[AnyBingoReaction], query: str, parameters: str = ""
+) -> BinaryExpression:
     """
     Perform exact reaction matching on a reaction column.
 
@@ -54,13 +64,15 @@ def equals(rxn_column: ColumnElement, query: str, parameters: str = ""):
     return rxn_column.op("@")(text(f"('{query}', '{parameters}')::bingo.rexact"))
 
 
-def has_reaction_smarts(rxn_column: ColumnElement, query: str, parameters: str = ""):
+def has_reaction_smarts(
+    rxn_column: ColumnElement[AnyBingoReaction], query: str, parameters: str = ""
+) -> BinaryExpression:
     """
     Perform reaction SMARTS pattern matching on a reaction column.
 
     Parameters
     ----------
-    rxn_column : ColumnElement
+    rxn_column : ColumnElement[AnyBingoReaction]
         SQLAlchemy column containing reaction data (reaction SMILES, Rxnfile, or binary).
     query : str
         Reaction SMARTS pattern string for matching.
@@ -83,8 +95,8 @@ def has_reaction_smarts(rxn_column: ColumnElement, query: str, parameters: str =
 
 
 def has_reaction_substructure(
-    rxn_column: ColumnElement, query: str, parameters: str = ""
-):
+    rxn_column: ColumnElement[AnyBingoReaction], query: str, parameters: str = ""
+) -> BinaryExpression:
     """
     Perform reaction substructure search on a reaction column.
 
@@ -112,7 +124,9 @@ def has_reaction_substructure(
     return rxn_column.op("@")(text(f"('{query}', '{parameters}')::bingo.rsub"))
 
 
-def to_binary(rxn_column: ColumnElement, preserve_pos: bool = True) -> Function[bytes]:
+def to_binary(
+    rxn_column: ColumnElement[AnyBingoReaction], preserve_pos: bool = True
+) -> Function[bytes]:
     """
     Convert reactions to Bingo's internal binary format.
 
@@ -140,7 +154,7 @@ def to_binary(rxn_column: ColumnElement, preserve_pos: bool = True) -> Function[
     return func.Bingo.CompactReaction(rxn_column, preserve_pos)
 
 
-def to_smiles(rxn_column: ColumnElement) -> Function[str]:
+def to_smiles(rxn_column: ColumnElement[AnyBingoReaction]) -> Function[str]:
     """
     Convert reactions to reaction SMILES format.
 
@@ -165,7 +179,7 @@ def to_smiles(rxn_column: ColumnElement) -> Function[str]:
     return func.Bingo.RSMILES(rxn_column)
 
 
-def to_rxnfile(rxn_column: ColumnElement) -> Function[str]:
+def to_rxnfile(rxn_column: ColumnElement[AnyBingoReaction]) -> Function[str]:
     """
     Convert reactions to Rxnfile format.
 
@@ -190,7 +204,7 @@ def to_rxnfile(rxn_column: ColumnElement) -> Function[str]:
     return func.Bingo.Rxnfile(rxn_column)
 
 
-def to_cml(rxn_column: ColumnElement) -> Function[str]:
+def to_cml(rxn_column: ColumnElement[AnyBingoReaction]) -> Function[str]:
     """
     Convert reactions to CML (Chemical Markup Language) format.
 
@@ -216,7 +230,7 @@ def to_cml(rxn_column: ColumnElement) -> Function[str]:
 
 
 def map_atoms(
-    rxn_column: ColumnElement, strategy: _AAM_STRATEGIES = "KEEP"
+    rxn_column: ColumnElement[AnyBingoReaction], strategy: _AAM_STRATEGIES = "KEEP"
 ) -> Function[str]:
     """
     Perform automatic atom-to-atom mapping (AAM) on reactions.
@@ -246,3 +260,20 @@ def map_atoms(
     ... )
     """
     return func.Bingo.AAM(rxn_column, strategy)
+
+
+def compact_molecule(mol_column: ColumnElement[AnyBingoReaction]) -> Function[bytes]:
+    """
+    Convert molecules to Bingo's internal compact binary format.
+
+    Parameters
+    ----------
+    mol_column : ColumnElement
+        SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
+
+    Returns
+    -------
+    Function[bytes]
+        SQLAlchemy function expression returning compact binary data.
+    """
+    return func.bingo.CompactReaction(mol_column)

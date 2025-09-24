@@ -22,3 +22,11 @@ repos:
       types_or: [ python, pyi ]
     # Run the formatter.
     - id: ruff-format
+- repo: local
+  hooks:
+    - id: sync-docs
+      name: Sync documentation files
+      entry: make sync-docs
+      language: system
+      files: ^(README\.md|CHANGELOG\.md|ROADMAP\.md|CONTRIBUTING\.md)$
+      pass_filenames: false
