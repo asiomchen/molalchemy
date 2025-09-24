@@ -2,7 +2,7 @@
 name = "molalchemy"
 dynamic = ["version"]
 description = "Extensions for SQLAlchemy to work with chemical cartridges"
-license = {text = "Apache-2.0"}
+license = {file = "LICENSE"}
 readme = "README.md"
 authors = [
     { name = "Anton Siomchen", email = "anton.siomchen+molalchemy@gmail.com" }
@@ -73,11 +73,21 @@ version.raw-options.git_describe_command = [
 version.raw-options.version_scheme = "no-guess-dev"
 
 [tool.hatch.build.targets.sdist]
-include = [
-    "/src",
+exclude = [
+    "docs/*",
+    "docker/*",
+    "tests/*",
+    "tests/*",
+    ".github/*",
+    ".devcontainer/*"
 ]
 
 [tool.hatch.build.targets.wheel]
-include = [
-    "/src",
+exclude = [
+    "docs/*",
+    "docker/*",
+    "tests/*",
+    "tests/*",
+    ".github/*",
+    ".devcontainer/*"
 ]

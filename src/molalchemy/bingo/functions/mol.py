@@ -8,7 +8,7 @@ similarity search, and format conversions.
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Literal, TypeVar
 
 from sqlalchemy import text
 from sqlalchemy.sql import ColumnElement, func
@@ -20,10 +20,14 @@ from molalchemy.bingo.types import BingoBinaryMol, BingoMol
 _WEIGHT_TYPES = Literal["molecular-weight", "most-abundant-mass", "monoisotopic"]
 
 AnyBingoMol = BingoMol | BingoBinaryMol
+T = TypeVar("T", bound=AnyBingoMol)
+
 
 __all__ = [
     "check_molecule",
+    "compact_molecule",
     "equals",
+    "get_name",
     "get_similarity",
     "get_weight",
     "gross_formula",
@@ -31,6 +35,7 @@ __all__ = [
     "has_substructure",
     "matches_smarts",
     "similarity",
+    "standardize",
     "to_binary",
     "to_canonical",
     "to_cml",
@@ -383,3 +388,56 @@ def to_cml(mol_column: ColumnElement[AnyBingoMol]) -> Function[str]:
 
     """
     return func.Bingo.CML(mol_column)
+
+
+def compact_molecule(mol_column: ColumnElement[AnyBingoMol]) -> Function[bytes]:
+    """
+    Convert molecules to Bingo's internal compact binary format.
+
+    Parameters
+    ----------
+    mol_column : ColumnElement
+        SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
+
+    Returns
+    -------
+    Function[bytes]
+        SQLAlchemy function expression returning compact binary data.
+    """
+    return func.bingo.CompactMolecule(mol_column)
+
+
+def get_name(
+    mol_column: ColumnElement[AnyBingoMol],
+) -> Function[str]:
+    """
+    Retrieve the name of the molecule
+
+    Parameters
+    ----------
+    mol_column : ColumnElement
+        SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
+
+    Returns
+    -------
+    Function[str]
+        SQLAlchemy function expression returning the molecule name as a string.
+
+    """
+    return func.bingo.GetName(mol_column)
+
+
+def standardize(mol_column: ColumnElement[T]) -> Function[T]:
+    """
+    Standardize molecules using Bingo's standardization rules.
+
+    Parameters
+    ----------
+    mol_column : ColumnElement
+        SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
+    Returns
+    -------
+    Function[T]
+        SQLAlchemy function expression returning standardized molecule data in the same format as input.
+    """
+    return func.bingo.Standardize(mol_column)
