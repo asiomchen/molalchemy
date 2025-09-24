@@ -64,12 +64,12 @@ version.raw-options.local_scheme = "no-local-version"
 # with .devN suffix. We need to tell setuptools_scm to ignore past tags with
 # this suffix when calculating the version number else it refuses to
 # bump the version number.
-# version.raw-options.git_describe_command = [
-#     "git", "describe", "--dirty", "--tags", "--long",
-#     "--match", "v*.[0-9]",
-#     "--match", "v*.[0-9][0-9]",
-#     "--match", "v*.[0-9][0-9][0-9]",
-# ]
+version.raw-options.git_describe_command = [
+    "git", "describe", "--dirty", "--tags", "--long",
+    "--match", "v*.[0-9]",
+    "--match", "v*.[0-9][0-9]",
+    "--match", "v*.[0-9][0-9][0-9]",
+]
 version.raw-options.version_scheme = "no-guess-dev"
 
 [tool.hatch.build.targets.sdist]
