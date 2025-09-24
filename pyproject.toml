@@ -70,7 +70,7 @@ version.raw-options.local_scheme = "no-local-version"
 #     "--match", "v*.[0-9][0-9]",
 #     "--match", "v*.[0-9][0-9][0-9]",
 # ]
-# version.raw-options.version_scheme = "no-guess-dev"
+version.raw-options.version_scheme = "no-guess-dev"
 
 [tool.hatch.build.targets.sdist]
 include = [
