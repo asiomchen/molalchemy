@@ -10,10 +10,10 @@ authors = [
 
 requires-python = ">=3.10,<3.14"
 dependencies = [
-    "loguru>=0.7.3",
-    "psycopg[binary]>=3.2.9",
+    "loguru>=0.7.0",
+    "psycopg>=3.0.0",
     "rdkit>=2024.3.1",
-    "sqlalchemy>=2.0.43",
+    "sqlalchemy>=2.0.0",
 ]
 keywords = ["chemistry", "cheminformatics", "molecules", "reactions", "databases"]
 classifiers = [
