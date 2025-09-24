@@ -35,12 +35,12 @@ uv run mkdocs serve
 
 ### 🧪 **Intermediate Contributions**
 
-#### RDKit Function Implementation
+#### RDKit/Bingo Function Implementation
 
-Many RDKit PostgreSQL functions are not yet wrapped in our Python API. This is a great way to learn the codebase while adding valuable functionality.
+Many RDKit/Bingo PostgreSQL functions are not yet wrapped in our Python API. This is a great way to learn the codebase while adding valuable functionality.
 
 **Steps:**
-1. Research the PostgreSQL function in RDKit docs
+1. Research the PostgreSQL function in RDKit/Bingo docs
 2. Add the function to `src/molalchemy/rdkit/functions.py`
 3. Add type hints and docstrings
 4. Create comprehensive tests
@@ -76,9 +76,7 @@ Improve error messages and create custom exception classes for better debugging.
 - Add error handling guides
 - Test error scenarios
 
-### 🚀 **Advanced Contributions**
-
-#### 7. ChemAxon Cartridge Integration
+####  ChemAxon Cartridge Integration
 
 Add support for ChemAxon's JChem PostgreSQL cartridge.
 
@@ -88,11 +86,11 @@ Add support for ChemAxon's JChem PostgreSQL cartridge.
 - Need comprehensive testing
 - Require detailed documentation
 
-#### 8. Advanced Chemical Operations
+#### Advanced Chemical Operations
 
 Implement higher-level chemical operations like scaffold analysis, fragment operations, or reaction processing.
 
-#### 9. Data Science Integration
+#### Data Science Integration
 
 Create pandas accessors and DataFrame operations for chemical data.
 
@@ -111,6 +109,8 @@ Create pandas accessors and DataFrame operations for chemical data.
 ```bash
 # Create and activate virtual environment
 uv sync
+# if you plan to change the documentation too - install all dependencies
+uv sync --all-extras --all-groups
 source .venv/bin/activate
 
 # Start relevant database
@@ -430,6 +430,16 @@ docker-compose up -d
 3. **Include errors** - Full error messages and tracebacks
 4. **Describe attempts** - What have you already tried?
 
+
+## Release Process
+
+1. **Update Changelog** - Follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+2. Create a new tag on `main` matching the semantic versioning format (e.g., `v0.1.0`). We use `hatch-vcs` for version management, so version will be updated automatically, based on the tag.
+3. Push the tag to GitHub
+4. GitHub Actions will build and wait for manual approval to publish to PyPI
+5. After approval, the package will be published to PyPI automatically
+6. Together with the package, documentation will be published to ReadTheDocs
+7. Draft release is created automatically with auto-generated notes from the PR titles since the last release - please review and edit if necessary
 
 ---
 
