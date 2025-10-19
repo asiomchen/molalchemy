@@ -34,7 +34,7 @@
         "default": null,
         "description": "The integer value to compare against.",
         "name": "value",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       }
     ],
     "description": "Returns a boolean indicating whether or not all elements of the sfp argument are greater than the int argument.",
@@ -42,7 +42,7 @@
     "name": "all_values_gt",
     "return_type": {
       "description": "A boolean indicating whether or not all elements of the sfp argument are greater than the int argument.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "all_values_lt": {
@@ -57,7 +57,7 @@
         "default": null,
         "description": "The integer value to compare against the sfp elements.",
         "name": "value",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       }
     ],
     "description": "Returns a boolean indicating whether or not all elements of the sfp argument are less than the int argument.",
@@ -65,7 +65,7 @@
     "name": "all_values_lt",
     "return_type": {
       "description": "A boolean indicating whether or not all elements of the sfp argument are less than the int argument.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "atompair_fp": {
@@ -114,13 +114,13 @@
         "default": null,
         "description": "TODO",
         "name": "arg_2",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       },
       {
         "default": null,
         "description": "TODO",
         "name": "arg_3",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       }
     ],
     "description": "Generates Avalon fingerprints for a molecule.",
@@ -151,7 +151,7 @@
     "name": "bfp_cmp",
     "return_type": {
       "description": "An integer representing the comparison result between the two bit fingerprints. Typically, 0 indicates equality, a negative value indicates the first fingerprint is 'less than' the second, and a positive value indicates the first is 'greater than' the second.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "bfp_eq": {
@@ -174,7 +174,7 @@
     "name": "bfp_eq",
     "return_type": {
       "description": "True if the two bit vector fingerprints are equal, False otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "bfp_from_binary_text": {
@@ -214,7 +214,7 @@
     "name": "bfp_ge",
     "return_type": {
       "description": "A boolean value indicating if the first fingerprint is greater than or equal to the second.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "bfp_gt": {
@@ -237,7 +237,7 @@
     "name": "bfp_gt",
     "return_type": {
       "description": "A boolean indicating if the first fingerprint is 'greater than' the second.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "bfp_in": {
@@ -277,7 +277,7 @@
     "name": "bfp_le",
     "return_type": {
       "description": "True if the first bit fingerprint is less than or equal to the second bit fingerprint, False otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "bfp_lt": {
@@ -300,7 +300,7 @@
     "name": "bfp_lt",
     "return_type": {
       "description": "A boolean value indicating the result of the 'less than' comparison.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "bfp_ne": {
@@ -323,7 +323,7 @@
     "name": "bfp_ne",
     "return_type": {
       "description": "True if the two bit vector fingerprints are not equal, False otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "bfp_out": {
@@ -426,7 +426,7 @@
     "name": "dice_sml_op",
     "return_type": {
       "description": "The Dice similarity between the two fingerprints.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "featmorgan_fp": {
@@ -441,7 +441,7 @@
         "default": "2",
         "description": "The radius for the fingerprint generation. This argument is optional and defaults to 2.",
         "name": "radius",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       }
     ],
     "description": "Returns a count-based Morgan fingerprint for a molecule using chemical-feature invariants. This is an FCFP-like fingerprint.",
@@ -464,7 +464,7 @@
         "default": "2",
         "description": "The radius for the fingerprint generation.",
         "name": "radius",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       }
     ],
     "description": "Returns a bit vector Morgan fingerprint for a molecule using chemical-feature invariants. The second argument provides the radius. This is an FCFP-like fingerprint.",
@@ -498,13 +498,13 @@
         "default": null,
         "description": "A space-separated string of SMILES representations of molecules for which to calculate the MCS.",
         "name": "mls",
-        "type": "sqltypes.Text | CString"
+        "type": "sqltypes.Text | CString | Cast[Any]"
       },
       {
         "default": "''",
         "description": "An optional JSON string used to provide parameters to the MCS code.",
         "name": "json",
-        "type": "sqltypes.Text | CString"
+        "type": "sqltypes.Text | CString | Cast[Any]"
       }
     ],
     "description": "Calculates the Maximum Common Substructure (MCS) for a space-separated set of SMILES.",
@@ -552,7 +552,7 @@
     "name": "is_valid_ctab",
     "return_type": {
       "description": "A boolean indicating whether or not the CTAB string produces a valid RDKit molecule.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "is_valid_mol_pkl": {
@@ -569,7 +569,7 @@
     "name": "is_valid_mol_pkl",
     "return_type": {
       "description": "A boolean indicating whether or not the binary string can be converted into a valid RDKit molecule.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "is_valid_smarts": {
@@ -586,7 +586,7 @@
     "name": "is_valid_smarts",
     "return_type": {
       "description": "A boolean indicating whether the SMARTS string produces a valid RDKit molecule.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "is_valid_smiles": {
@@ -603,7 +603,7 @@
     "name": "is_valid_smiles",
     "return_type": {
       "description": "A boolean indicating whether the SMILES string produces a valid RDKit molecule.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "layered_fp": {
@@ -652,7 +652,7 @@
         "default": "cast('', CString)",
         "description": "A string with additional query parameters (optional)",
         "name": "query_parameters",
-        "type": "CString"
+        "type": "CString | Cast[Any]"
       }
     ],
     "description": "Returns a new molecule with additional query information attached.",
@@ -870,7 +870,7 @@
     "name": "mol_cmp",
     "return_type": {
       "description": "An integer representing the comparison result. Returns -1 if the first molecule is 'less than' the second, 0 if they are 'equal', and 1 if the first molecule is 'greater than' the second.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_eq": {
@@ -893,7 +893,7 @@
     "name": "mol_eq",
     "return_type": {
       "description": "Returns a boolean indicating whether the two molecules are equal.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "mol_exactmw": {
@@ -925,13 +925,13 @@
         "default": false,
         "description": "Controls whether isotope information is included in the formula.",
         "name": "include_isotopes",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       },
       {
         "default": true,
         "description": "Controls whether \"D\" and \"T\" are used instead of [2H] and [3H].",
         "name": "use_deuterium_tritium_symbols",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       }
     ],
     "description": "Returns a string with the molecular formula for a molecule. The second argument controls whether isotope information is included in the formula; the third argument controls whether \"D\" and \"T\" are used instead of [2H] and [3H].",
@@ -971,7 +971,7 @@
         "default": null,
         "description": "A boolean indicating whether the molecule's coordinates should be saved.",
         "name": "arg_2",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       },
       {
         "default": null,
@@ -1059,7 +1059,7 @@
     "name": "mol_ge",
     "return_type": {
       "description": "A boolean value: true if the first molecule is a superstructure of or identical to the second, false otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "mol_gt": {
@@ -1082,7 +1082,7 @@
     "name": "mol_gt",
     "return_type": {
       "description": "True if the first molecule is greater than the second, False otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "mol_hallkieralpha": {
@@ -1116,7 +1116,7 @@
     "name": "mol_hba",
     "return_type": {
       "description": "The number of Lipinski H-bond acceptors (i.e., number of Os and Ns) for the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_hbd": {
@@ -1133,7 +1133,7 @@
     "name": "mol_hbd",
     "return_type": {
       "description": "The number of Lipinski H-bond donors for the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_in": {
@@ -1287,7 +1287,7 @@
     "name": "mol_le",
     "return_type": {
       "description": "`True` if the first molecule is less than or equal to the second, `False` otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "mol_logp": {
@@ -1327,7 +1327,7 @@
     "name": "mol_lt",
     "return_type": {
       "description": "`True` if the first molecule is less than the second molecule, `False` otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "mol_murckoscaffold": {
@@ -1367,7 +1367,7 @@
     "name": "mol_ne",
     "return_type": {
       "description": "A boolean indicating if the two molecules are not equal.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "mol_nm_hash": {
@@ -1382,7 +1382,7 @@
         "default": "cast('AnonymousGraph', CString)",
         "description": "The type of hash to generate. Legal values are 'AnonymousGraph', 'ElementGraph', 'CanonicalSmiles', 'MurckoScaffold', 'ExtendedMurcko', 'MolFormula', 'AtomBondCounts', 'DegreeVector', 'Mesomer', 'HetAtomTautomer', 'HetAtomProtomer', 'RedoxPair', 'Regioisomer', 'NetCharge', 'SmallWorldIndexBR', 'SmallWorldIndexBRL', 'ArthorSubstructureOrder'. The default is 'AnonymousGraph'.",
         "name": "hash_type",
-        "type": "CString"
+        "type": "CString | Cast[Any]"
       }
     ],
     "description": "Returns a string with a hash for the molecule.",
@@ -1407,7 +1407,7 @@
     "name": "mol_numaliphaticcarbocycles",
     "return_type": {
       "description": "The number of aliphatic (at least one non-aromatic bond) carbocycles in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numaliphaticheterocycles": {
@@ -1424,7 +1424,7 @@
     "name": "mol_numaliphaticheterocycles",
     "return_type": {
       "description": "The number of aliphatic (at least one non-aromatic bond) heterocycles in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numaliphaticrings": {
@@ -1441,7 +1441,7 @@
     "name": "mol_numaliphaticrings",
     "return_type": {
       "description": "The number of aliphatic (at least one non-aromatic bond) rings in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numamidebonds": {
@@ -1458,7 +1458,7 @@
     "name": "mol_numamidebonds",
     "return_type": {
       "description": "The number of amide bonds in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numaromaticcarbocycles": {
@@ -1475,7 +1475,7 @@
     "name": "mol_numaromaticcarbocycles",
     "return_type": {
       "description": "The number of aromatic carbocycles in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numaromaticheterocycles": {
@@ -1492,7 +1492,7 @@
     "name": "mol_numaromaticheterocycles",
     "return_type": {
       "description": "The number of aromatic heterocycles in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numaromaticrings": {
@@ -1509,7 +1509,7 @@
     "name": "mol_numaromaticrings",
     "return_type": {
       "description": "The number of aromatic rings in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numatoms": {
@@ -1526,7 +1526,7 @@
     "name": "mol_numatoms",
     "return_type": {
       "description": "The total number of atoms in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numbridgeheadatoms": {
@@ -1543,7 +1543,7 @@
     "name": "mol_numbridgeheadatoms",
     "return_type": {
       "description": "The number of bridgehead atoms in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numheavyatoms": {
@@ -1560,7 +1560,7 @@
     "name": "mol_numheavyatoms",
     "return_type": {
       "description": "The number of heavy atoms in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numheteroatoms": {
@@ -1577,7 +1577,7 @@
     "name": "mol_numheteroatoms",
     "return_type": {
       "description": "The number of heteroatoms in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numheterocycles": {
@@ -1594,7 +1594,7 @@
     "name": "mol_numheterocycles",
     "return_type": {
       "description": "The number of heteroatoms in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numrings": {
@@ -1611,7 +1611,7 @@
     "name": "mol_numrings",
     "return_type": {
       "description": "The number of rings in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numrotatablebonds": {
@@ -1628,7 +1628,7 @@
     "name": "mol_numrotatablebonds",
     "return_type": {
       "description": "The number of rotatable bonds in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numsaturatedcarbocycles": {
@@ -1645,7 +1645,7 @@
     "name": "mol_numsaturatedcarbocycles",
     "return_type": {
       "description": "The number of saturated carbocycles in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numsaturatedheterocycles": {
@@ -1662,7 +1662,7 @@
     "name": "mol_numsaturatedheterocycles",
     "return_type": {
       "description": "The number of saturated heterocycles in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numsaturatedrings": {
@@ -1679,7 +1679,7 @@
     "name": "mol_numsaturatedrings",
     "return_type": {
       "description": "The number of saturated rings in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_numspiroatoms": {
@@ -1696,7 +1696,7 @@
     "name": "mol_numspiroatoms",
     "return_type": {
       "description": "The number of spiro atoms in the molecule.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "mol_out": {
@@ -1762,13 +1762,13 @@
         "default": true,
         "description": "",
         "name": "arg_2",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       },
       {
         "default": false,
         "description": "",
         "name": "arg_3",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       }
     ],
     "description": "Returns a CTAB (mol block) string for a molecule.",
@@ -1893,25 +1893,25 @@
         "default": "cast('', CString)",
         "description": "An optional string to use as the legend for the drawing.",
         "name": "arg_2",
-        "type": "CString"
+        "type": "CString | Cast[Any]"
       },
       {
         "default": 250,
         "description": "The optional width of the generated SVG image.",
         "name": "width",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       },
       {
         "default": 200,
         "description": "The optional height of the generated SVG image.",
         "name": "height",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       },
       {
         "default": "cast('', CString)",
         "description": "",
         "name": "arg_5",
-        "type": "CString"
+        "type": "CString | Cast[Any]"
       }
     ],
     "description": "Returns an SVG with a drawing of the molecule. This function is available from the 2016_09 release.",
@@ -1931,10 +1931,10 @@
         "type": "RdkitMol"
       },
       {
-        "default": "true",
+        "default": true,
         "description": "Controls whether or not 2D coordinates will be generated for molecules that don't have coordinates.",
         "name": "create_depiction",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       }
     ],
     "description": "Returns a CTAB (mol block) string for a molecule. The optional second argument controls whether or not 2D coordinates will be generated for molecules that don\u2019t have coordinates.",
@@ -1957,19 +1957,19 @@
         "default": null,
         "description": "A boolean parameter for the conversion process.",
         "name": "arg_2",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       },
       {
         "default": null,
         "description": "Another boolean parameter for the conversion process.",
         "name": "arg_3",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       },
       {
         "default": null,
         "description": "A third boolean parameter for the conversion process.",
         "name": "arg_4",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       },
       {
         "default": null,
@@ -2015,7 +2015,7 @@
         "default": 2,
         "description": "The radius for the Morgan fingerprint generation. Defaults to 2.",
         "name": "radius",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       }
     ],
     "description": "Returns a count-based Morgan fingerprint (sfp) for a molecule using connectivity invariants. This is an ECFP-like fingerprint.",
@@ -2038,7 +2038,7 @@
         "default": 2,
         "description": "The radius for the Morgan fingerprint calculation.",
         "name": "radius",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       }
     ],
     "description": "Returns a bit vector Morgan fingerprint (bfp) for a molecule using connectivity invariants. The second argument provides the radius. This is an ECFP-like fingerprint.",
@@ -2061,7 +2061,7 @@
         "default": null,
         "description": "Controls whether or not the coordinates are saved.",
         "name": "keep_conformer",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       },
       {
         "default": null,
@@ -2229,7 +2229,7 @@
         "default": null,
         "description": "Integer denoting the fingerprint type. Likely 1 (AtomPairFP), 2 (TopologicalTorsionFP), or 3 (MorganFP).",
         "name": "fp_type",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       }
     ],
     "description": "Calculates a sparse fingerprint representing the difference between reactants and products in an RDKit reaction.",
@@ -2260,7 +2260,7 @@
     "name": "reaction_eq",
     "return_type": {
       "description": "True if the reactions are equivalent, False otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "reaction_from_ctab": {
@@ -2351,7 +2351,7 @@
     "name": "reaction_ne",
     "return_type": {
       "description": "True if the reactions are not equal, False otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "reaction_numagents": {
@@ -2368,7 +2368,7 @@
     "name": "reaction_numagents",
     "return_type": {
       "description": "The number of agents in the RDKit reaction.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "reaction_numproducts": {
@@ -2385,7 +2385,7 @@
     "name": "reaction_numproducts",
     "return_type": {
       "description": "The number of products in the reaction.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "reaction_numreactants": {
@@ -2402,7 +2402,7 @@
     "name": "reaction_numreactants",
     "return_type": {
       "description": "The number of reactants in the RDKit reaction.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "reaction_out": {
@@ -2451,7 +2451,7 @@
         "default": null,
         "description": "The radius to use for the fingerprint generation.",
         "name": "radius",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       }
     ],
     "description": "Returns a bit vector fingerprint (bfp) representing the structural features of a chemical reaction. The second argument provides the radius for the fingerprint generation.",
@@ -2525,19 +2525,19 @@
         "default": null,
         "description": "If true, highlights the reactants in the SVG drawing.",
         "name": "highlight_reactants",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       },
       {
         "default": null,
         "description": "The desired width of the SVG image.",
         "name": "width",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       },
       {
         "default": null,
         "description": "The desired height of the SVG image.",
         "name": "height",
-        "type": "sqltypes.Integer"
+        "type": "int | sqltypes.Integer"
       },
       {
         "default": null,
@@ -2574,7 +2574,7 @@
     "name": "rsubstruct",
     "return_type": {
       "description": "A boolean indicating whether the second molecule (`arg_2`) is a substructure of the first molecule (`arg_1`).",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "rsubstruct_chiral": {
@@ -2597,7 +2597,7 @@
     "name": "rsubstruct_chiral",
     "return_type": {
       "description": "A boolean indicating whether the second molecule is a chiral substructure of the first.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "rsubstruct_query": {
@@ -2620,7 +2620,7 @@
     "name": "rsubstruct_query",
     "return_type": {
       "description": "A boolean indicating whether the second molecule is a substructure of the first.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "rsubstructfp": {
@@ -2643,7 +2643,7 @@
     "name": "rsubstructfp",
     "return_type": {
       "description": "`True` if the second reaction is a substructure of the first, `False` otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "sfp_cmp": {
@@ -2666,7 +2666,7 @@
     "name": "sfp_cmp",
     "return_type": {
       "description": "TODO",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "sfp_eq": {
@@ -2689,7 +2689,7 @@
     "name": "sfp_eq",
     "return_type": {
       "description": "A boolean indicating the equality of the two sparse fingerprints.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "sfp_ge": {
@@ -2712,7 +2712,7 @@
     "name": "sfp_ge",
     "return_type": {
       "description": "A boolean indicating whether the first sparse fingerprint is element-wise greater than or equal to the second sparse fingerprint.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "sfp_gt": {
@@ -2735,7 +2735,7 @@
     "name": "sfp_gt",
     "return_type": {
       "description": "`True` if all elements of the first sparse fingerprint are greater than the corresponding elements of the second, False otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "sfp_in": {
@@ -2775,7 +2775,7 @@
     "name": "sfp_le",
     "return_type": {
       "description": "True if the first sparse fingerprint is element-wise less than or equal to the second; otherwise, False.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "sfp_lt": {
@@ -2798,7 +2798,7 @@
     "name": "sfp_lt",
     "return_type": {
       "description": "A boolean value (True if the first sparse fingerprint is less than the second, False otherwise).",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "sfp_ne": {
@@ -2821,7 +2821,7 @@
     "name": "sfp_ne",
     "return_type": {
       "description": "`True` if the two sparse fingerprints are not equal, `False` otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "sfp_out": {
@@ -2855,7 +2855,7 @@
     "name": "size",
     "return_type": {
       "description": "The length of (number of bits in) the bit vector fingerprint.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "substruct": {
@@ -2878,7 +2878,7 @@
     "name": "substruct",
     "return_type": {
       "description": "True if the second molecule is a substructure of the first, False otherwise.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "substruct_chiral": {
@@ -2901,7 +2901,7 @@
     "name": "substruct_chiral",
     "return_type": {
       "description": "A boolean indicating whether the second molecule is a substructure of the first, taking chirality into account.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "substruct_count": {
@@ -2922,7 +2922,7 @@
         "default": true,
         "description": "Toggles whether or not the matches are uniquified.",
         "name": "unique",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       }
     ],
     "description": "Returns the number of substructure matches between the second molecule and the first. Optionally, the matches can be uniquified.",
@@ -2930,7 +2930,7 @@
     "name": "substruct_count",
     "return_type": {
       "description": "The number of substructure matches found.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "substruct_count_chiral": {
@@ -2951,7 +2951,7 @@
         "default": null,
         "description": "A boolean flag indicating whether to count only unique chiral substructure matches (true) or all matches (false).",
         "name": "unique",
-        "type": "sqltypes.Boolean"
+        "type": "bool | sqltypes.Boolean"
       }
     ],
     "description": "Returns the number of chiral substructure matches found between a query molecule and a target molecule. This function considers chirality during the matching process.",
@@ -2959,7 +2959,7 @@
     "name": "substruct_count_chiral",
     "return_type": {
       "description": "The total number of chiral substructure matches found.",
-      "type": "sqltypes.Integer"
+      "type": "int | sqltypes.Integer"
     }
   },
   "substruct_query": {
@@ -2982,7 +2982,7 @@
     "name": "substruct_query",
     "return_type": {
       "description": "A boolean indicating whether the second molecule is a substructure of the first.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "substructfp": {
@@ -3005,7 +3005,7 @@
     "name": "substructfp",
     "return_type": {
       "description": "A boolean indicating whether the second reaction is a substructure of the first.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "subtract": {
@@ -3097,7 +3097,7 @@
     "name": "tanimoto_sml_op",
     "return_type": {
       "description": "A boolean value representing the result of the Tanimoto similarity operation.",
-      "type": "sqltypes.Boolean"
+      "type": "bool | sqltypes.Boolean"
     }
   },
   "torsion_fp": {

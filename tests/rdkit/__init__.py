@@ -1,11 +1,6 @@
 """RDKit query structure tests."""
 
 from .test_comparators import TestRdkitFPComparator, TestRdkitMolComparator
-from .test_functions import (
-    TestRdkitFunc,
-    TestRdkitFuncIntegration,
-    TestRdkitFuncWithORM,
-)
 from .test_index import TestRdkitIndex
 from .test_types import (
     TestRdkitBitFingerprint,

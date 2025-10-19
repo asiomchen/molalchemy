@@ -186,3 +186,13 @@ class RdkitReaction(RdkitBaseType):
                 return str(value)
 
         return functools.partial(process, return_type=self.return_type)
+
+
+class RdkitQMol(RdkitBaseType):
+    def get_col_spec(self):
+        return "qmol"
+
+
+class RdkitXQMol(RdkitBaseType):
+    def get_col_spec(self):
+        return "xqmol"

@@ -42,8 +42,12 @@ build-backend = "hatchling.build"
 [dependency-groups]
 dev = [
     "ipykernel>=6.30.1",
+    "mypy>=1.18.2",
+    "pandas>=2.3.3",
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
+    "pyyaml>=6.0.2",
+    "sqlalchemy[mypy]>=2.0.43",
 ]
 docs = [
     "griffe-typingdoc>=0.2.9",
@@ -91,3 +95,7 @@ exclude = [
     ".github/*",
     ".devcontainer/*"
 ]
+
+[tool.mypy]
+plugins = "sqlalchemy.ext.mypy.plugin"
+
