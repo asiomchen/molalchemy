@@ -24,9 +24,9 @@ class bfp_cmp(GenericFunction):
     Parameters
     ----------
     fp_1: RdkitBitFingerprint
-                The first RDKit bit fingerprint for comparison.
+        The first RDKit bit fingerprint for comparison.
     fp_2: RdkitBitFingerprint
-                The second RDKit bit fingerprint for comparison.
+        The second RDKit bit fingerprint for comparison.
 
 
     Returns
@@ -51,9 +51,9 @@ class bfp_eq(GenericFunction):
     Parameters
     ----------
     fp_1: RdkitBitFingerprint
-                The first bit vector fingerprint for comparison.
+        The first bit vector fingerprint for comparison.
     fp_2: RdkitBitFingerprint
-                The second bit vector fingerprint for comparison.
+        The second bit vector fingerprint for comparison.
 
 
     Returns
@@ -80,9 +80,9 @@ class bfp_ge(GenericFunction):
     Parameters
     ----------
     fp_1: RdkitBitFingerprint
-                The first bit fingerprint.
+        The first bit fingerprint.
     fp_2: RdkitBitFingerprint
-                The second bit fingerprint.
+        The second bit fingerprint.
 
 
     Returns
@@ -109,9 +109,9 @@ class bfp_gt(GenericFunction):
     Parameters
     ----------
     fp_1: RdkitBitFingerprint
-                The first bit vector fingerprint.
+        The first bit vector fingerprint.
     fp_2: RdkitBitFingerprint
-                The second bit vector fingerprint for comparison.
+        The second bit vector fingerprint for comparison.
 
 
     Returns
@@ -138,7 +138,7 @@ class bfp_in(GenericFunction):
     Parameters
     ----------
     input: CString
-                The string representation of the bit fingerprint.
+        The string representation of the bit fingerprint.
 
 
     Returns
@@ -163,9 +163,9 @@ class bfp_lt(GenericFunction):
     Parameters
     ----------
     fp_1: RdkitBitFingerprint
-                The first bit fingerprint to compare.
+        The first bit fingerprint to compare.
     fp_2: RdkitBitFingerprint
-                The second bit fingerprint to compare.
+        The second bit fingerprint to compare.
 
 
     Returns
@@ -192,9 +192,9 @@ class bfp_ne(GenericFunction):
     Parameters
     ----------
     bfp1: RdkitBitFingerprint
-                The first bit vector fingerprint.
+        The first bit vector fingerprint.
     bfp2: RdkitBitFingerprint
-                The second bit vector fingerprint.
+        The second bit vector fingerprint.
 
 
     Returns
@@ -221,7 +221,7 @@ class bfp_out(GenericFunction):
     Parameters
     ----------
     fp: RdkitBitFingerprint
-                The bit vector fingerprint to convert to a binary string representation.
+        The bit vector fingerprint to convert to a binary string representation.
 
 
     Returns
@@ -246,9 +246,9 @@ class fmcs_smiles_transition(GenericFunction):
     Parameters
     ----------
     arg_1: sqltypes.Text
-                TODO.
+        TODO.
     arg_2: sqltypes.Text
-                TODO.
+        TODO.
 
 
     Returns
@@ -275,9 +275,9 @@ class mol_cmp(GenericFunction):
     Parameters
     ----------
     mol_1: RdkitMol
-                The first RDKit molecule to compare.
+        The first RDKit molecule to compare.
     mol_2: RdkitMol
-                The second RDKit molecule to compare.
+        The second RDKit molecule to compare.
 
 
     Returns
@@ -300,9 +300,9 @@ class mol_eq(GenericFunction):
     Parameters
     ----------
     mol_1: RdkitMol
-                The first RDKit molecule to compare.
+        The first RDKit molecule to compare.
     mol_2: RdkitMol
-                The second RDKit molecule to compare.
+        The second RDKit molecule to compare.
 
 
     Returns
@@ -327,9 +327,9 @@ class mol_ge(GenericFunction):
     Parameters
     ----------
     arg_1: RdkitMol
-                The RDKit molecule to be checked as the potential superstructure.
+        The RDKit molecule to be checked as the potential superstructure.
     arg_2: RdkitMol
-                The RDKit molecule to be checked as the potential substructure.
+        The RDKit molecule to be checked as the potential substructure.
 
 
     Returns
@@ -354,9 +354,9 @@ class mol_gt(GenericFunction):
     Parameters
     ----------
     mol_1: RdkitMol
-                The first RDKit molecule for comparison.
+        The first RDKit molecule for comparison.
     mol_2: RdkitMol
-                The second RDKit molecule for comparison.
+        The second RDKit molecule for comparison.
 
 
     Returns
@@ -381,7 +381,7 @@ class mol_in(GenericFunction):
     Parameters
     ----------
     mol_str: CString
-                The string representation of the molecule.
+        The string representation of the molecule.
 
 
     Returns
@@ -406,9 +406,9 @@ class mol_le(GenericFunction):
     Parameters
     ----------
     mol_1: RdkitMol
-                The first RDKit molecule for comparison.
+        The first RDKit molecule for comparison.
     mol_2: RdkitMol
-                The second RDKit molecule for comparison.
+        The second RDKit molecule for comparison.
 
 
     Returns
@@ -433,9 +433,9 @@ class mol_lt(GenericFunction):
     Parameters
     ----------
     mol_1: RdkitMol
-                The first RDKit molecule.
+        The first RDKit molecule.
     mol_2: RdkitMol
-                The second RDKit molecule.
+        The second RDKit molecule.
 
 
     Returns
@@ -460,9 +460,9 @@ class mol_ne(GenericFunction):
     Parameters
     ----------
     mol_1: RdkitMol
-                The first molecule to compare.
+        The first molecule to compare.
     mol_2: RdkitMol
-                The second molecule to compare.
+        The second molecule to compare.
 
 
     Returns
@@ -487,7 +487,7 @@ class mol_out(GenericFunction):
     Parameters
     ----------
     mol: RdkitMol
-                The RDKit molecule to be converted to a string.
+        The RDKit molecule to be converted to a string.
 
 
     Returns
@@ -512,7 +512,7 @@ class qmol_in(GenericFunction):
     Parameters
     ----------
     mol_str: CString
-                The string representation of the query molecule
+        The string representation of the query molecule
 
 
     Returns
@@ -537,7 +537,7 @@ class qmol_out(GenericFunction):
     Parameters
     ----------
     mol: RdkitQMol
-                The query molecule.
+        The query molecule.
 
 
     Returns
@@ -562,9 +562,9 @@ class reaction_eq(GenericFunction):
     Parameters
     ----------
     rxn_1: RdkitReaction
-                The first RDKit reaction.
+        The first RDKit reaction.
     rxn_2: RdkitReaction
-                The second RDKit reaction.
+        The second RDKit reaction.
 
 
     Returns
@@ -591,7 +591,7 @@ class reaction_in(GenericFunction):
     Parameters
     ----------
     rxn_str: CString
-                The string representation of the chemical reaction, typically in reaction SMILES format.
+        The string representation of the chemical reaction, typically in reaction SMILES format.
 
 
     Returns
@@ -616,9 +616,9 @@ class reaction_ne(GenericFunction):
     Parameters
     ----------
     rxn_1: RdkitReaction
-                The first RDKit reaction.
+        The first RDKit reaction.
     rxn_2: RdkitReaction
-                The second RDKit reaction.
+        The second RDKit reaction.
 
 
     Returns
@@ -645,7 +645,7 @@ class reaction_out(GenericFunction):
     Parameters
     ----------
     rxn: RdkitReaction
-                The RDKit reaction object to convert.
+        The RDKit reaction object to convert.
 
 
     Returns
@@ -670,9 +670,9 @@ class sfp_cmp(GenericFunction):
     Parameters
     ----------
     arg_1: RdkitSparseFingerprint
-                The first sparse fingerprint to compare.
+        The first sparse fingerprint to compare.
     arg_2: RdkitSparseFingerprint
-                The second sparse fingerprint to compare.
+        The second sparse fingerprint to compare.
 
 
     Returns
@@ -700,9 +700,9 @@ class sfp_eq(GenericFunction):
     Parameters
     ----------
     fp_1: RdkitSparseFingerprint
-                The first sparse fingerprint.
+        The first sparse fingerprint.
     fp_2: RdkitSparseFingerprint
-                The second sparse fingerprint.
+        The second sparse fingerprint.
 
 
     Returns
@@ -729,9 +729,9 @@ class sfp_ge(GenericFunction):
     Parameters
     ----------
     fp_1: RdkitSparseFingerprint
-                The first sparse fingerprint (sfp) for comparison.
+        The first sparse fingerprint (sfp) for comparison.
     fp_2: RdkitSparseFingerprint
-                The second sparse fingerprint (sfp) for comparison.
+        The second sparse fingerprint (sfp) for comparison.
 
 
     Returns
@@ -758,9 +758,9 @@ class sfp_gt(GenericFunction):
     Parameters
     ----------
     fp_1: RdkitSparseFingerprint
-                The first sparse fingerprint for comparison.
+        The first sparse fingerprint for comparison.
     fp_2: RdkitSparseFingerprint
-                The second sparse fingerprint for comparison.
+        The second sparse fingerprint for comparison.
 
 
     Returns
@@ -787,7 +787,7 @@ class sfp_in(GenericFunction):
     Parameters
     ----------
     fp_string: CString
-                The string representation of the sparse fingerprint.
+        The string representation of the sparse fingerprint.
 
 
     Returns
@@ -812,9 +812,9 @@ class sfp_le(GenericFunction):
     Parameters
     ----------
     fp_1: RdkitSparseFingerprint
-                The first RDKit sparse fingerprint.
+        The first RDKit sparse fingerprint.
     fp_2: RdkitSparseFingerprint
-                The second RDKit sparse fingerprint.
+        The second RDKit sparse fingerprint.
 
 
     Returns
@@ -841,9 +841,9 @@ class sfp_lt(GenericFunction):
     Parameters
     ----------
     fp_1: RdkitSparseFingerprint
-                The first sparse fingerprint to compare.
+        The first sparse fingerprint to compare.
     fp_2: RdkitSparseFingerprint
-                The second sparse fingerprint to compare.
+        The second sparse fingerprint to compare.
 
 
     Returns
@@ -870,9 +870,9 @@ class sfp_ne(GenericFunction):
     Parameters
     ----------
     fp_1: RdkitSparseFingerprint
-                The first sparse fingerprint.
+        The first sparse fingerprint.
     fp_2: RdkitSparseFingerprint
-                The second sparse fingerprint.
+        The second sparse fingerprint.
 
 
     Returns
@@ -899,7 +899,7 @@ class sfp_out(GenericFunction):
     Parameters
     ----------
     fp: RdkitSparseFingerprint
-                The sparse fingerprint to be converted to a string.
+        The sparse fingerprint to be converted to a string.
 
 
     Returns
@@ -924,9 +924,9 @@ class tanimoto_sml_op(GenericFunction):
     Parameters
     ----------
     fp_1: RdkitSparseFingerprint | RdkitBitFingerprint
-                The first fingerprint, which can be either a sparse fingerprint (sfp) or a bit vector fingerprint (bfp).
+        The first fingerprint, which can be either a sparse fingerprint (sfp) or a bit vector fingerprint (bfp).
     fp_2: RdkitSparseFingerprint | RdkitBitFingerprint
-                The second fingerprint, which must be of the same type as the first fingerprint (either sfp or bfp).
+        The second fingerprint, which must be of the same type as the first fingerprint (either sfp or bfp).
 
 
     Returns
@@ -956,7 +956,7 @@ class xqmol_in(GenericFunction):
     Parameters
     ----------
     arg_1: CString
-                The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).
+        The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).
 
 
     Returns
@@ -981,7 +981,7 @@ class xqmol_out(GenericFunction):
     Parameters
     ----------
     arg_1: RdkitXQMol
-                The RDKit query molecule to convert to a string.
+        The RDKit query molecule to convert to a string.
 
 
     Returns

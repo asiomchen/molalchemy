@@ -14,9 +14,9 @@ class aam(GenericFunction):
     Parameters
     ----------
     rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-                Input reaction
+        Input reaction
     strategy: sqltypes.Text | Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP'] = 'KEEP'
-                Strategy for handling existing atom mapping (default is 'KEEP').
+        Strategy for handling existing atom mapping (default is 'KEEP').
                 - 'CLEAR': Remove all existing mappings and compute new ones
                 - 'DISCARD': Remove all mappings without computing new ones
                 - 'ALTER': Modify existing mappings

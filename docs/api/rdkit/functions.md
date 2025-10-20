@@ -6,8 +6,8 @@ These function classes wrap RDKit PostgreSQL functions, enabling various chemica
 
 ## Function Classes
 
-## `molalchemy.rdkit.functions.mol`
-::: molalchemy.rdkit.functions.mol
+## `molalchemy.rdkit.functions.general`
+::: molalchemy.rdkit.functions.general
     options:
       heading_level: 3
       show_source: false
@@ -16,19 +16,9 @@ These function classes wrap RDKit PostgreSQL functions, enabling various chemica
       members_order: source
 
 
-## `molalchemy.rdkit.functions.rxn`
+## `molalchemy.rdkit.functions.internal`
 
-::: molalchemy.rdkit.functions.rxn
-    options:
-      heading_level: 3
-      show_source: false
-      show_bases: true
-      show_root_heading: false
-      members_order: source
-
-## `molalchemy.rdkit.functions.fp`
-
-::: molalchemy.rdkit.functions.fp
+::: molalchemy.rdkit.functions.internal
     options:
       heading_level: 3
       show_source: false

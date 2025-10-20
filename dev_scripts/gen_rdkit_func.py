@@ -66,7 +66,7 @@ def json_to_function_code(func_name: str, test_data: dict) -> str:
         if param["default"] is not None:
             param_str += f" = {param['default']}"
         params_list.append(param_str)
-        param_str += f"  \n\t\t{param['description']}"
+        param_str += f"  \n\t{param['description']}"
         doc_param_list.append(param_str)
         arg_names.append(param["name"])
     doc_params = "\n    ".join(doc_param_list)
