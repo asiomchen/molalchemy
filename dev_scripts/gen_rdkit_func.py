@@ -2,6 +2,8 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
+from jinja2 import Environment
+
 HEADERS = """
 \"\"\"Auto-generated from data/rdkit_functions.json. Do not edit manually.\"\"\"
 from molalchemy.rdkit.types import RdkitMol, RdkitReaction, RdkitBitFingerprint, RdkitSparseFingerprint, RdkitQMol, RdkitXQMol
@@ -17,24 +19,37 @@ DATA_PATH = Path("data/rdkit_functions.json")
 
 MODULE_PATH = "src/molalchemy/rdkit/functions"
 
-TEMPLATE = """
-class {func_name}(GenericFunction):
+_TEMPLATE = """
+class {{ func_name }}(GenericFunction):
     \"""
-    {description}
+    {{ description }}
     \n
     Parameters
     ----------
-    {params}
+    {{ params }}
     \n
     Returns
     -------
-    Function[{return_type}]
-        {return_description}
+    Function[{{ return_type }}]
+        {{ return_description }}
     \"""
-    def __init__(self, {arg_inits}):
-        super().__init__({arg_names})
-        
+    {% if '|' not in return_type %}
+    type = {{ return_type }}()
+    {% elif 'RdkitMol' in return_type %}
+    type = RdkitMol()
+    {% elif 'RdkitReaction' in return_type %}
+    type = RdkitReaction()
+    {% elif 'RdkitBitFingerprint' in return_type %}
+    type = RdkitBitFingerprint()
+    {% endif %}
+    inherits_cache = True
+    def __init__(self, {{ arg_inits }}**kwargs: Any) -> None:
+        super().__init__({{ arg_names }}**kwargs)
+
 """
+
+ENV = Environment()
+TEMPLATE = ENV.from_string(_TEMPLATE)
 
 with DATA_PATH.open("r") as f:
     data = json.load(f)
@@ -47,22 +62,29 @@ def json_to_function_code(func_name: str, test_data: dict) -> str:
     doc_param_list = []
     arg_names = []
     for param in test_data["args"]:
-        print(param)
         param_str = f"{param['name']}: {param['type']}"
         if param["default"] is not None:
             param_str += f" = {param['default']}"
         params_list.append(param_str)
-        param_str += f"  {param['description']}"
+        param_str += f"  \n\t\t{param['description']}"
         doc_param_list.append(param_str)
         arg_names.append(param["name"])
     doc_params = "\n    ".join(doc_param_list)
     params = ", ".join(params_list)
-    generated_code = TEMPLATE.format(
+    if len(params) > 1:
+        params += ", "
+    if len(arg_names) > 1:
+        arg_names_str = ", ".join(arg_names) + ", "
+    else:
+        arg_names_str = ""
+    print(f"Generating code for function: {func_name}")
+    print(f"  Description: {arg_names_str}")
+    generated_code = TEMPLATE.render(
         func_name=func_name,
         description=description,
         params=doc_params,
         arg_inits=params,
-        arg_names=", ".join(arg_names),
+        arg_names=arg_names_str,
         return_type=test_data["return_type"]["type"],
         return_description=test_data["return_type"]["description"],
     )

@@ -1,5 +1,7 @@
 """Auto-generated from data/rdkit_functions.json. Do not edit manually."""
 
+from typing import Any
+
 from sqlalchemy import types as sqltypes
 from sqlalchemy.sql.functions import GenericFunction
 
@@ -21,8 +23,10 @@ class bfp_cmp(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitBitFingerprint  The first RDKit bit fingerprint for comparison.
-    fp_2: RdkitBitFingerprint  The second RDKit bit fingerprint for comparison.
+    fp_1: RdkitBitFingerprint
+                The first RDKit bit fingerprint for comparison.
+    fp_2: RdkitBitFingerprint
+                The second RDKit bit fingerprint for comparison.
 
 
     Returns
@@ -31,8 +35,12 @@ class bfp_cmp(GenericFunction):
         An integer representing the comparison result between the two bit fingerprints. Typically, 0 indicates equality, a negative value indicates the first fingerprint is 'less than' the second, and a positive value indicates the first is 'greater than' the second.
     """
 
-    def __init__(self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint):
-        super().__init__(fp_1, fp_2)
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class bfp_eq(GenericFunction):
@@ -42,18 +50,26 @@ class bfp_eq(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitBitFingerprint  The first bit vector fingerprint for comparison.
-    fp_2: RdkitBitFingerprint  The second bit vector fingerprint for comparison.
+    fp_1: RdkitBitFingerprint
+                The first bit vector fingerprint for comparison.
+    fp_2: RdkitBitFingerprint
+                The second bit vector fingerprint for comparison.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         True if the two bit vector fingerprints are equal, False otherwise.
     """
 
-    def __init__(self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class bfp_ge(GenericFunction):
@@ -63,18 +79,26 @@ class bfp_ge(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitBitFingerprint  The first bit fingerprint.
-    fp_2: RdkitBitFingerprint  The second bit fingerprint.
+    fp_1: RdkitBitFingerprint
+                The first bit fingerprint.
+    fp_2: RdkitBitFingerprint
+                The second bit fingerprint.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean value indicating if the first fingerprint is greater than or equal to the second.
     """
 
-    def __init__(self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class bfp_gt(GenericFunction):
@@ -84,18 +108,26 @@ class bfp_gt(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitBitFingerprint  The first bit vector fingerprint.
-    fp_2: RdkitBitFingerprint  The second bit vector fingerprint for comparison.
+    fp_1: RdkitBitFingerprint
+                The first bit vector fingerprint.
+    fp_2: RdkitBitFingerprint
+                The second bit vector fingerprint for comparison.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating if the first fingerprint is 'greater than' the second.
     """
 
-    def __init__(self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class bfp_in(GenericFunction):
@@ -105,7 +137,8 @@ class bfp_in(GenericFunction):
 
     Parameters
     ----------
-    input: CString  The string representation of the bit fingerprint.
+    input: CString
+                The string representation of the bit fingerprint.
 
 
     Returns
@@ -114,8 +147,12 @@ class bfp_in(GenericFunction):
         The RDKit bit fingerprint object.
     """
 
-    def __init__(self, input: CString):
-        super().__init__(input)
+    type = RdkitBitFingerprint()
+
+    inherits_cache = True
+
+    def __init__(self, input: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class bfp_lt(GenericFunction):
@@ -125,18 +162,26 @@ class bfp_lt(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitBitFingerprint  The first bit fingerprint to compare.
-    fp_2: RdkitBitFingerprint  The second bit fingerprint to compare.
+    fp_1: RdkitBitFingerprint
+                The first bit fingerprint to compare.
+    fp_2: RdkitBitFingerprint
+                The second bit fingerprint to compare.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean value indicating the result of the 'less than' comparison.
     """
 
-    def __init__(self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class bfp_ne(GenericFunction):
@@ -146,18 +191,26 @@ class bfp_ne(GenericFunction):
 
     Parameters
     ----------
-    bfp1: RdkitBitFingerprint  The first bit vector fingerprint.
-    bfp2: RdkitBitFingerprint  The second bit vector fingerprint.
+    bfp1: RdkitBitFingerprint
+                The first bit vector fingerprint.
+    bfp2: RdkitBitFingerprint
+                The second bit vector fingerprint.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         True if the two bit vector fingerprints are not equal, False otherwise.
     """
 
-    def __init__(self, bfp1: RdkitBitFingerprint, bfp2: RdkitBitFingerprint):
-        super().__init__(bfp1, bfp2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, bfp1: RdkitBitFingerprint, bfp2: RdkitBitFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(bfp1, bfp2, **kwargs)
 
 
 class bfp_out(GenericFunction):
@@ -167,7 +220,8 @@ class bfp_out(GenericFunction):
 
     Parameters
     ----------
-    fp: RdkitBitFingerprint  The bit vector fingerprint to convert to a binary string representation.
+    fp: RdkitBitFingerprint
+                The bit vector fingerprint to convert to a binary string representation.
 
 
     Returns
@@ -176,8 +230,12 @@ class bfp_out(GenericFunction):
         A bytea with the binary string representation of the fingerprint.
     """
 
-    def __init__(self, fp: RdkitBitFingerprint):
-        super().__init__(fp)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, fp: RdkitBitFingerprint, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class fmcs_smiles_transition(GenericFunction):
@@ -187,8 +245,10 @@ class fmcs_smiles_transition(GenericFunction):
 
     Parameters
     ----------
-    arg_1: sqltypes.Text  TODO.
-    arg_2: sqltypes.Text  TODO.
+    arg_1: sqltypes.Text
+                TODO.
+    arg_2: sqltypes.Text
+                TODO.
 
 
     Returns
@@ -197,8 +257,14 @@ class fmcs_smiles_transition(GenericFunction):
         A string representing the Most Common Substructure (MCS) found among the input molecules.
     """
 
-    def __init__(self, arg_1: sqltypes.Text, arg_2: sqltypes.Text):
-        super().__init__(arg_1, arg_2)
+    type = sqltypes.Text()
+
+    inherits_cache = True
+
+    def __init__(
+        self, arg_1: sqltypes.Text, arg_2: sqltypes.Text, **kwargs: Any
+    ) -> None:
+        super().__init__(arg_1, arg_2, **kwargs)
 
 
 class mol_cmp(GenericFunction):
@@ -208,8 +274,10 @@ class mol_cmp(GenericFunction):
 
     Parameters
     ----------
-    mol_1: RdkitMol  The first RDKit molecule to compare.
-    mol_2: RdkitMol  The second RDKit molecule to compare.
+    mol_1: RdkitMol
+                The first RDKit molecule to compare.
+    mol_2: RdkitMol
+                The second RDKit molecule to compare.
 
 
     Returns
@@ -218,8 +286,10 @@ class mol_cmp(GenericFunction):
         An integer representing the comparison result. Returns -1 if the first molecule is 'less than' the second, 0 if they are 'equal', and 1 if the first molecule is 'greater than' the second.
     """
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol):
-        super().__init__(mol_1, mol_2)
+    inherits_cache = True
+
+    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(mol_1, mol_2, **kwargs)
 
 
 class mol_eq(GenericFunction):
@@ -229,18 +299,24 @@ class mol_eq(GenericFunction):
 
     Parameters
     ----------
-    mol_1: RdkitMol  The first RDKit molecule to compare.
-    mol_2: RdkitMol  The second RDKit molecule to compare.
+    mol_1: RdkitMol
+                The first RDKit molecule to compare.
+    mol_2: RdkitMol
+                The second RDKit molecule to compare.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         Returns a boolean indicating whether the two molecules are equal.
     """
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol):
-        super().__init__(mol_1, mol_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(mol_1, mol_2, **kwargs)
 
 
 class mol_ge(GenericFunction):
@@ -250,18 +326,24 @@ class mol_ge(GenericFunction):
 
     Parameters
     ----------
-    arg_1: RdkitMol  The RDKit molecule to be checked as the potential superstructure.
-    arg_2: RdkitMol  The RDKit molecule to be checked as the potential substructure.
+    arg_1: RdkitMol
+                The RDKit molecule to be checked as the potential superstructure.
+    arg_2: RdkitMol
+                The RDKit molecule to be checked as the potential substructure.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean value: true if the first molecule is a superstructure of or identical to the second, false otherwise.
     """
 
-    def __init__(self, arg_1: RdkitMol, arg_2: RdkitMol):
-        super().__init__(arg_1, arg_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(self, arg_1: RdkitMol, arg_2: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(arg_1, arg_2, **kwargs)
 
 
 class mol_gt(GenericFunction):
@@ -271,18 +353,24 @@ class mol_gt(GenericFunction):
 
     Parameters
     ----------
-    mol_1: RdkitMol  The first RDKit molecule for comparison.
-    mol_2: RdkitMol  The second RDKit molecule for comparison.
+    mol_1: RdkitMol
+                The first RDKit molecule for comparison.
+    mol_2: RdkitMol
+                The second RDKit molecule for comparison.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         True if the first molecule is greater than the second, False otherwise.
     """
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol):
-        super().__init__(mol_1, mol_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(mol_1, mol_2, **kwargs)
 
 
 class mol_in(GenericFunction):
@@ -292,7 +380,8 @@ class mol_in(GenericFunction):
 
     Parameters
     ----------
-    mol_str: CString  The string representation of the molecule.
+    mol_str: CString
+                The string representation of the molecule.
 
 
     Returns
@@ -301,8 +390,12 @@ class mol_in(GenericFunction):
         An RDKit molecule object.
     """
 
-    def __init__(self, mol_str: CString):
-        super().__init__(mol_str)
+    type = RdkitMol()
+
+    inherits_cache = True
+
+    def __init__(self, mol_str: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_le(GenericFunction):
@@ -312,18 +405,24 @@ class mol_le(GenericFunction):
 
     Parameters
     ----------
-    mol_1: RdkitMol  The first RDKit molecule for comparison.
-    mol_2: RdkitMol  The second RDKit molecule for comparison.
+    mol_1: RdkitMol
+                The first RDKit molecule for comparison.
+    mol_2: RdkitMol
+                The second RDKit molecule for comparison.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         `True` if the first molecule is less than or equal to the second, `False` otherwise.
     """
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol):
-        super().__init__(mol_1, mol_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(mol_1, mol_2, **kwargs)
 
 
 class mol_lt(GenericFunction):
@@ -333,18 +432,24 @@ class mol_lt(GenericFunction):
 
     Parameters
     ----------
-    mol_1: RdkitMol  The first RDKit molecule.
-    mol_2: RdkitMol  The second RDKit molecule.
+    mol_1: RdkitMol
+                The first RDKit molecule.
+    mol_2: RdkitMol
+                The second RDKit molecule.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         `True` if the first molecule is less than the second molecule, `False` otherwise.
     """
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol):
-        super().__init__(mol_1, mol_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(mol_1, mol_2, **kwargs)
 
 
 class mol_ne(GenericFunction):
@@ -354,18 +459,24 @@ class mol_ne(GenericFunction):
 
     Parameters
     ----------
-    mol_1: RdkitMol  The first molecule to compare.
-    mol_2: RdkitMol  The second molecule to compare.
+    mol_1: RdkitMol
+                The first molecule to compare.
+    mol_2: RdkitMol
+                The second molecule to compare.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating if the two molecules are not equal.
     """
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol):
-        super().__init__(mol_1, mol_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(mol_1, mol_2, **kwargs)
 
 
 class mol_out(GenericFunction):
@@ -375,7 +486,8 @@ class mol_out(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule to be converted to a string.
+    mol: RdkitMol
+                The RDKit molecule to be converted to a string.
 
 
     Returns
@@ -384,8 +496,12 @@ class mol_out(GenericFunction):
         A string representation of the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class qmol_in(GenericFunction):
@@ -395,7 +511,8 @@ class qmol_in(GenericFunction):
 
     Parameters
     ----------
-    mol_str: CString  The string representation of the query molecule
+    mol_str: CString
+                The string representation of the query molecule
 
 
     Returns
@@ -404,8 +521,12 @@ class qmol_in(GenericFunction):
         An RDKit query molecule.
     """
 
-    def __init__(self, mol_str: CString):
-        super().__init__(mol_str)
+    type = RdkitQMol()
+
+    inherits_cache = True
+
+    def __init__(self, mol_str: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class qmol_out(GenericFunction):
@@ -415,7 +536,8 @@ class qmol_out(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitQMol  The query molecule.
+    mol: RdkitQMol
+                The query molecule.
 
 
     Returns
@@ -424,8 +546,12 @@ class qmol_out(GenericFunction):
         The SMARTS string representation of the query molecule.
     """
 
-    def __init__(self, mol: RdkitQMol):
-        super().__init__(mol)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitQMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_eq(GenericFunction):
@@ -435,18 +561,26 @@ class reaction_eq(GenericFunction):
 
     Parameters
     ----------
-    rxn_1: RdkitReaction  The first RDKit reaction.
-    rxn_2: RdkitReaction  The second RDKit reaction.
+    rxn_1: RdkitReaction
+                The first RDKit reaction.
+    rxn_2: RdkitReaction
+                The second RDKit reaction.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         True if the reactions are equivalent, False otherwise.
     """
 
-    def __init__(self, rxn_1: RdkitReaction, rxn_2: RdkitReaction):
-        super().__init__(rxn_1, rxn_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, rxn_1: RdkitReaction, rxn_2: RdkitReaction, **kwargs: Any
+    ) -> None:
+        super().__init__(rxn_1, rxn_2, **kwargs)
 
 
 class reaction_in(GenericFunction):
@@ -456,7 +590,8 @@ class reaction_in(GenericFunction):
 
     Parameters
     ----------
-    rxn_str: CString  The string representation of the chemical reaction, typically in reaction SMILES format.
+    rxn_str: CString
+                The string representation of the chemical reaction, typically in reaction SMILES format.
 
 
     Returns
@@ -465,8 +600,12 @@ class reaction_in(GenericFunction):
         An RDKit reaction object representing the parsed chemical reaction.
     """
 
-    def __init__(self, rxn_str: CString):
-        super().__init__(rxn_str)
+    type = RdkitReaction()
+
+    inherits_cache = True
+
+    def __init__(self, rxn_str: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_ne(GenericFunction):
@@ -476,18 +615,26 @@ class reaction_ne(GenericFunction):
 
     Parameters
     ----------
-    rxn_1: RdkitReaction  The first RDKit reaction.
-    rxn_2: RdkitReaction  The second RDKit reaction.
+    rxn_1: RdkitReaction
+                The first RDKit reaction.
+    rxn_2: RdkitReaction
+                The second RDKit reaction.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         True if the reactions are not equal, False otherwise.
     """
 
-    def __init__(self, rxn_1: RdkitReaction, rxn_2: RdkitReaction):
-        super().__init__(rxn_1, rxn_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, rxn_1: RdkitReaction, rxn_2: RdkitReaction, **kwargs: Any
+    ) -> None:
+        super().__init__(rxn_1, rxn_2, **kwargs)
 
 
 class reaction_out(GenericFunction):
@@ -497,7 +644,8 @@ class reaction_out(GenericFunction):
 
     Parameters
     ----------
-    rxn: RdkitReaction  The RDKit reaction object to convert.
+    rxn: RdkitReaction
+                The RDKit reaction object to convert.
 
 
     Returns
@@ -506,8 +654,12 @@ class reaction_out(GenericFunction):
         The string representation of the RDKit reaction.
     """
 
-    def __init__(self, rxn: RdkitReaction):
-        super().__init__(rxn)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class sfp_cmp(GenericFunction):
@@ -517,8 +669,10 @@ class sfp_cmp(GenericFunction):
 
     Parameters
     ----------
-    arg_1: RdkitSparseFingerprint  The first sparse fingerprint to compare.
-    arg_2: RdkitSparseFingerprint  The second sparse fingerprint to compare.
+    arg_1: RdkitSparseFingerprint
+                The first sparse fingerprint to compare.
+    arg_2: RdkitSparseFingerprint
+                The second sparse fingerprint to compare.
 
 
     Returns
@@ -527,8 +681,15 @@ class sfp_cmp(GenericFunction):
         TODO
     """
 
-    def __init__(self, arg_1: RdkitSparseFingerprint, arg_2: RdkitSparseFingerprint):
-        super().__init__(arg_1, arg_2)
+    inherits_cache = True
+
+    def __init__(
+        self,
+        arg_1: RdkitSparseFingerprint,
+        arg_2: RdkitSparseFingerprint,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(arg_1, arg_2, **kwargs)
 
 
 class sfp_eq(GenericFunction):
@@ -538,18 +699,26 @@ class sfp_eq(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitSparseFingerprint  The first sparse fingerprint.
-    fp_2: RdkitSparseFingerprint  The second sparse fingerprint.
+    fp_1: RdkitSparseFingerprint
+                The first sparse fingerprint.
+    fp_2: RdkitSparseFingerprint
+                The second sparse fingerprint.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating the equality of the two sparse fingerprints.
     """
 
-    def __init__(self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class sfp_ge(GenericFunction):
@@ -559,18 +728,26 @@ class sfp_ge(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitSparseFingerprint  The first sparse fingerprint (sfp) for comparison.
-    fp_2: RdkitSparseFingerprint  The second sparse fingerprint (sfp) for comparison.
+    fp_1: RdkitSparseFingerprint
+                The first sparse fingerprint (sfp) for comparison.
+    fp_2: RdkitSparseFingerprint
+                The second sparse fingerprint (sfp) for comparison.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether the first sparse fingerprint is element-wise greater than or equal to the second sparse fingerprint.
     """
 
-    def __init__(self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class sfp_gt(GenericFunction):
@@ -580,18 +757,26 @@ class sfp_gt(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitSparseFingerprint  The first sparse fingerprint for comparison.
-    fp_2: RdkitSparseFingerprint  The second sparse fingerprint for comparison.
+    fp_1: RdkitSparseFingerprint
+                The first sparse fingerprint for comparison.
+    fp_2: RdkitSparseFingerprint
+                The second sparse fingerprint for comparison.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         `True` if all elements of the first sparse fingerprint are greater than the corresponding elements of the second, False otherwise.
     """
 
-    def __init__(self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class sfp_in(GenericFunction):
@@ -601,7 +786,8 @@ class sfp_in(GenericFunction):
 
     Parameters
     ----------
-    fp_string: CString  The string representation of the sparse fingerprint.
+    fp_string: CString
+                The string representation of the sparse fingerprint.
 
 
     Returns
@@ -610,8 +796,12 @@ class sfp_in(GenericFunction):
         The RDKit sparse fingerprint (sfp) object.
     """
 
-    def __init__(self, fp_string: CString):
-        super().__init__(fp_string)
+    type = RdkitSparseFingerprint()
+
+    inherits_cache = True
+
+    def __init__(self, fp_string: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class sfp_le(GenericFunction):
@@ -621,18 +811,26 @@ class sfp_le(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitSparseFingerprint  The first RDKit sparse fingerprint.
-    fp_2: RdkitSparseFingerprint  The second RDKit sparse fingerprint.
+    fp_1: RdkitSparseFingerprint
+                The first RDKit sparse fingerprint.
+    fp_2: RdkitSparseFingerprint
+                The second RDKit sparse fingerprint.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         True if the first sparse fingerprint is element-wise less than or equal to the second; otherwise, False.
     """
 
-    def __init__(self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class sfp_lt(GenericFunction):
@@ -642,18 +840,26 @@ class sfp_lt(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitSparseFingerprint  The first sparse fingerprint to compare.
-    fp_2: RdkitSparseFingerprint  The second sparse fingerprint to compare.
+    fp_1: RdkitSparseFingerprint
+                The first sparse fingerprint to compare.
+    fp_2: RdkitSparseFingerprint
+                The second sparse fingerprint to compare.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean value (True if the first sparse fingerprint is less than the second, False otherwise).
     """
 
-    def __init__(self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class sfp_ne(GenericFunction):
@@ -663,18 +869,26 @@ class sfp_ne(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitSparseFingerprint  The first sparse fingerprint.
-    fp_2: RdkitSparseFingerprint  The second sparse fingerprint.
+    fp_1: RdkitSparseFingerprint
+                The first sparse fingerprint.
+    fp_2: RdkitSparseFingerprint
+                The second sparse fingerprint.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         `True` if the two sparse fingerprints are not equal, `False` otherwise.
     """
 
-    def __init__(self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class sfp_out(GenericFunction):
@@ -684,7 +898,8 @@ class sfp_out(GenericFunction):
 
     Parameters
     ----------
-    fp: RdkitSparseFingerprint  The sparse fingerprint to be converted to a string.
+    fp: RdkitSparseFingerprint
+                The sparse fingerprint to be converted to a string.
 
 
     Returns
@@ -693,8 +908,12 @@ class sfp_out(GenericFunction):
         A string representation of the sparse fingerprint.
     """
 
-    def __init__(self, fp: RdkitSparseFingerprint):
-        super().__init__(fp)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, fp: RdkitSparseFingerprint, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class tanimoto_sml_op(GenericFunction):
@@ -704,22 +923,29 @@ class tanimoto_sml_op(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitSparseFingerprint | RdkitBitFingerprint  The first fingerprint, which can be either a sparse fingerprint (sfp) or a bit vector fingerprint (bfp).
-    fp_2: RdkitSparseFingerprint | RdkitBitFingerprint  The second fingerprint, which must be of the same type as the first fingerprint (either sfp or bfp).
+    fp_1: RdkitSparseFingerprint | RdkitBitFingerprint
+                The first fingerprint, which can be either a sparse fingerprint (sfp) or a bit vector fingerprint (bfp).
+    fp_2: RdkitSparseFingerprint | RdkitBitFingerprint
+                The second fingerprint, which must be of the same type as the first fingerprint (either sfp or bfp).
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean value representing the result of the Tanimoto similarity operation.
     """
+
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
 
     def __init__(
         self,
         fp_1: RdkitSparseFingerprint | RdkitBitFingerprint,
         fp_2: RdkitSparseFingerprint | RdkitBitFingerprint,
-    ):
-        super().__init__(fp_1, fp_2)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class xqmol_in(GenericFunction):
@@ -729,7 +955,8 @@ class xqmol_in(GenericFunction):
 
     Parameters
     ----------
-    arg_1: CString  The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).
+    arg_1: CString
+                The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).
 
 
     Returns
@@ -738,8 +965,12 @@ class xqmol_in(GenericFunction):
         A query molecule (RdkitXQMol) object.
     """
 
-    def __init__(self, arg_1: CString):
-        super().__init__(arg_1)
+    type = RdkitXQMol()
+
+    inherits_cache = True
+
+    def __init__(self, arg_1: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class xqmol_out(GenericFunction):
@@ -749,7 +980,8 @@ class xqmol_out(GenericFunction):
 
     Parameters
     ----------
-    arg_1: RdkitXQMol  The RDKit query molecule to convert to a string.
+    arg_1: RdkitXQMol
+                The RDKit query molecule to convert to a string.
 
 
     Returns
@@ -758,5 +990,9 @@ class xqmol_out(GenericFunction):
         TODO
     """
 
-    def __init__(self, arg_1: RdkitXQMol):
-        super().__init__(arg_1)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, arg_1: RdkitXQMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)

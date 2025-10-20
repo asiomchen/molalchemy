@@ -25,8 +25,10 @@ class add(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitSparseFingerprint  The first sparse fingerprint.
-    fp_2: RdkitSparseFingerprint  The second sparse fingerprint.
+    fp_1: RdkitSparseFingerprint
+                The first sparse fingerprint.
+    fp_2: RdkitSparseFingerprint
+                The second sparse fingerprint.
 
 
     Returns
@@ -35,8 +37,14 @@ class add(GenericFunction):
         An sfp formed by the element-wise addition of the two sfp arguments.
     """
 
-    def __init__(self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = RdkitSparseFingerprint()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class all_values_gt(GenericFunction):
@@ -46,18 +54,26 @@ class all_values_gt(GenericFunction):
 
     Parameters
     ----------
-    fp: RdkitSparseFingerprint  The sparse fingerprint to check.
-    value: int | sqltypes.Integer  The integer value to compare against.
+    fp: RdkitSparseFingerprint
+                The sparse fingerprint to check.
+    value: int | sqltypes.Integer
+                The integer value to compare against.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether or not all elements of the sfp argument are greater than the int argument.
     """
 
-    def __init__(self, fp: RdkitSparseFingerprint, value: int | sqltypes.Integer):
-        super().__init__(fp, value)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp: RdkitSparseFingerprint, value: int | sqltypes.Integer, **kwargs: Any
+    ) -> None:
+        super().__init__(fp, value, **kwargs)
 
 
 class all_values_lt(GenericFunction):
@@ -67,18 +83,26 @@ class all_values_lt(GenericFunction):
 
     Parameters
     ----------
-    fp: RdkitSparseFingerprint  The sparse fingerprint (sfp) to check.
-    value: int | sqltypes.Integer  The integer value to compare against the sfp elements.
+    fp: RdkitSparseFingerprint
+                The sparse fingerprint (sfp) to check.
+    value: int | sqltypes.Integer
+                The integer value to compare against the sfp elements.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether or not all elements of the sfp argument are less than the int argument.
     """
 
-    def __init__(self, fp: RdkitSparseFingerprint, value: int | sqltypes.Integer):
-        super().__init__(fp, value)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp: RdkitSparseFingerprint, value: int | sqltypes.Integer, **kwargs: Any
+    ) -> None:
+        super().__init__(fp, value, **kwargs)
 
 
 class atompair_fp(GenericFunction):
@@ -88,7 +112,8 @@ class atompair_fp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to generate the fingerprint.
+    mol: RdkitMol
+                The molecule for which to generate the fingerprint.
 
 
     Returns
@@ -97,8 +122,12 @@ class atompair_fp(GenericFunction):
         The count-based atom-pair fingerprint (sfp) for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = RdkitSparseFingerprint()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class atompairbv_fp(GenericFunction):
@@ -108,7 +137,8 @@ class atompairbv_fp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to compute the fingerprint for.
+    mol: RdkitMol
+                The molecule to compute the fingerprint for.
 
 
     Returns
@@ -117,8 +147,12 @@ class atompairbv_fp(GenericFunction):
         A bit vector atom-pair fingerprint.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = RdkitBitFingerprint()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class avalon_fp(GenericFunction):
@@ -128,9 +162,12 @@ class avalon_fp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule for which to generate the fingerprint.
-    arg_2: bool | sqltypes.Boolean  TODO
-    arg_3: int | sqltypes.Integer  TODO
+    mol: RdkitMol
+                The RDKit molecule for which to generate the fingerprint.
+    arg_2: sqltypes.Boolean
+                TODO
+    arg_3: int | sqltypes.Integer
+                TODO
 
 
     Returns
@@ -139,13 +176,18 @@ class avalon_fp(GenericFunction):
         A bit vector fingerprint (bfp).
     """
 
+    type = RdkitBitFingerprint()
+
+    inherits_cache = True
+
     def __init__(
         self,
         mol: RdkitMol,
-        arg_2: bool | sqltypes.Boolean,
+        arg_2: sqltypes.Boolean,
         arg_3: int | sqltypes.Integer,
-    ):
-        super().__init__(mol, arg_2, arg_3)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(mol, arg_2, arg_3, **kwargs)
 
 
 class bfp_from_binary_text(GenericFunction):
@@ -155,7 +197,8 @@ class bfp_from_binary_text(GenericFunction):
 
     Parameters
     ----------
-    input: sqltypes.LargeBinary  The binary string representation of the fingerprint.
+    input: sqltypes.LargeBinary
+                The binary string representation of the fingerprint.
 
 
     Returns
@@ -164,8 +207,12 @@ class bfp_from_binary_text(GenericFunction):
         A bit vector fingerprint (bfp).
     """
 
-    def __init__(self, input: sqltypes.LargeBinary):
-        super().__init__(input)
+    type = RdkitBitFingerprint()
+
+    inherits_cache = True
+
+    def __init__(self, input: sqltypes.LargeBinary, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class bfp_le(GenericFunction):
@@ -175,18 +222,26 @@ class bfp_le(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitBitFingerprint  The first bit vector fingerprint for comparison.
-    fp_2: RdkitBitFingerprint  The second bit vector fingerprint for comparison.
+    fp_1: RdkitBitFingerprint
+                The first bit vector fingerprint for comparison.
+    fp_2: RdkitBitFingerprint
+                The second bit vector fingerprint for comparison.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         True if the first bit fingerprint is less than or equal to the second bit fingerprint, False otherwise.
     """
 
-    def __init__(self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class bfp_to_binary_text(GenericFunction):
@@ -196,7 +251,8 @@ class bfp_to_binary_text(GenericFunction):
 
     Parameters
     ----------
-    fp: RdkitBitFingerprint  The bit vector fingerprint (bfp) to convert.
+    fp: RdkitBitFingerprint
+                The bit vector fingerprint (bfp) to convert.
 
 
     Returns
@@ -205,8 +261,12 @@ class bfp_to_binary_text(GenericFunction):
         A bytea with the binary string representation of the fingerprint.
     """
 
-    def __init__(self, fp: RdkitBitFingerprint):
-        super().__init__(fp)
+    type = sqltypes.LargeBinary()
+
+    inherits_cache = True
+
+    def __init__(self, fp: RdkitBitFingerprint, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class dice_dist(GenericFunction):
@@ -216,8 +276,10 @@ class dice_dist(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitBitFingerprint  The first fingerprint (bfp) for the distance calculation.
-    fp_2: RdkitBitFingerprint  The second fingerprint (bfp) for the distance calculation.
+    fp_1: RdkitBitFingerprint
+                The first fingerprint (bfp) for the distance calculation.
+    fp_2: RdkitBitFingerprint
+                The second fingerprint (bfp) for the distance calculation.
 
 
     Returns
@@ -226,8 +288,14 @@ class dice_dist(GenericFunction):
         The Dice distance (float) between the two fingerprints.
     """
 
-    def __init__(self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class dice_sml(GenericFunction):
@@ -237,8 +305,10 @@ class dice_sml(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitSparseFingerprint | RdkitBitFingerprint  The first fingerprint (either sparse or bit vector) for comparison.
-    fp_2: RdkitSparseFingerprint | RdkitBitFingerprint  The second fingerprint (either sparse or bit vector) for comparison.
+    fp_1: RdkitSparseFingerprint | RdkitBitFingerprint
+                The first fingerprint (either sparse or bit vector) for comparison.
+    fp_2: RdkitSparseFingerprint | RdkitBitFingerprint
+                The second fingerprint (either sparse or bit vector) for comparison.
 
 
     Returns
@@ -247,12 +317,17 @@ class dice_sml(GenericFunction):
         The Dice similarity between the two fingerprints.
     """
 
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
     def __init__(
         self,
         fp_1: RdkitSparseFingerprint | RdkitBitFingerprint,
         fp_2: RdkitSparseFingerprint | RdkitBitFingerprint,
-    ):
-        super().__init__(fp_1, fp_2)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class dice_sml_op(GenericFunction):
@@ -262,22 +337,29 @@ class dice_sml_op(GenericFunction):
 
     Parameters
     ----------
-    arg_1: RdkitSparseFingerprint | RdkitBitFingerprint  The first fingerprint.
-    arg_2: RdkitSparseFingerprint | RdkitBitFingerprint  The second fingerprint of the same type as the first.
+    arg_1: RdkitSparseFingerprint | RdkitBitFingerprint
+                The first fingerprint.
+    arg_2: RdkitSparseFingerprint | RdkitBitFingerprint
+                The second fingerprint of the same type as the first.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         The Dice similarity between the two fingerprints.
     """
+
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
 
     def __init__(
         self,
         arg_1: RdkitSparseFingerprint | RdkitBitFingerprint,
         arg_2: RdkitSparseFingerprint | RdkitBitFingerprint,
-    ):
-        super().__init__(arg_1, arg_2)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(arg_1, arg_2, **kwargs)
 
 
 class featmorgan_fp(GenericFunction):
@@ -287,8 +369,10 @@ class featmorgan_fp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to generate the fingerprint.
-    radius: int | sqltypes.Integer = 2  The radius for the fingerprint generation. This argument is optional and defaults to 2.
+    mol: RdkitMol
+                The molecule for which to generate the fingerprint.
+    radius: int | sqltypes.Integer = 2
+                The radius for the fingerprint generation. This argument is optional and defaults to 2.
 
 
     Returns
@@ -297,8 +381,14 @@ class featmorgan_fp(GenericFunction):
         The count-based Morgan fingerprint (sfp) for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol, radius: int | sqltypes.Integer = 2):
-        super().__init__(mol, radius)
+    type = RdkitSparseFingerprint()
+
+    inherits_cache = True
+
+    def __init__(
+        self, mol: RdkitMol, radius: int | sqltypes.Integer = 2, **kwargs: Any
+    ) -> None:
+        super().__init__(mol, radius, **kwargs)
 
 
 class featmorganbv_fp(GenericFunction):
@@ -308,8 +398,10 @@ class featmorganbv_fp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to generate the fingerprint.
-    radius: int | sqltypes.Integer = 2  The radius for the fingerprint generation.
+    mol: RdkitMol
+                The molecule for which to generate the fingerprint.
+    radius: int | sqltypes.Integer = 2
+                The radius for the fingerprint generation.
 
 
     Returns
@@ -318,8 +410,14 @@ class featmorganbv_fp(GenericFunction):
         The bit vector Morgan fingerprint.
     """
 
-    def __init__(self, mol: RdkitMol, radius: int | sqltypes.Integer = 2):
-        super().__init__(mol, radius)
+    type = RdkitBitFingerprint()
+
+    inherits_cache = True
+
+    def __init__(
+        self, mol: RdkitMol, radius: int | sqltypes.Integer = 2, **kwargs: Any
+    ) -> None:
+        super().__init__(mol, radius, **kwargs)
 
 
 class fmcs(GenericFunction):
@@ -329,7 +427,8 @@ class fmcs(GenericFunction):
 
     Parameters
     ----------
-    mols: RdkitMol | sqltypes.Text  A set of molecules for which to calculate the MCS.
+    mols: RdkitMol | sqltypes.Text
+                A set of molecules for which to calculate the MCS.
 
 
     Returns
@@ -338,8 +437,12 @@ class fmcs(GenericFunction):
         The Maximum Common Substructure (MCS) as a string representation.
     """
 
-    def __init__(self, mols: RdkitMol | sqltypes.Text):
-        super().__init__(mols)
+    type = sqltypes.Text()
+
+    inherits_cache = True
+
+    def __init__(self, mols: RdkitMol | sqltypes.Text, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class fmcs_smiles(GenericFunction):
@@ -349,22 +452,29 @@ class fmcs_smiles(GenericFunction):
 
     Parameters
     ----------
-    mls: sqltypes.Text | CString | Cast[Any]  A space-separated string of SMILES representations of molecules for which to calculate the MCS.
-    json: sqltypes.Text | CString | Cast[Any] = ''  An optional JSON string used to provide parameters to the MCS code.
+    molecules: sqltypes.Text | CString | Cast[Any]
+                A space-separated string of SMILES representations of molecules for which to calculate the MCS.
+    json: sqltypes.Text | CString | Cast[Any] | str = ''
+                An optional JSON string used to provide parameters to the MCS code.
 
 
     Returns
     -------
-    Function[sqltypes.Text | CString]
+    Function[CString]
         The Maximum Common Substructure (MCS) for the set of molecules, returned as a SMILES string.
     """
 
+    type = CString()
+
+    inherits_cache = True
+
     def __init__(
         self,
-        mls: sqltypes.Text | CString | Cast[Any],
-        json: sqltypes.Text | CString | Cast[Any] = "",
-    ):
-        super().__init__(mls, json)
+        molecules: sqltypes.Text | CString | Cast[Any],
+        json: sqltypes.Text | CString | Cast[Any] | str = "",
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(molecules, json, **kwargs)
 
 
 class is_valid_ctab(GenericFunction):
@@ -374,17 +484,22 @@ class is_valid_ctab(GenericFunction):
 
     Parameters
     ----------
-    input: CString  The CTAB (mol block) string to validate.
+    input: CString
+                The CTAB (mol block) string to validate.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether or not the CTAB string produces a valid RDKit molecule.
     """
 
-    def __init__(self, input: CString):
-        super().__init__(input)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(self, input: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class is_valid_mol_pkl(GenericFunction):
@@ -394,17 +509,22 @@ class is_valid_mol_pkl(GenericFunction):
 
     Parameters
     ----------
-    input: sqltypes.LargeBinary  A binary string (bytea) representing a molecule.
+    input: sqltypes.LargeBinary
+                A binary string (bytea) representing a molecule.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether or not the binary string can be converted into a valid RDKit molecule.
     """
 
-    def __init__(self, input: sqltypes.LargeBinary):
-        super().__init__(input)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(self, input: sqltypes.LargeBinary, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class is_valid_smarts(GenericFunction):
@@ -414,17 +534,22 @@ class is_valid_smarts(GenericFunction):
 
     Parameters
     ----------
-    input: CString  The SMARTS string to validate.
+    input: CString
+                The SMARTS string to validate.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether the SMARTS string produces a valid RDKit molecule.
     """
 
-    def __init__(self, input: CString):
-        super().__init__(input)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(self, input: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class is_valid_smiles(GenericFunction):
@@ -434,17 +559,22 @@ class is_valid_smiles(GenericFunction):
 
     Parameters
     ----------
-    input: CString  The SMILES string to validate.
+    input: CString
+                The SMILES string to validate.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether the SMILES string produces a valid RDKit molecule.
     """
 
-    def __init__(self, input: CString):
-        super().__init__(input)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(self, input: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class layered_fp(GenericFunction):
@@ -454,7 +584,8 @@ class layered_fp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to generate the layered fingerprint.
+    mol: RdkitMol
+                The molecule for which to generate the layered fingerprint.
 
 
     Returns
@@ -463,8 +594,12 @@ class layered_fp(GenericFunction):
         The layered fingerprint (bit vector) for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = RdkitBitFingerprint()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class maccs_fp(GenericFunction):
@@ -474,7 +609,8 @@ class maccs_fp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to generate the MACCS fingerprint.
+    mol: RdkitMol
+                The molecule for which to generate the MACCS fingerprint.
 
 
     Returns
@@ -483,8 +619,12 @@ class maccs_fp(GenericFunction):
         A bit vector (bfp) representing the MACCS fingerprint.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = RdkitBitFingerprint()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_adjust_query_properties(GenericFunction):
@@ -494,8 +634,10 @@ class mol_adjust_query_properties(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol | RdkitQMol  The molecule to which additional query information will be attached.
-    query_parameters: CString | Cast[Any] = cast('', CString)  A string with additional query parameters (optional)
+    mol: RdkitMol | RdkitQMol
+                The molecule to which additional query information will be attached.
+    query_parameters: CString | Cast[Any] = cast('', CString)
+                A string with additional query parameters (optional)
 
 
     Returns
@@ -504,12 +646,17 @@ class mol_adjust_query_properties(GenericFunction):
         A new molecule with additional query information attached.
     """
 
+    type = RdkitMol()
+
+    inherits_cache = True
+
     def __init__(
         self,
         mol: RdkitMol | RdkitQMol,
         query_parameters: CString | Cast[Any] = cast("", CString),
-    ):
-        super().__init__(mol, query_parameters)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(mol, query_parameters, **kwargs)
 
 
 class mol_amw(GenericFunction):
@@ -519,7 +666,8 @@ class mol_amw(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the AMW.
+    mol: RdkitMol
+                The molecule for which to calculate the AMW.
 
 
     Returns
@@ -528,8 +676,12 @@ class mol_amw(GenericFunction):
         The AMW (Average Molecular Weight) for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_chi0n(GenericFunction):
@@ -539,7 +691,8 @@ class mol_chi0n(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule.
+    mol: RdkitMol
+                The RDKit molecule.
 
 
     Returns
@@ -548,8 +701,12 @@ class mol_chi0n(GenericFunction):
         The Chi0n value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_chi0v(GenericFunction):
@@ -559,7 +716,8 @@ class mol_chi0v(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the Chi0v value.
+    mol: RdkitMol
+                The molecule for which to calculate the Chi0v value.
 
 
     Returns
@@ -568,8 +726,12 @@ class mol_chi0v(GenericFunction):
         The Chi0v value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_chi1n(GenericFunction):
@@ -579,7 +741,8 @@ class mol_chi1n(GenericFunction):
 
     Parameters
     ----------
-    arg_1: RdkitMol  The molecule for which to calculate the Chi1n value.
+    arg_1: RdkitMol
+                The molecule for which to calculate the Chi1n value.
 
 
     Returns
@@ -588,8 +751,12 @@ class mol_chi1n(GenericFunction):
         The Chi1n value of the molecule.
     """
 
-    def __init__(self, arg_1: RdkitMol):
-        super().__init__(arg_1)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, arg_1: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_chi1v(GenericFunction):
@@ -599,7 +766,8 @@ class mol_chi1v(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule.
+    mol: RdkitMol
+                The RDKit molecule.
 
 
     Returns
@@ -608,8 +776,12 @@ class mol_chi1v(GenericFunction):
         The Chi1v value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_chi2n(GenericFunction):
@@ -619,7 +791,8 @@ class mol_chi2n(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the Chi2n value.
+    mol: RdkitMol
+                The molecule for which to calculate the Chi2n value.
 
 
     Returns
@@ -628,8 +801,12 @@ class mol_chi2n(GenericFunction):
         The Chi2n value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_chi2v(GenericFunction):
@@ -639,7 +816,8 @@ class mol_chi2v(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule.
+    mol: RdkitMol
+                The RDKit molecule.
 
 
     Returns
@@ -648,8 +826,12 @@ class mol_chi2v(GenericFunction):
         The Chi2v value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_chi3n(GenericFunction):
@@ -659,7 +841,8 @@ class mol_chi3n(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the Chi3n value.
+    mol: RdkitMol
+                The molecule for which to calculate the Chi3n value.
 
 
     Returns
@@ -668,8 +851,12 @@ class mol_chi3n(GenericFunction):
         The Chi3n value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_chi3v(GenericFunction):
@@ -679,7 +866,8 @@ class mol_chi3v(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the Chi3v value.
+    mol: RdkitMol
+                The molecule for which to calculate the Chi3v value.
 
 
     Returns
@@ -688,8 +876,12 @@ class mol_chi3v(GenericFunction):
         The Chi3v value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_chi4n(GenericFunction):
@@ -699,7 +891,8 @@ class mol_chi4n(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the Chi4n value.
+    mol: RdkitMol
+                The molecule for which to calculate the Chi4n value.
 
 
     Returns
@@ -708,8 +901,12 @@ class mol_chi4n(GenericFunction):
         The Chi4n value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_chi4v(GenericFunction):
@@ -719,7 +916,8 @@ class mol_chi4v(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to calculate the Chi4v value for.
+    mol: RdkitMol
+                The molecule to calculate the Chi4v value for.
 
 
     Returns
@@ -728,8 +926,12 @@ class mol_chi4v(GenericFunction):
         The Chi4v value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_exactmw(GenericFunction):
@@ -739,7 +941,8 @@ class mol_exactmw(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the exact molecular weight.
+    mol: RdkitMol
+                The molecule for which to calculate the exact molecular weight.
 
 
     Returns
@@ -748,8 +951,12 @@ class mol_exactmw(GenericFunction):
         The exact molecular weight of the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_formula(GenericFunction):
@@ -759,9 +966,12 @@ class mol_formula(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to get the molecular formula.
-    include_isotopes: bool | sqltypes.Boolean = False  Controls whether isotope information is included in the formula.
-    use_deuterium_tritium_symbols: bool | sqltypes.Boolean = True  Controls whether "D" and "T" are used instead of [2H] and [3H].
+    mol: RdkitMol
+                The molecule for which to get the molecular formula.
+    include_isotopes: bool | sqltypes.Boolean = False
+                Controls whether isotope information is included in the formula.
+    use_deuterium_tritium_symbols: bool | sqltypes.Boolean = True
+                Controls whether "D" and "T" are used instead of [2H] and [3H].
 
 
     Returns
@@ -770,13 +980,18 @@ class mol_formula(GenericFunction):
         A string containing the molecular formula.
     """
 
+    type = CString()
+
+    inherits_cache = True
+
     def __init__(
         self,
         mol: RdkitMol,
         include_isotopes: bool | sqltypes.Boolean = False,
         use_deuterium_tritium_symbols: bool | sqltypes.Boolean = True,
-    ):
-        super().__init__(mol, include_isotopes, use_deuterium_tritium_symbols)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(mol, include_isotopes, use_deuterium_tritium_symbols, **kwargs)
 
 
 class mol_fractioncsp3(GenericFunction):
@@ -786,7 +1001,8 @@ class mol_fractioncsp3(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the fraction of sp3 hybridized carbons.
+    mol: RdkitMol
+                The molecule for which to calculate the fraction of sp3 hybridized carbons.
 
 
     Returns
@@ -795,8 +1011,12 @@ class mol_fractioncsp3(GenericFunction):
         The fraction of carbons that are sp3 hybridized in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_from_ctab(GenericFunction):
@@ -806,9 +1026,10 @@ class mol_from_ctab(GenericFunction):
 
     Parameters
     ----------
-    ctab: CString  The CTAB (mol block) string from which to create the molecule.
-    arg_2: bool | sqltypes.Boolean  A boolean indicating whether the molecule's coordinates should be saved.
-    kwargs: Any  Optional kwargs (might be useful between the cartridge versions)
+    ctab: CString
+                The CTAB (mol block) string from which to create the molecule.
+    arg_2: sqltypes.Boolean
+                A boolean indicating whether the molecule's coordinates should be saved.
 
 
     Returns
@@ -817,8 +1038,12 @@ class mol_from_ctab(GenericFunction):
         An RDKit molecule object, or NULL if the molecule construction fails.
     """
 
-    def __init__(self, ctab: CString, arg_2: bool | sqltypes.Boolean, kwargs: Any):
-        super().__init__(ctab, arg_2, kwargs)
+    type = RdkitMol()
+
+    inherits_cache = True
+
+    def __init__(self, ctab: CString, arg_2: sqltypes.Boolean, **kwargs: Any) -> None:
+        super().__init__(ctab, arg_2, **kwargs)
 
 
 class mol_from_json(GenericFunction):
@@ -828,7 +1053,8 @@ class mol_from_json(GenericFunction):
 
     Parameters
     ----------
-    json_str: CString  A commonchem JSON string representing a molecule.
+    json_str: CString
+                A commonchem JSON string representing a molecule.
 
 
     Returns
@@ -837,8 +1063,12 @@ class mol_from_json(GenericFunction):
         A molecule for a commonchem JSON string, NULL if the molecule construction fails.
     """
 
-    def __init__(self, json_str: CString):
-        super().__init__(json_str)
+    type = RdkitMol()
+
+    inherits_cache = True
+
+    def __init__(self, json_str: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_from_pkl(GenericFunction):
@@ -848,7 +1078,8 @@ class mol_from_pkl(GenericFunction):
 
     Parameters
     ----------
-    bytea: sqltypes.LargeBinary  A binary string representation of the molecule.
+    bytea: sqltypes.LargeBinary
+                A binary string representation of the molecule.
 
 
     Returns
@@ -857,8 +1088,12 @@ class mol_from_pkl(GenericFunction):
         A molecule, or NULL if the molecule construction fails.
     """
 
-    def __init__(self, bytea: sqltypes.LargeBinary):
-        super().__init__(bytea)
+    type = RdkitMol()
+
+    inherits_cache = True
+
+    def __init__(self, bytea: sqltypes.LargeBinary, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_from_smiles(GenericFunction):
@@ -868,7 +1103,8 @@ class mol_from_smiles(GenericFunction):
 
     Parameters
     ----------
-    smiles: sqltypes.Text | CString  The SMILES string to convert to a molecule.
+    smiles: sqltypes.Text | CString
+                The SMILES string to convert to a molecule.
 
 
     Returns
@@ -877,8 +1113,12 @@ class mol_from_smiles(GenericFunction):
         A molecule object, or NULL if the molecule construction from the SMILES string fails.
     """
 
-    def __init__(self, smiles: sqltypes.Text | CString):
-        super().__init__(smiles)
+    type = RdkitMol()
+
+    inherits_cache = True
+
+    def __init__(self, smiles: sqltypes.Text | CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_hallkieralpha(GenericFunction):
@@ -888,7 +1128,8 @@ class mol_hallkieralpha(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule.
+    mol: RdkitMol
+                The RDKit molecule.
 
 
     Returns
@@ -897,8 +1138,12 @@ class mol_hallkieralpha(GenericFunction):
         The Hall-Kier alpha value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_hba(GenericFunction):
@@ -908,7 +1153,8 @@ class mol_hba(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the number of Lipinski H-bond acceptors.
+    mol: RdkitMol
+                The molecule for which to calculate the number of Lipinski H-bond acceptors.
 
 
     Returns
@@ -917,8 +1163,10 @@ class mol_hba(GenericFunction):
         The number of Lipinski H-bond acceptors (i.e., number of Os and Ns) for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_hbd(GenericFunction):
@@ -928,7 +1176,8 @@ class mol_hbd(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the number of Lipinski H-bond donors.
+    mol: RdkitMol
+                The molecule for which to calculate the number of Lipinski H-bond donors.
 
 
     Returns
@@ -937,8 +1186,10 @@ class mol_hbd(GenericFunction):
         The number of Lipinski H-bond donors for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_inchi(GenericFunction):
@@ -948,8 +1199,10 @@ class mol_inchi(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule for which to generate the InChI.
-    arg_2: CString  Additional parameters to pass to the generator (TODO)
+    mol: RdkitMol
+                The RDKit molecule for which to generate the InChI.
+    arg_2: CString
+                Additional parameters to pass to the generator (TODO)
 
 
     Returns
@@ -958,8 +1211,12 @@ class mol_inchi(GenericFunction):
         The InChI string representation of the molecule.
     """
 
-    def __init__(self, mol: RdkitMol, arg_2: CString):
-        super().__init__(mol, arg_2)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, arg_2: CString, **kwargs: Any) -> None:
+        super().__init__(mol, arg_2, **kwargs)
 
 
 class mol_inchikey(GenericFunction):
@@ -969,8 +1226,10 @@ class mol_inchikey(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule for which to generate the InChI key.
-    arg_2: CString  Additional parameters to pass to the generator  (TODO)
+    mol: RdkitMol
+                The RDKit molecule for which to generate the InChI key.
+    arg_2: CString
+                Additional parameters to pass to the generator  (TODO)
 
 
     Returns
@@ -979,8 +1238,12 @@ class mol_inchikey(GenericFunction):
         An InChI key for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol, arg_2: CString):
-        super().__init__(mol, arg_2)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, arg_2: CString, **kwargs: Any) -> None:
+        super().__init__(mol, arg_2, **kwargs)
 
 
 class mol_kappa1(GenericFunction):
@@ -990,7 +1253,8 @@ class mol_kappa1(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule.
+    mol: RdkitMol
+                The RDKit molecule.
 
 
     Returns
@@ -999,8 +1263,12 @@ class mol_kappa1(GenericFunction):
         The kappa1 value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_kappa2(GenericFunction):
@@ -1010,7 +1278,8 @@ class mol_kappa2(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the kappa2 value.
+    mol: RdkitMol
+                The molecule for which to calculate the kappa2 value.
 
 
     Returns
@@ -1019,8 +1288,12 @@ class mol_kappa2(GenericFunction):
         The kappa2 value.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_kappa3(GenericFunction):
@@ -1030,7 +1303,8 @@ class mol_kappa3(GenericFunction):
 
     Parameters
     ----------
-    mol_1: RdkitMol  The molecule for which to calculate the kappa3 value.
+    mol_1: RdkitMol
+                The molecule for which to calculate the kappa3 value.
 
 
     Returns
@@ -1039,8 +1313,12 @@ class mol_kappa3(GenericFunction):
         The kappa3 value for the molecule.
     """
 
-    def __init__(self, mol_1: RdkitMol):
-        super().__init__(mol_1)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol_1: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_labuteasa(GenericFunction):
@@ -1050,7 +1328,8 @@ class mol_labuteasa(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate Labute's approximate surface area.
+    mol: RdkitMol
+                The molecule for which to calculate Labute's approximate surface area.
 
 
     Returns
@@ -1059,8 +1338,12 @@ class mol_labuteasa(GenericFunction):
         Labute's approximate surface area (ASA) for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_logp(GenericFunction):
@@ -1070,7 +1353,8 @@ class mol_logp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the MolLogP.
+    mol: RdkitMol
+                The molecule for which to calculate the MolLogP.
 
 
     Returns
@@ -1079,8 +1363,12 @@ class mol_logp(GenericFunction):
         The MolLogP value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_murckoscaffold(GenericFunction):
@@ -1090,7 +1378,8 @@ class mol_murckoscaffold(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule for which to compute the Murcko scaffold.
+    mol: RdkitMol
+                The RDKit molecule for which to compute the Murcko scaffold.
 
 
     Returns
@@ -1099,8 +1388,12 @@ class mol_murckoscaffold(GenericFunction):
         The RDKit molecule representing the Murcko scaffold.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = RdkitMol()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_nm_hash(GenericFunction):
@@ -1110,8 +1403,10 @@ class mol_nm_hash(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to generate the hash.
-    hash_type: CString | Cast[Any] = cast('AnonymousGraph', CString)  The type of hash to generate. Legal values are 'AnonymousGraph', 'ElementGraph', 'CanonicalSmiles', 'MurckoScaffold', 'ExtendedMurcko', 'MolFormula', 'AtomBondCounts', 'DegreeVector', 'Mesomer', 'HetAtomTautomer', 'HetAtomProtomer', 'RedoxPair', 'Regioisomer', 'NetCharge', 'SmallWorldIndexBR', 'SmallWorldIndexBRL', 'ArthorSubstructureOrder'. The default is 'AnonymousGraph'.
+    mol: RdkitMol
+                The molecule for which to generate the hash.
+    hash_type: CString | Cast[Any] = cast('AnonymousGraph', CString)
+                The type of hash to generate. Legal values are 'AnonymousGraph', 'ElementGraph', 'CanonicalSmiles', 'MurckoScaffold', 'ExtendedMurcko', 'MolFormula', 'AtomBondCounts', 'DegreeVector', 'Mesomer', 'HetAtomTautomer', 'HetAtomProtomer', 'RedoxPair', 'Regioisomer', 'NetCharge', 'SmallWorldIndexBR', 'SmallWorldIndexBRL', 'ArthorSubstructureOrder'. The default is 'AnonymousGraph'.
 
 
     Returns
@@ -1120,12 +1415,17 @@ class mol_nm_hash(GenericFunction):
         A string with the hash for the molecule.
     """
 
+    type = CString()
+
+    inherits_cache = True
+
     def __init__(
         self,
         mol: RdkitMol,
         hash_type: CString | Cast[Any] = cast("AnonymousGraph", CString),
-    ):
-        super().__init__(mol, hash_type)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(mol, hash_type, **kwargs)
 
 
 class mol_numaliphaticcarbocycles(GenericFunction):
@@ -1135,7 +1435,8 @@ class mol_numaliphaticcarbocycles(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to analyze.
+    mol: RdkitMol
+                The molecule to analyze.
 
 
     Returns
@@ -1144,8 +1445,10 @@ class mol_numaliphaticcarbocycles(GenericFunction):
         The number of aliphatic (at least one non-aromatic bond) carbocycles in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numaliphaticheterocycles(GenericFunction):
@@ -1155,7 +1458,8 @@ class mol_numaliphaticheterocycles(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule.
+    mol: RdkitMol
+                The RDKit molecule.
 
 
     Returns
@@ -1164,8 +1468,10 @@ class mol_numaliphaticheterocycles(GenericFunction):
         The number of aliphatic (at least one non-aromatic bond) heterocycles in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numaliphaticrings(GenericFunction):
@@ -1175,7 +1481,8 @@ class mol_numaliphaticrings(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the number of aliphatic rings.
+    mol: RdkitMol
+                The molecule for which to calculate the number of aliphatic rings.
 
 
     Returns
@@ -1184,8 +1491,10 @@ class mol_numaliphaticrings(GenericFunction):
         The number of aliphatic (at least one non-aromatic bond) rings in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numamidebonds(GenericFunction):
@@ -1195,7 +1504,8 @@ class mol_numamidebonds(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule for which to calculate the number of amide bonds.
+    mol: RdkitMol
+                The RDKit molecule for which to calculate the number of amide bonds.
 
 
     Returns
@@ -1204,8 +1514,10 @@ class mol_numamidebonds(GenericFunction):
         The number of amide bonds in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numaromaticcarbocycles(GenericFunction):
@@ -1215,7 +1527,8 @@ class mol_numaromaticcarbocycles(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule.
+    mol: RdkitMol
+                The RDKit molecule.
 
 
     Returns
@@ -1224,8 +1537,10 @@ class mol_numaromaticcarbocycles(GenericFunction):
         The number of aromatic carbocycles in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numaromaticheterocycles(GenericFunction):
@@ -1235,7 +1550,8 @@ class mol_numaromaticheterocycles(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule.
+    mol: RdkitMol
+                The RDKit molecule.
 
 
     Returns
@@ -1244,8 +1560,10 @@ class mol_numaromaticheterocycles(GenericFunction):
         The number of aromatic heterocycles in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numaromaticrings(GenericFunction):
@@ -1255,7 +1573,8 @@ class mol_numaromaticrings(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to analyze.
+    mol: RdkitMol
+                The molecule to analyze.
 
 
     Returns
@@ -1264,8 +1583,10 @@ class mol_numaromaticrings(GenericFunction):
         The number of aromatic rings in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numatoms(GenericFunction):
@@ -1275,7 +1596,8 @@ class mol_numatoms(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule.
+    mol: RdkitMol
+                The RDKit molecule.
 
 
     Returns
@@ -1284,8 +1606,10 @@ class mol_numatoms(GenericFunction):
         The total number of atoms in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numbridgeheadatoms(GenericFunction):
@@ -1295,7 +1619,8 @@ class mol_numbridgeheadatoms(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to calculate the number of bridgehead atoms for.
+    mol: RdkitMol
+                The molecule to calculate the number of bridgehead atoms for.
 
 
     Returns
@@ -1304,8 +1629,10 @@ class mol_numbridgeheadatoms(GenericFunction):
         The number of bridgehead atoms in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numheavyatoms(GenericFunction):
@@ -1315,7 +1642,8 @@ class mol_numheavyatoms(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to analyze.
+    mol: RdkitMol
+                The molecule to analyze.
 
 
     Returns
@@ -1324,8 +1652,10 @@ class mol_numheavyatoms(GenericFunction):
         The number of heavy atoms in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numheteroatoms(GenericFunction):
@@ -1335,7 +1665,8 @@ class mol_numheteroatoms(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule.
+    mol: RdkitMol
+                The RDKit molecule.
 
 
     Returns
@@ -1344,8 +1675,10 @@ class mol_numheteroatoms(GenericFunction):
         The number of heteroatoms in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numheterocycles(GenericFunction):
@@ -1355,7 +1688,8 @@ class mol_numheterocycles(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to count the number of heteroatoms.
+    mol: RdkitMol
+                The molecule for which to count the number of heteroatoms.
 
 
     Returns
@@ -1364,8 +1698,10 @@ class mol_numheterocycles(GenericFunction):
         The number of heteroatoms in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numrings(GenericFunction):
@@ -1375,7 +1711,8 @@ class mol_numrings(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the number of rings.
+    mol: RdkitMol
+                The molecule for which to calculate the number of rings.
 
 
     Returns
@@ -1384,8 +1721,10 @@ class mol_numrings(GenericFunction):
         The number of rings in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numrotatablebonds(GenericFunction):
@@ -1395,7 +1734,8 @@ class mol_numrotatablebonds(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to calculate the number of rotatable bonds for.
+    mol: RdkitMol
+                The molecule to calculate the number of rotatable bonds for.
 
 
     Returns
@@ -1404,8 +1744,10 @@ class mol_numrotatablebonds(GenericFunction):
         The number of rotatable bonds in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numsaturatedcarbocycles(GenericFunction):
@@ -1415,7 +1757,8 @@ class mol_numsaturatedcarbocycles(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the number of saturated carbocycles.
+    mol: RdkitMol
+                The molecule for which to calculate the number of saturated carbocycles.
 
 
     Returns
@@ -1424,8 +1767,10 @@ class mol_numsaturatedcarbocycles(GenericFunction):
         The number of saturated carbocycles in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numsaturatedheterocycles(GenericFunction):
@@ -1435,7 +1780,8 @@ class mol_numsaturatedheterocycles(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to analyze.
+    mol: RdkitMol
+                The molecule to analyze.
 
 
     Returns
@@ -1444,8 +1790,10 @@ class mol_numsaturatedheterocycles(GenericFunction):
         The number of saturated heterocycles in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numsaturatedrings(GenericFunction):
@@ -1455,7 +1803,8 @@ class mol_numsaturatedrings(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the number of saturated rings.
+    mol: RdkitMol
+                The molecule for which to calculate the number of saturated rings.
 
 
     Returns
@@ -1464,8 +1813,10 @@ class mol_numsaturatedrings(GenericFunction):
         The number of saturated rings in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_numspiroatoms(GenericFunction):
@@ -1475,7 +1826,8 @@ class mol_numspiroatoms(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule.
+    mol: RdkitMol
+                The RDKit molecule.
 
 
     Returns
@@ -1484,8 +1836,10 @@ class mol_numspiroatoms(GenericFunction):
         The number of spiro atoms in the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_phi(GenericFunction):
@@ -1495,7 +1849,8 @@ class mol_phi(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the Kier Phi value.
+    mol: RdkitMol
+                The molecule for which to calculate the Kier Phi value.
 
 
     Returns
@@ -1504,8 +1859,12 @@ class mol_phi(GenericFunction):
         The Kier Phi value for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_send(GenericFunction):
@@ -1515,7 +1874,8 @@ class mol_send(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule to be serialized.
+    mol: RdkitMol
+                The RDKit molecule to be serialized.
 
 
     Returns
@@ -1524,8 +1884,12 @@ class mol_send(GenericFunction):
         A binary string (bytea) representation of the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.LargeBinary()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_to_ctab(GenericFunction):
@@ -1535,9 +1899,12 @@ class mol_to_ctab(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to generate the CTAB string.
-    arg_2: bool | sqltypes.Boolean = True
-    arg_3: bool | sqltypes.Boolean = False
+    mol: RdkitMol
+                The molecule for which to generate the CTAB string.
+    arg_2: sqltypes.Boolean | bool = True
+
+    arg_3: sqltypes.Boolean | bool = False
+
 
 
     Returns
@@ -1546,13 +1913,18 @@ class mol_to_ctab(GenericFunction):
         A CTAB (mol block) string for a molecule.
     """
 
+    type = CString()
+
+    inherits_cache = True
+
     def __init__(
         self,
         mol: RdkitMol,
-        arg_2: bool | sqltypes.Boolean = True,
-        arg_3: bool | sqltypes.Boolean = False,
-    ):
-        super().__init__(mol, arg_2, arg_3)
+        arg_2: sqltypes.Boolean | bool = True,
+        arg_3: sqltypes.Boolean | bool = False,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(mol, arg_2, arg_3, **kwargs)
 
 
 class mol_to_cxsmarts(GenericFunction):
@@ -1562,7 +1934,8 @@ class mol_to_cxsmarts(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol | RdkitQMol  The molecule to convert to CXSMARTS.
+    mol: RdkitMol | RdkitQMol
+                The molecule to convert to CXSMARTS.
 
 
     Returns
@@ -1571,8 +1944,12 @@ class mol_to_cxsmarts(GenericFunction):
         The CXSMARTS string for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol | RdkitQMol):
-        super().__init__(mol)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol | RdkitQMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_to_cxsmiles(GenericFunction):
@@ -1582,7 +1959,8 @@ class mol_to_cxsmiles(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to convert.
+    mol: RdkitMol
+                The molecule to convert.
 
 
     Returns
@@ -1591,8 +1969,12 @@ class mol_to_cxsmiles(GenericFunction):
         The CXSMILES string for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_to_json(GenericFunction):
@@ -1602,7 +1984,8 @@ class mol_to_json(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol | RdkitQMol  The molecule to convert to commonchem JSON.
+    mol: RdkitMol | RdkitQMol
+                The molecule to convert to commonchem JSON.
 
 
     Returns
@@ -1611,8 +1994,12 @@ class mol_to_json(GenericFunction):
         The commonchem JSON string representation of the molecule.
     """
 
-    def __init__(self, mol: RdkitMol | RdkitQMol):
-        super().__init__(mol)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol | RdkitQMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_to_pkl(GenericFunction):
@@ -1622,7 +2009,8 @@ class mol_to_pkl(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The RDKit molecule to be converted to a binary string.
+    mol: RdkitMol
+                The RDKit molecule to be converted to a binary string.
 
 
     Returns
@@ -1631,8 +2019,12 @@ class mol_to_pkl(GenericFunction):
         A binary string (bytea) representation of the RDKit molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.LargeBinary()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_to_smarts(GenericFunction):
@@ -1642,7 +2034,8 @@ class mol_to_smarts(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol | RdkitQMol  The molecule to convert to a SMARTS string.
+    mol: RdkitMol | RdkitQMol
+                The molecule to convert to a SMARTS string.
 
 
     Returns
@@ -1651,8 +2044,12 @@ class mol_to_smarts(GenericFunction):
         The SMARTS string representation of the molecule.
     """
 
-    def __init__(self, mol: RdkitMol | RdkitQMol):
-        super().__init__(mol)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol | RdkitQMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_to_smiles(GenericFunction):
@@ -1662,7 +2059,8 @@ class mol_to_smiles(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol | RdkitQMol  The molecule to convert to SMILES.
+    mol: RdkitMol | RdkitQMol
+                The molecule to convert to SMILES.
 
 
     Returns
@@ -1671,8 +2069,12 @@ class mol_to_smiles(GenericFunction):
         The canonical SMILES string for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol | RdkitQMol):
-        super().__init__(mol)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol | RdkitQMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class mol_to_svg(GenericFunction):
@@ -1682,11 +2084,16 @@ class mol_to_svg(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol | RdkitQMol  The molecule to be drawn.
-    arg_2: CString | Cast[Any] = cast('', CString)  An optional string to use as the legend for the drawing.
-    width: int | sqltypes.Integer = 250  The optional width of the generated SVG image.
-    height: int | sqltypes.Integer = 200  The optional height of the generated SVG image.
+    mol: RdkitMol | RdkitQMol
+                The molecule to be drawn.
+    arg_2: CString | Cast[Any] = cast('', CString)
+                An optional string to use as the legend for the drawing.
+    width: int | sqltypes.Integer = 250
+                The optional width of the generated SVG image.
+    height: int | sqltypes.Integer = 200
+                The optional height of the generated SVG image.
     arg_5: CString | Cast[Any] = cast('', CString)
+
 
 
     Returns
@@ -1695,6 +2102,10 @@ class mol_to_svg(GenericFunction):
         An SVG string representing the drawing of the molecule.
     """
 
+    type = CString()
+
+    inherits_cache = True
+
     def __init__(
         self,
         mol: RdkitMol | RdkitQMol,
@@ -1702,8 +2113,9 @@ class mol_to_svg(GenericFunction):
         width: int | sqltypes.Integer = 250,
         height: int | sqltypes.Integer = 200,
         arg_5: CString | Cast[Any] = cast("", CString),
-    ):
-        super().__init__(mol, arg_2, width, height, arg_5)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(mol, arg_2, width, height, arg_5, **kwargs)
 
 
 class mol_to_v3kctab(GenericFunction):
@@ -1713,8 +2125,10 @@ class mol_to_v3kctab(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to convert to a V3000 CTAB string.
-    create_depiction: bool | sqltypes.Boolean = True  Controls whether or not 2D coordinates will be generated for molecules that don't have coordinates.
+    mol: RdkitMol
+                The molecule to convert to a V3000 CTAB string.
+    create_depiction: sqltypes.Boolean | bool = True
+                Controls whether or not 2D coordinates will be generated for molecules that don't have coordinates.
 
 
     Returns
@@ -1723,8 +2137,17 @@ class mol_to_v3kctab(GenericFunction):
         A CTAB (mol block) string for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol, create_depiction: bool | sqltypes.Boolean = True):
-        super().__init__(mol, create_depiction)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(
+        self,
+        mol: RdkitMol,
+        create_depiction: sqltypes.Boolean | bool = True,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(mol, create_depiction, **kwargs)
 
 
 class mol_to_xqmol(GenericFunction):
@@ -1734,11 +2157,16 @@ class mol_to_xqmol(GenericFunction):
 
     Parameters
     ----------
-    arg_1: RdkitMol  The RDKit molecule to be converted.
-    arg_2: bool | sqltypes.Boolean  A boolean parameter for the conversion process.
-    arg_3: bool | sqltypes.Boolean  Another boolean parameter for the conversion process.
-    arg_4: bool | sqltypes.Boolean  A third boolean parameter for the conversion process.
-    arg_5: CString  A string parameter for the conversion process.
+    arg_1: RdkitMol
+                The RDKit molecule to be converted.
+    arg_2: sqltypes.Boolean
+                A boolean parameter for the conversion process.
+    arg_3: sqltypes.Boolean
+                Another boolean parameter for the conversion process.
+    arg_4: sqltypes.Boolean
+                A third boolean parameter for the conversion process.
+    arg_5: CString
+                A string parameter for the conversion process.
 
 
     Returns
@@ -1747,15 +2175,20 @@ class mol_to_xqmol(GenericFunction):
         The RDKit XQuery molecule.
     """
 
+    type = RdkitXQMol()
+
+    inherits_cache = True
+
     def __init__(
         self,
         arg_1: RdkitMol,
-        arg_2: bool | sqltypes.Boolean,
-        arg_3: bool | sqltypes.Boolean,
-        arg_4: bool | sqltypes.Boolean,
+        arg_2: sqltypes.Boolean,
+        arg_3: sqltypes.Boolean,
+        arg_4: sqltypes.Boolean,
         arg_5: CString,
-    ):
-        super().__init__(arg_1, arg_2, arg_3, arg_4, arg_5)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(arg_1, arg_2, arg_3, arg_4, arg_5, **kwargs)
 
 
 class mol_tpsa(GenericFunction):
@@ -1765,7 +2198,8 @@ class mol_tpsa(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to calculate the topological polar surface area.
+    mol: RdkitMol
+                The molecule for which to calculate the topological polar surface area.
 
 
     Returns
@@ -1774,8 +2208,12 @@ class mol_tpsa(GenericFunction):
         The topological polar surface area of the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class morgan_fp(GenericFunction):
@@ -1785,8 +2223,10 @@ class morgan_fp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to generate the fingerprint.
-    radius: int | sqltypes.Integer = 2  The radius for the Morgan fingerprint generation. Defaults to 2.
+    mol: RdkitMol
+                The molecule for which to generate the fingerprint.
+    radius: int | sqltypes.Integer = 2
+                The radius for the Morgan fingerprint generation. Defaults to 2.
 
 
     Returns
@@ -1795,8 +2235,14 @@ class morgan_fp(GenericFunction):
         A sparse fingerprint (sfp) which is the count-based Morgan fingerprint.
     """
 
-    def __init__(self, mol: RdkitMol, radius: int | sqltypes.Integer = 2):
-        super().__init__(mol, radius)
+    type = RdkitSparseFingerprint()
+
+    inherits_cache = True
+
+    def __init__(
+        self, mol: RdkitMol, radius: int | sqltypes.Integer = 2, **kwargs: Any
+    ) -> None:
+        super().__init__(mol, radius, **kwargs)
 
 
 class morganbv_fp(GenericFunction):
@@ -1806,8 +2252,10 @@ class morganbv_fp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to generate the fingerprint.
-    radius: int | sqltypes.Integer = 2  The radius for the Morgan fingerprint calculation.
+    mol: RdkitMol
+                The molecule for which to generate the fingerprint.
+    radius: int | sqltypes.Integer = 2
+                The radius for the Morgan fingerprint calculation.
 
 
     Returns
@@ -1816,8 +2264,14 @@ class morganbv_fp(GenericFunction):
         A bit vector Morgan fingerprint (bfp) for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol, radius: int | sqltypes.Integer = 2):
-        super().__init__(mol, radius)
+    type = RdkitBitFingerprint()
+
+    inherits_cache = True
+
+    def __init__(
+        self, mol: RdkitMol, radius: int | sqltypes.Integer = 2, **kwargs: Any
+    ) -> None:
+        super().__init__(mol, radius, **kwargs)
 
 
 class qmol_from_ctab(GenericFunction):
@@ -1827,9 +2281,10 @@ class qmol_from_ctab(GenericFunction):
 
     Parameters
     ----------
-    ctab: CString  A CTAB (mol block) string.
-    keep_conformer: bool | sqltypes.Boolean  Controls whether or not the coordinates are saved.
-    kwargs: Any  Optional kwargs (might be useful between the cartridge versions)
+    ctab: CString
+                A CTAB (mol block) string.
+    keep_conformer: sqltypes.Boolean
+                Controls whether or not the coordinates are saved.
 
 
     Returns
@@ -1838,10 +2293,14 @@ class qmol_from_ctab(GenericFunction):
         A query molecule
     """
 
+    type = RdkitQMol()
+
+    inherits_cache = True
+
     def __init__(
-        self, ctab: CString, keep_conformer: bool | sqltypes.Boolean, kwargs: Any
-    ):
-        super().__init__(ctab, keep_conformer, kwargs)
+        self, ctab: CString, keep_conformer: sqltypes.Boolean, **kwargs: Any
+    ) -> None:
+        super().__init__(ctab, keep_conformer, **kwargs)
 
 
 class qmol_from_json(GenericFunction):
@@ -1851,7 +2310,8 @@ class qmol_from_json(GenericFunction):
 
     Parameters
     ----------
-    json: CString  The commonchem JSON string representing the query molecule.
+    json: CString
+                The commonchem JSON string representing the query molecule.
 
 
     Returns
@@ -1860,8 +2320,12 @@ class qmol_from_json(GenericFunction):
         A query molecule
     """
 
-    def __init__(self, json: CString):
-        super().__init__(json)
+    type = RdkitQMol()
+
+    inherits_cache = True
+
+    def __init__(self, json: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class qmol_from_smarts(GenericFunction):
@@ -1871,7 +2335,8 @@ class qmol_from_smarts(GenericFunction):
 
     Parameters
     ----------
-    smarts: CString  The SMARTS string representing the query molecule.
+    smarts: CString
+                The SMARTS string representing the query molecule.
 
 
     Returns
@@ -1880,8 +2345,12 @@ class qmol_from_smarts(GenericFunction):
         A query molecule (RdkitQMol) or NULL if the molecule construction fails.
     """
 
-    def __init__(self, smarts: CString):
-        super().__init__(smarts)
+    type = RdkitQMol()
+
+    inherits_cache = True
+
+    def __init__(self, smarts: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class qmol_from_smiles(GenericFunction):
@@ -1891,7 +2360,8 @@ class qmol_from_smiles(GenericFunction):
 
     Parameters
     ----------
-    smiles: CString  The SMILES string to convert into a query molecule.
+    smiles: CString
+                The SMILES string to convert into a query molecule.
 
 
     Returns
@@ -1900,8 +2370,12 @@ class qmol_from_smiles(GenericFunction):
         A query molecule for the SMILES string.
     """
 
-    def __init__(self, smiles: CString):
-        super().__init__(smiles)
+    type = RdkitQMol()
+
+    inherits_cache = True
+
+    def __init__(self, smiles: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class qmol_send(GenericFunction):
@@ -1911,7 +2385,8 @@ class qmol_send(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitQMol  The query molecule to be converted.
+    mol: RdkitQMol
+                The query molecule to be converted.
 
 
     Returns
@@ -1920,8 +2395,12 @@ class qmol_send(GenericFunction):
         A binary string representation of the query molecule.
     """
 
-    def __init__(self, mol: RdkitQMol):
-        super().__init__(mol)
+    type = sqltypes.LargeBinary()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitQMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class rdkit_fp(GenericFunction):
@@ -1931,7 +2410,8 @@ class rdkit_fp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to generate the fingerprint.
+    mol: RdkitMol
+                The molecule for which to generate the fingerprint.
 
 
     Returns
@@ -1940,8 +2420,12 @@ class rdkit_fp(GenericFunction):
         A bit vector fingerprint (bfp) representing the RDKit fingerprint.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = RdkitBitFingerprint()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class rdkit_toolkit_version(GenericFunction):
@@ -1960,10 +2444,12 @@ class rdkit_toolkit_version(GenericFunction):
         The version of the RDKit toolkit as a string.
     """
 
-    def __init__(
-        self,
-    ):
-        super().__init__()
+    type = sqltypes.Text()
+
+    inherits_cache = True
+
+    def __init__(self, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class rdkit_version(GenericFunction):
@@ -1982,10 +2468,12 @@ class rdkit_version(GenericFunction):
         Returns the RDKit version as text.
     """
 
-    def __init__(
-        self,
-    ):
-        super().__init__()
+    type = sqltypes.Text()
+
+    inherits_cache = True
+
+    def __init__(self, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_difference_fp(GenericFunction):
@@ -1995,8 +2483,10 @@ class reaction_difference_fp(GenericFunction):
 
     Parameters
     ----------
-    rxn_1: RdkitReaction  The RDKit reaction object.
-    fp_type: int | sqltypes.Integer  Integer denoting the fingerprint type. Likely 1 (AtomPairFP), 2 (TopologicalTorsionFP), or 3 (MorganFP).
+    rxn_1: RdkitReaction
+                The RDKit reaction object.
+    fp_type: int | sqltypes.Integer
+                Integer denoting the fingerprint type. Likely 1 (AtomPairFP), 2 (TopologicalTorsionFP), or 3 (MorganFP).
 
 
     Returns
@@ -2005,8 +2495,14 @@ class reaction_difference_fp(GenericFunction):
         A sparse fingerprint (sfp) representing the reaction difference.
     """
 
-    def __init__(self, rxn_1: RdkitReaction, fp_type: int | sqltypes.Integer):
-        super().__init__(rxn_1, fp_type)
+    type = RdkitSparseFingerprint()
+
+    inherits_cache = True
+
+    def __init__(
+        self, rxn_1: RdkitReaction, fp_type: int | sqltypes.Integer, **kwargs: Any
+    ) -> None:
+        super().__init__(rxn_1, fp_type, **kwargs)
 
 
 class reaction_from_ctab(GenericFunction):
@@ -2016,7 +2512,8 @@ class reaction_from_ctab(GenericFunction):
 
     Parameters
     ----------
-    rxn_str: CString  The CTAB (reaction block) string representing the reaction.
+    rxn_str: CString
+                The CTAB (reaction block) string representing the reaction.
 
 
     Returns
@@ -2025,8 +2522,12 @@ class reaction_from_ctab(GenericFunction):
         An RDKit reaction object, or NULL if the reaction construction fails.
     """
 
-    def __init__(self, rxn_str: CString):
-        super().__init__(rxn_str)
+    type = RdkitReaction()
+
+    inherits_cache = True
+
+    def __init__(self, rxn_str: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_from_smarts(GenericFunction):
@@ -2036,7 +2537,8 @@ class reaction_from_smarts(GenericFunction):
 
     Parameters
     ----------
-    rxn_str: CString  The SMARTS string representing the reaction.
+    rxn_str: CString
+                The SMARTS string representing the reaction.
 
 
     Returns
@@ -2045,8 +2547,12 @@ class reaction_from_smarts(GenericFunction):
         The RDKit reaction object.
     """
 
-    def __init__(self, rxn_str: CString):
-        super().__init__(rxn_str)
+    type = RdkitReaction()
+
+    inherits_cache = True
+
+    def __init__(self, rxn_str: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_from_smiles(GenericFunction):
@@ -2056,7 +2562,8 @@ class reaction_from_smiles(GenericFunction):
 
     Parameters
     ----------
-    rxn_str: CString  The reaction SMILES string to convert into an RDKit reaction object.
+    rxn_str: CString
+                The reaction SMILES string to convert into an RDKit reaction object.
 
 
     Returns
@@ -2065,8 +2572,12 @@ class reaction_from_smiles(GenericFunction):
         An RDKit reaction object, or NULL if the conversion from the reaction SMILES string fails.
     """
 
-    def __init__(self, rxn_str: CString):
-        super().__init__(rxn_str)
+    type = RdkitReaction()
+
+    inherits_cache = True
+
+    def __init__(self, rxn_str: CString, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_numagents(GenericFunction):
@@ -2076,7 +2587,8 @@ class reaction_numagents(GenericFunction):
 
     Parameters
     ----------
-    rxn: RdkitReaction  The RDKit reaction molecule.
+    rxn: RdkitReaction
+                The RDKit reaction molecule.
 
 
     Returns
@@ -2085,8 +2597,10 @@ class reaction_numagents(GenericFunction):
         The number of agents in the RDKit reaction.
     """
 
-    def __init__(self, rxn: RdkitReaction):
-        super().__init__(rxn)
+    inherits_cache = True
+
+    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_numproducts(GenericFunction):
@@ -2096,7 +2610,8 @@ class reaction_numproducts(GenericFunction):
 
     Parameters
     ----------
-    rxn: RdkitReaction  The RDKit reaction object.
+    rxn: RdkitReaction
+                The RDKit reaction object.
 
 
     Returns
@@ -2105,8 +2620,10 @@ class reaction_numproducts(GenericFunction):
         The number of products in the reaction.
     """
 
-    def __init__(self, rxn: RdkitReaction):
-        super().__init__(rxn)
+    inherits_cache = True
+
+    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_numreactants(GenericFunction):
@@ -2116,7 +2633,8 @@ class reaction_numreactants(GenericFunction):
 
     Parameters
     ----------
-    rxn: RdkitReaction  The RDKit reaction object.
+    rxn: RdkitReaction
+                The RDKit reaction object.
 
 
     Returns
@@ -2125,8 +2643,10 @@ class reaction_numreactants(GenericFunction):
         The number of reactants in the RDKit reaction.
     """
 
-    def __init__(self, rxn: RdkitReaction):
-        super().__init__(rxn)
+    inherits_cache = True
+
+    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_send(GenericFunction):
@@ -2136,7 +2656,8 @@ class reaction_send(GenericFunction):
 
     Parameters
     ----------
-    rxn: RdkitReaction  The RDKit reaction object to be sent.
+    rxn: RdkitReaction
+                The RDKit reaction object to be sent.
 
 
     Returns
@@ -2145,8 +2666,12 @@ class reaction_send(GenericFunction):
         The binary representation of the RDKit reaction.
     """
 
-    def __init__(self, rxn: RdkitReaction):
-        super().__init__(rxn)
+    type = sqltypes.LargeBinary()
+
+    inherits_cache = True
+
+    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_structural_bfp(GenericFunction):
@@ -2156,8 +2681,10 @@ class reaction_structural_bfp(GenericFunction):
 
     Parameters
     ----------
-    rxn: RdkitReaction  The RDKit reaction object.
-    radius: int | sqltypes.Integer  The radius to use for the fingerprint generation.
+    rxn: RdkitReaction
+                The RDKit reaction object.
+    radius: int | sqltypes.Integer
+                The radius to use for the fingerprint generation.
 
 
     Returns
@@ -2166,8 +2693,14 @@ class reaction_structural_bfp(GenericFunction):
         A bit vector fingerprint (bfp) representing the structural features of the reaction.
     """
 
-    def __init__(self, rxn: RdkitReaction, radius: int | sqltypes.Integer):
-        super().__init__(rxn, radius)
+    type = RdkitBitFingerprint()
+
+    inherits_cache = True
+
+    def __init__(
+        self, rxn: RdkitReaction, radius: int | sqltypes.Integer, **kwargs: Any
+    ) -> None:
+        super().__init__(rxn, radius, **kwargs)
 
 
 class reaction_to_ctab(GenericFunction):
@@ -2177,7 +2710,8 @@ class reaction_to_ctab(GenericFunction):
 
     Parameters
     ----------
-    reaction: RdkitReaction  The RDKit reaction object to convert.
+    reaction: RdkitReaction
+                The RDKit reaction object to convert.
 
 
     Returns
@@ -2186,8 +2720,12 @@ class reaction_to_ctab(GenericFunction):
         The CTAB (mol block) string representation of the reaction.
     """
 
-    def __init__(self, reaction: RdkitReaction):
-        super().__init__(reaction)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, reaction: RdkitReaction, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_to_smarts(GenericFunction):
@@ -2197,7 +2735,8 @@ class reaction_to_smarts(GenericFunction):
 
     Parameters
     ----------
-    rxn: RdkitReaction  The RDKit reaction object to convert.
+    rxn: RdkitReaction
+                The RDKit reaction object to convert.
 
 
     Returns
@@ -2206,8 +2745,12 @@ class reaction_to_smarts(GenericFunction):
         The SMARTS string representation of the reaction.
     """
 
-    def __init__(self, rxn: RdkitReaction):
-        super().__init__(rxn)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_to_smiles(GenericFunction):
@@ -2217,7 +2760,8 @@ class reaction_to_smiles(GenericFunction):
 
     Parameters
     ----------
-    rxn: RdkitReaction  The RDKit reaction object.
+    rxn: RdkitReaction
+                The RDKit reaction object.
 
 
     Returns
@@ -2226,8 +2770,12 @@ class reaction_to_smiles(GenericFunction):
         The SMILES string representation of the reaction.
     """
 
-    def __init__(self, rxn: RdkitReaction):
-        super().__init__(rxn)
+    type = CString()
+
+    inherits_cache = True
+
+    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class reaction_to_svg(GenericFunction):
@@ -2237,11 +2785,16 @@ class reaction_to_svg(GenericFunction):
 
     Parameters
     ----------
-    rxn: RdkitReaction  The RDKit reaction object to be drawn.
-    highlight_reactants: bool | sqltypes.Boolean  If true, highlights the reactants in the SVG drawing.
-    width: int | sqltypes.Integer  The desired width of the SVG image.
-    height: int | sqltypes.Integer  The desired height of the SVG image.
-    params: CString  An optional string for other drawing parameters? [TODO]
+    rxn: RdkitReaction
+                The RDKit reaction object to be drawn.
+    highlight_reactants: sqltypes.Boolean
+                If true, highlights the reactants in the SVG drawing.
+    width: int | sqltypes.Integer
+                The desired width of the SVG image.
+    height: int | sqltypes.Integer
+                The desired height of the SVG image.
+    params: CString
+                An optional string for other drawing parameters? [TODO]
 
 
     Returns
@@ -2250,15 +2803,20 @@ class reaction_to_svg(GenericFunction):
         A string containing the SVG representation of the reaction.
     """
 
+    type = CString()
+
+    inherits_cache = True
+
     def __init__(
         self,
         rxn: RdkitReaction,
-        highlight_reactants: bool | sqltypes.Boolean,
+        highlight_reactants: sqltypes.Boolean,
         width: int | sqltypes.Integer,
         height: int | sqltypes.Integer,
         params: CString,
-    ):
-        super().__init__(rxn, highlight_reactants, width, height, params)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(rxn, highlight_reactants, width, height, params, **kwargs)
 
 
 class rsubstruct(GenericFunction):
@@ -2268,22 +2826,29 @@ class rsubstruct(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitQMol | RdkitMol | RdkitXQMol | RdkitReaction  The molecule (or query molecule/reaction) to be searched within.
-    query: RdkitMol | RdkitReaction  The molecule (or reaction) to check as a substructure.
+    mol: RdkitQMol | RdkitMol | RdkitXQMol | RdkitReaction
+                The molecule (or query molecule/reaction) to be searched within.
+    query: RdkitMol | RdkitReaction
+                The molecule (or reaction) to check as a substructure.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether the second molecule (`arg_2`) is a substructure of the first molecule (`arg_1`).
     """
+
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
 
     def __init__(
         self,
         mol: RdkitQMol | RdkitMol | RdkitXQMol | RdkitReaction,
         query: RdkitMol | RdkitReaction,
-    ):
-        super().__init__(mol, query)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(mol, query, **kwargs)
 
 
 class rsubstruct_chiral(GenericFunction):
@@ -2293,18 +2858,24 @@ class rsubstruct_chiral(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to search within.
-    query_mol: RdkitMol  The molecule to search for as a substructure.
+    mol: RdkitMol
+                The molecule to search within.
+    query_mol: RdkitMol
+                The molecule to search for as a substructure.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether the second molecule is a chiral substructure of the first.
     """
 
-    def __init__(self, mol: RdkitMol, query_mol: RdkitMol):
-        super().__init__(mol, query_mol)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, query_mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(mol, query_mol, **kwargs)
 
 
 class rsubstruct_query(GenericFunction):
@@ -2314,18 +2885,26 @@ class rsubstruct_query(GenericFunction):
 
     Parameters
     ----------
-    mol_1: RdkitMol | RdkitXQMol | RdkitQMol  The molecule to be searched within.
-    mol_2: RdkitMol  The substructure molecule to search for.
+    mol_1: RdkitMol | RdkitXQMol | RdkitQMol
+                The molecule to be searched within.
+    mol_2: RdkitMol
+                The substructure molecule to search for.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether the second molecule is a substructure of the first.
     """
 
-    def __init__(self, mol_1: RdkitMol | RdkitXQMol | RdkitQMol, mol_2: RdkitMol):
-        super().__init__(mol_1, mol_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, mol_1: RdkitMol | RdkitXQMol | RdkitQMol, mol_2: RdkitMol, **kwargs: Any
+    ) -> None:
+        super().__init__(mol_1, mol_2, **kwargs)
 
 
 class rsubstructfp(GenericFunction):
@@ -2335,18 +2914,26 @@ class rsubstructfp(GenericFunction):
 
     Parameters
     ----------
-    rxn_1: RdkitReaction  The first RDKit reaction.
-    rxn_2: RdkitReaction  The second RDKit reaction, which is checked as a substructure.
+    rxn_1: RdkitReaction
+                The first RDKit reaction.
+    rxn_2: RdkitReaction
+                The second RDKit reaction, which is checked as a substructure.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         `True` if the second reaction is a substructure of the first, `False` otherwise.
     """
 
-    def __init__(self, rxn_1: RdkitReaction, rxn_2: RdkitReaction):
-        super().__init__(rxn_1, rxn_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, rxn_1: RdkitReaction, rxn_2: RdkitReaction, **kwargs: Any
+    ) -> None:
+        super().__init__(rxn_1, rxn_2, **kwargs)
 
 
 class size(GenericFunction):
@@ -2356,7 +2943,8 @@ class size(GenericFunction):
 
     Parameters
     ----------
-    bfp: RdkitBitFingerprint  The bit vector fingerprint.
+    bfp: RdkitBitFingerprint
+                The bit vector fingerprint.
 
 
     Returns
@@ -2365,8 +2953,10 @@ class size(GenericFunction):
         The length of (number of bits in) the bit vector fingerprint.
     """
 
-    def __init__(self, bfp: RdkitBitFingerprint):
-        super().__init__(bfp)
+    inherits_cache = True
+
+    def __init__(self, bfp: RdkitBitFingerprint, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class substruct(GenericFunction):
@@ -2376,22 +2966,29 @@ class substruct(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol | RdkitReaction  The first molecule.
-    query: RdkitMol | RdkitXQMol | RdkitQMol | RdkitReaction  The second molecule, which is checked as a substructure of the first.
+    mol: RdkitMol | RdkitReaction
+                The first molecule.
+    query: RdkitMol | RdkitXQMol | RdkitQMol | RdkitReaction
+                The second molecule, which is checked as a substructure of the first.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         True if the second molecule is a substructure of the first, False otherwise.
     """
+
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
 
     def __init__(
         self,
         mol: RdkitMol | RdkitReaction,
         query: RdkitMol | RdkitXQMol | RdkitQMol | RdkitReaction,
-    ):
-        super().__init__(mol, query)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(mol, query, **kwargs)
 
 
 class substruct_chiral(GenericFunction):
@@ -2401,18 +2998,24 @@ class substruct_chiral(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to be searched for the substructure.
-    query: RdkitMol  The substructure molecule to search for within the first molecule. Chirality is considered.
+    mol: RdkitMol
+                The molecule to be searched for the substructure.
+    query: RdkitMol
+                The substructure molecule to search for within the first molecule. Chirality is considered.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether the second molecule is a substructure of the first, taking chirality into account.
     """
 
-    def __init__(self, mol: RdkitMol, query: RdkitMol):
-        super().__init__(mol, query)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, query: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(mol, query, **kwargs)
 
 
 class substruct_count(GenericFunction):
@@ -2422,9 +3025,12 @@ class substruct_count(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule to search within.
-    query: RdkitMol | RdkitQMol  The substructure to search for.
-    unique: bool | sqltypes.Boolean = True  Toggles whether or not the matches are uniquified.
+    mol: RdkitMol
+                The molecule to search within.
+    query: RdkitMol | RdkitQMol
+                The substructure to search for.
+    unique: sqltypes.Boolean | bool = True
+                Toggles whether or not the matches are uniquified.
 
 
     Returns
@@ -2433,13 +3039,16 @@ class substruct_count(GenericFunction):
         The number of substructure matches found.
     """
 
+    inherits_cache = True
+
     def __init__(
         self,
         mol: RdkitMol,
         query: RdkitMol | RdkitQMol,
-        unique: bool | sqltypes.Boolean = True,
-    ):
-        super().__init__(mol, query, unique)
+        unique: sqltypes.Boolean | bool = True,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(mol, query, unique, **kwargs)
 
 
 class substruct_count_chiral(GenericFunction):
@@ -2449,9 +3058,12 @@ class substruct_count_chiral(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The target RDKit molecule to search within.
-    query: RdkitMol | RdkitQMol  The RDKit molecule or query molecule to search for as a chiral substructure.
-    unique: bool | sqltypes.Boolean  A boolean flag indicating whether to count only unique chiral substructure matches (true) or all matches (false).
+    mol: RdkitMol
+                The target RDKit molecule to search within.
+    query: RdkitMol | RdkitQMol
+                The RDKit molecule or query molecule to search for as a chiral substructure.
+    unique: sqltypes.Boolean
+                A boolean flag indicating whether to count only unique chiral substructure matches (true) or all matches (false).
 
 
     Returns
@@ -2460,13 +3072,16 @@ class substruct_count_chiral(GenericFunction):
         The total number of chiral substructure matches found.
     """
 
+    inherits_cache = True
+
     def __init__(
         self,
         mol: RdkitMol,
         query: RdkitMol | RdkitQMol,
-        unique: bool | sqltypes.Boolean,
-    ):
-        super().__init__(mol, query, unique)
+        unique: sqltypes.Boolean,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(mol, query, unique, **kwargs)
 
 
 class substruct_query(GenericFunction):
@@ -2476,18 +3091,26 @@ class substruct_query(GenericFunction):
 
     Parameters
     ----------
-    mol_1: RdkitMol  The molecule to search within.
-    mol_2: RdkitMol | RdkitXQMol | RdkitQMol  The molecule or query molecule to search for as a substructure.
+    mol_1: RdkitMol
+                The molecule to search within.
+    mol_2: RdkitMol | RdkitXQMol | RdkitQMol
+                The molecule or query molecule to search for as a substructure.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether the second molecule is a substructure of the first.
     """
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol | RdkitXQMol | RdkitQMol):
-        super().__init__(mol_1, mol_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, mol_1: RdkitMol, mol_2: RdkitMol | RdkitXQMol | RdkitQMol, **kwargs: Any
+    ) -> None:
+        super().__init__(mol_1, mol_2, **kwargs)
 
 
 class substructfp(GenericFunction):
@@ -2497,18 +3120,26 @@ class substructfp(GenericFunction):
 
     Parameters
     ----------
-    rxn_1: RdkitReaction  The first RDKit reaction.
-    rxn_2: RdkitReaction  The second RDKit reaction, which is checked as a substructure of the first.
+    rxn_1: RdkitReaction
+                The first RDKit reaction.
+    rxn_2: RdkitReaction
+                The second RDKit reaction, which is checked as a substructure of the first.
 
 
     Returns
     -------
-    Function[bool | sqltypes.Boolean]
+    Function[sqltypes.Boolean]
         A boolean indicating whether the second reaction is a substructure of the first.
     """
 
-    def __init__(self, rxn_1: RdkitReaction, rxn_2: RdkitReaction):
-        super().__init__(rxn_1, rxn_2)
+    type = sqltypes.Boolean()
+
+    inherits_cache = True
+
+    def __init__(
+        self, rxn_1: RdkitReaction, rxn_2: RdkitReaction, **kwargs: Any
+    ) -> None:
+        super().__init__(rxn_1, rxn_2, **kwargs)
 
 
 class subtract(GenericFunction):
@@ -2518,8 +3149,10 @@ class subtract(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitSparseFingerprint  The first sparse fingerprint (sfp).
-    fp_2: RdkitSparseFingerprint  The second sparse fingerprint (sfp) to subtract.
+    fp_1: RdkitSparseFingerprint
+                The first sparse fingerprint (sfp).
+    fp_2: RdkitSparseFingerprint
+                The second sparse fingerprint (sfp) to subtract.
 
 
     Returns
@@ -2528,8 +3161,14 @@ class subtract(GenericFunction):
         The resulting sparse fingerprint (sfp) after subtraction.
     """
 
-    def __init__(self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = RdkitSparseFingerprint()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class tanimoto_dist(GenericFunction):
@@ -2539,8 +3178,10 @@ class tanimoto_dist(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitBitFingerprint  The first fingerprint to compare.
-    fp_2: RdkitBitFingerprint  The second fingerprint to compare.
+    fp_1: RdkitBitFingerprint
+                The first fingerprint to compare.
+    fp_2: RdkitBitFingerprint
+                The second fingerprint to compare.
 
 
     Returns
@@ -2549,8 +3190,14 @@ class tanimoto_dist(GenericFunction):
         The Tanimoto distance between the two fingerprints.
     """
 
-    def __init__(self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint):
-        super().__init__(fp_1, fp_2)
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
+    def __init__(
+        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class tanimoto_sml(GenericFunction):
@@ -2560,8 +3207,10 @@ class tanimoto_sml(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitSparseFingerprint | RdkitBitFingerprint  The first fingerprint to compare.
-    fp_2: RdkitSparseFingerprint | RdkitBitFingerprint  The second fingerprint to compare.
+    fp_1: RdkitSparseFingerprint | RdkitBitFingerprint
+                The first fingerprint to compare.
+    fp_2: RdkitSparseFingerprint | RdkitBitFingerprint
+                The second fingerprint to compare.
 
 
     Returns
@@ -2570,12 +3219,17 @@ class tanimoto_sml(GenericFunction):
         The Tanimoto similarity as a float value.
     """
 
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
     def __init__(
         self,
         fp_1: RdkitSparseFingerprint | RdkitBitFingerprint,
         fp_2: RdkitSparseFingerprint | RdkitBitFingerprint,
-    ):
-        super().__init__(fp_1, fp_2)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(fp_1, fp_2, **kwargs)
 
 
 class torsion_fp(GenericFunction):
@@ -2585,7 +3239,8 @@ class torsion_fp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to generate the fingerprint.
+    mol: RdkitMol
+                The molecule for which to generate the fingerprint.
 
 
     Returns
@@ -2594,8 +3249,12 @@ class torsion_fp(GenericFunction):
         A count-based topological-torsion fingerprint (sfp) for the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = RdkitSparseFingerprint()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class torsionbv_fp(GenericFunction):
@@ -2605,7 +3264,8 @@ class torsionbv_fp(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitMol  The molecule for which to generate the fingerprint.
+    mol: RdkitMol
+                The molecule for which to generate the fingerprint.
 
 
     Returns
@@ -2614,8 +3274,12 @@ class torsionbv_fp(GenericFunction):
         A bit vector (bfp) representing the topological-torsion fingerprint of the molecule.
     """
 
-    def __init__(self, mol: RdkitMol):
-        super().__init__(mol)
+    type = RdkitBitFingerprint()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
 
 
 class tversky_sml(GenericFunction):
@@ -2625,10 +3289,14 @@ class tversky_sml(GenericFunction):
 
     Parameters
     ----------
-    fp_1: RdkitBitFingerprint  The first fingerprint.
-    fp_2: RdkitBitFingerprint  The second fingerprint.
-    alpha: float  The alpha parameter for the Tversky similarity.
-    beta: float  The beta parameter for the Tversky similarity.
+    fp_1: RdkitBitFingerprint
+                The first fingerprint.
+    fp_2: RdkitBitFingerprint
+                The second fingerprint.
+    alpha: float
+                The alpha parameter for the Tversky similarity.
+    beta: float
+                The beta parameter for the Tversky similarity.
 
 
     Returns
@@ -2637,14 +3305,19 @@ class tversky_sml(GenericFunction):
         The Tversky similarity between the two fingerprints.
     """
 
+    type = sqltypes.Float()
+
+    inherits_cache = True
+
     def __init__(
         self,
         fp_1: RdkitBitFingerprint,
         fp_2: RdkitBitFingerprint,
         alpha: float,
         beta: float,
-    ):
-        super().__init__(fp_1, fp_2, alpha, beta)
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(fp_1, fp_2, alpha, beta, **kwargs)
 
 
 class xqmol_send(GenericFunction):
@@ -2654,7 +3327,8 @@ class xqmol_send(GenericFunction):
 
     Parameters
     ----------
-    mol: RdkitXQMol  An RDKit extended query molecule.
+    mol: RdkitXQMol
+                An RDKit extended query molecule.
 
 
     Returns
@@ -2663,5 +3337,9 @@ class xqmol_send(GenericFunction):
         SQLAlchemy function
     """
 
-    def __init__(self, mol: RdkitXQMol):
-        super().__init__(mol)
+    type = sqltypes.LargeBinary()
+
+    inherits_cache = True
+
+    def __init__(self, mol: RdkitXQMol, **kwargs: Any) -> None:
+        super().__init__(**kwargs)

@@ -42,7 +42,7 @@
     "name": "all_values_gt",
     "return_type": {
       "description": "A boolean indicating whether or not all elements of the sfp argument are greater than the int argument.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "all_values_lt": {
@@ -65,7 +65,7 @@
     "name": "all_values_lt",
     "return_type": {
       "description": "A boolean indicating whether or not all elements of the sfp argument are less than the int argument.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "atompair_fp": {
@@ -114,7 +114,7 @@
         "default": null,
         "description": "TODO",
         "name": "arg_2",
-        "type": "bool | sqltypes.Boolean"
+        "type": "sqltypes.Boolean"
       },
       {
         "default": null,
@@ -174,7 +174,7 @@
     "name": "bfp_eq",
     "return_type": {
       "description": "True if the two bit vector fingerprints are equal, False otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "bfp_from_binary_text": {
@@ -214,7 +214,7 @@
     "name": "bfp_ge",
     "return_type": {
       "description": "A boolean value indicating if the first fingerprint is greater than or equal to the second.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "bfp_gt": {
@@ -237,7 +237,7 @@
     "name": "bfp_gt",
     "return_type": {
       "description": "A boolean indicating if the first fingerprint is 'greater than' the second.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "bfp_in": {
@@ -277,7 +277,7 @@
     "name": "bfp_le",
     "return_type": {
       "description": "True if the first bit fingerprint is less than or equal to the second bit fingerprint, False otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "bfp_lt": {
@@ -300,7 +300,7 @@
     "name": "bfp_lt",
     "return_type": {
       "description": "A boolean value indicating the result of the 'less than' comparison.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "bfp_ne": {
@@ -323,7 +323,7 @@
     "name": "bfp_ne",
     "return_type": {
       "description": "True if the two bit vector fingerprints are not equal, False otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "bfp_out": {
@@ -426,7 +426,7 @@
     "name": "dice_sml_op",
     "return_type": {
       "description": "The Dice similarity between the two fingerprints.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "featmorgan_fp": {
@@ -497,14 +497,14 @@
       {
         "default": null,
         "description": "A space-separated string of SMILES representations of molecules for which to calculate the MCS.",
-        "name": "mls",
+        "name": "molecules",
         "type": "sqltypes.Text | CString | Cast[Any]"
       },
       {
         "default": "''",
         "description": "An optional JSON string used to provide parameters to the MCS code.",
         "name": "json",
-        "type": "sqltypes.Text | CString | Cast[Any]"
+        "type": "sqltypes.Text | CString | Cast[Any] | str"
       }
     ],
     "description": "Calculates the Maximum Common Substructure (MCS) for a space-separated set of SMILES.",
@@ -512,7 +512,7 @@
     "name": "fmcs_smiles",
     "return_type": {
       "description": "The Maximum Common Substructure (MCS) for the set of molecules, returned as a SMILES string.",
-      "type": "sqltypes.Text | CString"
+      "type": "CString"
     }
   },
   "fmcs_smiles_transition": {
@@ -552,7 +552,7 @@
     "name": "is_valid_ctab",
     "return_type": {
       "description": "A boolean indicating whether or not the CTAB string produces a valid RDKit molecule.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "is_valid_mol_pkl": {
@@ -569,7 +569,7 @@
     "name": "is_valid_mol_pkl",
     "return_type": {
       "description": "A boolean indicating whether or not the binary string can be converted into a valid RDKit molecule.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "is_valid_smarts": {
@@ -586,7 +586,7 @@
     "name": "is_valid_smarts",
     "return_type": {
       "description": "A boolean indicating whether the SMARTS string produces a valid RDKit molecule.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "is_valid_smiles": {
@@ -603,7 +603,7 @@
     "name": "is_valid_smiles",
     "return_type": {
       "description": "A boolean indicating whether the SMILES string produces a valid RDKit molecule.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "layered_fp": {
@@ -893,7 +893,7 @@
     "name": "mol_eq",
     "return_type": {
       "description": "Returns a boolean indicating whether the two molecules are equal.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "mol_exactmw": {
@@ -971,13 +971,7 @@
         "default": null,
         "description": "A boolean indicating whether the molecule's coordinates should be saved.",
         "name": "arg_2",
-        "type": "bool | sqltypes.Boolean"
-      },
-      {
-        "default": null,
-        "description": "Optional kwargs (might be useful between the cartridge versions)",
-        "name": "kwargs",
-        "type": "Any"
+        "type": "sqltypes.Boolean"
       }
     ],
     "description": "Returns a molecule object from a CTAB (mol block) string, returning NULL if the molecule construction fails.",
@@ -1059,7 +1053,7 @@
     "name": "mol_ge",
     "return_type": {
       "description": "A boolean value: true if the first molecule is a superstructure of or identical to the second, false otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "mol_gt": {
@@ -1082,7 +1076,7 @@
     "name": "mol_gt",
     "return_type": {
       "description": "True if the first molecule is greater than the second, False otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "mol_hallkieralpha": {
@@ -1287,7 +1281,7 @@
     "name": "mol_le",
     "return_type": {
       "description": "`True` if the first molecule is less than or equal to the second, `False` otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "mol_logp": {
@@ -1327,7 +1321,7 @@
     "name": "mol_lt",
     "return_type": {
       "description": "`True` if the first molecule is less than the second molecule, `False` otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "mol_murckoscaffold": {
@@ -1367,7 +1361,7 @@
     "name": "mol_ne",
     "return_type": {
       "description": "A boolean indicating if the two molecules are not equal.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "mol_nm_hash": {
@@ -1762,13 +1756,13 @@
         "default": true,
         "description": "",
         "name": "arg_2",
-        "type": "bool | sqltypes.Boolean"
+        "type": "sqltypes.Boolean | bool"
       },
       {
         "default": false,
         "description": "",
         "name": "arg_3",
-        "type": "bool | sqltypes.Boolean"
+        "type": "sqltypes.Boolean | bool"
       }
     ],
     "description": "Returns a CTAB (mol block) string for a molecule.",
@@ -1934,7 +1928,7 @@
         "default": true,
         "description": "Controls whether or not 2D coordinates will be generated for molecules that don't have coordinates.",
         "name": "create_depiction",
-        "type": "bool | sqltypes.Boolean"
+        "type": "sqltypes.Boolean | bool"
       }
     ],
     "description": "Returns a CTAB (mol block) string for a molecule. The optional second argument controls whether or not 2D coordinates will be generated for molecules that don\u2019t have coordinates.",
@@ -1957,19 +1951,19 @@
         "default": null,
         "description": "A boolean parameter for the conversion process.",
         "name": "arg_2",
-        "type": "bool | sqltypes.Boolean"
+        "type": "sqltypes.Boolean"
       },
       {
         "default": null,
         "description": "Another boolean parameter for the conversion process.",
         "name": "arg_3",
-        "type": "bool | sqltypes.Boolean"
+        "type": "sqltypes.Boolean"
       },
       {
         "default": null,
         "description": "A third boolean parameter for the conversion process.",
         "name": "arg_4",
-        "type": "bool | sqltypes.Boolean"
+        "type": "sqltypes.Boolean"
       },
       {
         "default": null,
@@ -2061,13 +2055,7 @@
         "default": null,
         "description": "Controls whether or not the coordinates are saved.",
         "name": "keep_conformer",
-        "type": "bool | sqltypes.Boolean"
-      },
-      {
-        "default": null,
-        "description": "Optional kwargs (might be useful between the cartridge versions)",
-        "name": "kwargs",
-        "type": "Any"
+        "type": "sqltypes.Boolean"
       }
     ],
     "description": "Returns a query molecule for a CTAB (mol block) string. TODO: This functions changed between the versions - adding new arg.",
@@ -2260,7 +2248,7 @@
     "name": "reaction_eq",
     "return_type": {
       "description": "True if the reactions are equivalent, False otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "reaction_from_ctab": {
@@ -2351,7 +2339,7 @@
     "name": "reaction_ne",
     "return_type": {
       "description": "True if the reactions are not equal, False otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "reaction_numagents": {
@@ -2525,7 +2513,7 @@
         "default": null,
         "description": "If true, highlights the reactants in the SVG drawing.",
         "name": "highlight_reactants",
-        "type": "bool | sqltypes.Boolean"
+        "type": "sqltypes.Boolean"
       },
       {
         "default": null,
@@ -2574,7 +2562,7 @@
     "name": "rsubstruct",
     "return_type": {
       "description": "A boolean indicating whether the second molecule (`arg_2`) is a substructure of the first molecule (`arg_1`).",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "rsubstruct_chiral": {
@@ -2597,7 +2585,7 @@
     "name": "rsubstruct_chiral",
     "return_type": {
       "description": "A boolean indicating whether the second molecule is a chiral substructure of the first.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "rsubstruct_query": {
@@ -2620,7 +2608,7 @@
     "name": "rsubstruct_query",
     "return_type": {
       "description": "A boolean indicating whether the second molecule is a substructure of the first.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "rsubstructfp": {
@@ -2643,7 +2631,7 @@
     "name": "rsubstructfp",
     "return_type": {
       "description": "`True` if the second reaction is a substructure of the first, `False` otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "sfp_cmp": {
@@ -2689,7 +2677,7 @@
     "name": "sfp_eq",
     "return_type": {
       "description": "A boolean indicating the equality of the two sparse fingerprints.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "sfp_ge": {
@@ -2712,7 +2700,7 @@
     "name": "sfp_ge",
     "return_type": {
       "description": "A boolean indicating whether the first sparse fingerprint is element-wise greater than or equal to the second sparse fingerprint.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "sfp_gt": {
@@ -2735,7 +2723,7 @@
     "name": "sfp_gt",
     "return_type": {
       "description": "`True` if all elements of the first sparse fingerprint are greater than the corresponding elements of the second, False otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "sfp_in": {
@@ -2775,7 +2763,7 @@
     "name": "sfp_le",
     "return_type": {
       "description": "True if the first sparse fingerprint is element-wise less than or equal to the second; otherwise, False.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "sfp_lt": {
@@ -2798,7 +2786,7 @@
     "name": "sfp_lt",
     "return_type": {
       "description": "A boolean value (True if the first sparse fingerprint is less than the second, False otherwise).",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "sfp_ne": {
@@ -2821,7 +2809,7 @@
     "name": "sfp_ne",
     "return_type": {
       "description": "`True` if the two sparse fingerprints are not equal, `False` otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "sfp_out": {
@@ -2878,7 +2866,7 @@
     "name": "substruct",
     "return_type": {
       "description": "True if the second molecule is a substructure of the first, False otherwise.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "substruct_chiral": {
@@ -2901,7 +2889,7 @@
     "name": "substruct_chiral",
     "return_type": {
       "description": "A boolean indicating whether the second molecule is a substructure of the first, taking chirality into account.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "substruct_count": {
@@ -2922,7 +2910,7 @@
         "default": true,
         "description": "Toggles whether or not the matches are uniquified.",
         "name": "unique",
-        "type": "bool | sqltypes.Boolean"
+        "type": "sqltypes.Boolean | bool"
       }
     ],
     "description": "Returns the number of substructure matches between the second molecule and the first. Optionally, the matches can be uniquified.",
@@ -2951,7 +2939,7 @@
         "default": null,
         "description": "A boolean flag indicating whether to count only unique chiral substructure matches (true) or all matches (false).",
         "name": "unique",
-        "type": "bool | sqltypes.Boolean"
+        "type": "sqltypes.Boolean"
       }
     ],
     "description": "Returns the number of chiral substructure matches found between a query molecule and a target molecule. This function considers chirality during the matching process.",
@@ -2982,7 +2970,7 @@
     "name": "substruct_query",
     "return_type": {
       "description": "A boolean indicating whether the second molecule is a substructure of the first.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "substructfp": {
@@ -3005,7 +2993,7 @@
     "name": "substructfp",
     "return_type": {
       "description": "A boolean indicating whether the second reaction is a substructure of the first.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "subtract": {
@@ -3097,7 +3085,7 @@
     "name": "tanimoto_sml_op",
     "return_type": {
       "description": "A boolean value representing the result of the Tanimoto similarity operation.",
-      "type": "bool | sqltypes.Boolean"
+      "type": "sqltypes.Boolean"
     }
   },
   "torsion_fp": {
