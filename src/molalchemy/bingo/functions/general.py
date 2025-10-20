@@ -30,6 +30,7 @@ class aam(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -48,7 +49,7 @@ class cansmiles(GenericFunction):
     Parameters
     ----------
     mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+        Input molecule in any supported format
 
 
     Returns
@@ -58,6 +59,7 @@ class cansmiles(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self, mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
@@ -67,13 +69,13 @@ class cansmiles(GenericFunction):
 
 class checkmolecule(GenericFunction):
     """
-    Calls the rdkit cartridge function `checkmolecule`.
+    Check molecule for validity
 
 
     Parameters
     ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+    mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        Input molecule in any supported format
 
 
     Returns
@@ -83,22 +85,23 @@ class checkmolecule(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
-        self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        super().__init__(arg_1, **kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class checkreaction(GenericFunction):
     """
-    Calls the rdkit cartridge function `checkreaction`.
+    Check reaction for validity
 
 
     Parameters
     ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+    rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        Input reaction in any supported format
 
 
     Returns
@@ -108,22 +111,23 @@ class checkreaction(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
-        self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        super().__init__(arg_1, **kwargs)
+        super().__init__(rxn, **kwargs)
 
 
 class cml(GenericFunction):
     """
-    Calls the rdkit cartridge function `cml`.
+    Converts a molecule to CML format.
 
 
     Parameters
     ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+    mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        Input molecule in any supported format
 
 
     Returns
@@ -133,22 +137,23 @@ class cml(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
-        self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        super().__init__(arg_1, **kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class compactmolecule(GenericFunction):
     """
-    Calls the rdkit cartridge function `compactmolecule`.
+    Calculates the compact representation of a molecule.
 
 
     Parameters
     ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+    mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        Input molecule in any supported format
     arg_2: sqltypes.Boolean
 
 
@@ -160,14 +165,15 @@ class compactmolecule(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
+        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
         arg_2: sqltypes.Boolean,
         **kwargs: Any,
     ) -> None:
-        super().__init__(arg_1, arg_2, **kwargs)
+        super().__init__(mol, arg_2, **kwargs)
 
 
 class compactreaction(GenericFunction):
@@ -177,9 +183,9 @@ class compactreaction(GenericFunction):
 
     Parameters
     ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-    arg_2: sqltypes.Boolean
+    rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        Input reaction in any supported format
+    arg_2: sqltypes.Boolean | bool
 
 
 
@@ -190,19 +196,20 @@ class compactreaction(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
-        arg_2: sqltypes.Boolean,
+        rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
+        arg_2: sqltypes.Boolean | bool,
         **kwargs: Any,
     ) -> None:
-        super().__init__(arg_1, arg_2, **kwargs)
+        super().__init__(rxn, arg_2, **kwargs)
 
 
 class exportrdf(GenericFunction):
     """
-    Calls the rdkit cartridge function `exportrdf`.
+    Exports reactions to an RDF format.
 
 
     Parameters
@@ -224,6 +231,7 @@ class exportrdf(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -238,13 +246,13 @@ class exportrdf(GenericFunction):
 
 class exportsdf(GenericFunction):
     """
-    Calls the rdkit cartridge function `exportsdf`.
+    Exports molecules to an SDF format.
 
 
     Parameters
     ----------
-    arg_1: str | sqltypes.Text
-
+    mol: str | sqltypes.Text
+        Input molecule in any supported format
     arg_2: str | sqltypes.Text
 
     arg_3: str | sqltypes.Text
@@ -260,16 +268,17 @@ class exportsdf(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text,
+        mol: str | sqltypes.Text,
         arg_2: str | sqltypes.Text,
         arg_3: str | sqltypes.Text,
         arg_4: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        super().__init__(arg_1, arg_2, arg_3, arg_4, **kwargs)
+        super().__init__(mol, arg_2, arg_3, arg_4, **kwargs)
 
 
 class filetoblob(GenericFunction):
@@ -290,6 +299,7 @@ class filetoblob(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
         super().__init__(arg_1, **kwargs)
@@ -313,6 +323,7 @@ class filetotext(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
         super().__init__(arg_1, **kwargs)
@@ -338,6 +349,7 @@ class fingerprint(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -366,6 +378,7 @@ class getblockcount(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
         super().__init__(arg_1, **kwargs)
@@ -388,6 +401,7 @@ class getindexstructurescount(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -411,6 +425,7 @@ class getmass(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
@@ -436,6 +451,7 @@ class getname(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
         super().__init__(arg_1, **kwargs)
@@ -463,6 +479,7 @@ class getsimilarity(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -492,6 +509,7 @@ class getstructurescount(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
         super().__init__(arg_1, **kwargs)
@@ -514,6 +532,7 @@ class getversion(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -539,6 +558,7 @@ class getweight(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -567,6 +587,7 @@ class gross(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
@@ -598,6 +619,7 @@ class importrdf(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -634,6 +656,7 @@ class importsdf(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -670,6 +693,7 @@ class importsmiles(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -702,6 +726,7 @@ class inchi(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -730,6 +755,7 @@ class inchikey(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
         super().__init__(arg_1, **kwargs)
@@ -754,6 +780,7 @@ class matchexact(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -778,6 +805,7 @@ class matchgross(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -802,6 +830,7 @@ class matchrexact(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -826,6 +855,7 @@ class matchrsmarts(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -850,6 +880,7 @@ class matchrsub(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -874,6 +905,7 @@ class matchsim(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -898,6 +930,7 @@ class matchsmarts(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -922,6 +955,7 @@ class matchsub(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -945,6 +979,7 @@ class molfile(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
@@ -972,6 +1007,7 @@ class precachedatabase(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self, arg_1: str | sqltypes.Text, arg_2: str | sqltypes.Text, **kwargs: Any
@@ -997,6 +1033,7 @@ class rcml(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
@@ -1024,6 +1061,7 @@ class rfingerprint(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -1052,6 +1090,7 @@ class rsmiles(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
@@ -1077,6 +1116,7 @@ class rxnfile(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
@@ -1102,6 +1142,7 @@ class smiles(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
@@ -1129,6 +1170,7 @@ class standardize(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,

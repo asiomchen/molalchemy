@@ -419,7 +419,7 @@
     "args": [
       {
         "default": null,
-        "description": "",
+        "description": "Input molecule in any supported format",
         "name": "mol",
         "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
       }
@@ -436,12 +436,12 @@
     "args": [
       {
         "default": null,
-        "description": "",
-        "name": "arg_1",
+        "description": "Input molecule in any supported format",
+        "name": "mol",
         "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
       }
     ],
-    "description": "Calls the rdkit cartridge function `checkmolecule`.",
+    "description": "Check molecule for validity",
     "group": "general",
     "name": "checkmolecule",
     "return_type": {
@@ -453,12 +453,12 @@
     "args": [
       {
         "default": null,
-        "description": "",
-        "name": "arg_1",
+        "description": "Input reaction in any supported format",
+        "name": "rxn",
         "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
       }
     ],
-    "description": "Calls the rdkit cartridge function `checkreaction`.",
+    "description": "Check reaction for validity",
     "group": "general",
     "name": "checkreaction",
     "return_type": {
@@ -470,12 +470,12 @@
     "args": [
       {
         "default": null,
-        "description": "",
-        "name": "arg_1",
+        "description": "Input molecule in any supported format",
+        "name": "mol",
         "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
       }
     ],
-    "description": "Calls the rdkit cartridge function `cml`.",
+    "description": "Converts a molecule to CML format.",
     "group": "general",
     "name": "cml",
     "return_type": {
@@ -487,8 +487,8 @@
     "args": [
       {
         "default": null,
-        "description": "",
-        "name": "arg_1",
+        "description": "Input molecule in any supported format",
+        "name": "mol",
         "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
       },
       {
@@ -498,7 +498,7 @@
         "type": "sqltypes.Boolean"
       }
     ],
-    "description": "Calls the rdkit cartridge function `compactmolecule`.",
+    "description": "Calculates the compact representation of a molecule.",
     "group": "general",
     "name": "compactmolecule",
     "return_type": {
@@ -510,15 +510,15 @@
     "args": [
       {
         "default": null,
-        "description": "",
-        "name": "arg_1",
+        "description": "Input reaction in any supported format",
+        "name": "rxn",
         "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
       },
       {
         "default": null,
         "description": "",
         "name": "arg_2",
-        "type": "sqltypes.Boolean"
+        "type": "sqltypes.Boolean | bool"
       }
     ],
     "description": "Calls the rdkit cartridge function `compactreaction`.",
@@ -556,7 +556,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `exportrdf`.",
+    "description": "Exports reactions to an RDF format.",
     "group": "general",
     "name": "exportrdf",
     "return_type": {
@@ -568,8 +568,8 @@
     "args": [
       {
         "default": null,
-        "description": "",
-        "name": "arg_1",
+        "description": "Input molecule in any supported format",
+        "name": "mol",
         "type": "str | sqltypes.Text"
       },
       {
@@ -591,7 +591,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `exportsdf`.",
+    "description": "Exports molecules to an SDF format.",
     "group": "general",
     "name": "exportsdf",
     "return_type": {

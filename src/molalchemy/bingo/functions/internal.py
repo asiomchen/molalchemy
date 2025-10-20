@@ -32,6 +32,7 @@ class _exact_internal(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -60,6 +61,7 @@ class _get_block_count(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -84,6 +86,7 @@ class _get_profiling_info(GenericFunction):
     type = CString()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -106,6 +109,7 @@ class _get_structures_count(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -135,6 +139,7 @@ class _gross_internal(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -168,6 +173,7 @@ class _internal_func_011(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -199,6 +205,7 @@ class _internal_func_012(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self, arg_1: int | sqltypes.Integer, arg_2: str | sqltypes.Text, **kwargs: Any
@@ -226,6 +233,7 @@ class _internal_func_check(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, arg_1: int | sqltypes.Integer, **kwargs: Any) -> None:
         super().__init__(arg_1, **kwargs)
@@ -250,6 +258,7 @@ class _match_mass_great(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -274,6 +283,7 @@ class _match_mass_less(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -296,6 +306,7 @@ class _precache_database(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -318,6 +329,7 @@ class _print_profiling_info(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -340,6 +352,7 @@ class _reset_profiling_info(GenericFunction):
     """
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -369,6 +382,7 @@ class _rexact_internal(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -404,6 +418,7 @@ class _rsmarts_internal(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -439,6 +454,7 @@ class _rsub_internal(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -478,6 +494,7 @@ class _sim_internal(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -515,6 +532,7 @@ class _smarts_internal(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,
@@ -550,6 +568,7 @@ class _sub_internal(GenericFunction):
     type = sqltypes.Boolean()
 
     inherits_cache = True
+    package = "bingo"
 
     def __init__(
         self,

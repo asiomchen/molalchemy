@@ -45,6 +45,7 @@ class {{ func_name }}(GenericFunction):
     type = BingoBinaryReaction()
     {% endif %}
     inherits_cache = True
+    package = "bingo"
     def __init__(self, {{ arg_inits }}**kwargs: Any) -> None:
         super().__init__({{ arg_names }}**kwargs)
 
