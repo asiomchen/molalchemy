@@ -9,11 +9,26 @@ HEADERS = """
 from molalchemy.types import CString
 from molalchemy.bingo.types import BingoBinaryMol, BingoBinaryReaction, BingoMol, BingoReaction
 from sqlalchemy import types as sqltypes
-from sqlalchemy.sql import cast
+from sqlalchemy.sql import cast, text
 from sqlalchemy import Cast
+from sqlalchemy.sql.elements import BinaryExpression
+from sqlalchemy.sql.elements import ColumnElement
 from sqlalchemy.sql.functions import GenericFunction
 from typing import Any, Literal
+
+AnyBingoMol = BingoMol | BingoBinaryMol
+
+\n\n
 """
+AFTER_HEADERS = defaultdict(str)
+EXTRA_MEMBERS = defaultdict(list)
+AFTER_HEADERS["general"] = Path("data/extra_bingo.py_").open("r").read()
+EXTRA_MEMBERS["general"] = [
+    "has_substructure",
+    "matches_smarts",
+    "equals",
+    "similarity",
+]
 
 DATA_PATH = Path("data/bingo_functions.json")
 
@@ -106,8 +121,11 @@ for func_name, func_data in data.items():
     groups[group].append(code)
     group_members[group].append(func_name)
 
+for group in EXTRA_MEMBERS:
+    group_members[group].extend(EXTRA_MEMBERS[group])
+
 for group, codes in groups.items():
-    module_code = HEADERS + "\n".join(codes)
+    module_code = HEADERS + AFTER_HEADERS[group] + "\n".join(codes)
     module_path = Path(f"{MODULE_PATH}/{group}.py")
     with module_path.open("w") as f:
         f.write(module_code)

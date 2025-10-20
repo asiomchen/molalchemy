@@ -5,7 +5,13 @@ from typing import Any
 from sqlalchemy import types as sqltypes
 from sqlalchemy.sql.functions import GenericFunction
 
+from molalchemy.bingo.types import (
+    BingoBinaryMol,
+    BingoMol,
+)
 from molalchemy.types import CString
+
+AnyBingoMol = BingoMol | BingoBinaryMol
 
 
 class _exact_internal(GenericFunction):
