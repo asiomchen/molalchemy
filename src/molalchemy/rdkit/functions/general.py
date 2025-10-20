@@ -127,7 +127,7 @@ class atompair_fp(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class atompairbv_fp(GenericFunction):
@@ -152,7 +152,7 @@ class atompairbv_fp(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class avalon_fp(GenericFunction):
@@ -212,7 +212,7 @@ class bfp_from_binary_text(GenericFunction):
     inherits_cache = True
 
     def __init__(self, input: sqltypes.LargeBinary, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(input, **kwargs)
 
 
 class bfp_le(GenericFunction):
@@ -266,7 +266,7 @@ class bfp_to_binary_text(GenericFunction):
     inherits_cache = True
 
     def __init__(self, fp: RdkitBitFingerprint, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(fp, **kwargs)
 
 
 class dice_dist(GenericFunction):
@@ -442,7 +442,7 @@ class fmcs(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mols: RdkitMol | sqltypes.Text, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mols, **kwargs)
 
 
 class fmcs_smiles(GenericFunction):
@@ -499,7 +499,7 @@ class is_valid_ctab(GenericFunction):
     inherits_cache = True
 
     def __init__(self, input: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(input, **kwargs)
 
 
 class is_valid_mol_pkl(GenericFunction):
@@ -524,7 +524,7 @@ class is_valid_mol_pkl(GenericFunction):
     inherits_cache = True
 
     def __init__(self, input: sqltypes.LargeBinary, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(input, **kwargs)
 
 
 class is_valid_smarts(GenericFunction):
@@ -549,7 +549,7 @@ class is_valid_smarts(GenericFunction):
     inherits_cache = True
 
     def __init__(self, input: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(input, **kwargs)
 
 
 class is_valid_smiles(GenericFunction):
@@ -574,7 +574,7 @@ class is_valid_smiles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, input: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(input, **kwargs)
 
 
 class layered_fp(GenericFunction):
@@ -599,7 +599,7 @@ class layered_fp(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class maccs_fp(GenericFunction):
@@ -624,7 +624,7 @@ class maccs_fp(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_adjust_query_properties(GenericFunction):
@@ -681,7 +681,7 @@ class mol_amw(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_chi0n(GenericFunction):
@@ -706,7 +706,7 @@ class mol_chi0n(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_chi0v(GenericFunction):
@@ -731,7 +731,7 @@ class mol_chi0v(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_chi1n(GenericFunction):
@@ -756,7 +756,7 @@ class mol_chi1n(GenericFunction):
     inherits_cache = True
 
     def __init__(self, arg_1: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(arg_1, **kwargs)
 
 
 class mol_chi1v(GenericFunction):
@@ -781,7 +781,7 @@ class mol_chi1v(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_chi2n(GenericFunction):
@@ -806,7 +806,7 @@ class mol_chi2n(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_chi2v(GenericFunction):
@@ -831,7 +831,7 @@ class mol_chi2v(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_chi3n(GenericFunction):
@@ -856,7 +856,7 @@ class mol_chi3n(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_chi3v(GenericFunction):
@@ -881,7 +881,7 @@ class mol_chi3v(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_chi4n(GenericFunction):
@@ -906,7 +906,7 @@ class mol_chi4n(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_chi4v(GenericFunction):
@@ -931,7 +931,7 @@ class mol_chi4v(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_exactmw(GenericFunction):
@@ -956,7 +956,7 @@ class mol_exactmw(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_formula(GenericFunction):
@@ -1016,7 +1016,7 @@ class mol_fractioncsp3(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_from_ctab(GenericFunction):
@@ -1068,7 +1068,7 @@ class mol_from_json(GenericFunction):
     inherits_cache = True
 
     def __init__(self, json_str: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(json_str, **kwargs)
 
 
 class mol_from_pkl(GenericFunction):
@@ -1093,7 +1093,7 @@ class mol_from_pkl(GenericFunction):
     inherits_cache = True
 
     def __init__(self, bytea: sqltypes.LargeBinary, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(bytea, **kwargs)
 
 
 class mol_from_smiles(GenericFunction):
@@ -1118,7 +1118,7 @@ class mol_from_smiles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, smiles: sqltypes.Text | CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(smiles, **kwargs)
 
 
 class mol_hallkieralpha(GenericFunction):
@@ -1143,7 +1143,7 @@ class mol_hallkieralpha(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_hba(GenericFunction):
@@ -1166,7 +1166,7 @@ class mol_hba(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_hbd(GenericFunction):
@@ -1189,7 +1189,7 @@ class mol_hbd(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_inchi(GenericFunction):
@@ -1268,7 +1268,7 @@ class mol_kappa1(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_kappa2(GenericFunction):
@@ -1293,7 +1293,7 @@ class mol_kappa2(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_kappa3(GenericFunction):
@@ -1318,7 +1318,7 @@ class mol_kappa3(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol_1: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol_1, **kwargs)
 
 
 class mol_labuteasa(GenericFunction):
@@ -1343,7 +1343,7 @@ class mol_labuteasa(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_logp(GenericFunction):
@@ -1368,7 +1368,7 @@ class mol_logp(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_murckoscaffold(GenericFunction):
@@ -1393,7 +1393,7 @@ class mol_murckoscaffold(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_nm_hash(GenericFunction):
@@ -1448,7 +1448,7 @@ class mol_numaliphaticcarbocycles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numaliphaticheterocycles(GenericFunction):
@@ -1471,7 +1471,7 @@ class mol_numaliphaticheterocycles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numaliphaticrings(GenericFunction):
@@ -1494,7 +1494,7 @@ class mol_numaliphaticrings(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numamidebonds(GenericFunction):
@@ -1517,7 +1517,7 @@ class mol_numamidebonds(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numaromaticcarbocycles(GenericFunction):
@@ -1540,7 +1540,7 @@ class mol_numaromaticcarbocycles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numaromaticheterocycles(GenericFunction):
@@ -1563,7 +1563,7 @@ class mol_numaromaticheterocycles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numaromaticrings(GenericFunction):
@@ -1586,7 +1586,7 @@ class mol_numaromaticrings(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numatoms(GenericFunction):
@@ -1609,7 +1609,7 @@ class mol_numatoms(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numbridgeheadatoms(GenericFunction):
@@ -1632,7 +1632,7 @@ class mol_numbridgeheadatoms(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numheavyatoms(GenericFunction):
@@ -1655,7 +1655,7 @@ class mol_numheavyatoms(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numheteroatoms(GenericFunction):
@@ -1678,7 +1678,7 @@ class mol_numheteroatoms(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numheterocycles(GenericFunction):
@@ -1701,7 +1701,7 @@ class mol_numheterocycles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numrings(GenericFunction):
@@ -1724,7 +1724,7 @@ class mol_numrings(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numrotatablebonds(GenericFunction):
@@ -1747,7 +1747,7 @@ class mol_numrotatablebonds(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numsaturatedcarbocycles(GenericFunction):
@@ -1770,7 +1770,7 @@ class mol_numsaturatedcarbocycles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numsaturatedheterocycles(GenericFunction):
@@ -1793,7 +1793,7 @@ class mol_numsaturatedheterocycles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numsaturatedrings(GenericFunction):
@@ -1816,7 +1816,7 @@ class mol_numsaturatedrings(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_numspiroatoms(GenericFunction):
@@ -1839,7 +1839,7 @@ class mol_numspiroatoms(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_phi(GenericFunction):
@@ -1864,7 +1864,7 @@ class mol_phi(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_send(GenericFunction):
@@ -1889,7 +1889,7 @@ class mol_send(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_to_ctab(GenericFunction):
@@ -1949,7 +1949,7 @@ class mol_to_cxsmarts(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol | RdkitQMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_to_cxsmiles(GenericFunction):
@@ -1974,7 +1974,7 @@ class mol_to_cxsmiles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_to_json(GenericFunction):
@@ -1999,7 +1999,7 @@ class mol_to_json(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol | RdkitQMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_to_pkl(GenericFunction):
@@ -2024,7 +2024,7 @@ class mol_to_pkl(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_to_smarts(GenericFunction):
@@ -2049,7 +2049,7 @@ class mol_to_smarts(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol | RdkitQMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_to_smiles(GenericFunction):
@@ -2074,7 +2074,7 @@ class mol_to_smiles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol | RdkitQMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class mol_to_svg(GenericFunction):
@@ -2213,7 +2213,7 @@ class mol_tpsa(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class morgan_fp(GenericFunction):
@@ -2325,7 +2325,7 @@ class qmol_from_json(GenericFunction):
     inherits_cache = True
 
     def __init__(self, json: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(json, **kwargs)
 
 
 class qmol_from_smarts(GenericFunction):
@@ -2350,7 +2350,7 @@ class qmol_from_smarts(GenericFunction):
     inherits_cache = True
 
     def __init__(self, smarts: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(smarts, **kwargs)
 
 
 class qmol_from_smiles(GenericFunction):
@@ -2375,7 +2375,7 @@ class qmol_from_smiles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, smiles: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(smiles, **kwargs)
 
 
 class qmol_send(GenericFunction):
@@ -2400,7 +2400,7 @@ class qmol_send(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitQMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class rdkit_fp(GenericFunction):
@@ -2425,7 +2425,7 @@ class rdkit_fp(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class rdkit_toolkit_version(GenericFunction):
@@ -2527,7 +2527,7 @@ class reaction_from_ctab(GenericFunction):
     inherits_cache = True
 
     def __init__(self, rxn_str: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(rxn_str, **kwargs)
 
 
 class reaction_from_smarts(GenericFunction):
@@ -2552,7 +2552,7 @@ class reaction_from_smarts(GenericFunction):
     inherits_cache = True
 
     def __init__(self, rxn_str: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(rxn_str, **kwargs)
 
 
 class reaction_from_smiles(GenericFunction):
@@ -2577,7 +2577,7 @@ class reaction_from_smiles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, rxn_str: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(rxn_str, **kwargs)
 
 
 class reaction_numagents(GenericFunction):
@@ -2600,7 +2600,7 @@ class reaction_numagents(GenericFunction):
     inherits_cache = True
 
     def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(rxn, **kwargs)
 
 
 class reaction_numproducts(GenericFunction):
@@ -2623,7 +2623,7 @@ class reaction_numproducts(GenericFunction):
     inherits_cache = True
 
     def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(rxn, **kwargs)
 
 
 class reaction_numreactants(GenericFunction):
@@ -2646,7 +2646,7 @@ class reaction_numreactants(GenericFunction):
     inherits_cache = True
 
     def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(rxn, **kwargs)
 
 
 class reaction_send(GenericFunction):
@@ -2671,7 +2671,7 @@ class reaction_send(GenericFunction):
     inherits_cache = True
 
     def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(rxn, **kwargs)
 
 
 class reaction_structural_bfp(GenericFunction):
@@ -2725,7 +2725,7 @@ class reaction_to_ctab(GenericFunction):
     inherits_cache = True
 
     def __init__(self, reaction: RdkitReaction, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(reaction, **kwargs)
 
 
 class reaction_to_smarts(GenericFunction):
@@ -2750,7 +2750,7 @@ class reaction_to_smarts(GenericFunction):
     inherits_cache = True
 
     def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(rxn, **kwargs)
 
 
 class reaction_to_smiles(GenericFunction):
@@ -2775,7 +2775,7 @@ class reaction_to_smiles(GenericFunction):
     inherits_cache = True
 
     def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(rxn, **kwargs)
 
 
 class reaction_to_svg(GenericFunction):
@@ -2956,7 +2956,7 @@ class size(GenericFunction):
     inherits_cache = True
 
     def __init__(self, bfp: RdkitBitFingerprint, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(bfp, **kwargs)
 
 
 class substruct(GenericFunction):
@@ -3254,7 +3254,7 @@ class torsion_fp(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class torsionbv_fp(GenericFunction):
@@ -3279,7 +3279,7 @@ class torsionbv_fp(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class tversky_sml(GenericFunction):
@@ -3342,4 +3342,4 @@ class xqmol_send(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitXQMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)

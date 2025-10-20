@@ -401,10 +401,10 @@
         "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
       },
       {
-        "default": "Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP']",
-        "description": "Strategy for handling existing atom mapping (default is 'KEEP').\n- 'CLEAR': Remove all existing mappings and compute new ones\n- 'DISCARD': Remove all mappings without computing new ones\n- 'ALTER': Modify existing mappings\n- 'KEEP': Keep existing mappings and map unmapped atoms",
+        "default": "'KEEP'",
+        "description": "Strategy for handling existing atom mapping (default is 'KEEP').\n\t\t- 'CLEAR': Remove all existing mappings and compute new ones\n\t\t- 'DISCARD': Remove all mappings without computing new ones\n\t\t- 'ALTER': Modify existing mappings\n\t\t- 'KEEP': Keep existing mappings and map unmapped atoms",
         "name": "strategy",
-        "type": "str | sqltypes.Text"
+        "type": "sqltypes.Text | Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP']"
       }
     ],
     "description": "Creates an atom-atom mapping for a reaction.",

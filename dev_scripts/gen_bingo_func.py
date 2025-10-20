@@ -5,19 +5,19 @@ from pathlib import Path
 from jinja2 import Environment
 
 HEADERS = """
-\"\"\"Auto-generated from data/rdkit_functions.json. Do not edit manually.\"\"\"
-from molalchemy.rdkit.types import RdkitMol, RdkitReaction, RdkitBitFingerprint, RdkitSparseFingerprint, RdkitQMol, RdkitXQMol
+\"\"\"Auto-generated from data/bingo_functions.json. Do not edit manually.\"\"\"
 from molalchemy.types import CString
+from molalchemy.bingo.types import BingoBinaryMol, BingoBinaryReaction, BingoMol, BingoReaction
 from sqlalchemy import types as sqltypes
 from sqlalchemy.sql import cast
 from sqlalchemy import Cast
-from  sqlalchemy.sql.functions import GenericFunction
-from typing import Any
+from sqlalchemy.sql.functions import GenericFunction
+from typing import Any, Literal
 """
 
-DATA_PATH = Path("data/rdkit_functions.json")
+DATA_PATH = Path("data/bingo_functions.json")
 
-MODULE_PATH = "src/molalchemy/rdkit/functions"
+MODULE_PATH = "src/molalchemy/bingo/functions"
 
 _TEMPLATE = """
 class {{ func_name }}(GenericFunction):
@@ -35,12 +35,14 @@ class {{ func_name }}(GenericFunction):
     \"""
     {% if '|' not in return_type %}
     type = {{ return_type }}()
-    {% elif 'RdkitMol' in return_type %}
-    type = RdkitMol()
-    {% elif 'RdkitReaction' in return_type %}
-    type = RdkitReaction()
-    {% elif 'RdkitBitFingerprint' in return_type %}
-    type = RdkitBitFingerprint()
+    {% elif 'BingoMol' in return_type %}
+    type = BingoMol()
+    {% elif 'BingoBinaryMol' in return_type %}
+    type = BingoBinaryMol()
+    {% elif 'BingoReaction' in return_type %}
+    type = BingoReaction()
+    {% elif 'BingoBinaryReaction' in return_type %}
+    type = BingoBinaryReaction()
     {% endif %}
     inherits_cache = True
     def __init__(self, {{ arg_inits }}**kwargs: Any) -> None:
@@ -77,8 +79,8 @@ def json_to_function_code(func_name: str, test_data: dict) -> str:
         arg_names_str = ", ".join(arg_names) + ", "
     else:
         arg_names_str = ""
-    print(f"Generating code for function: {func_name}")
-    print(f"  Description: {arg_names_str}")
+    print(func_name)
+    print(arg_names_str)
     generated_code = TEMPLATE.render(
         func_name=func_name,
         description=description,

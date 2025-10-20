@@ -152,7 +152,7 @@ class bfp_in(GenericFunction):
     inherits_cache = True
 
     def __init__(self, input: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(input, **kwargs)
 
 
 class bfp_lt(GenericFunction):
@@ -235,7 +235,7 @@ class bfp_out(GenericFunction):
     inherits_cache = True
 
     def __init__(self, fp: RdkitBitFingerprint, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(fp, **kwargs)
 
 
 class fmcs_smiles_transition(GenericFunction):
@@ -395,7 +395,7 @@ class mol_in(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol_str: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol_str, **kwargs)
 
 
 class mol_le(GenericFunction):
@@ -501,7 +501,7 @@ class mol_out(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class qmol_in(GenericFunction):
@@ -526,7 +526,7 @@ class qmol_in(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol_str: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol_str, **kwargs)
 
 
 class qmol_out(GenericFunction):
@@ -551,7 +551,7 @@ class qmol_out(GenericFunction):
     inherits_cache = True
 
     def __init__(self, mol: RdkitQMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(mol, **kwargs)
 
 
 class reaction_eq(GenericFunction):
@@ -605,7 +605,7 @@ class reaction_in(GenericFunction):
     inherits_cache = True
 
     def __init__(self, rxn_str: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(rxn_str, **kwargs)
 
 
 class reaction_ne(GenericFunction):
@@ -659,7 +659,7 @@ class reaction_out(GenericFunction):
     inherits_cache = True
 
     def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(rxn, **kwargs)
 
 
 class sfp_cmp(GenericFunction):
@@ -801,7 +801,7 @@ class sfp_in(GenericFunction):
     inherits_cache = True
 
     def __init__(self, fp_string: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(fp_string, **kwargs)
 
 
 class sfp_le(GenericFunction):
@@ -913,7 +913,7 @@ class sfp_out(GenericFunction):
     inherits_cache = True
 
     def __init__(self, fp: RdkitSparseFingerprint, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(fp, **kwargs)
 
 
 class tanimoto_sml_op(GenericFunction):
@@ -970,7 +970,7 @@ class xqmol_in(GenericFunction):
     inherits_cache = True
 
     def __init__(self, arg_1: CString, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(arg_1, **kwargs)
 
 
 class xqmol_out(GenericFunction):
@@ -995,4 +995,4 @@ class xqmol_out(GenericFunction):
     inherits_cache = True
 
     def __init__(self, arg_1: RdkitXQMol, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(arg_1, **kwargs)
