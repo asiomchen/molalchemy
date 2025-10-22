@@ -36,18 +36,6 @@ MODULE_PATH = "src/molalchemy/bingo/functions"
 
 _TEMPLATE = """
 class {{ func_name }}(GenericFunction):
-    \"""
-    {{ description }}
-    \n
-    Parameters
-    ----------
-    {{ params }}
-    \n
-    Returns
-    -------
-    Function[{{ return_type }}]
-        {{ return_description }}
-    \"""
     {% if '|' not in return_type %}
     type = {{ return_type }}()
     {% elif 'BingoMol' in return_type %}
@@ -62,17 +50,16 @@ class {{ func_name }}(GenericFunction):
     inherit_cache = True
     name = "{{ func_name.lower() }}"
     def __init__(self, {{ arg_inits }}**kwargs: Any) -> None:
-        \"""
-        {{ description }}
-        \n
-        Parameters
-        ----------
-        {{ params }}
+        \"""{{ description }}
 
-        Returns
-        -------
-        Function[{{ return_type }}]
-            {{ return_description }}
+Parameters
+----------
+{{ params }}
+
+Returns
+-------
+Function[{{ return_type }}]
+    {{ return_description }}
         \"""
         super().__init__({{ arg_names }}**kwargs)
         self.packagenames = ("bingo",)
@@ -98,11 +85,12 @@ def json_to_function_code(func_name: str, test_data: dict) -> str:
         if param["default"] is not None:
             param_str += f" = {param['default']}"
         params_list.append(param_str)
-        param_str += f"  \n{param['description']}"
+        param_str += f"\n    {param['description']}"
         doc_param_list.append(param_str)
         arg_names.append(param["name"])
-    doc_params = "    ".join(doc_param_list)
-    print(doc_params)
+    doc_params = "\n".join(doc_param_list)
+    if func_name == "aam":
+        print(doc_params)
     params = ", ".join(params_list)
     if len(params) > 0:
         params += ", "

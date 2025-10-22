@@ -126,27 +126,6 @@ def similarity(
 
 
 class aam(GenericFunction):
-    """
-        Creates an atom-atom mapping for a reaction.
-
-
-        Parameters
-        ----------
-        rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    Input reaction    strategy: sqltypes.Text | Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP'] = 'KEEP'
-    Strategy for handling existing atom mapping (default is 'KEEP').
-                    - 'CLEAR': Remove all existing mappings and compute new ones
-                    - 'DISCARD': Remove all mappings without computing new ones
-                    - 'ALTER': Modify existing mappings
-                    - 'KEEP': Keep existing mappings and map unmapped atoms
-
-
-        Returns
-        -------
-        Function[str | sqltypes.Text]
-            SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "aam"
 
@@ -156,211 +135,121 @@ class aam(GenericFunction):
         strategy: sqltypes.Text | Literal["CLEAR", "DISCARD", "ALTER", "KEEP"] = "KEEP",
         **kwargs: Any,
     ) -> None:
-        """
-                Creates an atom-atom mapping for a reaction.
+        """Creates an atom-atom mapping for a reaction.
 
-
-                Parameters
-                ----------
-                rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-        Input reaction    strategy: sqltypes.Text | Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP'] = 'KEEP'
-        Strategy for handling existing atom mapping (default is 'KEEP').
+        Parameters
+        ----------
+        rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Input reaction
+        strategy: sqltypes.Text | Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP'] = 'KEEP'
+            Strategy for handling existing atom mapping (default is 'KEEP').
                         - 'CLEAR': Remove all existing mappings and compute new ones
                         - 'DISCARD': Remove all mappings without computing new ones
                         - 'ALTER': Modify existing mappings
                         - 'KEEP': Keep existing mappings and map unmapped atoms
 
-                Returns
-                -------
-                Function[str | sqltypes.Text]
-                    SQLAlchemy function
+        Returns
+        -------
+        Function[str | sqltypes.Text]
+            SQLAlchemy function
         """
         super().__init__(rxn, strategy, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class cansmiles(GenericFunction):
-    """
-        Generates the canonical SMILES for a molecule.
-
-
-        Parameters
-        ----------
-        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    Input molecule in any supported format
-
-
-        Returns
-        -------
-        Function[str | sqltypes.Text]
-            SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "cansmiles"
 
     def __init__(
         self, mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        """
-                Generates the canonical SMILES for a molecule.
+        """Generates the canonical SMILES for a molecule.
 
+        Parameters
+        ----------
+        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Input molecule in any supported format
 
-                Parameters
-                ----------
-                mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-        Input molecule in any supported format
-
-                Returns
-                -------
-                Function[str | sqltypes.Text]
-                    SQLAlchemy function
+        Returns
+        -------
+        Function[str | sqltypes.Text]
+            SQLAlchemy function
         """
         super().__init__(mol, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class checkmolecule(GenericFunction):
-    """
-        Check molecule for validity
-
-
-        Parameters
-        ----------
-        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    Input molecule in any supported format
-
-
-        Returns
-        -------
-        Function[str | sqltypes.Text]
-            SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "checkmolecule"
 
     def __init__(
         self, mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        """
-                Check molecule for validity
+        """Check molecule for validity
 
+        Parameters
+        ----------
+        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Input molecule in any supported format
 
-                Parameters
-                ----------
-                mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-        Input molecule in any supported format
-
-                Returns
-                -------
-                Function[str | sqltypes.Text]
-                    SQLAlchemy function
+        Returns
+        -------
+        Function[str | sqltypes.Text]
+            SQLAlchemy function
         """
         super().__init__(mol, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class checkreaction(GenericFunction):
-    """
-        Check reaction for validity
-
-
-        Parameters
-        ----------
-        rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    Input reaction in any supported format
-
-
-        Returns
-        -------
-        Function[str | sqltypes.Text]
-            SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "checkreaction"
 
     def __init__(
         self, rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        """
-                Check reaction for validity
+        """Check reaction for validity
 
+        Parameters
+        ----------
+        rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Input reaction in any supported format
 
-                Parameters
-                ----------
-                rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-        Input reaction in any supported format
-
-                Returns
-                -------
-                Function[str | sqltypes.Text]
-                    SQLAlchemy function
+        Returns
+        -------
+        Function[str | sqltypes.Text]
+            SQLAlchemy function
         """
         super().__init__(rxn, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class cml(GenericFunction):
-    """
-        Converts a molecule to CML format.
-
-
-        Parameters
-        ----------
-        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    Input molecule in any supported format
-
-
-        Returns
-        -------
-        Function[str | sqltypes.Text]
-            SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "cml"
 
     def __init__(
         self, mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        """
-                Converts a molecule to CML format.
+        """Converts a molecule to CML format.
 
+        Parameters
+        ----------
+        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Input molecule in any supported format
 
-                Parameters
-                ----------
-                mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-        Input molecule in any supported format
-
-                Returns
-                -------
-                Function[str | sqltypes.Text]
-                    SQLAlchemy function
+        Returns
+        -------
+        Function[str | sqltypes.Text]
+            SQLAlchemy function
         """
         super().__init__(mol, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class compactmolecule(GenericFunction):
-    """
-        Calculates the compact representation of a molecule.
-
-
-        Parameters
-        ----------
-        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    Input molecule in any supported format    arg_2: sqltypes.Boolean
-
-
-
-        Returns
-        -------
-        Function[bytes | sqltypes.LargeBinary]
-            SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "compactmolecule"
 
@@ -370,43 +259,25 @@ class compactmolecule(GenericFunction):
         arg_2: sqltypes.Boolean,
         **kwargs: Any,
     ) -> None:
-        """
-                Calculates the compact representation of a molecule.
-
-
-                Parameters
-                ----------
-                mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-        Input molecule in any supported format    arg_2: sqltypes.Boolean
-
-
-                Returns
-                -------
-                Function[bytes | sqltypes.LargeBinary]
-                    SQLAlchemy function
-        """
-        super().__init__(mol, arg_2, **kwargs)
-        self.packagenames = ("bingo",)
-
-
-class compactreaction(GenericFunction):
-    """
-        Calls the rdkit cartridge function `compactreaction`.
-
+        """Calculates the compact representation of a molecule.
 
         Parameters
         ----------
-        rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    Input reaction in any supported format    arg_2: sqltypes.Boolean | bool
-
+        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Input molecule in any supported format
+        arg_2: sqltypes.Boolean
 
 
         Returns
         -------
         Function[bytes | sqltypes.LargeBinary]
             SQLAlchemy function
-    """
+        """
+        super().__init__(mol, arg_2, **kwargs)
+        self.packagenames = ("bingo",)
 
+
+class compactreaction(GenericFunction):
     inherit_cache = True
     name = "compactreaction"
 
@@ -416,45 +287,25 @@ class compactreaction(GenericFunction):
         arg_2: sqltypes.Boolean | bool,
         **kwargs: Any,
     ) -> None:
-        """
-                Calls the rdkit cartridge function `compactreaction`.
+        """Calls the rdkit cartridge function `compactreaction`.
+
+        Parameters
+        ----------
+        rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Input reaction in any supported format
+        arg_2: sqltypes.Boolean | bool
 
 
-                Parameters
-                ----------
-                rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-        Input reaction in any supported format    arg_2: sqltypes.Boolean | bool
-
-
-                Returns
-                -------
-                Function[bytes | sqltypes.LargeBinary]
-                    SQLAlchemy function
+        Returns
+        -------
+        Function[bytes | sqltypes.LargeBinary]
+            SQLAlchemy function
         """
         super().__init__(rxn, arg_2, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class exportrdf(GenericFunction):
-    """
-    Exports reactions to an RDF format.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-    arg_2: str | sqltypes.Text
-    arg_3: str | sqltypes.Text
-    arg_4: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[None | sqltypes.NullType]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "exportrdf"
 
@@ -466,47 +317,29 @@ class exportrdf(GenericFunction):
         arg_4: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Exports reactions to an RDF format.
-
-
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text
-        arg_2: str | sqltypes.Text
-        arg_3: str | sqltypes.Text
-        arg_4: str | sqltypes.Text
-
-
-            Returns
-            -------
-            Function[None | sqltypes.NullType]
-                SQLAlchemy function
-        """
-        super().__init__(arg_1, arg_2, arg_3, arg_4, **kwargs)
-        self.packagenames = ("bingo",)
-
-
-class exportsdf(GenericFunction):
-    """
-        Exports molecules to an SDF format.
-
+        """Exports reactions to an RDF format.
 
         Parameters
         ----------
-        mol: str | sqltypes.Text
-    Input molecule in any supported format    arg_2: str | sqltypes.Text
-        arg_3: str | sqltypes.Text
-        arg_4: str | sqltypes.Text
+        arg_1: str | sqltypes.Text
 
+        arg_2: str | sqltypes.Text
+
+        arg_3: str | sqltypes.Text
+
+        arg_4: str | sqltypes.Text
 
 
         Returns
         -------
         Function[None | sqltypes.NullType]
             SQLAlchemy function
-    """
+        """
+        super().__init__(arg_1, arg_2, arg_3, arg_4, **kwargs)
+        self.packagenames = ("bingo",)
 
+
+class exportsdf(GenericFunction):
     inherit_cache = True
     name = "exportsdf"
 
@@ -518,51 +351,34 @@ class exportsdf(GenericFunction):
         arg_4: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-                Exports molecules to an SDF format.
+        """Exports molecules to an SDF format.
+
+        Parameters
+        ----------
+        mol: str | sqltypes.Text
+            Input molecule in any supported format
+        arg_2: str | sqltypes.Text
+
+        arg_3: str | sqltypes.Text
+
+        arg_4: str | sqltypes.Text
 
 
-                Parameters
-                ----------
-                mol: str | sqltypes.Text
-        Input molecule in any supported format    arg_2: str | sqltypes.Text
-            arg_3: str | sqltypes.Text
-            arg_4: str | sqltypes.Text
-
-
-                Returns
-                -------
-                Function[None | sqltypes.NullType]
-                    SQLAlchemy function
+        Returns
+        -------
+        Function[None | sqltypes.NullType]
+            SQLAlchemy function
         """
         super().__init__(mol, arg_2, arg_3, arg_4, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class filetoblob(GenericFunction):
-    """
-    Calls the rdkit cartridge function `filetoblob`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[bytes | sqltypes.LargeBinary]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "filetoblob"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `filetoblob`.
-
+        """Calls the rdkit cartridge function `filetoblob`.
 
         Parameters
         ----------
@@ -579,29 +395,11 @@ class filetoblob(GenericFunction):
 
 
 class filetotext(GenericFunction):
-    """
-    Calls the rdkit cartridge function `filetotext`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "filetotext"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `filetotext`.
-
+        """Calls the rdkit cartridge function `filetotext`.
 
         Parameters
         ----------
@@ -618,23 +416,6 @@ class filetotext(GenericFunction):
 
 
 class fingerprint(GenericFunction):
-    """
-    Calls the rdkit cartridge function `fingerprint`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    arg_2: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[bytes | sqltypes.LargeBinary]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "fingerprint"
 
@@ -644,49 +425,30 @@ class fingerprint(GenericFunction):
         arg_2: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `fingerprint`.
+        """Calls the rdkit cartridge function `fingerprint`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
         arg_2: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[bytes | sqltypes.LargeBinary]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[bytes | sqltypes.LargeBinary]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class getblockcount(GenericFunction):
-    """
-    Calls the rdkit cartridge function `getblockcount`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[int | sqltypes.Integer]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "getblockcount"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `getblockcount`.
-
+        """Calls the rdkit cartridge function `getblockcount`.
 
         Parameters
         ----------
@@ -703,28 +465,11 @@ class getblockcount(GenericFunction):
 
 
 class getindexstructurescount(GenericFunction):
-    """
-    Calls the rdkit cartridge function `getindexstructurescount`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[int | sqltypes.Integer]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "getindexstructurescount"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `getindexstructurescount`.
-
+        """Calls the rdkit cartridge function `getindexstructurescount`.
 
         Parameters
         ----------
@@ -740,31 +485,13 @@ class getindexstructurescount(GenericFunction):
 
 
 class getmass(GenericFunction):
-    """
-    Calls the rdkit cartridge function `getmass`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-
-
-    Returns
-    -------
-    Function[float | sqltypes.Float]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "getmass"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        """
-        Calls the rdkit cartridge function `getmass`.
-
+        """Calls the rdkit cartridge function `getmass`.
 
         Parameters
         ----------
@@ -781,29 +508,11 @@ class getmass(GenericFunction):
 
 
 class getname(GenericFunction):
-    """
-    Calls the rdkit cartridge function `getname`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "getname"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `getname`.
-
+        """Calls the rdkit cartridge function `getname`.
 
         Parameters
         ----------
@@ -820,24 +529,6 @@ class getname(GenericFunction):
 
 
 class getsimilarity(GenericFunction):
-    """
-        Calls the rdkit cartridge function `getsimilarity`.
-
-
-        Parameters
-        ----------
-        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    Input molecule or molecular column in any supported format    query: str | sqltypes.Text
-    Query molecule in any supported format    metric: str | sqltypes.Text = 'tanimoto'
-    string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional “alpha” and “beta” parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).
-
-
-        Returns
-        -------
-        Function[float | sqltypes.Float]
-            SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "getsimilarity"
 
@@ -848,50 +539,32 @@ class getsimilarity(GenericFunction):
         metric: str | sqltypes.Text = "tanimoto",
         **kwargs: Any,
     ) -> None:
-        """
-                Calls the rdkit cartridge function `getsimilarity`.
+        """Calls the rdkit cartridge function `getsimilarity`.
 
+        Parameters
+        ----------
+        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Input molecule or molecular column in any supported format
+        query: str | sqltypes.Text
+            Query molecule in any supported format
+        metric: str | sqltypes.Text = 'tanimoto'
+            string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional “alpha” and “beta” parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).
 
-                Parameters
-                ----------
-                mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-        Input molecule or molecular column in any supported format    query: str | sqltypes.Text
-        Query molecule in any supported format    metric: str | sqltypes.Text = 'tanimoto'
-        string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional “alpha” and “beta” parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).
-
-                Returns
-                -------
-                Function[float | sqltypes.Float]
-                    SQLAlchemy function
+        Returns
+        -------
+        Function[float | sqltypes.Float]
+            SQLAlchemy function
         """
         super().__init__(mol, query, metric, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class getstructurescount(GenericFunction):
-    """
-    Calls the rdkit cartridge function `getstructurescount`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[int | sqltypes.Integer]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "getstructurescount"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `getstructurescount`.
-
+        """Calls the rdkit cartridge function `getstructurescount`.
 
         Parameters
         ----------
@@ -908,28 +581,11 @@ class getstructurescount(GenericFunction):
 
 
 class getversion(GenericFunction):
-    """
-    Calls the rdkit cartridge function `getversion`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "getversion"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `getversion`.
-
+        """Calls the rdkit cartridge function `getversion`.
 
         Parameters
         ----------
@@ -945,23 +601,6 @@ class getversion(GenericFunction):
 
 
 class getweight(GenericFunction):
-    """
-    Calls the rdkit cartridge function `getweight`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    arg_2: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[float | sqltypes.Float]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "getweight"
 
@@ -971,51 +610,32 @@ class getweight(GenericFunction):
         arg_2: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `getweight`.
+        """Calls the rdkit cartridge function `getweight`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
         arg_2: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[float | sqltypes.Float]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[float | sqltypes.Float]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class gross(GenericFunction):
-    """
-    Calls the rdkit cartridge function `gross`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "gross"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        """
-        Calls the rdkit cartridge function `gross`.
-
+        """Calls the rdkit cartridge function `gross`.
 
         Parameters
         ----------
@@ -1032,25 +652,6 @@ class gross(GenericFunction):
 
 
 class importrdf(GenericFunction):
-    """
-    Calls the rdkit cartridge function `importrdf`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-    arg_2: str | sqltypes.Text
-    arg_3: str | sqltypes.Text
-    arg_4: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[None | sqltypes.NullType]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "importrdf"
 
@@ -1062,47 +663,29 @@ class importrdf(GenericFunction):
         arg_4: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `importrdf`.
+        """Calls the rdkit cartridge function `importrdf`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text
         arg_2: str | sqltypes.Text
+
         arg_3: str | sqltypes.Text
+
         arg_4: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[None | sqltypes.NullType]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[None | sqltypes.NullType]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, arg_3, arg_4, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class importsdf(GenericFunction):
-    """
-    Calls the rdkit cartridge function `importsdf`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-    arg_2: str | sqltypes.Text
-    arg_3: str | sqltypes.Text
-    arg_4: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[None | sqltypes.NullType]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "importsdf"
 
@@ -1114,47 +697,29 @@ class importsdf(GenericFunction):
         arg_4: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `importsdf`.
+        """Calls the rdkit cartridge function `importsdf`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text
         arg_2: str | sqltypes.Text
+
         arg_3: str | sqltypes.Text
+
         arg_4: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[None | sqltypes.NullType]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[None | sqltypes.NullType]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, arg_3, arg_4, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class importsmiles(GenericFunction):
-    """
-    Calls the rdkit cartridge function `importsmiles`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-    arg_2: str | sqltypes.Text
-    arg_3: str | sqltypes.Text
-    arg_4: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[None | sqltypes.NullType]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "importsmiles"
 
@@ -1166,45 +731,29 @@ class importsmiles(GenericFunction):
         arg_4: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `importsmiles`.
+        """Calls the rdkit cartridge function `importsmiles`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text
         arg_2: str | sqltypes.Text
+
         arg_3: str | sqltypes.Text
+
         arg_4: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[None | sqltypes.NullType]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[None | sqltypes.NullType]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, arg_3, arg_4, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class inchi(GenericFunction):
-    """
-    Calls the rdkit cartridge function `inchi`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    arg_2: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "inchi"
 
@@ -1214,49 +763,30 @@ class inchi(GenericFunction):
         arg_2: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `inchi`.
+        """Calls the rdkit cartridge function `inchi`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
         arg_2: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[str | sqltypes.Text]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[str | sqltypes.Text]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class inchikey(GenericFunction):
-    """
-    Calls the rdkit cartridge function `inchikey`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "inchikey"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `inchikey`.
-
+        """Calls the rdkit cartridge function `inchikey`.
 
         Parameters
         ----------
@@ -1273,30 +803,13 @@ class inchikey(GenericFunction):
 
 
 class matchexact(GenericFunction):
-    """
-    Calls the rdkit cartridge function `matchexact`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
     name = "matchexact"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `matchexact`.
-
+        """Calls the rdkit cartridge function `matchexact`.
 
         Parameters
         ----------
@@ -1312,30 +825,13 @@ class matchexact(GenericFunction):
 
 
 class matchgross(GenericFunction):
-    """
-    Calls the rdkit cartridge function `matchgross`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
     name = "matchgross"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `matchgross`.
-
+        """Calls the rdkit cartridge function `matchgross`.
 
         Parameters
         ----------
@@ -1351,30 +847,13 @@ class matchgross(GenericFunction):
 
 
 class matchrexact(GenericFunction):
-    """
-    Calls the rdkit cartridge function `matchrexact`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
     name = "matchrexact"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `matchrexact`.
-
+        """Calls the rdkit cartridge function `matchrexact`.
 
         Parameters
         ----------
@@ -1390,30 +869,13 @@ class matchrexact(GenericFunction):
 
 
 class matchrsmarts(GenericFunction):
-    """
-    Calls the rdkit cartridge function `matchrsmarts`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
     name = "matchrsmarts"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `matchrsmarts`.
-
+        """Calls the rdkit cartridge function `matchrsmarts`.
 
         Parameters
         ----------
@@ -1429,30 +891,13 @@ class matchrsmarts(GenericFunction):
 
 
 class matchrsub(GenericFunction):
-    """
-    Calls the rdkit cartridge function `matchrsub`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
     name = "matchrsub"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `matchrsub`.
-
+        """Calls the rdkit cartridge function `matchrsub`.
 
         Parameters
         ----------
@@ -1468,30 +913,13 @@ class matchrsub(GenericFunction):
 
 
 class matchsim(GenericFunction):
-    """
-    Calls the rdkit cartridge function `matchsim`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
     name = "matchsim"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `matchsim`.
-
+        """Calls the rdkit cartridge function `matchsim`.
 
         Parameters
         ----------
@@ -1507,30 +935,13 @@ class matchsim(GenericFunction):
 
 
 class matchsmarts(GenericFunction):
-    """
-    Calls the rdkit cartridge function `matchsmarts`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
     name = "matchsmarts"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `matchsmarts`.
-
+        """Calls the rdkit cartridge function `matchsmarts`.
 
         Parameters
         ----------
@@ -1546,30 +957,13 @@ class matchsmarts(GenericFunction):
 
 
 class matchsub(GenericFunction):
-    """
-    Calls the rdkit cartridge function `matchsub`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
     name = "matchsub"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `matchsub`.
-
+        """Calls the rdkit cartridge function `matchsub`.
 
         Parameters
         ----------
@@ -1585,31 +979,13 @@ class matchsub(GenericFunction):
 
 
 class molfile(GenericFunction):
-    """
-    Calls the rdkit cartridge function `molfile`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "molfile"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        """
-        Calls the rdkit cartridge function `molfile`.
-
+        """Calls the rdkit cartridge function `molfile`.
 
         Parameters
         ----------
@@ -1626,74 +1002,38 @@ class molfile(GenericFunction):
 
 
 class precachedatabase(GenericFunction):
-    """
-    Calls the rdkit cartridge function `precachedatabase`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-    arg_2: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "precachedatabase"
 
     def __init__(
         self, arg_1: str | sqltypes.Text, arg_2: str | sqltypes.Text, **kwargs: Any
     ) -> None:
-        """
-            Calls the rdkit cartridge function `precachedatabase`.
+        """Calls the rdkit cartridge function `precachedatabase`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text
         arg_2: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[str | sqltypes.Text]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[str | sqltypes.Text]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class rcml(GenericFunction):
-    """
-    Calls the rdkit cartridge function `rcml`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "rcml"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        """
-        Calls the rdkit cartridge function `rcml`.
-
+        """Calls the rdkit cartridge function `rcml`.
 
         Parameters
         ----------
@@ -1710,23 +1050,6 @@ class rcml(GenericFunction):
 
 
 class rfingerprint(GenericFunction):
-    """
-    Calls the rdkit cartridge function `rfingerprint`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    arg_2: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[bytes | sqltypes.LargeBinary]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "rfingerprint"
 
@@ -1736,51 +1059,32 @@ class rfingerprint(GenericFunction):
         arg_2: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `rfingerprint`.
+        """Calls the rdkit cartridge function `rfingerprint`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
         arg_2: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[bytes | sqltypes.LargeBinary]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[bytes | sqltypes.LargeBinary]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class rsmiles(GenericFunction):
-    """
-    Calls the rdkit cartridge function `rsmiles`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "rsmiles"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        """
-        Calls the rdkit cartridge function `rsmiles`.
-
+        """Calls the rdkit cartridge function `rsmiles`.
 
         Parameters
         ----------
@@ -1797,31 +1101,13 @@ class rsmiles(GenericFunction):
 
 
 class rxnfile(GenericFunction):
-    """
-    Calls the rdkit cartridge function `rxnfile`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "rxnfile"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        """
-        Calls the rdkit cartridge function `rxnfile`.
-
+        """Calls the rdkit cartridge function `rxnfile`.
 
         Parameters
         ----------
@@ -1838,31 +1124,13 @@ class rxnfile(GenericFunction):
 
 
 class smiles(GenericFunction):
-    """
-    Calls the rdkit cartridge function `smiles`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "smiles"
 
     def __init__(
         self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
     ) -> None:
-        """
-        Calls the rdkit cartridge function `smiles`.
-
+        """Calls the rdkit cartridge function `smiles`.
 
         Parameters
         ----------
@@ -1879,23 +1147,6 @@ class smiles(GenericFunction):
 
 
 class standardize(GenericFunction):
-    """
-    Calls the rdkit cartridge function `standardize`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    arg_2: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "standardize"
 
@@ -1905,20 +1156,19 @@ class standardize(GenericFunction):
         arg_2: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `standardize`.
+        """Calls the rdkit cartridge function `standardize`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
         arg_2: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[str | sqltypes.Text]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[str | sqltypes.Text]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, **kwargs)
         self.packagenames = ("bingo",)

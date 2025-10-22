@@ -9,7 +9,7 @@ Due to the differences in the naming conventions among Bingo functions, match of
 Currently, not all Bingo functions are implemented. The rest can be accessed via `sqlalchemy.func` directly.
 
 
-## `molalchemy.bingo.general`
+## `molalchemy.bingo.functions.general`
 ::: molalchemy.bingo.functions.general
     options:
       heading_level: 3
@@ -17,6 +17,10 @@ Currently, not all Bingo functions are implemented. The rest can be accessed via
       show_bases: true
       show_root_heading: false
       members_order: source
+      docstring_options:
+        ignore_init_summary: true
+      merge_init_into_class: true
+      
 
 
 ## `molalchemy.bingo.functions.internal`
@@ -28,3 +32,6 @@ Currently, not all Bingo functions are implemented. The rest can be accessed via
       show_bases: true
       show_root_heading: false
       members_order: source
+      docstring_options:
+        ignore_init_summary: true
+      merge_init_into_class: true

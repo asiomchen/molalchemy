@@ -15,24 +15,6 @@ AnyBingoMol = BingoMol | BingoBinaryMol
 
 
 class _exact_internal(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_exact_internal`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-    arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    arg_3: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
@@ -45,49 +27,32 @@ class _exact_internal(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `_exact_internal`.
+        """Calls the rdkit cartridge function `_exact_internal`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text
         arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+
         arg_3: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, arg_3, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class _get_block_count(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_get_block_count`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[int | sqltypes.Integer]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "_get_block_count"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `_get_block_count`.
-
+        """Calls the rdkit cartridge function `_get_block_count`.
 
         Parameters
         ----------
@@ -103,30 +68,13 @@ class _get_block_count(GenericFunction):
 
 
 class _get_profiling_info(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_get_profiling_info`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[CString]
-        SQLAlchemy function
-    """
-
     type = CString()
 
     inherit_cache = True
     name = "_get_profiling_info"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `_get_profiling_info`.
-
+        """Calls the rdkit cartridge function `_get_profiling_info`.
 
         Parameters
         ----------
@@ -142,28 +90,11 @@ class _get_profiling_info(GenericFunction):
 
 
 class _get_structures_count(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_get_structures_count`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[int | sqltypes.Integer]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "_get_structures_count"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `_get_structures_count`.
-
+        """Calls the rdkit cartridge function `_get_structures_count`.
 
         Parameters
         ----------
@@ -179,24 +110,6 @@ class _get_structures_count(GenericFunction):
 
 
 class _gross_internal(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_gross_internal`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-    arg_2: str | sqltypes.Text
-    arg_3: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
@@ -209,45 +122,27 @@ class _gross_internal(GenericFunction):
         arg_3: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `_gross_internal`.
+        """Calls the rdkit cartridge function `_gross_internal`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text
         arg_2: str | sqltypes.Text
+
         arg_3: str | sqltypes.Text | bytes | sqltypes.LargeBinary
 
 
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, arg_3, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class _internal_func_011(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_internal_func_011`.
-
-
-    Parameters
-    ----------
-    arg_1: int | sqltypes.Integer
-    arg_2: str | sqltypes.Text
-    arg_3: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[None | sqltypes.NullType]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "_internal_func_011"
 
@@ -258,95 +153,59 @@ class _internal_func_011(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `_internal_func_011`.
+        """Calls the rdkit cartridge function `_internal_func_011`.
 
+        Parameters
+        ----------
+        arg_1: int | sqltypes.Integer
 
-            Parameters
-            ----------
-            arg_1: int | sqltypes.Integer
         arg_2: str | sqltypes.Text
+
         arg_3: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[None | sqltypes.NullType]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[None | sqltypes.NullType]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, arg_3, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class _internal_func_012(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_internal_func_012`.
-
-
-    Parameters
-    ----------
-    arg_1: int | sqltypes.Integer
-    arg_2: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[None | sqltypes.NullType]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "_internal_func_012"
 
     def __init__(
         self, arg_1: int | sqltypes.Integer, arg_2: str | sqltypes.Text, **kwargs: Any
     ) -> None:
-        """
-            Calls the rdkit cartridge function `_internal_func_012`.
+        """Calls the rdkit cartridge function `_internal_func_012`.
 
+        Parameters
+        ----------
+        arg_1: int | sqltypes.Integer
 
-            Parameters
-            ----------
-            arg_1: int | sqltypes.Integer
         arg_2: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[None | sqltypes.NullType]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[None | sqltypes.NullType]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class _internal_func_check(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_internal_func_check`.
-
-
-    Parameters
-    ----------
-    arg_1: int | sqltypes.Integer
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
     name = "_internal_func_check"
 
     def __init__(self, arg_1: int | sqltypes.Integer, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `_internal_func_check`.
-
+        """Calls the rdkit cartridge function `_internal_func_check`.
 
         Parameters
         ----------
@@ -363,30 +222,13 @@ class _internal_func_check(GenericFunction):
 
 
 class _match_mass_great(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_match_mass_great`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
     name = "_match_mass_great"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `_match_mass_great`.
-
+        """Calls the rdkit cartridge function `_match_mass_great`.
 
         Parameters
         ----------
@@ -402,30 +244,13 @@ class _match_mass_great(GenericFunction):
 
 
 class _match_mass_less(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_match_mass_less`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
     name = "_match_mass_less"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `_match_mass_less`.
-
+        """Calls the rdkit cartridge function `_match_mass_less`.
 
         Parameters
         ----------
@@ -441,28 +266,11 @@ class _match_mass_less(GenericFunction):
 
 
 class _precache_database(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_precache_database`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[str | sqltypes.Text]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "_precache_database"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `_precache_database`.
-
+        """Calls the rdkit cartridge function `_precache_database`.
 
         Parameters
         ----------
@@ -478,28 +286,11 @@ class _precache_database(GenericFunction):
 
 
 class _print_profiling_info(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_print_profiling_info`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[None | sqltypes.NullType]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "_print_profiling_info"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `_print_profiling_info`.
-
+        """Calls the rdkit cartridge function `_print_profiling_info`.
 
         Parameters
         ----------
@@ -515,28 +306,11 @@ class _print_profiling_info(GenericFunction):
 
 
 class _reset_profiling_info(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_reset_profiling_info`.
-
-
-    Parameters
-    ----------
-
-
-
-    Returns
-    -------
-    Function[None | sqltypes.NullType]
-        SQLAlchemy function
-    """
-
     inherit_cache = True
     name = "_reset_profiling_info"
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Calls the rdkit cartridge function `_reset_profiling_info`.
-
+        """Calls the rdkit cartridge function `_reset_profiling_info`.
 
         Parameters
         ----------
@@ -552,24 +326,6 @@ class _reset_profiling_info(GenericFunction):
 
 
 class _rexact_internal(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_rexact_internal`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-    arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    arg_3: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
@@ -582,45 +338,27 @@ class _rexact_internal(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `_rexact_internal`.
+        """Calls the rdkit cartridge function `_rexact_internal`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text
         arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+
         arg_3: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, arg_3, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class _rsmarts_internal(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_rsmarts_internal`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-    arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    arg_3: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
@@ -633,45 +371,27 @@ class _rsmarts_internal(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `_rsmarts_internal`.
+        """Calls the rdkit cartridge function `_rsmarts_internal`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text
         arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+
         arg_3: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, arg_3, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class _rsub_internal(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_rsub_internal`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-    arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    arg_3: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
@@ -684,47 +404,27 @@ class _rsub_internal(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `_rsub_internal`.
+        """Calls the rdkit cartridge function `_rsub_internal`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text
         arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+
         arg_3: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, arg_3, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class _sim_internal(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_sim_internal`.
-
-
-    Parameters
-    ----------
-    arg_1: float | sqltypes.Float
-    arg_2: float | sqltypes.Float
-    arg_3: str | sqltypes.Text
-    arg_4: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    arg_5: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
@@ -739,47 +439,31 @@ class _sim_internal(GenericFunction):
         arg_5: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `_sim_internal`.
+        """Calls the rdkit cartridge function `_sim_internal`.
 
+        Parameters
+        ----------
+        arg_1: float | sqltypes.Float
 
-            Parameters
-            ----------
-            arg_1: float | sqltypes.Float
         arg_2: float | sqltypes.Float
+
         arg_3: str | sqltypes.Text
+
         arg_4: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+
         arg_5: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, arg_3, arg_4, arg_5, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class _smarts_internal(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_smarts_internal`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-    arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    arg_3: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
@@ -792,45 +476,27 @@ class _smarts_internal(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `_smarts_internal`.
+        """Calls the rdkit cartridge function `_smarts_internal`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text
         arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+
         arg_3: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, arg_3, **kwargs)
         self.packagenames = ("bingo",)
 
 
 class _sub_internal(GenericFunction):
-    """
-    Calls the rdkit cartridge function `_sub_internal`.
-
-
-    Parameters
-    ----------
-    arg_1: str | sqltypes.Text
-    arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-    arg_3: str | sqltypes.Text
-
-
-
-    Returns
-    -------
-    Function[sqltypes.Boolean]
-        SQLAlchemy function
-    """
-
     type = sqltypes.Boolean()
 
     inherit_cache = True
@@ -843,21 +509,21 @@ class _sub_internal(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """
-            Calls the rdkit cartridge function `_sub_internal`.
+        """Calls the rdkit cartridge function `_sub_internal`.
 
+        Parameters
+        ----------
+        arg_1: str | sqltypes.Text
 
-            Parameters
-            ----------
-            arg_1: str | sqltypes.Text
         arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
+
         arg_3: str | sqltypes.Text
 
 
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                SQLAlchemy function
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            SQLAlchemy function
         """
         super().__init__(arg_1, arg_2, arg_3, **kwargs)
         self.packagenames = ("bingo",)
