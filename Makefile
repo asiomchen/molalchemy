@@ -8,3 +8,13 @@ sync-docs:
 	@cp CHANGELOG.md docs/
 	@cp ROADMAP.md docs/
 	@cp CONTRIBUTING.md docs/
+
+update-rdkit-func:
+	@uv run python dev_scripts/gen_rdkit_func.py
+	@ruff format src/molalchemy/rdkit/functions/
+	@ruff check --fix src/molalchemy/rdkit/functions/
+
+update-bingo-func:
+	@uv run python dev_scripts/gen_bingo_func.py
+	@ruff format src/molalchemy/bingo/functions/
+	@ruff check --fix src/molalchemy/bingo/functions/

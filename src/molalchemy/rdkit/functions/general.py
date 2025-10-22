@@ -2,10 +2,10 @@
 
 from typing import Any
 
-from sqlalchemy import Cast
+from sqlalchemy import BinaryExpression, Cast, ColumnElement, func
 from sqlalchemy import types as sqltypes
 from sqlalchemy.sql import cast
-from sqlalchemy.sql.functions import GenericFunction
+from sqlalchemy.sql.functions import Function, GenericFunction
 
 from molalchemy.rdkit.types import (
     RdkitBitFingerprint,
@@ -16,6 +16,66 @@ from molalchemy.rdkit.types import (
     RdkitXQMol,
 )
 from molalchemy.types import CString
+
+
+def mol_has_substructure(
+    mol_column: ColumnElement[RdkitMol], query: str
+) -> BinaryExpression:
+    """
+    Perform substructure search.
+
+    Checks if the molecular structure in the column contains the query
+    substructure using the `@>` operator.
+
+    Parameters
+    ----------
+    mol_column : ColumnElement[molalchemy.rdkit.types.RdkitMol]
+        The database column containing the molecular structure to search.
+    query : str
+        The query substructure as a string (SMILES, SMARTS, or other format).
+
+    Returns
+    -------
+    BinaryExpression
+        SQLAlchemy binary expression for the substructure search.
+
+    Examples
+    --------
+    >>> from sqlalchemy import select
+    >>> query = select(Molecule).where(has_substructure(Molecule.structure, "C=O"))
+    """
+    return mol_column.op("@>")(query)
+
+
+def rxn_has_smarts(rxn_column: ColumnElement, pattern: str) -> Function[bool]:
+    """
+    Perform reaction substructure search.
+
+    Checks if the reaction in the column contains the query pattern
+    using the `substruct` PostgreSQL function. This searches for
+    reaction substructures within stored reactions.
+
+    Parameters
+    ----------
+    rxn_column : ColumnElement
+        The database column containing the reaction to search in.
+    pattern : str
+        The reaction SMARTS pattern to search for. Can represent
+        partial reaction patterns or transformations.
+
+    Returns
+    -------
+    Function[bool]
+        SQLAlchemy function, that returns `True` if the pattern
+        is found in the reaction, `False` otherwise.
+
+    Examples
+    --------
+    >>> from sqlalchemy import select
+    >>> # Search for reactions containing a carbonyl formation
+    >>> query = select(Reaction).where(has_smarts(Reaction.rxn, ">>C=O"))
+    """
+    return func.substruct(rxn_column, reaction_from_smarts(pattern))
 
 
 class add(GenericFunction):

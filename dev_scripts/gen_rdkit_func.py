@@ -10,14 +10,22 @@ from molalchemy.rdkit.types import RdkitMol, RdkitReaction, RdkitBitFingerprint,
 from molalchemy.types import CString
 from sqlalchemy import types as sqltypes
 from sqlalchemy.sql import cast
-from sqlalchemy import Cast
-from  sqlalchemy.sql.functions import GenericFunction
+from sqlalchemy import Cast, func, BinaryExpression, ColumnElement
+from sqlalchemy.sql.functions import GenericFunction, Function
 from typing import Any
 """
 
 DATA_PATH = Path("data/rdkit_functions.json")
 
 MODULE_PATH = "src/molalchemy/rdkit/functions"
+
+AFTER_HEADERS = defaultdict(str)
+EXTRA_MEMBERS = defaultdict(list)
+AFTER_HEADERS["general"] = Path("data/extra_rdkit.py_").open("r").read()
+EXTRA_MEMBERS["general"] = [
+    "mol_has_substructure",
+    "rxn_has_smarts",
+]
 
 _TEMPLATE = """
 class {{ func_name }}(GenericFunction):
@@ -103,8 +111,11 @@ for func_name, func_data in data.items():
     groups[group].append(code)
     group_members[group].append(func_name)
 
+for group in EXTRA_MEMBERS:
+    group_members[group].extend(EXTRA_MEMBERS[group])
+
 for group, codes in groups.items():
-    module_code = HEADERS + "\n".join(codes)
+    module_code = HEADERS + AFTER_HEADERS[group] + "\n".join(codes)
     module_path = Path(f"{MODULE_PATH}/{group}.py")
     with module_path.open("w") as f:
         f.write(module_code)
