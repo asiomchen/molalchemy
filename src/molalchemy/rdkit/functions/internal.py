@@ -23,21 +23,19 @@ class bfp_cmp(GenericFunction):
         self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
     ) -> None:
         """
-            Calls the rdkit cartridge function `bfp_cmp`.
+        Calls the rdkit cartridge function `bfp_cmp`.
 
-
-            Parameters
-            ----------
-            fp_1: RdkitBitFingerprint
+        Parameters
+        ----------
+        fp_1: RdkitBitFingerprint
             The first RDKit bit fingerprint for comparison.
         fp_2: RdkitBitFingerprint
             The second RDKit bit fingerprint for comparison.
 
-
-            Returns
-            -------
-            Function[int | sqltypes.Integer]
-                An integer representing the comparison result between the two bit fingerprints. Typically, 0 indicates equality, a negative value indicates the first fingerprint is 'less than' the second, and a positive value indicates the first is 'greater than' the second.
+        Returns
+        -------
+        Function[int | sqltypes.Integer]
+            An integer representing the comparison result between the two bit fingerprints. Typically, 0 indicates equality, a negative value indicates the first fingerprint is 'less than' the second, and a positive value indicates the first is 'greater than' the second.
         """
         super().__init__(fp_1, fp_2, **kwargs)
 
@@ -51,21 +49,19 @@ class bfp_eq(GenericFunction):
         self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
     ) -> None:
         """
-            Checks if two bit vector fingerprints are equal. Used for operator overloading.
+        Checks if two bit vector fingerprints are equal. Used for operator overloading.
 
-
-            Parameters
-            ----------
-            fp_1: RdkitBitFingerprint
+        Parameters
+        ----------
+        fp_1: RdkitBitFingerprint
             The first bit vector fingerprint for comparison.
         fp_2: RdkitBitFingerprint
             The second bit vector fingerprint for comparison.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                True if the two bit vector fingerprints are equal, False otherwise.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            True if the two bit vector fingerprints are equal, False otherwise.
         """
         super().__init__(fp_1, fp_2, **kwargs)
 
@@ -79,21 +75,19 @@ class bfp_ge(GenericFunction):
         self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
     ) -> None:
         """
-            Returns whether the first bit fingerprint is greater than or equal to the second bit fingerprint. Used for operator overloading.
+        Returns whether the first bit fingerprint is greater than or equal to the second bit fingerprint. Used for operator overloading.
 
-
-            Parameters
-            ----------
-            fp_1: RdkitBitFingerprint
+        Parameters
+        ----------
+        fp_1: RdkitBitFingerprint
             The first bit fingerprint.
         fp_2: RdkitBitFingerprint
             The second bit fingerprint.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                A boolean value indicating if the first fingerprint is greater than or equal to the second.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            A boolean value indicating if the first fingerprint is greater than or equal to the second.
         """
         super().__init__(fp_1, fp_2, **kwargs)
 
@@ -107,21 +101,19 @@ class bfp_gt(GenericFunction):
         self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
     ) -> None:
         """
-            Returns whether the first bit vector fingerprint is 'greater than' the second bit vector fingerprint. Used internally for operator overloading.
+        Returns whether the first bit vector fingerprint is 'greater than' the second bit vector fingerprint. Used internally for operator overloading.
 
-
-            Parameters
-            ----------
-            fp_1: RdkitBitFingerprint
+        Parameters
+        ----------
+        fp_1: RdkitBitFingerprint
             The first bit vector fingerprint.
         fp_2: RdkitBitFingerprint
             The second bit vector fingerprint for comparison.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                A boolean indicating if the first fingerprint is 'greater than' the second.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            A boolean indicating if the first fingerprint is 'greater than' the second.
         """
         super().__init__(fp_1, fp_2, **kwargs)
 
@@ -135,12 +127,10 @@ class bfp_in(GenericFunction):
         """
         Converts a string representation into an RDKit bit fingerprint. Used for input conversion from the client.
 
-
         Parameters
         ----------
         input: CString
-        The string representation of the bit fingerprint.
-
+            The string representation of the bit fingerprint.
 
         Returns
         -------
@@ -159,21 +149,19 @@ class bfp_lt(GenericFunction):
         self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
     ) -> None:
         """
-            Returns a boolean indicating whether or not the first bit fingerprint is less than the second bit fingerprint. Used internally for operator overloading.
+        Returns a boolean indicating whether or not the first bit fingerprint is less than the second bit fingerprint. Used internally for operator overloading.
 
-
-            Parameters
-            ----------
-            fp_1: RdkitBitFingerprint
+        Parameters
+        ----------
+        fp_1: RdkitBitFingerprint
             The first bit fingerprint to compare.
         fp_2: RdkitBitFingerprint
             The second bit fingerprint to compare.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                A boolean value indicating the result of the 'less than' comparison.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            A boolean value indicating the result of the 'less than' comparison.
         """
         super().__init__(fp_1, fp_2, **kwargs)
 
@@ -187,21 +175,19 @@ class bfp_ne(GenericFunction):
         self, bfp1: RdkitBitFingerprint, bfp2: RdkitBitFingerprint, **kwargs: Any
     ) -> None:
         """
-            Compares two bit vector fingerprints for inequality. Used internally for operator overloading.
+        Compares two bit vector fingerprints for inequality. Used internally for operator overloading.
 
-
-            Parameters
-            ----------
-            bfp1: RdkitBitFingerprint
+        Parameters
+        ----------
+        bfp1: RdkitBitFingerprint
             The first bit vector fingerprint.
         bfp2: RdkitBitFingerprint
             The second bit vector fingerprint.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                True if the two bit vector fingerprints are not equal, False otherwise.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            True if the two bit vector fingerprints are not equal, False otherwise.
         """
         super().__init__(bfp1, bfp2, **kwargs)
 
@@ -215,12 +201,10 @@ class bfp_out(GenericFunction):
         """
         Returns a bytea with the binary string representation of the fingerprint. Used internally to return fingerprint values to the client.
 
-
         Parameters
         ----------
         fp: RdkitBitFingerprint
-        The bit vector fingerprint to convert to a binary string representation.
-
+            The bit vector fingerprint to convert to a binary string representation.
 
         Returns
         -------
@@ -239,21 +223,19 @@ class fmcs_smiles_transition(GenericFunction):
         self, arg_1: sqltypes.Text, arg_2: sqltypes.Text, **kwargs: Any
     ) -> None:
         """
-            TODO
+        TODO
 
-
-            Parameters
-            ----------
-            arg_1: sqltypes.Text
+        Parameters
+        ----------
+        arg_1: sqltypes.Text
             TODO.
         arg_2: sqltypes.Text
             TODO.
 
-
-            Returns
-            -------
-            Function[sqltypes.Text]
-                A string representing the Most Common Substructure (MCS) found among the input molecules.
+        Returns
+        -------
+        Function[sqltypes.Text]
+            A string representing the Most Common Substructure (MCS) found among the input molecules.
         """
         super().__init__(arg_1, arg_2, **kwargs)
 
@@ -263,21 +245,19 @@ class mol_cmp(GenericFunction):
 
     def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
         """
-            Compares two RDKit molecules.
+        Compares two RDKit molecules.
 
-
-            Parameters
-            ----------
-            mol_1: RdkitMol
+        Parameters
+        ----------
+        mol_1: RdkitMol
             The first RDKit molecule to compare.
         mol_2: RdkitMol
             The second RDKit molecule to compare.
 
-
-            Returns
-            -------
-            Function[int | sqltypes.Integer]
-                An integer representing the comparison result. Returns -1 if the first molecule is 'less than' the second, 0 if they are 'equal', and 1 if the first molecule is 'greater than' the second.
+        Returns
+        -------
+        Function[int | sqltypes.Integer]
+            An integer representing the comparison result. Returns -1 if the first molecule is 'less than' the second, 0 if they are 'equal', and 1 if the first molecule is 'greater than' the second.
         """
         super().__init__(mol_1, mol_2, **kwargs)
 
@@ -289,21 +269,19 @@ class mol_eq(GenericFunction):
 
     def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
         """
-            Checks if two RDKit molecules are equal. Used internally for operator overloading.
+        Checks if two RDKit molecules are equal. Used internally for operator overloading.
 
-
-            Parameters
-            ----------
-            mol_1: RdkitMol
+        Parameters
+        ----------
+        mol_1: RdkitMol
             The first RDKit molecule to compare.
         mol_2: RdkitMol
             The second RDKit molecule to compare.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                Returns a boolean indicating whether the two molecules are equal.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            Returns a boolean indicating whether the two molecules are equal.
         """
         super().__init__(mol_1, mol_2, **kwargs)
 
@@ -315,21 +293,19 @@ class mol_ge(GenericFunction):
 
     def __init__(self, arg_1: RdkitMol, arg_2: RdkitMol, **kwargs: Any) -> None:
         """
-            Checks if the first RDKit molecule is a superstructure of, or identical to, the second RDKit molecule. Used internally for operator overloading.
+        Checks if the first RDKit molecule is a superstructure of, or identical to, the second RDKit molecule. Used internally for operator overloading.
 
-
-            Parameters
-            ----------
-            arg_1: RdkitMol
+        Parameters
+        ----------
+        arg_1: RdkitMol
             The RDKit molecule to be checked as the potential superstructure.
         arg_2: RdkitMol
             The RDKit molecule to be checked as the potential substructure.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                A boolean value: true if the first molecule is a superstructure of or identical to the second, false otherwise.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            A boolean value: true if the first molecule is a superstructure of or identical to the second, false otherwise.
         """
         super().__init__(arg_1, arg_2, **kwargs)
 
@@ -341,21 +317,19 @@ class mol_gt(GenericFunction):
 
     def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
         """
-            Compares two RDKit molecules to determine if the first molecule is greater than the second, based on an internal canonical ordering. Used internally for operator overloading.
+        Compares two RDKit molecules to determine if the first molecule is greater than the second, based on an internal canonical ordering. Used internally for operator overloading.
 
-
-            Parameters
-            ----------
-            mol_1: RdkitMol
+        Parameters
+        ----------
+        mol_1: RdkitMol
             The first RDKit molecule for comparison.
         mol_2: RdkitMol
             The second RDKit molecule for comparison.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                True if the first molecule is greater than the second, False otherwise.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            True if the first molecule is greater than the second, False otherwise.
         """
         super().__init__(mol_1, mol_2, **kwargs)
 
@@ -369,12 +343,10 @@ class mol_in(GenericFunction):
         """
         Internal function used to load the molecule from the client input.
 
-
         Parameters
         ----------
         mol_str: CString
-        The string representation of the molecule.
-
+            The string representation of the molecule.
 
         Returns
         -------
@@ -391,21 +363,19 @@ class mol_le(GenericFunction):
 
     def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
         """
-            Compares two RDKit molecules to check if the first is less than or equal to the second. Used internally for operator overloading
+        Compares two RDKit molecules to check if the first is less than or equal to the second. Used internally for operator overloading
 
-
-            Parameters
-            ----------
-            mol_1: RdkitMol
+        Parameters
+        ----------
+        mol_1: RdkitMol
             The first RDKit molecule for comparison.
         mol_2: RdkitMol
             The second RDKit molecule for comparison.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                `True` if the first molecule is less than or equal to the second, `False` otherwise.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            `True` if the first molecule is less than or equal to the second, `False` otherwise.
         """
         super().__init__(mol_1, mol_2, **kwargs)
 
@@ -417,21 +387,19 @@ class mol_lt(GenericFunction):
 
     def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
         """
-            Compares two RDKit molecules to determine if the first molecule is less than the second molecule. Used internally for operator overloading
+        Compares two RDKit molecules to determine if the first molecule is less than the second molecule. Used internally for operator overloading
 
-
-            Parameters
-            ----------
-            mol_1: RdkitMol
+        Parameters
+        ----------
+        mol_1: RdkitMol
             The first RDKit molecule.
         mol_2: RdkitMol
             The second RDKit molecule.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                `True` if the first molecule is less than the second molecule, `False` otherwise.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            `True` if the first molecule is less than the second molecule, `False` otherwise.
         """
         super().__init__(mol_1, mol_2, **kwargs)
 
@@ -443,21 +411,19 @@ class mol_ne(GenericFunction):
 
     def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
         """
-            Returns a boolean indicating whether or not two molecules are not equal. Used internally for the operator overloading
+        Returns a boolean indicating whether or not two molecules are not equal. Used internally for the operator overloading
 
-
-            Parameters
-            ----------
-            mol_1: RdkitMol
+        Parameters
+        ----------
+        mol_1: RdkitMol
             The first molecule to compare.
         mol_2: RdkitMol
             The second molecule to compare.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                A boolean indicating if the two molecules are not equal.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            A boolean indicating if the two molecules are not equal.
         """
         super().__init__(mol_1, mol_2, **kwargs)
 
@@ -471,12 +437,10 @@ class mol_out(GenericFunction):
         """
         Calls the RDKit cartridge function `mol_out` to return a string representation of the molecule. Used internally for displaying molecules in query results.
 
-
         Parameters
         ----------
         mol: RdkitMol
-        The RDKit molecule to be converted to a string.
-
+            The RDKit molecule to be converted to a string.
 
         Returns
         -------
@@ -495,12 +459,10 @@ class qmol_in(GenericFunction):
         """
         Constructs an RDKit query molecule from a string representation. This function is used internally for receiving a query molecule from the client.
 
-
         Parameters
         ----------
         mol_str: CString
-        The string representation of the query molecule
-
+            The string representation of the query molecule
 
         Returns
         -------
@@ -519,12 +481,10 @@ class qmol_out(GenericFunction):
         """
         Returns the SMARTS string for a query molecule. This function is used internally for sending the result of a query molecule to the client.
 
-
         Parameters
         ----------
         mol: RdkitQMol
-        The query molecule.
-
+            The query molecule.
 
         Returns
         -------
@@ -543,21 +503,19 @@ class reaction_eq(GenericFunction):
         self, rxn_1: RdkitReaction, rxn_2: RdkitReaction, **kwargs: Any
     ) -> None:
         """
-            Checks if two RDKit reactions are equivalent. Used internally for the operator overloading.
+        Checks if two RDKit reactions are equivalent. Used internally for the operator overloading.
 
-
-            Parameters
-            ----------
-            rxn_1: RdkitReaction
+        Parameters
+        ----------
+        rxn_1: RdkitReaction
             The first RDKit reaction.
         rxn_2: RdkitReaction
             The second RDKit reaction.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                True if the reactions are equivalent, False otherwise.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            True if the reactions are equivalent, False otherwise.
         """
         super().__init__(rxn_1, rxn_2, **kwargs)
 
@@ -571,12 +529,10 @@ class reaction_in(GenericFunction):
         """
         Converts a string representation of a chemical reaction into an RDKit reaction object.
 
-
         Parameters
         ----------
         rxn_str: CString
-        The string representation of the chemical reaction, typically in reaction SMILES format.
-
+            The string representation of the chemical reaction, typically in reaction SMILES format.
 
         Returns
         -------
@@ -595,21 +551,19 @@ class reaction_ne(GenericFunction):
         self, rxn_1: RdkitReaction, rxn_2: RdkitReaction, **kwargs: Any
     ) -> None:
         """
-            Returns true if the two reactions are not equal. Used internally for the operator overloading
+        Returns true if the two reactions are not equal. Used internally for the operator overloading
 
-
-            Parameters
-            ----------
-            rxn_1: RdkitReaction
+        Parameters
+        ----------
+        rxn_1: RdkitReaction
             The first RDKit reaction.
         rxn_2: RdkitReaction
             The second RDKit reaction.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                True if the reactions are not equal, False otherwise.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            True if the reactions are not equal, False otherwise.
         """
         super().__init__(rxn_1, rxn_2, **kwargs)
 
@@ -623,12 +577,10 @@ class reaction_out(GenericFunction):
         """
         Internal function: Converts an RDKit reaction object to its string representation.
 
-
         Parameters
         ----------
         rxn: RdkitReaction
-        The RDKit reaction object to convert.
-
+            The RDKit reaction object to convert.
 
         Returns
         -------
@@ -648,21 +600,19 @@ class sfp_cmp(GenericFunction):
         **kwargs: Any,
     ) -> None:
         """
-            Calls the rdkit cartridge function `sfp_cmp`.
+        Calls the rdkit cartridge function `sfp_cmp`.
 
-
-            Parameters
-            ----------
-            arg_1: RdkitSparseFingerprint
+        Parameters
+        ----------
+        arg_1: RdkitSparseFingerprint
             The first sparse fingerprint to compare.
         arg_2: RdkitSparseFingerprint
             The second sparse fingerprint to compare.
 
-
-            Returns
-            -------
-            Function[int | sqltypes.Integer]
-                TODO
+        Returns
+        -------
+        Function[int | sqltypes.Integer]
+            TODO
         """
         super().__init__(arg_1, arg_2, **kwargs)
 
@@ -676,21 +626,19 @@ class sfp_eq(GenericFunction):
         self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
     ) -> None:
         """
-            Returns a boolean indicating whether or not the two sparse fingerprint arguments are equal. Used for the operator overloading
+        Returns a boolean indicating whether or not the two sparse fingerprint arguments are equal. Used for the operator overloading
 
-
-            Parameters
-            ----------
-            fp_1: RdkitSparseFingerprint
+        Parameters
+        ----------
+        fp_1: RdkitSparseFingerprint
             The first sparse fingerprint.
         fp_2: RdkitSparseFingerprint
             The second sparse fingerprint.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                A boolean indicating the equality of the two sparse fingerprints.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            A boolean indicating the equality of the two sparse fingerprints.
         """
         super().__init__(fp_1, fp_2, **kwargs)
 
@@ -704,21 +652,19 @@ class sfp_ge(GenericFunction):
         self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
     ) -> None:
         """
-            Returns a boolean indicating whether the first sparse fingerprint is element-wise greater than or equal to the second sparse fingerprint. Used for the operator overloading
+        Returns a boolean indicating whether the first sparse fingerprint is element-wise greater than or equal to the second sparse fingerprint. Used for the operator overloading
 
-
-            Parameters
-            ----------
-            fp_1: RdkitSparseFingerprint
+        Parameters
+        ----------
+        fp_1: RdkitSparseFingerprint
             The first sparse fingerprint (sfp) for comparison.
         fp_2: RdkitSparseFingerprint
             The second sparse fingerprint (sfp) for comparison.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                A boolean indicating whether the first sparse fingerprint is element-wise greater than or equal to the second sparse fingerprint.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            A boolean indicating whether the first sparse fingerprint is element-wise greater than or equal to the second sparse fingerprint.
         """
         super().__init__(fp_1, fp_2, **kwargs)
 
@@ -732,21 +678,19 @@ class sfp_gt(GenericFunction):
         self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
     ) -> None:
         """
-            Returns a boolean indicating whether all elements of the first sparse fingerprint are greater than the corresponding elements of the second sparse fingerprint. Used for the operator overloading
+        Returns a boolean indicating whether all elements of the first sparse fingerprint are greater than the corresponding elements of the second sparse fingerprint. Used for the operator overloading
 
-
-            Parameters
-            ----------
-            fp_1: RdkitSparseFingerprint
+        Parameters
+        ----------
+        fp_1: RdkitSparseFingerprint
             The first sparse fingerprint for comparison.
         fp_2: RdkitSparseFingerprint
             The second sparse fingerprint for comparison.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                `True` if all elements of the first sparse fingerprint are greater than the corresponding elements of the second, False otherwise.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            `True` if all elements of the first sparse fingerprint are greater than the corresponding elements of the second, False otherwise.
         """
         super().__init__(fp_1, fp_2, **kwargs)
 
@@ -760,12 +704,10 @@ class sfp_in(GenericFunction):
         """
         Internal function, that constructs an RDKit sparse fingerprint (sfp) from a string representation.
 
-
         Parameters
         ----------
         fp_string: CString
-        The string representation of the sparse fingerprint.
-
+            The string representation of the sparse fingerprint.
 
         Returns
         -------
@@ -784,21 +726,19 @@ class sfp_le(GenericFunction):
         self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
     ) -> None:
         """
-            Returns a boolean indicating whether the first sparse fingerprint is element-wise less than or equal to the second sparse fingerprint. Used for the operator overloading
+        Returns a boolean indicating whether the first sparse fingerprint is element-wise less than or equal to the second sparse fingerprint. Used for the operator overloading
 
-
-            Parameters
-            ----------
-            fp_1: RdkitSparseFingerprint
+        Parameters
+        ----------
+        fp_1: RdkitSparseFingerprint
             The first RDKit sparse fingerprint.
         fp_2: RdkitSparseFingerprint
             The second RDKit sparse fingerprint.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                True if the first sparse fingerprint is element-wise less than or equal to the second; otherwise, False.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            True if the first sparse fingerprint is element-wise less than or equal to the second; otherwise, False.
         """
         super().__init__(fp_1, fp_2, **kwargs)
 
@@ -812,21 +752,19 @@ class sfp_lt(GenericFunction):
         self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
     ) -> None:
         """
-            Returns a boolean indicating whether the first sparse fingerprint is less than the second sparse fingerprint. Used for the operator overloading
+        Returns a boolean indicating whether the first sparse fingerprint is less than the second sparse fingerprint. Used for the operator overloading
 
-
-            Parameters
-            ----------
-            fp_1: RdkitSparseFingerprint
+        Parameters
+        ----------
+        fp_1: RdkitSparseFingerprint
             The first sparse fingerprint to compare.
         fp_2: RdkitSparseFingerprint
             The second sparse fingerprint to compare.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                A boolean value (True if the first sparse fingerprint is less than the second, False otherwise).
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            A boolean value (True if the first sparse fingerprint is less than the second, False otherwise).
         """
         super().__init__(fp_1, fp_2, **kwargs)
 
@@ -840,21 +778,19 @@ class sfp_ne(GenericFunction):
         self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
     ) -> None:
         """
-            Returns a boolean indicating whether two sparse fingerprints are not equal. Used for the operator overloading
+        Returns a boolean indicating whether two sparse fingerprints are not equal. Used for the operator overloading
 
-
-            Parameters
-            ----------
-            fp_1: RdkitSparseFingerprint
+        Parameters
+        ----------
+        fp_1: RdkitSparseFingerprint
             The first sparse fingerprint.
         fp_2: RdkitSparseFingerprint
             The second sparse fingerprint.
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                `True` if the two sparse fingerprints are not equal, `False` otherwise.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            `True` if the two sparse fingerprints are not equal, `False` otherwise.
         """
         super().__init__(fp_1, fp_2, **kwargs)
 
@@ -868,12 +804,10 @@ class sfp_out(GenericFunction):
         """
         Internal function, that returns a string representation of a sparse fingerprint.
 
-
         Parameters
         ----------
         fp: RdkitSparseFingerprint
-        The sparse fingerprint to be converted to a string.
-
+            The sparse fingerprint to be converted to a string.
 
         Returns
         -------
@@ -895,21 +829,19 @@ class tanimoto_sml_op(GenericFunction):
         **kwargs: Any,
     ) -> None:
         """
-            Calculates the Tanimoto similarity between two fingerprints of the same type and returns a boolean result. Used internally for operator overloading.
+        Calculates the Tanimoto similarity between two fingerprints of the same type and returns a boolean result. Used internally for operator overloading.
 
-
-            Parameters
-            ----------
-            fp_1: RdkitSparseFingerprint | RdkitBitFingerprint
+        Parameters
+        ----------
+        fp_1: RdkitSparseFingerprint | RdkitBitFingerprint
             The first fingerprint, which can be either a sparse fingerprint (sfp) or a bit vector fingerprint (bfp).
         fp_2: RdkitSparseFingerprint | RdkitBitFingerprint
             The second fingerprint, which must be of the same type as the first fingerprint (either sfp or bfp).
 
-
-            Returns
-            -------
-            Function[sqltypes.Boolean]
-                A boolean value representing the result of the Tanimoto similarity operation.
+        Returns
+        -------
+        Function[sqltypes.Boolean]
+            A boolean value representing the result of the Tanimoto similarity operation.
         """
         super().__init__(fp_1, fp_2, **kwargs)
 
@@ -923,12 +855,10 @@ class xqmol_in(GenericFunction):
         """
         Internal function: Constructs a query molecule from an input string.
 
-
         Parameters
         ----------
         arg_1: CString
-        The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).
-
+            The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).
 
         Returns
         -------
@@ -947,12 +877,10 @@ class xqmol_out(GenericFunction):
         """
         Internal function used to retrieve the string representation of an `RdkitXQMol` object.
 
-
         Parameters
         ----------
         arg_1: RdkitXQMol
-        The RDKit query molecule to convert to a string.
-
+            The RDKit query molecule to convert to a string.
 
         Returns
         -------

@@ -89,8 +89,6 @@ def json_to_function_code(func_name: str, test_data: dict) -> str:
         doc_param_list.append(param_str)
         arg_names.append(param["name"])
     doc_params = "\n".join(doc_param_list)
-    if func_name == "aam":
-        print(doc_params)
     params = ", ".join(params_list)
     if len(params) > 0:
         params += ", "

@@ -14,6 +14,9 @@ These function classes wrap RDKit PostgreSQL functions, enabling various chemica
       show_bases: true
       show_root_heading: false
       members_order: source
+      docstring_options:
+        ignore_init_summary: true
+      merge_init_into_class: true
 
 
 ## `molalchemy.rdkit.functions.internal`
@@ -25,3 +28,6 @@ These function classes wrap RDKit PostgreSQL functions, enabling various chemica
       show_bases: true
       show_root_heading: false
       members_order: source
+      docstring_options:
+        ignore_init_summary: true
+      merge_init_into_class: true
