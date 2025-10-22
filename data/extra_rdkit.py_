@@ -57,5 +57,5 @@ def rxn_has_smarts(rxn_column: ColumnElement, pattern: str) -> Function[bool]:
     >>> # Search for reactions containing a carbonyl formation
     >>> query = select(Reaction).where(has_smarts(Reaction.rxn, ">>C=O"))
     """
-    return func.substruct(rxn_column, reaction_from_smarts(pattern))
+    return func.substruct(rxn_column, reaction_from_smarts(cast(pattern, CString)))
 

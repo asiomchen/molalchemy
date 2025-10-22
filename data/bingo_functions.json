@@ -721,20 +721,20 @@
     "args": [
       {
         "default": null,
-        "description": "",
-        "name": "arg_1",
+        "description": "Input molecule or molecular column in any supported format",
+        "name": "mol",
         "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
       },
       {
         "default": null,
-        "description": "",
-        "name": "arg_2",
+        "description": "Query molecule in any supported format",
+        "name": "query",
         "type": "str | sqltypes.Text"
       },
       {
-        "default": null,
-        "description": "",
-        "name": "arg_3",
+        "default": "'tanimoto'",
+        "description": "string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional \u201calpha\u201d and \u201cbeta\u201d parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).",
+        "name": "metric",
         "type": "str | sqltypes.Text"
       }
     ],

@@ -47,7 +47,7 @@ def matches_smarts(
     return mol_column.op("@")(text(f"('{query}', '{parameters}')::bingo.smarts"))
 
 
-def equals(mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""):
+def mol_equals(mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""):
     """
     Perform exact structure matching on a molecule column.
 

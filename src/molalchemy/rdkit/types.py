@@ -50,9 +50,9 @@ class RdkitMol(RdkitBaseType):
 
         # For mol return type, we want the binary representation
         if self.return_type == "mol":
-            return rdkit_func.mol.to_binary(colexpr, type_=self)
+            return rdkit_func.mol_send(colexpr, type_=self)
         elif self.return_type == "bytes":
-            return rdkit_func.mol.to_binary(colexpr, type_=self)
+            return rdkit_func.mol_send(colexpr, type_=self)
         else:  # smiles
             return colexpr
 

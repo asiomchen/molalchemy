@@ -29,18 +29,6 @@ EXTRA_MEMBERS["general"] = [
 
 _TEMPLATE = """
 class {{ func_name }}(GenericFunction):
-    \"""
-    {{ description }}
-    \n
-    Parameters
-    ----------
-    {{ params }}
-    \n
-    Returns
-    -------
-    Function[{{ return_type }}]
-        {{ return_description }}
-    \"""
     {% if '|' not in return_type %}
     type = {{ return_type }}()
     {% elif 'RdkitMol' in return_type %}
@@ -50,8 +38,21 @@ class {{ func_name }}(GenericFunction):
     {% elif 'RdkitBitFingerprint' in return_type %}
     type = RdkitBitFingerprint()
     {% endif %}
-    inherits_cache = True
+    inherit_cache = True
+    
     def __init__(self, {{ arg_inits }}**kwargs: Any) -> None:
+        \"""
+        {{ description }}
+        \n
+        Parameters
+        ----------
+        {{ params }}
+        \n
+        Returns
+        -------
+        Function[{{ return_type }}]
+            {{ return_description }}
+        \"""
         super().__init__({{ arg_names }}**kwargs)
 
 """

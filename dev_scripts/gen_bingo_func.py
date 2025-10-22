@@ -26,7 +26,7 @@ AFTER_HEADERS["general"] = Path("data/extra_bingo.py_").open("r").read()
 EXTRA_MEMBERS["general"] = [
     "has_substructure",
     "matches_smarts",
-    "equals",
+    "mol_equals",
     "similarity",
 ]
 
@@ -59,12 +59,26 @@ class {{ func_name }}(GenericFunction):
     {% elif 'BingoBinaryReaction' in return_type %}
     type = BingoBinaryReaction()
     {% endif %}
-    inherits_cache = True
-    package = "bingo"
+    inherit_cache = True
+    name = "{{ func_name.lower() }}"
     def __init__(self, {{ arg_inits }}**kwargs: Any) -> None:
+        \"""
+        {{ description }}
+        \n
+        Parameters
+        ----------
+        {{ params }}
+
+        Returns
+        -------
+        Function[{{ return_type }}]
+            {{ return_description }}
+        \"""
         super().__init__({{ arg_names }}**kwargs)
+        self.packagenames = ("bingo",)
 
 """
+
 
 ENV = Environment()
 TEMPLATE = ENV.from_string(_TEMPLATE)
@@ -84,10 +98,11 @@ def json_to_function_code(func_name: str, test_data: dict) -> str:
         if param["default"] is not None:
             param_str += f" = {param['default']}"
         params_list.append(param_str)
-        param_str += f"  \n\t{param['description']}"
+        param_str += f"  \n{param['description']}"
         doc_param_list.append(param_str)
         arg_names.append(param["name"])
-    doc_params = "\n    ".join(doc_param_list)
+    doc_params = "    ".join(doc_param_list)
+    print(doc_params)
     params = ", ".join(params_list)
     if len(params) > 0:
         params += ", "
@@ -95,8 +110,6 @@ def json_to_function_code(func_name: str, test_data: dict) -> str:
         arg_names_str = ", ".join(arg_names) + ", "
     else:
         arg_names_str = ""
-    print(func_name)
-    print(arg_names_str)
     generated_code = TEMPLATE.render(
         func_name=func_name,
         description=description,
