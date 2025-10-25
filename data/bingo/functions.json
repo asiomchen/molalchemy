@@ -1,0 +1,1195 @@
+{
+  "_exact_internal": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `_exact_internal`.",
+    "group": "internal",
+    "name": "_exact_internal",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "_get_block_count": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `_get_block_count`.",
+    "group": "internal",
+    "name": "_get_block_count",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "_get_profiling_info": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `_get_profiling_info`.",
+    "group": "internal",
+    "name": "_get_profiling_info",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "CString"
+    }
+  },
+  "_get_structures_count": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `_get_structures_count`.",
+    "group": "internal",
+    "name": "_get_structures_count",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "_gross_internal": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `_gross_internal`.",
+    "group": "internal",
+    "name": "_gross_internal",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "_internal_func_011": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "int | sqltypes.Integer"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `_internal_func_011`.",
+    "group": "internal",
+    "name": "_internal_func_011",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "None | sqltypes.NullType"
+    }
+  },
+  "_internal_func_012": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "int | sqltypes.Integer"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `_internal_func_012`.",
+    "group": "internal",
+    "name": "_internal_func_012",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "None | sqltypes.NullType"
+    }
+  },
+  "_internal_func_check": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "int | sqltypes.Integer"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `_internal_func_check`.",
+    "group": "internal",
+    "name": "_internal_func_check",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "_match_mass_great": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `_match_mass_great`.",
+    "group": "internal",
+    "name": "_match_mass_great",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "_match_mass_less": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `_match_mass_less`.",
+    "group": "internal",
+    "name": "_match_mass_less",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "_precache_database": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `_precache_database`.",
+    "group": "internal",
+    "name": "_precache_database",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "_print_profiling_info": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `_print_profiling_info`.",
+    "group": "internal",
+    "name": "_print_profiling_info",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "None | sqltypes.NullType"
+    }
+  },
+  "_reset_profiling_info": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `_reset_profiling_info`.",
+    "group": "internal",
+    "name": "_reset_profiling_info",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "None | sqltypes.NullType"
+    }
+  },
+  "_rexact_internal": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `_rexact_internal`.",
+    "group": "internal",
+    "name": "_rexact_internal",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "_rsmarts_internal": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `_rsmarts_internal`.",
+    "group": "internal",
+    "name": "_rsmarts_internal",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "_rsub_internal": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `_rsub_internal`.",
+    "group": "internal",
+    "name": "_rsub_internal",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "_sim_internal": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "float | sqltypes.Float"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "float | sqltypes.Float"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_4",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_5",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `_sim_internal`.",
+    "group": "internal",
+    "name": "_sim_internal",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "_smarts_internal": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `_smarts_internal`.",
+    "group": "internal",
+    "name": "_smarts_internal",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "_sub_internal": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `_sub_internal`.",
+    "group": "internal",
+    "name": "_sub_internal",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "aam": {
+    "args": [
+      {
+        "default": null,
+        "description": "Input reaction",
+        "name": "rxn",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": "'KEEP'",
+        "description": "Strategy for handling existing atom mapping (default is 'KEEP').\n\t\t- 'CLEAR': Remove all existing mappings and compute new ones\n\t\t- 'DISCARD': Remove all mappings without computing new ones\n\t\t- 'ALTER': Modify existing mappings\n\t\t- 'KEEP': Keep existing mappings and map unmapped atoms",
+        "name": "strategy",
+        "type": "sqltypes.Text | Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP']"
+      }
+    ],
+    "description": "Creates an atom-atom mapping for a reaction.",
+    "group": "general",
+    "name": "aam",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "cansmiles": {
+    "args": [
+      {
+        "default": null,
+        "description": "Input molecule in any supported format",
+        "name": "mol",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Generates the canonical SMILES for a molecule.",
+    "group": "general",
+    "name": "cansmiles",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "checkmolecule": {
+    "args": [
+      {
+        "default": null,
+        "description": "Input molecule in any supported format",
+        "name": "mol",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Check molecule for validity",
+    "group": "general",
+    "name": "checkmolecule",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "checkreaction": {
+    "args": [
+      {
+        "default": null,
+        "description": "Input reaction in any supported format",
+        "name": "rxn",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Check reaction for validity",
+    "group": "general",
+    "name": "checkreaction",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "cml": {
+    "args": [
+      {
+        "default": null,
+        "description": "Input molecule in any supported format",
+        "name": "mol",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Converts a molecule to CML format.",
+    "group": "general",
+    "name": "cml",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "compactmolecule": {
+    "args": [
+      {
+        "default": null,
+        "description": "Input molecule in any supported format",
+        "name": "mol",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": false,
+        "description": "If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.",
+        "name": "use_pos",
+        "type": "sqltypes.Boolean | bool"
+      }
+    ],
+    "description": "Calculates the compact representation of a molecule.",
+    "group": "general",
+    "name": "compactmolecule",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "bytes | sqltypes.LargeBinary"
+    }
+  },
+  "compactreaction": {
+    "args": [
+      {
+        "default": null,
+        "description": "Input reaction in any supported format",
+        "name": "rxn",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": false,
+        "description": "If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.",
+        "name": "use_pos",
+        "type": "sqltypes.Boolean | bool"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `compactreaction`.",
+    "group": "general",
+    "name": "compactreaction",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "bytes | sqltypes.LargeBinary"
+    }
+  },
+  "exportrdf": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_4",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Exports reactions to an RDF format.",
+    "group": "general",
+    "name": "exportrdf",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "None | sqltypes.NullType"
+    }
+  },
+  "exportsdf": {
+    "args": [
+      {
+        "default": null,
+        "description": "Name of the table containing the molecules to export",
+        "name": "table",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "Name of the column containing the molecules to export",
+        "name": "column",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "Space-separated list of other columns to include in the SDF file as SD data fields",
+        "name": "other_columns",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "Path to the output SDF file",
+        "name": "outfile",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Exports molecules to an SDF format.",
+    "group": "general",
+    "name": "exportsdf",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "None | sqltypes.NullType"
+    }
+  },
+  "filetoblob": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `filetoblob`.",
+    "group": "general",
+    "name": "filetoblob",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "bytes | sqltypes.LargeBinary"
+    }
+  },
+  "filetotext": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `filetotext`.",
+    "group": "general",
+    "name": "filetotext",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "fingerprint": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `fingerprint`.",
+    "group": "general",
+    "name": "fingerprint",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "bytes | sqltypes.LargeBinary"
+    }
+  },
+  "getblockcount": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `getblockcount`.",
+    "group": "general",
+    "name": "getblockcount",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "getindexstructurescount": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `getindexstructurescount`.",
+    "group": "general",
+    "name": "getindexstructurescount",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "getmass": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `getmass`.",
+    "group": "general",
+    "name": "getmass",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "float | sqltypes.Float"
+    }
+  },
+  "getname": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `getname`.",
+    "group": "general",
+    "name": "getname",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "getsimilarity": {
+    "args": [
+      {
+        "default": null,
+        "description": "Input molecule or molecular column in any supported format",
+        "name": "mol",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "Query molecule in any supported format",
+        "name": "query",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": "'tanimoto'",
+        "description": "string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional \u201calpha\u201d and \u201cbeta\u201d parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).",
+        "name": "metric",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `getsimilarity`.",
+    "group": "general",
+    "name": "getsimilarity",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "float | sqltypes.Float"
+    }
+  },
+  "getstructurescount": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `getstructurescount`.",
+    "group": "general",
+    "name": "getstructurescount",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "getversion": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `getversion`.",
+    "group": "general",
+    "name": "getversion",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "getweight": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `getweight`.",
+    "group": "general",
+    "name": "getweight",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "float | sqltypes.Float"
+    }
+  },
+  "gross": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `gross`.",
+    "group": "general",
+    "name": "gross",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "importrdf": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_4",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `importrdf`.",
+    "group": "general",
+    "name": "importrdf",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "None | sqltypes.NullType"
+    }
+  },
+  "importsdf": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_4",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `importsdf`.",
+    "group": "general",
+    "name": "importsdf",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "None | sqltypes.NullType"
+    }
+  },
+  "importsmiles": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_3",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_4",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `importsmiles`.",
+    "group": "general",
+    "name": "importsmiles",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "None | sqltypes.NullType"
+    }
+  },
+  "inchi": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `inchi`.",
+    "group": "general",
+    "name": "inchi",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "inchikey": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `inchikey`.",
+    "group": "general",
+    "name": "inchikey",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "matchexact": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `matchexact`.",
+    "group": "general",
+    "name": "matchexact",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "matchgross": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `matchgross`.",
+    "group": "general",
+    "name": "matchgross",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "matchrexact": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `matchrexact`.",
+    "group": "general",
+    "name": "matchrexact",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "matchrsmarts": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `matchrsmarts`.",
+    "group": "general",
+    "name": "matchrsmarts",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "matchrsub": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `matchrsub`.",
+    "group": "general",
+    "name": "matchrsub",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "matchsim": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `matchsim`.",
+    "group": "general",
+    "name": "matchsim",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "matchsmarts": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `matchsmarts`.",
+    "group": "general",
+    "name": "matchsmarts",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "matchsub": {
+    "args": {},
+    "description": "Calls the rdkit cartridge function `matchsub`.",
+    "group": "general",
+    "name": "matchsub",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "molfile": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `molfile`.",
+    "group": "general",
+    "name": "molfile",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "precachedatabase": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `precachedatabase`.",
+    "group": "general",
+    "name": "precachedatabase",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "rcml": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `rcml`.",
+    "group": "general",
+    "name": "rcml",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "rfingerprint": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `rfingerprint`.",
+    "group": "general",
+    "name": "rfingerprint",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "bytes | sqltypes.LargeBinary"
+    }
+  },
+  "rsmiles": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `rsmiles`.",
+    "group": "general",
+    "name": "rsmiles",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "rxnfile": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `rxnfile`.",
+    "group": "general",
+    "name": "rxnfile",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "smiles": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `smiles`.",
+    "group": "general",
+    "name": "smiles",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  },
+  "standardize": {
+    "args": [
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_1",
+        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+      },
+      {
+        "default": null,
+        "description": "",
+        "name": "arg_2",
+        "type": "str | sqltypes.Text"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `standardize`.",
+    "group": "general",
+    "name": "standardize",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "str | sqltypes.Text"
+    }
+  }
+}

@@ -1,0 +1,106 @@
+def has_substructure(
+    mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""
+):
+    """
+    Perform substructure search on a molecule column.
+
+    Parameters
+    ----------
+    mol_column : ColumnElement
+        SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
+    query : str
+        Query molecule as SMILES, SMARTS, or Molfile string.
+    parameters : str, optional
+        Search parameters for customizing the matching behavior (default is "").
+        Examples: "TAU" for tautomer search, "RES" for resonance search.
+
+    Returns
+    -------
+    BinaryExpression
+        SQLAlchemy expression for substructure matching that can be used in WHERE clauses.
+
+    """
+    return mol_column.op("@")(text(f"('{query}', '{parameters}')::bingo.sub"))
+
+
+def matches_smarts(
+    mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""
+):
+    """
+    Perform SMARTS pattern matching on a molecule column.
+
+    Parameters
+    ----------
+    mol_column : ColumnElement
+        SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
+    query : str
+        SMARTS pattern string for matching.
+    parameters : str, optional
+        Search parameters for customizing the matching behavior (default is "").
+
+    Returns
+    -------
+    BinaryExpression
+        SQLAlchemy expression for SMARTS matching that can be used in WHERE clauses.
+
+    """
+    return mol_column.op("@")(text(f"('{query}', '{parameters}')::bingo.smarts"))
+
+
+def mol_equals(mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""):
+    """
+    Perform exact structure matching on a molecule column.
+
+    Parameters
+    ----------
+    mol_column : ColumnElement
+        SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
+    query : str
+        Query molecule as SMILES or Molfile string for exact matching.
+    parameters : str, optional
+        Search parameters for customizing the matching behavior (default is "").
+        Examples: "TAU" for tautomer matching, "STE" for stereochemistry.
+
+    Returns
+    -------
+    BinaryExpression
+        SQLAlchemy expression for exact matching that can be used in WHERE clauses.
+
+    """
+    return mol_column.op("@")(text(f"('{query}', '{parameters}')::bingo.exact"))
+
+
+def similarity(
+    mol_column: ColumnElement[AnyBingoMol],
+    query: str,
+    bottom: float = 0.0,
+    top: float = 1.0,
+    metric: str = "Tanimoto",
+) -> BinaryExpression:
+    """
+    Perform similarity search on a molecule column. This should be used in WHERE clauses, as it
+    returns a boolean expression indicating whether the similarity criteria are met.
+
+    Parameters
+    ----------
+    mol_column : ColumnElement
+        SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
+    query : str
+        Query molecule as SMILES or Molfile string for similarity comparison.
+    bottom : float, optional
+        Minimum similarity threshold (default is 0.0).
+    top : float, optional
+        Maximum similarity threshold (default is 1.0).
+    metric : str, optional
+        Similarity metric to use (default is "Tanimoto").
+        Other options include "Dice", "Cosine", etc.
+
+    Returns
+    -------
+    BinaryExpression
+        SQLAlchemy expression for similarity matching that can be used in WHERE clauses.
+
+    """
+    return mol_column.op("%")(
+        text(f"('{query}', {bottom}, {top}, '{metric}')::bingo.sim")
+    )

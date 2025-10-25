@@ -1,0 +1,31 @@
+class {{ func_name }}(GenericFunction):
+    {% if '|' not in return_type %}
+    type = {{ return_type }}()
+    {% elif 'BingoMol' in return_type %}
+    type = BingoMol()
+    {% elif 'BingoBinaryMol' in return_type %}
+    type = BingoBinaryMol()
+    {% elif 'BingoReaction' in return_type %}
+    type = BingoReaction()
+    {% elif 'BingoBinaryReaction' in return_type %}
+    type = BingoBinaryReaction()
+    {% endif %}
+    inherit_cache = True
+    name = "{{ func_name.lower() }}"
+    
+    def __init__(self, {{ arg_inits }}**kwargs: Any) -> None:
+        """{{ description }}
+
+        Parameters
+        ----------
+        {{ params }}
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
+
+        Returns
+        -------
+        Function[{{ return_type }}]
+            {{ return_description }}
+        """
+        super().__init__({{ arg_names }}**kwargs)
+        self.packagenames = ("bingo",)

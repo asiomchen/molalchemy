@@ -158,11 +158,11 @@ class BingoBinaryMol(BingoBaseType):
 
     def column_expression(self, col):
         if self.return_type == "smiles":
-            return func.Bingo.SMILES(col)
+            return func.Bingo.smiles(col)
         elif self.return_type == "molfile":
-            return func.Bingo.Molfile(col)
+            return func.Bingo.molfile(col)
         elif self.return_type == "cml":
-            return func.Bingo.CML(col)
+            return func.Bingo.cml(col)
         elif self.return_type == "bytes":
             return col
         else:

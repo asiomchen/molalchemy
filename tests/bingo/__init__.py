@@ -5,11 +5,6 @@ from .test_comparators import (
     TestBingoMolComparator,
     TestBingoMolComparatorWithBinaryType,
 )
-from .test_functions import (
-    TestBingoFunc,
-    TestBingoFuncIntegration,
-    TestBingoFuncWithORM,
-)
 from .test_index import (
     TestBingoBinaryMolIndex,
     TestBingoIndexCreation,

@@ -48,7 +48,7 @@ class TestBingoQueryIntegration:
 
         # Query using function
         stmt2 = select(self.compounds).where(
-            bingo_func.mol.has_substructure(self.compounds.c.structure, benzene)
+            bingo_func.has_substructure(self.compounds.c.structure, benzene)
         )
 
         # Both should compile successfully
@@ -65,7 +65,7 @@ class TestBingoQueryIntegration:
         ethanol = "CCO"
 
         stmt = select(self.compounds).where(
-            bingo_func.mol.similarity(self.compounds.c.structure, ethanol, 0.7, 1.0)
+            bingo_func.similarity(self.compounds.c.structure, ethanol, 0.7, 1.0)
         )
 
         compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
@@ -194,7 +194,7 @@ class TestBingoORMIntegration:
 
         # Using function
         stmt2 = select(self.Compound).where(
-            bingo_func.mol.has_substructure(self.Compound.structure, benzene)
+            bingo_func.has_substructure(self.Compound.structure, benzene)
         )
 
         compiled1 = str(stmt1.compile(compile_kwargs={"literal_binds": True}))
@@ -210,7 +210,7 @@ class TestBingoORMIntegration:
         ethanol = "CCO"
 
         stmt = select(self.Compound).where(
-            bingo_func.mol.similarity(self.Compound.structure, ethanol, 0.8)
+            bingo_func.similarity(self.Compound.structure, ethanol, 0.8)
         )
 
         compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
@@ -226,7 +226,7 @@ class TestBingoORMIntegration:
         stmt = select(self.Compound).where(
             and_(
                 self.Compound.structure.has_substructure(benzene),
-                bingo_func.mol.similarity(self.Compound.structure, ethanol, 0.5),
+                bingo_func.similarity(self.Compound.structure, ethanol, 0.5),
             )
         )
 
@@ -333,14 +333,14 @@ class TestBingoQueryVariations:
         benzene_smarts = "[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1"
         ethanol = "CCO"
 
-        substructure_expr = bingo_func.mol.has_substructure(
+        substructure_expr = bingo_func.has_substructure(
             self.compounds.c.structure, benzene
         )
-        smarts_expr = bingo_func.mol.matches_smarts(
+        smarts_expr = bingo_func.matches_smarts(
             self.compounds.c.structure, benzene_smarts
         )
-        equals_expr = bingo_func.mol.equals(self.compounds.c.structure, ethanol)
-        similarity_expr = bingo_func.mol.similarity(
+        equals_expr = self.compounds.c.structure == ethanol
+        similarity_expr = bingo_func.similarity(
             self.compounds.c.structure, ethanol, 0.7
         )
 

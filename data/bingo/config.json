@@ -1,0 +1,10 @@
+{
+  "general": {
+    "extra_members": [
+      "has_substructure",
+      "matches_smarts",
+      "mol_equals",
+      "similarity"
+    ]
+  }
+}

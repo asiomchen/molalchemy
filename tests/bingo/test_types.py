@@ -1,5 +1,6 @@
 """Tests for bingo types."""
 
+import pytest
 from sqlalchemy import Column, Integer, MetaData, String, Table
 
 from molalchemy.bingo.comparators import BingoMolComparator
@@ -72,6 +73,22 @@ class TestBingoBinaryMol:
         # Should not raise any exceptions
         assert test_table.c.mol.type.__class__ == BingoBinaryMol
         assert isinstance(test_table.c.mol.type, BingoBinaryMol)
+
+    @pytest.mark.parametrize(
+        "return_type, expected_sql",
+        [
+            ("smiles", "Bingo.smiles(mol)"),
+            ("molfile", "Bingo.molfile(mol)"),
+            ("cml", "Bingo.cml(mol)"),
+            ("bytes", "mol"),
+        ],
+    )
+    def test_column_expression(self, return_type, expected_sql):
+        """Test column_expression returns correct SQL for smiles."""
+        bingo_binary_mol = BingoBinaryMol(return_type=return_type)
+        col = Column("mol", bingo_binary_mol)
+        expr = bingo_binary_mol.column_expression(col)
+        assert str(expr) == expected_sql
 
 
 class TestTypesIntegration:

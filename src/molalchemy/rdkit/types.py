@@ -50,9 +50,9 @@ class RdkitMol(RdkitBaseType):
 
         # For mol return type, we want the binary representation
         if self.return_type == "mol":
-            return rdkit_func.mol.to_binary(colexpr, type_=self)
+            return rdkit_func.mol_send(colexpr, type_=self)
         elif self.return_type == "bytes":
-            return rdkit_func.mol.to_binary(colexpr, type_=self)
+            return rdkit_func.mol_send(colexpr, type_=self)
         else:  # smiles
             return colexpr
 
@@ -186,3 +186,13 @@ class RdkitReaction(RdkitBaseType):
                 return str(value)
 
         return functools.partial(process, return_type=self.return_type)
+
+
+class RdkitQMol(RdkitBaseType):
+    def get_col_spec(self):
+        return "qmol"
+
+
+class RdkitXQMol(RdkitBaseType):
+    def get_col_spec(self):
+        return "xqmol"

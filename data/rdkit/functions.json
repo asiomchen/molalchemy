@@ -1,0 +1,3211 @@
+{
+  "add": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first sparse fingerprint.",
+        "name": "fp_1",
+        "type": "RdkitSparseFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second sparse fingerprint.",
+        "name": "fp_2",
+        "type": "RdkitSparseFingerprint"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `add`.",
+    "group": "general",
+    "name": "add",
+    "return_type": {
+      "description": "An sfp formed by the element-wise addition of the two sfp arguments.",
+      "type": "RdkitSparseFingerprint"
+    }
+  },
+  "all_values_gt": {
+    "args": [
+      {
+        "default": null,
+        "description": "The sparse fingerprint to check.",
+        "name": "fp",
+        "type": "RdkitSparseFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The integer value to compare against.",
+        "name": "value",
+        "type": "int | sqltypes.Integer"
+      }
+    ],
+    "description": "Returns a boolean indicating whether or not all elements of the sfp argument are greater than the int argument.",
+    "group": "general",
+    "name": "all_values_gt",
+    "return_type": {
+      "description": "A boolean indicating whether or not all elements of the sfp argument are greater than the int argument.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "all_values_lt": {
+    "args": [
+      {
+        "default": null,
+        "description": "The sparse fingerprint (sfp) to check.",
+        "name": "fp",
+        "type": "RdkitSparseFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The integer value to compare against the sfp elements.",
+        "name": "value",
+        "type": "int | sqltypes.Integer"
+      }
+    ],
+    "description": "Returns a boolean indicating whether or not all elements of the sfp argument are less than the int argument.",
+    "group": "general",
+    "name": "all_values_lt",
+    "return_type": {
+      "description": "A boolean indicating whether or not all elements of the sfp argument are less than the int argument.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "atompair_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to generate the fingerprint.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns an sfp which is the count-based atom-pair fingerprint for a molecule.",
+    "group": "general",
+    "name": "atompair_fp",
+    "return_type": {
+      "description": "The count-based atom-pair fingerprint (sfp) for the molecule.",
+      "type": "RdkitSparseFingerprint"
+    }
+  },
+  "atompairbv_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to compute the fingerprint for.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns a bit vector atom-pair fingerprint for a molecule.",
+    "group": "general",
+    "name": "atompairbv_fp",
+    "return_type": {
+      "description": "A bit vector atom-pair fingerprint.",
+      "type": "RdkitBitFingerprint"
+    }
+  },
+  "avalon_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule for which to generate the fingerprint.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "TODO",
+        "name": "arg_2",
+        "type": "sqltypes.Boolean"
+      },
+      {
+        "default": null,
+        "description": "TODO",
+        "name": "arg_3",
+        "type": "int | sqltypes.Integer"
+      }
+    ],
+    "description": "Generates Avalon fingerprints for a molecule.",
+    "group": "general",
+    "name": "avalon_fp",
+    "return_type": {
+      "description": "A bit vector fingerprint (bfp).",
+      "type": "RdkitBitFingerprint"
+    }
+  },
+  "bfp_cmp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first RDKit bit fingerprint for comparison.",
+        "name": "fp_1",
+        "type": "RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second RDKit bit fingerprint for comparison.",
+        "name": "fp_2",
+        "type": "RdkitBitFingerprint"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `bfp_cmp`.",
+    "group": "internal",
+    "name": "bfp_cmp",
+    "return_type": {
+      "description": "An integer representing the comparison result between the two bit fingerprints. Typically, 0 indicates equality, a negative value indicates the first fingerprint is 'less than' the second, and a positive value indicates the first is 'greater than' the second.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "bfp_eq": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first bit vector fingerprint for comparison.",
+        "name": "fp_1",
+        "type": "RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second bit vector fingerprint for comparison.",
+        "name": "fp_2",
+        "type": "RdkitBitFingerprint"
+      }
+    ],
+    "description": "Checks if two bit vector fingerprints are equal. Used for operator overloading.",
+    "group": "internal",
+    "name": "bfp_eq",
+    "return_type": {
+      "description": "True if the two bit vector fingerprints are equal, False otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "bfp_from_binary_text": {
+    "args": [
+      {
+        "default": null,
+        "description": "The binary string representation of the fingerprint.",
+        "name": "input",
+        "type": "sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Constructs a bit vector fingerprint (bfp) from a binary string representation of the fingerprint.",
+    "group": "io",
+    "name": "bfp_from_binary_text",
+    "return_type": {
+      "description": "A bit vector fingerprint (bfp).",
+      "type": "RdkitBitFingerprint"
+    }
+  },
+  "bfp_ge": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first bit fingerprint.",
+        "name": "fp_1",
+        "type": "RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second bit fingerprint.",
+        "name": "fp_2",
+        "type": "RdkitBitFingerprint"
+      }
+    ],
+    "description": "Returns whether the first bit fingerprint is greater than or equal to the second bit fingerprint. Used for operator overloading.",
+    "group": "internal",
+    "name": "bfp_ge",
+    "return_type": {
+      "description": "A boolean value indicating if the first fingerprint is greater than or equal to the second.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "bfp_gt": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first bit vector fingerprint.",
+        "name": "fp_1",
+        "type": "RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second bit vector fingerprint for comparison.",
+        "name": "fp_2",
+        "type": "RdkitBitFingerprint"
+      }
+    ],
+    "description": "Returns whether the first bit vector fingerprint is 'greater than' the second bit vector fingerprint. Used internally for operator overloading.",
+    "group": "internal",
+    "name": "bfp_gt",
+    "return_type": {
+      "description": "A boolean indicating if the first fingerprint is 'greater than' the second.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "bfp_in": {
+    "args": [
+      {
+        "default": null,
+        "description": "The string representation of the bit fingerprint.",
+        "name": "input",
+        "type": "CString"
+      }
+    ],
+    "description": "Converts a string representation into an RDKit bit fingerprint. Used for input conversion from the client.",
+    "group": "internal",
+    "name": "bfp_in",
+    "return_type": {
+      "description": "The RDKit bit fingerprint object.",
+      "type": "RdkitBitFingerprint"
+    }
+  },
+  "bfp_le": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first bit vector fingerprint for comparison.",
+        "name": "fp_1",
+        "type": "RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second bit vector fingerprint for comparison.",
+        "name": "fp_2",
+        "type": "RdkitBitFingerprint"
+      }
+    ],
+    "description": "Returns whether the first bit fingerprint is less than or equal to the second bit fingerprint. Used for operator overloading.",
+    "group": "general",
+    "name": "bfp_le",
+    "return_type": {
+      "description": "True if the first bit fingerprint is less than or equal to the second bit fingerprint, False otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "bfp_lt": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first bit fingerprint to compare.",
+        "name": "fp_1",
+        "type": "RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second bit fingerprint to compare.",
+        "name": "fp_2",
+        "type": "RdkitBitFingerprint"
+      }
+    ],
+    "description": "Returns a boolean indicating whether or not the first bit fingerprint is less than the second bit fingerprint. Used internally for operator overloading.",
+    "group": "internal",
+    "name": "bfp_lt",
+    "return_type": {
+      "description": "A boolean value indicating the result of the 'less than' comparison.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "bfp_ne": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first bit vector fingerprint.",
+        "name": "bfp1",
+        "type": "RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second bit vector fingerprint.",
+        "name": "bfp2",
+        "type": "RdkitBitFingerprint"
+      }
+    ],
+    "description": "Compares two bit vector fingerprints for inequality. Used internally for operator overloading.",
+    "group": "internal",
+    "name": "bfp_ne",
+    "return_type": {
+      "description": "True if the two bit vector fingerprints are not equal, False otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "bfp_out": {
+    "args": [
+      {
+        "default": null,
+        "description": "The bit vector fingerprint to convert to a binary string representation.",
+        "name": "fp",
+        "type": "RdkitBitFingerprint"
+      }
+    ],
+    "description": "Returns a bytea with the binary string representation of the fingerprint. Used internally to return fingerprint values to the client.",
+    "group": "internal",
+    "name": "bfp_out",
+    "return_type": {
+      "description": "A bytea with the binary string representation of the fingerprint.",
+      "type": "CString"
+    }
+  },
+  "bfp_to_binary_text": {
+    "args": [
+      {
+        "default": null,
+        "description": "The bit vector fingerprint (bfp) to convert.",
+        "name": "fp",
+        "type": "RdkitBitFingerprint"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `bfp_to_binary_text`.",
+    "group": "io",
+    "name": "bfp_to_binary_text",
+    "return_type": {
+      "description": "A bytea with the binary string representation of the fingerprint.",
+      "type": "sqltypes.LargeBinary"
+    }
+  },
+  "dice_dist": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first fingerprint (bfp) for the distance calculation.",
+        "name": "fp_1",
+        "type": "RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second fingerprint (bfp) for the distance calculation.",
+        "name": "fp_2",
+        "type": "RdkitBitFingerprint"
+      }
+    ],
+    "description": "Returns the Dice distance between two fingerprints of the same type (either two sfp or two bfp values).",
+    "group": "general",
+    "name": "dice_dist",
+    "return_type": {
+      "description": "The Dice distance (float) between the two fingerprints.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "dice_sml": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first fingerprint (either sparse or bit vector) for comparison.",
+        "name": "fp_1",
+        "type": "RdkitSparseFingerprint | RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second fingerprint (either sparse or bit vector) for comparison.",
+        "name": "fp_2",
+        "type": "RdkitSparseFingerprint | RdkitBitFingerprint"
+      }
+    ],
+    "description": "Returns the Dice similarity between two fingerprints of the same type (either two sparse fingerprints or two bit vector fingerprints).",
+    "group": "general",
+    "name": "dice_sml",
+    "return_type": {
+      "description": "The Dice similarity between the two fingerprints.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "dice_sml_op": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first fingerprint.",
+        "name": "arg_1",
+        "type": "RdkitSparseFingerprint | RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second fingerprint of the same type as the first.",
+        "name": "arg_2",
+        "type": "RdkitSparseFingerprint | RdkitBitFingerprint"
+      }
+    ],
+    "description": "Returns the Dice similarity between two fingerprints of the same type (either two sfp or two bfp values).",
+    "group": "general",
+    "name": "dice_sml_op",
+    "return_type": {
+      "description": "The Dice similarity between the two fingerprints.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "featmorgan_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to generate the fingerprint.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": "2",
+        "description": "The radius for the fingerprint generation. This argument is optional and defaults to 2.",
+        "name": "radius",
+        "type": "int | sqltypes.Integer"
+      }
+    ],
+    "description": "Returns a count-based Morgan fingerprint for a molecule using chemical-feature invariants. This is an FCFP-like fingerprint.",
+    "group": "general",
+    "name": "featmorgan_fp",
+    "return_type": {
+      "description": "The count-based Morgan fingerprint (sfp) for the molecule.",
+      "type": "RdkitSparseFingerprint"
+    }
+  },
+  "featmorganbv_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to generate the fingerprint.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": "2",
+        "description": "The radius for the fingerprint generation.",
+        "name": "radius",
+        "type": "int | sqltypes.Integer"
+      }
+    ],
+    "description": "Returns a bit vector Morgan fingerprint for a molecule using chemical-feature invariants. The second argument provides the radius. This is an FCFP-like fingerprint.",
+    "group": "general",
+    "name": "featmorganbv_fp",
+    "return_type": {
+      "description": "The bit vector Morgan fingerprint.",
+      "type": "RdkitBitFingerprint"
+    }
+  },
+  "fmcs": {
+    "args": [
+      {
+        "default": null,
+        "description": "A set of molecules for which to calculate the MCS.",
+        "name": "mols",
+        "type": "RdkitMol | sqltypes.Text"
+      }
+    ],
+    "description": "An aggregation function that calculates the Maximum Common Substructure (MCS) for a set of molecules.",
+    "group": "general",
+    "name": "fmcs",
+    "return_type": {
+      "description": "The Maximum Common Substructure (MCS) as a string representation.",
+      "type": "sqltypes.Text"
+    }
+  },
+  "fmcs_smiles": {
+    "args": [
+      {
+        "default": null,
+        "description": "A space-separated string of SMILES representations of molecules for which to calculate the MCS.",
+        "name": "molecules",
+        "type": "sqltypes.Text | CString | Cast[Any]"
+      },
+      {
+        "default": "''",
+        "description": "An optional JSON string used to provide parameters to the MCS code.",
+        "name": "json",
+        "type": "sqltypes.Text | CString | Cast[Any] | str"
+      }
+    ],
+    "description": "Calculates the Maximum Common Substructure (MCS) for a space-separated set of SMILES.",
+    "group": "general",
+    "name": "fmcs_smiles",
+    "return_type": {
+      "description": "The Maximum Common Substructure (MCS) for the set of molecules, returned as a SMILES string.",
+      "type": "CString"
+    }
+  },
+  "fmcs_smiles_transition": {
+    "args": [
+      {
+        "default": null,
+        "description": "TODO.",
+        "name": "arg_1",
+        "type": "sqltypes.Text"
+      },
+      {
+        "default": null,
+        "description": "TODO.",
+        "name": "arg_2",
+        "type": "sqltypes.Text"
+      }
+    ],
+    "description": "TODO",
+    "group": "internal",
+    "name": "fmcs_smiles_transition",
+    "return_type": {
+      "description": "A string representing the Most Common Substructure (MCS) found among the input molecules.",
+      "type": "sqltypes.Text"
+    }
+  },
+  "is_valid_ctab": {
+    "args": [
+      {
+        "default": null,
+        "description": "The CTAB (mol block) string to validate.",
+        "name": "input",
+        "type": "CString"
+      }
+    ],
+    "description": "Returns whether or not a CTAB (mol block) string produces a valid RDKit molecule.",
+    "group": "general",
+    "name": "is_valid_ctab",
+    "return_type": {
+      "description": "A boolean indicating whether or not the CTAB string produces a valid RDKit molecule.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "is_valid_mol_pkl": {
+    "args": [
+      {
+        "default": null,
+        "description": "A binary string (bytea) representing a molecule.",
+        "name": "input",
+        "type": "sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Returns whether or not a binary string (bytea) can be converted into a valid RDKit molecule.",
+    "group": "general",
+    "name": "is_valid_mol_pkl",
+    "return_type": {
+      "description": "A boolean indicating whether or not the binary string can be converted into a valid RDKit molecule.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "is_valid_smarts": {
+    "args": [
+      {
+        "default": null,
+        "description": "The SMARTS string to validate.",
+        "name": "input",
+        "type": "CString"
+      }
+    ],
+    "description": "Returns whether or not a SMARTS string produces a valid RDKit molecule.",
+    "group": "general",
+    "name": "is_valid_smarts",
+    "return_type": {
+      "description": "A boolean indicating whether the SMARTS string produces a valid RDKit molecule.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "is_valid_smiles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The SMILES string to validate.",
+        "name": "input",
+        "type": "CString"
+      }
+    ],
+    "description": "Returns whether or not a SMILES string produces a valid RDKit molecule.",
+    "group": "general",
+    "name": "is_valid_smiles",
+    "return_type": {
+      "description": "A boolean indicating whether the SMILES string produces a valid RDKit molecule.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "layered_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to generate the layered fingerprint.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns a bit vector which is the layered fingerprint for a molecule. This is an experimental substructure fingerprint using hashed molecular subgraphs.",
+    "group": "general",
+    "name": "layered_fp",
+    "return_type": {
+      "description": "The layered fingerprint (bit vector) for the molecule.",
+      "type": "RdkitBitFingerprint"
+    }
+  },
+  "maccs_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to generate the MACCS fingerprint.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns a bit vector which is the MACCS fingerprint for a molecule.",
+    "group": "general",
+    "name": "maccs_fp",
+    "return_type": {
+      "description": "A bit vector (bfp) representing the MACCS fingerprint.",
+      "type": "RdkitBitFingerprint"
+    }
+  },
+  "mol_adjust_query_properties": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to which additional query information will be attached.",
+        "name": "mol",
+        "type": "RdkitMol | RdkitQMol"
+      },
+      {
+        "default": "cast('', CString)",
+        "description": "A string with additional query parameters (optional)",
+        "name": "query_parameters",
+        "type": "CString | Cast[Any]"
+      }
+    ],
+    "description": "Returns a new molecule with additional query information attached.",
+    "group": "substruct",
+    "name": "mol_adjust_query_properties",
+    "return_type": {
+      "description": "A new molecule with additional query information attached.",
+      "type": "RdkitQMol | RdkitMol"
+    }
+  },
+  "mol_amw": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the AMW.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the AMW for a molecule.",
+    "group": "descriptors",
+    "name": "mol_amw",
+    "return_type": {
+      "description": "The AMW (Average Molecular Weight) for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_chi0n": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Chi0n value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_chi0n",
+    "return_type": {
+      "description": "The Chi0n value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_chi0v": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the Chi0v value.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Chi0v value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_chi0v",
+    "return_type": {
+      "description": "The Chi0v value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_chi1n": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the Chi1n value.",
+        "name": "arg_1",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Chi1n value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_chi1n",
+    "return_type": {
+      "description": "The Chi1n value of the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_chi1v": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Chi1v value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_chi1v",
+    "return_type": {
+      "description": "The Chi1v value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_chi2n": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the Chi2n value.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Chi2n value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_chi2n",
+    "return_type": {
+      "description": "The Chi2n value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_chi2v": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Chi2v value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_chi2v",
+    "return_type": {
+      "description": "The Chi2v value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_chi3n": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the Chi3n value.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Chi3n value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_chi3n",
+    "return_type": {
+      "description": "The Chi3n value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_chi3v": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the Chi3v value.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Chi3v value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_chi3v",
+    "return_type": {
+      "description": "The Chi3v value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_chi4n": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the Chi4n value.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Chi4n value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_chi4n",
+    "return_type": {
+      "description": "The Chi4n value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_chi4v": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to calculate the Chi4v value for.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Chi4v value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_chi4v",
+    "return_type": {
+      "description": "The Chi4v value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_cmp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first RDKit molecule to compare.",
+        "name": "mol_1",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "The second RDKit molecule to compare.",
+        "name": "mol_2",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Compares two RDKit molecules.",
+    "group": "internal",
+    "name": "mol_cmp",
+    "return_type": {
+      "description": "An integer representing the comparison result. Returns -1 if the first molecule is 'less than' the second, 0 if they are 'equal', and 1 if the first molecule is 'greater than' the second.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_eq": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first RDKit molecule to compare.",
+        "name": "mol_1",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "The second RDKit molecule to compare.",
+        "name": "mol_2",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Checks if two RDKit molecules are equal. Used internally for operator overloading.",
+    "group": "internal",
+    "name": "mol_eq",
+    "return_type": {
+      "description": "Returns a boolean indicating whether the two molecules are equal.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "mol_exactmw": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the exact molecular weight.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the exact molecular weight for a molecule.",
+    "group": "descriptors",
+    "name": "mol_exactmw",
+    "return_type": {
+      "description": "The exact molecular weight of the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_formula": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to get the molecular formula.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": false,
+        "description": "Controls whether isotope information is included in the formula.",
+        "name": "include_isotopes",
+        "type": "bool | sqltypes.Boolean"
+      },
+      {
+        "default": true,
+        "description": "Controls whether \"D\" and \"T\" are used instead of [2H] and [3H].",
+        "name": "use_deuterium_tritium_symbols",
+        "type": "bool | sqltypes.Boolean"
+      }
+    ],
+    "description": "Returns a string with the molecular formula for a molecule. The second argument controls whether isotope information is included in the formula; the third argument controls whether \"D\" and \"T\" are used instead of [2H] and [3H].",
+    "group": "descriptors",
+    "name": "mol_formula",
+    "return_type": {
+      "description": "A string containing the molecular formula.",
+      "type": "CString"
+    }
+  },
+  "mol_fractioncsp3": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the fraction of sp3 hybridized carbons.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the fraction of carbons that are sp3 hybridized in a molecule.",
+    "group": "descriptors",
+    "name": "mol_fractioncsp3",
+    "return_type": {
+      "description": "The fraction of carbons that are sp3 hybridized in the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_from_ctab": {
+    "args": [
+      {
+        "default": null,
+        "description": "The CTAB (mol block) string from which to create the molecule.",
+        "name": "ctab",
+        "type": "CString"
+      },
+      {
+        "default": null,
+        "description": "A boolean indicating whether the molecule's coordinates should be saved.",
+        "name": "arg_2",
+        "type": "sqltypes.Boolean"
+      }
+    ],
+    "description": "Returns a molecule object from a CTAB (mol block) string, returning NULL if the molecule construction fails.",
+    "group": "io",
+    "name": "mol_from_ctab",
+    "return_type": {
+      "description": "An RDKit molecule object, or NULL if the molecule construction fails.",
+      "type": "RdkitMol"
+    }
+  },
+  "mol_from_json": {
+    "args": [
+      {
+        "default": null,
+        "description": "A commonchem JSON string representing a molecule.",
+        "name": "json_str",
+        "type": "CString"
+      }
+    ],
+    "description": "Returns a molecule for a commonchem JSON string, NULL if the molecule construction fails.",
+    "group": "io",
+    "name": "mol_from_json",
+    "return_type": {
+      "description": "A molecule for a commonchem JSON string, NULL if the molecule construction fails.",
+      "type": "RdkitMol"
+    }
+  },
+  "mol_from_pkl": {
+    "args": [
+      {
+        "default": null,
+        "description": "A binary string representation of the molecule.",
+        "name": "bytea",
+        "type": "sqltypes.LargeBinary"
+      }
+    ],
+    "description": "Returns a molecule for a binary string (bytea), NULL if the molecule construction fails.",
+    "group": "io",
+    "name": "mol_from_pkl",
+    "return_type": {
+      "description": "A molecule, or NULL if the molecule construction fails.",
+      "type": "RdkitMol"
+    }
+  },
+  "mol_from_smiles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The SMILES string to convert to a molecule.",
+        "name": "smiles",
+        "type": "sqltypes.Text | CString"
+      }
+    ],
+    "description": "Returns a molecule for a SMILES string, NULL if the molecule construction fails.",
+    "group": "io",
+    "name": "mol_from_smiles",
+    "return_type": {
+      "description": "A molecule object, or NULL if the molecule construction from the SMILES string fails.",
+      "type": "RdkitMol"
+    }
+  },
+  "mol_ge": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule to be checked as the potential superstructure.",
+        "name": "arg_1",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "The RDKit molecule to be checked as the potential substructure.",
+        "name": "arg_2",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Checks if the first RDKit molecule is a superstructure of, or identical to, the second RDKit molecule. Used internally for operator overloading.",
+    "group": "internal",
+    "name": "mol_ge",
+    "return_type": {
+      "description": "A boolean value: true if the first molecule is a superstructure of or identical to the second, false otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "mol_gt": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first RDKit molecule for comparison.",
+        "name": "mol_1",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "The second RDKit molecule for comparison.",
+        "name": "mol_2",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Compares two RDKit molecules to determine if the first molecule is greater than the second, based on an internal canonical ordering. Used internally for operator overloading.",
+    "group": "internal",
+    "name": "mol_gt",
+    "return_type": {
+      "description": "True if the first molecule is greater than the second, False otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "mol_hallkieralpha": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Hall-Kier alpha value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_hallkieralpha",
+    "return_type": {
+      "description": "The Hall-Kier alpha value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_hba": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the number of Lipinski H-bond acceptors.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `mol_hba`.",
+    "group": "descriptors",
+    "name": "mol_hba",
+    "return_type": {
+      "description": "The number of Lipinski H-bond acceptors (i.e., number of Os and Ns) for the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_hbd": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the number of Lipinski H-bond donors.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of Lipinski H-bond donors (i.e. number of Os and Ns that have at least one H) for a molecule.",
+    "group": "descriptors",
+    "name": "mol_hbd",
+    "return_type": {
+      "description": "The number of Lipinski H-bond donors for the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_in": {
+    "args": [
+      {
+        "default": null,
+        "description": "The string representation of the molecule.",
+        "name": "mol_str",
+        "type": "CString"
+      }
+    ],
+    "description": "Internal function used to load the molecule from the client input.",
+    "group": "internal",
+    "name": "mol_in",
+    "return_type": {
+      "description": "An RDKit molecule object.",
+      "type": "RdkitMol"
+    }
+  },
+  "mol_inchi": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule for which to generate the InChI.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "Additional parameters to pass to the generator (TODO)",
+        "name": "arg_2",
+        "type": "CString"
+      }
+    ],
+    "description": "Returns an InChI (International Chemical Identifier) for the given molecule. This function requires that the RDKit be built with InChI support.",
+    "group": "io",
+    "name": "mol_inchi",
+    "return_type": {
+      "description": "The InChI string representation of the molecule.",
+      "type": "CString"
+    }
+  },
+  "mol_inchikey": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule for which to generate the InChI key.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "Additional parameters to pass to the generator  (TODO)",
+        "name": "arg_2",
+        "type": "CString"
+      }
+    ],
+    "description": "Returns an InChI key for the molecule. Requires RDKit to be built with InChI support.",
+    "group": "io",
+    "name": "mol_inchikey",
+    "return_type": {
+      "description": "An InChI key for the molecule.",
+      "type": "CString"
+    }
+  },
+  "mol_kappa1": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the kappa1 value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_kappa1",
+    "return_type": {
+      "description": "The kappa1 value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_kappa2": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the kappa2 value.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the kappa2 value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_kappa2",
+    "return_type": {
+      "description": "The kappa2 value.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_kappa3": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the kappa3 value.",
+        "name": "mol_1",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the kappa3 value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_kappa3",
+    "return_type": {
+      "description": "The kappa3 value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_labuteasa": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate Labute's approximate surface area.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns Labute's approximate surface area (ASA) for a molecule.",
+    "group": "descriptors",
+    "name": "mol_labuteasa",
+    "return_type": {
+      "description": "Labute's approximate surface area (ASA) for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_le": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first RDKit molecule for comparison.",
+        "name": "mol_1",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "The second RDKit molecule for comparison.",
+        "name": "mol_2",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Compares two RDKit molecules to check if the first is less than or equal to the second. Used internally for operator overloading",
+    "group": "internal",
+    "name": "mol_le",
+    "return_type": {
+      "description": "`True` if the first molecule is less than or equal to the second, `False` otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "mol_logp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the MolLogP.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the MolLogP for a molecule.",
+    "group": "descriptors",
+    "name": "mol_logp",
+    "return_type": {
+      "description": "The MolLogP value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_lt": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first RDKit molecule.",
+        "name": "mol_1",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "The second RDKit molecule.",
+        "name": "mol_2",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Compares two RDKit molecules to determine if the first molecule is less than the second molecule. Used internally for operator overloading",
+    "group": "internal",
+    "name": "mol_lt",
+    "return_type": {
+      "description": "`True` if the first molecule is less than the second molecule, `False` otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "mol_murckoscaffold": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule for which to compute the Murcko scaffold.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Murcko scaffold for a molecule. The Murcko scaffold consists of all ring systems and the atoms connecting them.",
+    "group": "general",
+    "name": "mol_murckoscaffold",
+    "return_type": {
+      "description": "The RDKit molecule representing the Murcko scaffold.",
+      "type": "RdkitMol"
+    }
+  },
+  "mol_ne": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first molecule to compare.",
+        "name": "mol_1",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "The second molecule to compare.",
+        "name": "mol_2",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns a boolean indicating whether or not two molecules are not equal. Used internally for the operator overloading",
+    "group": "internal",
+    "name": "mol_ne",
+    "return_type": {
+      "description": "A boolean indicating if the two molecules are not equal.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "mol_nm_hash": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to generate the hash.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": "cast('AnonymousGraph', CString)",
+        "description": "The type of hash to generate. Legal values are 'AnonymousGraph', 'ElementGraph', 'CanonicalSmiles', 'MurckoScaffold', 'ExtendedMurcko', 'MolFormula', 'AtomBondCounts', 'DegreeVector', 'Mesomer', 'HetAtomTautomer', 'HetAtomProtomer', 'RedoxPair', 'Regioisomer', 'NetCharge', 'SmallWorldIndexBR', 'SmallWorldIndexBRL', 'ArthorSubstructureOrder'. The default is 'AnonymousGraph'.",
+        "name": "hash_type",
+        "type": "CString | Cast[Any]"
+      }
+    ],
+    "description": "Returns a string with a hash for the molecule.",
+    "group": "descriptors",
+    "name": "mol_nm_hash",
+    "return_type": {
+      "description": "A string with the hash for the molecule.",
+      "type": "CString"
+    }
+  },
+  "mol_numaliphaticcarbocycles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to analyze.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of aliphatic (at least one non-aromatic bond) carbocycles in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numaliphaticcarbocycles",
+    "return_type": {
+      "description": "The number of aliphatic (at least one non-aromatic bond) carbocycles in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numaliphaticheterocycles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of aliphatic (at least one non-aromatic bond) heterocycles in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numaliphaticheterocycles",
+    "return_type": {
+      "description": "The number of aliphatic (at least one non-aromatic bond) heterocycles in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numaliphaticrings": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the number of aliphatic rings.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of aliphatic (at least one non-aromatic bond) rings in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numaliphaticrings",
+    "return_type": {
+      "description": "The number of aliphatic (at least one non-aromatic bond) rings in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numamidebonds": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule for which to calculate the number of amide bonds.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of amide bonds in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numamidebonds",
+    "return_type": {
+      "description": "The number of amide bonds in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numaromaticcarbocycles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `mol_numaromaticcarbocycles`.",
+    "group": "descriptors",
+    "name": "mol_numaromaticcarbocycles",
+    "return_type": {
+      "description": "The number of aromatic carbocycles in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numaromaticheterocycles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of aromatic heterocycles in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numaromaticheterocycles",
+    "return_type": {
+      "description": "The number of aromatic heterocycles in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numaromaticrings": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to analyze.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of aromatic rings in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numaromaticrings",
+    "return_type": {
+      "description": "The number of aromatic rings in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numatoms": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the total number of atoms in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numatoms",
+    "return_type": {
+      "description": "The total number of atoms in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numbridgeheadatoms": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to calculate the number of bridgehead atoms for.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of bridgehead atoms in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numbridgeheadatoms",
+    "return_type": {
+      "description": "The number of bridgehead atoms in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numheavyatoms": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to analyze.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of heavy atoms in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numheavyatoms",
+    "return_type": {
+      "description": "The number of heavy atoms in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numheteroatoms": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of heteroatoms in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numheteroatoms",
+    "return_type": {
+      "description": "The number of heteroatoms in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numheterocycles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to count the number of heteroatoms.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of heterocycles in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numheterocycles",
+    "return_type": {
+      "description": "The number of heteroatoms in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numrings": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the number of rings.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of rings in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numrings",
+    "return_type": {
+      "description": "The number of rings in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numrotatablebonds": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to calculate the number of rotatable bonds for.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of rotatable bonds in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numrotatablebonds",
+    "return_type": {
+      "description": "The number of rotatable bonds in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numsaturatedcarbocycles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the number of saturated carbocycles.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of saturated carbocycles in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numsaturatedcarbocycles",
+    "return_type": {
+      "description": "The number of saturated carbocycles in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numsaturatedheterocycles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to analyze.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of saturated heterocycles in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numsaturatedheterocycles",
+    "return_type": {
+      "description": "The number of saturated heterocycles in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numsaturatedrings": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the number of saturated rings.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of saturated rings in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numsaturatedrings",
+    "return_type": {
+      "description": "The number of saturated rings in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_numspiroatoms": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the number of spiro atoms in a molecule.",
+    "group": "descriptors",
+    "name": "mol_numspiroatoms",
+    "return_type": {
+      "description": "The number of spiro atoms in the molecule.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "mol_out": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule to be converted to a string.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Calls the RDKit cartridge function `mol_out` to return a string representation of the molecule. Used internally for displaying molecules in query results.",
+    "group": "internal",
+    "name": "mol_out",
+    "return_type": {
+      "description": "A string representation of the molecule.",
+      "type": "CString"
+    }
+  },
+  "mol_phi": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the Kier Phi value.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the Kier Phi value for a molecule.",
+    "group": "descriptors",
+    "name": "mol_phi",
+    "return_type": {
+      "description": "The Kier Phi value for the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "mol_send": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule to be serialized.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Serializes an RDKit molecule into a binary string representation.",
+    "group": "io",
+    "name": "mol_send",
+    "return_type": {
+      "description": "A binary string (bytea) representation of the molecule.",
+      "type": "sqltypes.LargeBinary"
+    }
+  },
+  "mol_to_ctab": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to generate the CTAB string.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": true,
+        "description": "",
+        "name": "arg_2",
+        "type": "sqltypes.Boolean | bool"
+      },
+      {
+        "default": false,
+        "description": "",
+        "name": "arg_3",
+        "type": "sqltypes.Boolean | bool"
+      }
+    ],
+    "description": "Returns a CTAB (mol block) string for a molecule.",
+    "group": "io",
+    "name": "mol_to_ctab",
+    "return_type": {
+      "description": "A CTAB (mol block) string for a molecule.",
+      "type": "CString"
+    }
+  },
+  "mol_to_cxsmarts": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to convert to CXSMARTS.",
+        "name": "mol",
+        "type": "RdkitMol | RdkitQMol"
+      }
+    ],
+    "description": "Returns the CXSMARTS for a molecule.",
+    "group": "io",
+    "name": "mol_to_cxsmarts",
+    "return_type": {
+      "description": "The CXSMARTS string for the molecule.",
+      "type": "CString"
+    }
+  },
+  "mol_to_cxsmiles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to convert.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the CXSMILES for a molecule.",
+    "group": "io",
+    "name": "mol_to_cxsmiles",
+    "return_type": {
+      "description": "The CXSMILES string for the molecule.",
+      "type": "CString"
+    }
+  },
+  "mol_to_json": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to convert to commonchem JSON.",
+        "name": "mol",
+        "type": "RdkitMol | RdkitQMol"
+      }
+    ],
+    "description": "Returns the commonchem JSON for a molecule. (*available from the 2021_09 release*)",
+    "group": "io",
+    "name": "mol_to_json",
+    "return_type": {
+      "description": "The commonchem JSON string representation of the molecule.",
+      "type": "CString"
+    }
+  },
+  "mol_to_pkl": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule to be converted to a binary string.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns a binary string (bytea) for a molecule. This function is available from the Q3 2012 (2012_09) release.",
+    "group": "io",
+    "name": "mol_to_pkl",
+    "return_type": {
+      "description": "A binary string (bytea) representation of the RDKit molecule.",
+      "type": "sqltypes.LargeBinary"
+    }
+  },
+  "mol_to_smarts": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to convert to a SMARTS string.",
+        "name": "mol",
+        "type": "RdkitMol | RdkitQMol"
+      }
+    ],
+    "description": "Returns the SMARTS string for a molecule.",
+    "group": "io",
+    "name": "mol_to_smarts",
+    "return_type": {
+      "description": "The SMARTS string representation of the molecule.",
+      "type": "CString"
+    }
+  },
+  "mol_to_smiles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to convert to SMILES.",
+        "name": "mol",
+        "type": "RdkitMol | RdkitQMol"
+      }
+    ],
+    "description": "Returns a canonical SMILES string for a molecule.",
+    "group": "io",
+    "name": "mol_to_smiles",
+    "return_type": {
+      "description": "The canonical SMILES string for the molecule.",
+      "type": "CString"
+    }
+  },
+  "mol_to_svg": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to be drawn.",
+        "name": "mol",
+        "type": "RdkitMol | RdkitQMol"
+      },
+      {
+        "default": "cast('', CString)",
+        "description": "An optional string to use as the legend for the drawing.",
+        "name": "arg_2",
+        "type": "CString | Cast[Any]"
+      },
+      {
+        "default": 250,
+        "description": "The optional width of the generated SVG image.",
+        "name": "width",
+        "type": "int | sqltypes.Integer"
+      },
+      {
+        "default": 200,
+        "description": "The optional height of the generated SVG image.",
+        "name": "height",
+        "type": "int | sqltypes.Integer"
+      },
+      {
+        "default": "cast('', CString)",
+        "description": "",
+        "name": "arg_5",
+        "type": "CString | Cast[Any]"
+      }
+    ],
+    "description": "Returns an SVG with a drawing of the molecule. This function is available from the 2016_09 release.",
+    "group": "general",
+    "name": "mol_to_svg",
+    "return_type": {
+      "description": "An SVG string representing the drawing of the molecule.",
+      "type": "CString"
+    }
+  },
+  "mol_to_v3kctab": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to convert to a V3000 CTAB string.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": true,
+        "description": "Controls whether or not 2D coordinates will be generated for molecules that don't have coordinates.",
+        "name": "create_depiction",
+        "type": "sqltypes.Boolean | bool"
+      }
+    ],
+    "description": "Returns a CTAB (mol block) string for a molecule. The optional second argument controls whether or not 2D coordinates will be generated for molecules that don\u2019t have coordinates.",
+    "group": "io",
+    "name": "mol_to_v3kctab",
+    "return_type": {
+      "description": "A CTAB (mol block) string for the molecule.",
+      "type": "CString"
+    }
+  },
+  "mol_to_xqmol": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit molecule to be converted.",
+        "name": "arg_1",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "A boolean parameter for the conversion process.",
+        "name": "arg_2",
+        "type": "sqltypes.Boolean"
+      },
+      {
+        "default": null,
+        "description": "Another boolean parameter for the conversion process.",
+        "name": "arg_3",
+        "type": "sqltypes.Boolean"
+      },
+      {
+        "default": null,
+        "description": "A third boolean parameter for the conversion process.",
+        "name": "arg_4",
+        "type": "sqltypes.Boolean"
+      },
+      {
+        "default": null,
+        "description": "A string parameter for the conversion process.",
+        "name": "arg_5",
+        "type": "CString"
+      }
+    ],
+    "description": "Converts an RDKit molecule to an RDKit XQuery molecule. TODO: add docs",
+    "group": "general",
+    "name": "mol_to_xqmol",
+    "return_type": {
+      "description": "The RDKit XQuery molecule.",
+      "type": "RdkitXQMol"
+    }
+  },
+  "mol_tpsa": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to calculate the topological polar surface area.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns the topological polar surface area for a molecule.",
+    "group": "descriptors",
+    "name": "mol_tpsa",
+    "return_type": {
+      "description": "The topological polar surface area of the molecule.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "morgan_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to generate the fingerprint.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": 2,
+        "description": "The radius for the Morgan fingerprint generation. Defaults to 2.",
+        "name": "radius",
+        "type": "int | sqltypes.Integer"
+      }
+    ],
+    "description": "Returns a count-based Morgan fingerprint (sfp) for a molecule using connectivity invariants. This is an ECFP-like fingerprint.",
+    "group": "general",
+    "name": "morgan_fp",
+    "return_type": {
+      "description": "A sparse fingerprint (sfp) which is the count-based Morgan fingerprint.",
+      "type": "RdkitSparseFingerprint"
+    }
+  },
+  "morganbv_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to generate the fingerprint.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": 2,
+        "description": "The radius for the Morgan fingerprint calculation.",
+        "name": "radius",
+        "type": "int | sqltypes.Integer"
+      }
+    ],
+    "description": "Returns a bit vector Morgan fingerprint (bfp) for a molecule using connectivity invariants. The second argument provides the radius. This is an ECFP-like fingerprint.",
+    "group": "general",
+    "name": "morganbv_fp",
+    "return_type": {
+      "description": "A bit vector Morgan fingerprint (bfp) for the molecule.",
+      "type": "RdkitBitFingerprint"
+    }
+  },
+  "qmol_from_ctab": {
+    "args": [
+      {
+        "default": null,
+        "description": "A CTAB (mol block) string.",
+        "name": "ctab",
+        "type": "CString"
+      },
+      {
+        "default": null,
+        "description": "Controls whether or not the coordinates are saved.",
+        "name": "keep_conformer",
+        "type": "sqltypes.Boolean"
+      }
+    ],
+    "description": "Returns a query molecule for a CTAB (mol block) string. TODO: This functions changed between the versions - adding new arg.",
+    "group": "general",
+    "name": "qmol_from_ctab",
+    "return_type": {
+      "description": "A query molecule",
+      "type": "RdkitQMol"
+    }
+  },
+  "qmol_from_json": {
+    "args": [
+      {
+        "default": null,
+        "description": "The commonchem JSON string representing the query molecule.",
+        "name": "json",
+        "type": "CString"
+      }
+    ],
+    "description": "Returns a query molecule for a commonchem JSON string.",
+    "group": "io",
+    "name": "qmol_from_json",
+    "return_type": {
+      "description": "A query molecule",
+      "type": "RdkitQMol"
+    }
+  },
+  "qmol_from_smarts": {
+    "args": [
+      {
+        "default": null,
+        "description": "The SMARTS string representing the query molecule.",
+        "name": "smarts",
+        "type": "CString"
+      }
+    ],
+    "description": "Returns a query molecule for a SMARTS string. Explicit Hs in the SMARTS are converted into query features on the attached atom.",
+    "group": "io",
+    "name": "qmol_from_smarts",
+    "return_type": {
+      "description": "A query molecule (RdkitQMol) or NULL if the molecule construction fails.",
+      "type": "RdkitQMol"
+    }
+  },
+  "qmol_from_smiles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The SMILES string to convert into a query molecule.",
+        "name": "smiles",
+        "type": "CString"
+      }
+    ],
+    "description": "Returns a query molecule for a SMILES string. Explicit Hs in the SMILES are converted into query features on the attached atom.",
+    "group": "io",
+    "name": "qmol_from_smiles",
+    "return_type": {
+      "description": "A query molecule for the SMILES string.",
+      "type": "RdkitQMol"
+    }
+  },
+  "qmol_in": {
+    "args": [
+      {
+        "default": null,
+        "description": "The string representation of the query molecule",
+        "name": "mol_str",
+        "type": "CString"
+      }
+    ],
+    "description": "Constructs an RDKit query molecule from a string representation. This function is used internally for receiving a query molecule from the client.",
+    "group": "internal",
+    "name": "qmol_in",
+    "return_type": {
+      "description": "An RDKit query molecule.",
+      "type": "RdkitQMol"
+    }
+  },
+  "qmol_out": {
+    "args": [
+      {
+        "default": null,
+        "description": "The query molecule.",
+        "name": "mol",
+        "type": "RdkitQMol"
+      }
+    ],
+    "description": "Returns the SMARTS string for a query molecule. This function is used internally for sending the result of a query molecule to the client.",
+    "group": "internal",
+    "name": "qmol_out",
+    "return_type": {
+      "description": "The SMARTS string representation of the query molecule.",
+      "type": "CString"
+    }
+  },
+  "qmol_send": {
+    "args": [
+      {
+        "default": null,
+        "description": "The query molecule to be converted.",
+        "name": "mol",
+        "type": "RdkitQMol"
+      }
+    ],
+    "description": "Returns a binary string (bytea) for a query molecule.",
+    "group": "io",
+    "name": "qmol_send",
+    "return_type": {
+      "description": "A binary string representation of the query molecule.",
+      "type": "sqltypes.LargeBinary"
+    }
+  },
+  "rdkit_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to generate the fingerprint.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns a bit vector fingerprint (bfp) which is the RDKit fingerprint for a molecule. This is a daylight-inspired fingerprint using hashed molecular subgraphs.",
+    "group": "general",
+    "name": "rdkit_fp",
+    "return_type": {
+      "description": "A bit vector fingerprint (bfp) representing the RDKit fingerprint.",
+      "type": "RdkitBitFingerprint"
+    }
+  },
+  "rdkit_toolkit_version": {
+    "args": [],
+    "description": "Returns the version of the RDKit toolkit being used.",
+    "group": "general",
+    "name": "rdkit_toolkit_version",
+    "return_type": {
+      "description": "The version of the RDKit toolkit as a string.",
+      "type": "sqltypes.Text"
+    }
+  },
+  "rdkit_version": {
+    "args": [],
+    "description": "Returns the RDKit cartridge version.",
+    "group": "general",
+    "name": "rdkit_version",
+    "return_type": {
+      "description": "Returns the RDKit version as text.",
+      "type": "sqltypes.Text"
+    }
+  },
+  "reaction_difference_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit reaction object.",
+        "name": "rxn_1",
+        "type": "RdkitReaction"
+      },
+      {
+        "default": null,
+        "description": "Integer denoting the fingerprint type. Likely 1 (AtomPairFP), 2 (TopologicalTorsionFP), or 3 (MorganFP).",
+        "name": "fp_type",
+        "type": "int | sqltypes.Integer"
+      }
+    ],
+    "description": "Calculates a sparse fingerprint representing the difference between reactants and products in an RDKit reaction.",
+    "group": "general",
+    "name": "reaction_difference_fp",
+    "return_type": {
+      "description": "A sparse fingerprint (sfp) representing the reaction difference.",
+      "type": "RdkitSparseFingerprint"
+    }
+  },
+  "reaction_eq": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first RDKit reaction.",
+        "name": "rxn_1",
+        "type": "RdkitReaction"
+      },
+      {
+        "default": null,
+        "description": "The second RDKit reaction.",
+        "name": "rxn_2",
+        "type": "RdkitReaction"
+      }
+    ],
+    "description": "Checks if two RDKit reactions are equivalent. Used internally for the operator overloading.",
+    "group": "internal",
+    "name": "reaction_eq",
+    "return_type": {
+      "description": "True if the reactions are equivalent, False otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "reaction_from_ctab": {
+    "args": [
+      {
+        "default": null,
+        "description": "The CTAB (reaction block) string representing the reaction.",
+        "name": "rxn_str",
+        "type": "CString"
+      }
+    ],
+    "description": "Returns a reaction for a CTAB (reaction block) string.",
+    "group": "io",
+    "name": "reaction_from_ctab",
+    "return_type": {
+      "description": "An RDKit reaction object, or NULL if the reaction construction fails.",
+      "type": "RdkitReaction"
+    }
+  },
+  "reaction_from_smarts": {
+    "args": [
+      {
+        "default": null,
+        "description": "The SMARTS string representing the reaction.",
+        "name": "rxn_str",
+        "type": "CString | Cast[Any]"
+      }
+    ],
+    "description": "Returns a reaction object for a SMARTS string.",
+    "group": "io",
+    "name": "reaction_from_smarts",
+    "return_type": {
+      "description": "The RDKit reaction object.",
+      "type": "RdkitReaction"
+    }
+  },
+  "reaction_from_smiles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The reaction SMILES string to convert into an RDKit reaction object.",
+        "name": "rxn_str",
+        "type": "CString"
+      }
+    ],
+    "description": "Returns a reaction object for a reaction SMILES string. Returns NULL if the reaction construction fails.",
+    "group": "io",
+    "name": "reaction_from_smiles",
+    "return_type": {
+      "description": "An RDKit reaction object, or NULL if the conversion from the reaction SMILES string fails.",
+      "type": "RdkitReaction"
+    }
+  },
+  "reaction_in": {
+    "args": [
+      {
+        "default": null,
+        "description": "The string representation of the chemical reaction, typically in reaction SMILES format.",
+        "name": "rxn_str",
+        "type": "CString"
+      }
+    ],
+    "description": "Converts a string representation of a chemical reaction into an RDKit reaction object.",
+    "group": "internal",
+    "name": "reaction_in",
+    "return_type": {
+      "description": "An RDKit reaction object representing the parsed chemical reaction.",
+      "type": "RdkitReaction"
+    }
+  },
+  "reaction_ne": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first RDKit reaction.",
+        "name": "rxn_1",
+        "type": "RdkitReaction"
+      },
+      {
+        "default": null,
+        "description": "The second RDKit reaction.",
+        "name": "rxn_2",
+        "type": "RdkitReaction"
+      }
+    ],
+    "description": "Returns true if the two reactions are not equal. Used internally for the operator overloading",
+    "group": "internal",
+    "name": "reaction_ne",
+    "return_type": {
+      "description": "True if the reactions are not equal, False otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "reaction_numagents": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit reaction molecule.",
+        "name": "rxn",
+        "type": "RdkitReaction"
+      }
+    ],
+    "description": "Returns the number of agents in an RDKit reaction.",
+    "group": "general",
+    "name": "reaction_numagents",
+    "return_type": {
+      "description": "The number of agents in the RDKit reaction.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "reaction_numproducts": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit reaction object.",
+        "name": "rxn",
+        "type": "RdkitReaction"
+      }
+    ],
+    "description": "Returns the number of products in an RDKit reaction.",
+    "group": "general",
+    "name": "reaction_numproducts",
+    "return_type": {
+      "description": "The number of products in the reaction.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "reaction_numreactants": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit reaction object.",
+        "name": "rxn",
+        "type": "RdkitReaction"
+      }
+    ],
+    "description": "Returns the number of reactants in an RDKit reaction.",
+    "group": "rxn",
+    "name": "reaction_numreactants",
+    "return_type": {
+      "description": "The number of reactants in the RDKit reaction.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "reaction_out": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit reaction object to convert.",
+        "name": "rxn",
+        "type": "RdkitReaction"
+      }
+    ],
+    "description": "Internal function: Converts an RDKit reaction object to its string representation.",
+    "group": "internal",
+    "name": "reaction_out",
+    "return_type": {
+      "description": "The string representation of the RDKit reaction.",
+      "type": "CString"
+    }
+  },
+  "reaction_send": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit reaction object to be sent.",
+        "name": "rxn",
+        "type": "RdkitReaction"
+      }
+    ],
+    "description": "Serializes an RDKit reaction into a binary representation.",
+    "group": "general",
+    "name": "reaction_send",
+    "return_type": {
+      "description": "The binary representation of the RDKit reaction.",
+      "type": "sqltypes.LargeBinary"
+    }
+  },
+  "reaction_structural_bfp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit reaction object.",
+        "name": "rxn",
+        "type": "RdkitReaction"
+      },
+      {
+        "default": null,
+        "description": "The radius to use for the fingerprint generation.",
+        "name": "radius",
+        "type": "int | sqltypes.Integer"
+      }
+    ],
+    "description": "Returns a bit vector fingerprint (bfp) representing the structural features of a chemical reaction. The second argument provides the radius for the fingerprint generation.",
+    "group": "general",
+    "name": "reaction_structural_bfp",
+    "return_type": {
+      "description": "A bit vector fingerprint (bfp) representing the structural features of the reaction.",
+      "type": "RdkitBitFingerprint"
+    }
+  },
+  "reaction_to_ctab": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit reaction object to convert.",
+        "name": "reaction",
+        "type": "RdkitReaction"
+      }
+    ],
+    "description": "Returns a CTAB (mol block) string for a reaction.",
+    "group": "io",
+    "name": "reaction_to_ctab",
+    "return_type": {
+      "description": "The CTAB (mol block) string representation of the reaction.",
+      "type": "CString"
+    }
+  },
+  "reaction_to_smarts": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit reaction object to convert.",
+        "name": "rxn",
+        "type": "RdkitReaction"
+      }
+    ],
+    "description": "Returns the SMARTS string for a reaction.",
+    "group": "io",
+    "name": "reaction_to_smarts",
+    "return_type": {
+      "description": "The SMARTS string representation of the reaction.",
+      "type": "CString"
+    }
+  },
+  "reaction_to_smiles": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit reaction object.",
+        "name": "rxn",
+        "type": "RdkitReaction"
+      }
+    ],
+    "description": "Returns the SMILES string for a reaction.",
+    "group": "general",
+    "name": "reaction_to_smiles",
+    "return_type": {
+      "description": "The SMILES string representation of the reaction.",
+      "type": "CString"
+    }
+  },
+  "reaction_to_svg": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit reaction object to be drawn.",
+        "name": "rxn",
+        "type": "RdkitReaction"
+      },
+      {
+        "default": null,
+        "description": "If true, highlights the reactants in the SVG drawing.",
+        "name": "highlight_reactants",
+        "type": "sqltypes.Boolean"
+      },
+      {
+        "default": null,
+        "description": "The desired width of the SVG image.",
+        "name": "width",
+        "type": "int | sqltypes.Integer"
+      },
+      {
+        "default": null,
+        "description": "The desired height of the SVG image.",
+        "name": "height",
+        "type": "int | sqltypes.Integer"
+      },
+      {
+        "default": null,
+        "description": "An optional string for other drawing parameters? [TODO]",
+        "name": "params",
+        "type": "CString"
+      }
+    ],
+    "description": "Returns an SVG (Scalable Vector Graphics) drawing of the provided RDKit reaction. This function is quite slow",
+    "group": "general",
+    "name": "reaction_to_svg",
+    "return_type": {
+      "description": "A string containing the SVG representation of the reaction.",
+      "type": "CString"
+    }
+  },
+  "rsubstruct": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule (or query molecule/reaction) to be searched within.",
+        "name": "mol",
+        "type": "RdkitQMol | RdkitMol | RdkitXQMol | RdkitReaction"
+      },
+      {
+        "default": null,
+        "description": "The molecule (or reaction) to check as a substructure.",
+        "name": "query",
+        "type": "RdkitMol | RdkitReaction"
+      }
+    ],
+    "description": "Returns whether or not the second molecule (or reaction) is a substructure of the first molecule (or query molecule/reaction). Doesn't use chirality in the matching.",
+    "group": "general",
+    "name": "rsubstruct",
+    "return_type": {
+      "description": "A boolean indicating whether the second molecule (`arg_2`) is a substructure of the first molecule (`arg_1`).",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "rsubstruct_chiral": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to search within.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "The molecule to search for as a substructure.",
+        "name": "query_mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `rsubstruct_chiral`. This function returns whether or not the second molecule is a substructure of the first, considering chirality.",
+    "group": "general",
+    "name": "rsubstruct_chiral",
+    "return_type": {
+      "description": "A boolean indicating whether the second molecule is a chiral substructure of the first.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "rsubstruct_query": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to be searched within.",
+        "name": "mol_1",
+        "type": "RdkitMol | RdkitXQMol | RdkitQMol"
+      },
+      {
+        "default": null,
+        "description": "The substructure molecule to search for.",
+        "name": "mol_2",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns whether or not the second molecule is a substructure of the first molecule. Doesn't use chirality in the matching.",
+    "group": "general",
+    "name": "rsubstruct_query",
+    "return_type": {
+      "description": "A boolean indicating whether the second molecule is a substructure of the first.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "rsubstructfp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first RDKit reaction.",
+        "name": "rxn_1",
+        "type": "RdkitReaction"
+      },
+      {
+        "default": null,
+        "description": "The second RDKit reaction, which is checked as a substructure.",
+        "name": "rxn_2",
+        "type": "RdkitReaction"
+      }
+    ],
+    "description": "Returns whether or not the second RDKit reaction is a substructure of the first.",
+    "group": "general",
+    "name": "rsubstructfp",
+    "return_type": {
+      "description": "`True` if the second reaction is a substructure of the first, `False` otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "sfp_cmp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first sparse fingerprint to compare.",
+        "name": "arg_1",
+        "type": "RdkitSparseFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second sparse fingerprint to compare.",
+        "name": "arg_2",
+        "type": "RdkitSparseFingerprint"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `sfp_cmp`.",
+    "group": "internal",
+    "name": "sfp_cmp",
+    "return_type": {
+      "description": "TODO",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "sfp_eq": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first sparse fingerprint.",
+        "name": "fp_1",
+        "type": "RdkitSparseFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second sparse fingerprint.",
+        "name": "fp_2",
+        "type": "RdkitSparseFingerprint"
+      }
+    ],
+    "description": "Returns a boolean indicating whether or not the two sparse fingerprint arguments are equal. Used for the operator overloading",
+    "group": "internal",
+    "name": "sfp_eq",
+    "return_type": {
+      "description": "A boolean indicating the equality of the two sparse fingerprints.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "sfp_ge": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first sparse fingerprint (sfp) for comparison.",
+        "name": "fp_1",
+        "type": "RdkitSparseFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second sparse fingerprint (sfp) for comparison.",
+        "name": "fp_2",
+        "type": "RdkitSparseFingerprint"
+      }
+    ],
+    "description": "Returns a boolean indicating whether the first sparse fingerprint is element-wise greater than or equal to the second sparse fingerprint. Used for the operator overloading",
+    "group": "internal",
+    "name": "sfp_ge",
+    "return_type": {
+      "description": "A boolean indicating whether the first sparse fingerprint is element-wise greater than or equal to the second sparse fingerprint.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "sfp_gt": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first sparse fingerprint for comparison.",
+        "name": "fp_1",
+        "type": "RdkitSparseFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second sparse fingerprint for comparison.",
+        "name": "fp_2",
+        "type": "RdkitSparseFingerprint"
+      }
+    ],
+    "description": "Returns a boolean indicating whether all elements of the first sparse fingerprint are greater than the corresponding elements of the second sparse fingerprint. Used for the operator overloading",
+    "group": "internal",
+    "name": "sfp_gt",
+    "return_type": {
+      "description": "`True` if all elements of the first sparse fingerprint are greater than the corresponding elements of the second, False otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "sfp_in": {
+    "args": [
+      {
+        "default": null,
+        "description": "The string representation of the sparse fingerprint.",
+        "name": "fp_string",
+        "type": "CString"
+      }
+    ],
+    "description": "Internal function, that constructs an RDKit sparse fingerprint (sfp) from a string representation.",
+    "group": "internal",
+    "name": "sfp_in",
+    "return_type": {
+      "description": "The RDKit sparse fingerprint (sfp) object.",
+      "type": "RdkitSparseFingerprint"
+    }
+  },
+  "sfp_le": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first RDKit sparse fingerprint.",
+        "name": "fp_1",
+        "type": "RdkitSparseFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second RDKit sparse fingerprint.",
+        "name": "fp_2",
+        "type": "RdkitSparseFingerprint"
+      }
+    ],
+    "description": "Returns a boolean indicating whether the first sparse fingerprint is element-wise less than or equal to the second sparse fingerprint. Used for the operator overloading",
+    "group": "internal",
+    "name": "sfp_le",
+    "return_type": {
+      "description": "True if the first sparse fingerprint is element-wise less than or equal to the second; otherwise, False.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "sfp_lt": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first sparse fingerprint to compare.",
+        "name": "fp_1",
+        "type": "RdkitSparseFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second sparse fingerprint to compare.",
+        "name": "fp_2",
+        "type": "RdkitSparseFingerprint"
+      }
+    ],
+    "description": "Returns a boolean indicating whether the first sparse fingerprint is less than the second sparse fingerprint. Used for the operator overloading",
+    "group": "internal",
+    "name": "sfp_lt",
+    "return_type": {
+      "description": "A boolean value (True if the first sparse fingerprint is less than the second, False otherwise).",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "sfp_ne": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first sparse fingerprint.",
+        "name": "fp_1",
+        "type": "RdkitSparseFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second sparse fingerprint.",
+        "name": "fp_2",
+        "type": "RdkitSparseFingerprint"
+      }
+    ],
+    "description": "Returns a boolean indicating whether two sparse fingerprints are not equal. Used for the operator overloading",
+    "group": "internal",
+    "name": "sfp_ne",
+    "return_type": {
+      "description": "`True` if the two sparse fingerprints are not equal, `False` otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "sfp_out": {
+    "args": [
+      {
+        "default": null,
+        "description": "The sparse fingerprint to be converted to a string.",
+        "name": "fp",
+        "type": "RdkitSparseFingerprint"
+      }
+    ],
+    "description": "Internal function, that returns a string representation of a sparse fingerprint.",
+    "group": "internal",
+    "name": "sfp_out",
+    "return_type": {
+      "description": "A string representation of the sparse fingerprint.",
+      "type": "CString"
+    }
+  },
+  "size": {
+    "args": [
+      {
+        "default": null,
+        "description": "The bit vector fingerprint.",
+        "name": "bfp",
+        "type": "RdkitBitFingerprint"
+      }
+    ],
+    "description": "Returns the length of (number of bits in) a bit vector fingerprint.",
+    "group": "general",
+    "name": "size",
+    "return_type": {
+      "description": "The length of (number of bits in) the bit vector fingerprint.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "substruct": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first molecule.",
+        "name": "mol",
+        "type": "RdkitMol | RdkitReaction"
+      },
+      {
+        "default": null,
+        "description": "The second molecule, which is checked as a substructure of the first.",
+        "name": "query",
+        "type": "RdkitMol | RdkitXQMol | RdkitQMol | RdkitReaction"
+      }
+    ],
+    "description": "Returns whether or not the second molecule/reaction is a substructure of the first one.",
+    "group": "general",
+    "name": "substruct",
+    "return_type": {
+      "description": "True if the second molecule is a substructure of the first, False otherwise.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "substruct_chiral": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to be searched for the substructure.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "The substructure molecule to search for within the first molecule. Chirality is considered.",
+        "name": "query",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Calls the rdkit cartridge function `substruct_chiral`.",
+    "group": "general",
+    "name": "substruct_chiral",
+    "return_type": {
+      "description": "A boolean indicating whether the second molecule is a substructure of the first, taking chirality into account.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "substruct_count": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to search within.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "The substructure to search for.",
+        "name": "query",
+        "type": "RdkitMol | RdkitQMol"
+      },
+      {
+        "default": true,
+        "description": "Toggles whether or not the matches are uniquified.",
+        "name": "unique",
+        "type": "sqltypes.Boolean | bool"
+      }
+    ],
+    "description": "Returns the number of substructure matches between the second molecule and the first. Optionally, the matches can be uniquified.",
+    "group": "general",
+    "name": "substruct_count",
+    "return_type": {
+      "description": "The number of substructure matches found.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "substruct_count_chiral": {
+    "args": [
+      {
+        "default": null,
+        "description": "The target RDKit molecule to search within.",
+        "name": "mol",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "The RDKit molecule or query molecule to search for as a chiral substructure.",
+        "name": "query",
+        "type": "RdkitMol | RdkitQMol"
+      },
+      {
+        "default": null,
+        "description": "A boolean flag indicating whether to count only unique chiral substructure matches (true) or all matches (false).",
+        "name": "unique",
+        "type": "sqltypes.Boolean"
+      }
+    ],
+    "description": "Returns the number of chiral substructure matches found between a query molecule and a target molecule. This function considers chirality during the matching process.",
+    "group": "general",
+    "name": "substruct_count_chiral",
+    "return_type": {
+      "description": "The total number of chiral substructure matches found.",
+      "type": "int | sqltypes.Integer"
+    }
+  },
+  "substruct_query": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule to search within.",
+        "name": "mol_1",
+        "type": "RdkitMol"
+      },
+      {
+        "default": null,
+        "description": "The molecule or query molecule to search for as a substructure.",
+        "name": "mol_2",
+        "type": "RdkitMol | RdkitXQMol | RdkitQMol"
+      }
+    ],
+    "description": "Returns whether or not the second molecule is a substructure of the first molecule.",
+    "group": "general",
+    "name": "substruct_query",
+    "return_type": {
+      "description": "A boolean indicating whether the second molecule is a substructure of the first.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "substructfp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first RDKit reaction.",
+        "name": "rxn_1",
+        "type": "RdkitReaction"
+      },
+      {
+        "default": null,
+        "description": "The second RDKit reaction, which is checked as a substructure of the first.",
+        "name": "rxn_2",
+        "type": "RdkitReaction"
+      }
+    ],
+    "description": "Returns whether or not the second RDKit reaction is a substructure of the first.",
+    "group": "general",
+    "name": "substructfp",
+    "return_type": {
+      "description": "A boolean indicating whether the second reaction is a substructure of the first.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "subtract": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first sparse fingerprint (sfp).",
+        "name": "fp_1",
+        "type": "RdkitSparseFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second sparse fingerprint (sfp) to subtract.",
+        "name": "fp_2",
+        "type": "RdkitSparseFingerprint"
+      }
+    ],
+    "description": "Returns an sfp formed by the element-wise subtraction of the two sfp arguments.",
+    "group": "general",
+    "name": "subtract",
+    "return_type": {
+      "description": "The resulting sparse fingerprint (sfp) after subtraction.",
+      "type": "RdkitSparseFingerprint"
+    }
+  },
+  "tanimoto_dist": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first fingerprint to compare.",
+        "name": "fp_1",
+        "type": "RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second fingerprint to compare.",
+        "name": "fp_2",
+        "type": "RdkitBitFingerprint"
+      }
+    ],
+    "description": "Returns the Tanimoto distance between two bit fingerprints.",
+    "group": "fp",
+    "name": "tanimoto_dist",
+    "return_type": {
+      "description": "The Tanimoto distance between the two fingerprints.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "tanimoto_sml": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first fingerprint to compare.",
+        "name": "fp_1",
+        "type": "RdkitSparseFingerprint | RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second fingerprint to compare.",
+        "name": "fp_2",
+        "type": "RdkitSparseFingerprint | RdkitBitFingerprint"
+      }
+    ],
+    "description": "Returns the Tanimoto similarity between two fingerprints of the same type (either two sparse fingerprints or two bit vector fingerprints).",
+    "group": "fp",
+    "name": "tanimoto_sml",
+    "return_type": {
+      "description": "The Tanimoto similarity as a float value.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "tanimoto_sml_op": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first fingerprint, which can be either a sparse fingerprint (sfp) or a bit vector fingerprint (bfp).",
+        "name": "fp_1",
+        "type": "RdkitSparseFingerprint | RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second fingerprint, which must be of the same type as the first fingerprint (either sfp or bfp).",
+        "name": "fp_2",
+        "type": "RdkitSparseFingerprint | RdkitBitFingerprint"
+      }
+    ],
+    "description": "Calculates the Tanimoto similarity between two fingerprints of the same type and returns a boolean result. Used internally for operator overloading.",
+    "group": "internal",
+    "name": "tanimoto_sml_op",
+    "return_type": {
+      "description": "A boolean value representing the result of the Tanimoto similarity operation.",
+      "type": "sqltypes.Boolean"
+    }
+  },
+  "torsion_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to generate the fingerprint.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns a sparse vector topological-torsion fingerprint for a molecule.",
+    "group": "general",
+    "name": "torsion_fp",
+    "return_type": {
+      "description": "A count-based topological-torsion fingerprint (sfp) for the molecule.",
+      "type": "RdkitSparseFingerprint"
+    }
+  },
+  "torsionbv_fp": {
+    "args": [
+      {
+        "default": null,
+        "description": "The molecule for which to generate the fingerprint.",
+        "name": "mol",
+        "type": "RdkitMol"
+      }
+    ],
+    "description": "Returns a bit vector topological-torsion fingerprint for a molecule.",
+    "group": "general",
+    "name": "torsionbv_fp",
+    "return_type": {
+      "description": "A bit vector (bfp) representing the topological-torsion fingerprint of the molecule.",
+      "type": "RdkitBitFingerprint"
+    }
+  },
+  "tversky_sml": {
+    "args": [
+      {
+        "default": null,
+        "description": "The first fingerprint.",
+        "name": "fp_1",
+        "type": "RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The second fingerprint.",
+        "name": "fp_2",
+        "type": "RdkitBitFingerprint"
+      },
+      {
+        "default": null,
+        "description": "The alpha parameter for the Tversky similarity.",
+        "name": "alpha",
+        "type": "float"
+      },
+      {
+        "default": null,
+        "description": "The beta parameter for the Tversky similarity.",
+        "name": "beta",
+        "type": "float"
+      }
+    ],
+    "description": "Returns the Tversky similarity between two bit fingerprints. The third and fourth arguments are the alpha and beta parameters for the Tversky similarity.",
+    "group": "general",
+    "name": "tversky_sml",
+    "return_type": {
+      "description": "The Tversky similarity between the two fingerprints.",
+      "type": "sqltypes.Float"
+    }
+  },
+  "xqmol_in": {
+    "args": [
+      {
+        "default": null,
+        "description": "The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).",
+        "name": "arg_1",
+        "type": "CString"
+      }
+    ],
+    "description": "Internal function: Constructs a query molecule from an input string.",
+    "group": "internal",
+    "name": "xqmol_in",
+    "return_type": {
+      "description": "A query molecule (RdkitXQMol) object.",
+      "type": "RdkitXQMol"
+    }
+  },
+  "xqmol_out": {
+    "args": [
+      {
+        "default": null,
+        "description": "The RDKit query molecule to convert to a string.",
+        "name": "arg_1",
+        "type": "RdkitXQMol"
+      }
+    ],
+    "description": "Internal function used to retrieve the string representation of an `RdkitXQMol` object.",
+    "group": "internal",
+    "name": "xqmol_out",
+    "return_type": {
+      "description": "TODO",
+      "type": "CString"
+    }
+  },
+  "xqmol_send": {
+    "args": [
+      {
+        "default": null,
+        "description": "An RDKit extended query molecule.",
+        "name": "mol",
+        "type": "RdkitXQMol"
+      }
+    ],
+    "description": "Converts `RdkitXQMol` to its binary representation.",
+    "group": "io",
+    "name": "xqmol_send",
+    "return_type": {
+      "description": "SQLAlchemy function",
+      "type": "sqltypes.LargeBinary"
+    }
+  }
+}

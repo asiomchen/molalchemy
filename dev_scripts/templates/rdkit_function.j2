@@ -1,0 +1,27 @@
+class {{ func_name }}(GenericFunction):
+    {% if '|' not in return_type %}
+    type = {{ return_type }}()
+    {% elif 'RdkitMol' in return_type %}
+    type = RdkitMol()
+    {% elif 'RdkitReaction' in return_type %}
+    type = RdkitReaction()
+    {% elif 'RdkitBitFingerprint' in return_type %}
+    type = RdkitBitFingerprint()
+    {% endif %}
+    inherit_cache = True
+
+    def __init__(self, {{ arg_inits }}**kwargs: Any) -> None:
+        """{{ description }}
+
+        Parameters
+        ----------
+        {{ params }}
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
+
+        Returns
+        -------
+        Function[{{ return_type }}]
+            {{ return_description }}
+        """
+        super().__init__({{ arg_names }}**kwargs)

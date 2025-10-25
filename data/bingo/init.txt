@@ -1,0 +1,5 @@
+"""
+The `molalchemy.bingo.functions` module provides collections of Bingo PostgreSQL functions for molecular structure search and analysis.
+
+These function classes wrap Bingo PostgreSQL functions, enabling various chemical structure operations including substructure search, exact matching, similarity search, fingerprint calculations, and chemical property calculations directly from SQLAlchemy queries.
+"""

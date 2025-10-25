@@ -1,0 +1,8 @@
+{
+  "general": {
+    "extra_members": [
+      "mol_has_substructure",
+      "rxn_has_smarts"
+    ]
+  }
+}
