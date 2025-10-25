@@ -1,4 +1,4 @@
-"""Auto-generated from data/bingo_functions.json. Do not edit manually."""
+"""Auto-generated from `data/bingo/functions.json`. Do not edit manually"""
 
 from typing import Any, Literal
 
@@ -7,9 +7,16 @@ from sqlalchemy.sql import text
 from sqlalchemy.sql.elements import BinaryExpression, ColumnElement
 from sqlalchemy.sql.functions import GenericFunction
 
-from molalchemy.bingo.types import BingoBinaryMol, BingoMol
+from molalchemy.bingo.types import (
+    BingoBinaryMol,
+    BingoBinaryReaction,
+    BingoMol,
+    BingoReaction,
+)
 
 AnyBingoMol = BingoMol | BingoBinaryMol
+
+AnyBingoReaction = BingoReaction | BingoBinaryReaction
 
 
 def has_substructure(
@@ -136,14 +143,14 @@ class aam(GenericFunction):
 
         Parameters
         ----------
-        rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-            Input reaction
-        strategy: sqltypes.Text | Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP'] = 'KEEP'
-            Strategy for handling existing atom mapping (default is 'KEEP').
-                        - 'CLEAR': Remove all existing mappings and compute new ones
-                        - 'DISCARD': Remove all mappings without computing new ones
-                        - 'ALTER': Modify existing mappings
-                        - 'KEEP': Keep existing mappings and map unmapped atoms
+        rxn
+        Input reaction
+        strategy
+        Strategy for handling existing atom mapping (default is 'KEEP').
+                - 'CLEAR': Remove all existing mappings and compute new ones
+                - 'DISCARD': Remove all mappings without computing new ones
+                - 'ALTER': Modify existing mappings
+                - 'KEEP': Keep existing mappings and map unmapped atoms
 
         Returns
         -------
@@ -165,8 +172,8 @@ class cansmiles(GenericFunction):
 
         Parameters
         ----------
-        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-            Input molecule in any supported format
+        mol
+        Input molecule in any supported format
 
         Returns
         -------
@@ -188,8 +195,8 @@ class checkmolecule(GenericFunction):
 
         Parameters
         ----------
-        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-            Input molecule in any supported format
+        mol
+        Input molecule in any supported format
 
         Returns
         -------
@@ -211,8 +218,8 @@ class checkreaction(GenericFunction):
 
         Parameters
         ----------
-        rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-            Input reaction in any supported format
+        rxn
+        Input reaction in any supported format
 
         Returns
         -------
@@ -234,8 +241,8 @@ class cml(GenericFunction):
 
         Parameters
         ----------
-        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-            Input molecule in any supported format
+        mol
+        Input molecule in any supported format
 
         Returns
         -------
@@ -260,10 +267,10 @@ class compactmolecule(GenericFunction):
 
         Parameters
         ----------
-        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-            Input molecule in any supported format
-        use_pos: sqltypes.Boolean | bool = False
-            If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
+        mol
+        Input molecule in any supported format
+        use_pos
+        If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
 
         Returns
         -------
@@ -288,10 +295,10 @@ class compactreaction(GenericFunction):
 
         Parameters
         ----------
-        rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-            Input reaction in any supported format
-        use_pos: sqltypes.Boolean | bool = False
-            If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
+        rxn
+        Input reaction in any supported format
+        use_pos
+        If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
 
         Returns
         -------
@@ -318,14 +325,10 @@ class exportrdf(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
-        arg_2: str | sqltypes.Text
-
-        arg_3: str | sqltypes.Text
-
-        arg_4: str | sqltypes.Text
-
+        arg_1
+        arg_2
+        arg_3
+        arg_4
 
         Returns
         -------
@@ -352,14 +355,14 @@ class exportsdf(GenericFunction):
 
         Parameters
         ----------
-        table: str | sqltypes.Text
-            Name of the table containing the molecules to export
-        column: str | sqltypes.Text
-            Name of the column containing the molecules to export
-        other_columns: str | sqltypes.Text
-            Space-separated list of other columns to include in the SDF file as SD data fields
-        outfile: str | sqltypes.Text
-            Path to the output SDF file
+        table
+        Name of the table containing the molecules to export
+        column
+        Name of the column containing the molecules to export
+        other_columns
+        Space-separated list of other columns to include in the SDF file as SD data fields
+        outfile
+        Path to the output SDF file
 
         Returns
         -------
@@ -379,8 +382,7 @@ class filetoblob(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
+        arg_1
 
         Returns
         -------
@@ -400,8 +402,7 @@ class filetotext(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
+        arg_1
 
         Returns
         -------
@@ -426,10 +427,8 @@ class fingerprint(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-        arg_2: str | sqltypes.Text
-
+        arg_1
+        arg_2
 
         Returns
         -------
@@ -449,8 +448,7 @@ class getblockcount(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
+        arg_1
 
         Returns
         -------
@@ -492,8 +490,7 @@ class getmass(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+        arg_1
 
         Returns
         -------
@@ -513,8 +510,7 @@ class getname(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
+        arg_1
 
         Returns
         -------
@@ -540,12 +536,12 @@ class getsimilarity(GenericFunction):
 
         Parameters
         ----------
-        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-            Input molecule or molecular column in any supported format
-        query: str | sqltypes.Text
-            Query molecule in any supported format
-        metric: str | sqltypes.Text = 'tanimoto'
-            string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional “alpha” and “beta” parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).
+        mol
+        Input molecule or molecular column in any supported format
+        query
+        Query molecule in any supported format
+        metric
+        string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional “alpha” and “beta” parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).
 
         Returns
         -------
@@ -565,8 +561,7 @@ class getstructurescount(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
+        arg_1
 
         Returns
         -------
@@ -611,10 +606,8 @@ class getweight(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-        arg_2: str | sqltypes.Text
-
+        arg_1
+        arg_2
 
         Returns
         -------
@@ -636,8 +629,7 @@ class gross(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+        arg_1
 
         Returns
         -------
@@ -664,14 +656,10 @@ class importrdf(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
-        arg_2: str | sqltypes.Text
-
-        arg_3: str | sqltypes.Text
-
-        arg_4: str | sqltypes.Text
-
+        arg_1
+        arg_2
+        arg_3
+        arg_4
 
         Returns
         -------
@@ -698,14 +686,10 @@ class importsdf(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
-        arg_2: str | sqltypes.Text
-
-        arg_3: str | sqltypes.Text
-
-        arg_4: str | sqltypes.Text
-
+        arg_1
+        arg_2
+        arg_3
+        arg_4
 
         Returns
         -------
@@ -732,14 +716,10 @@ class importsmiles(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
-        arg_2: str | sqltypes.Text
-
-        arg_3: str | sqltypes.Text
-
-        arg_4: str | sqltypes.Text
-
+        arg_1
+        arg_2
+        arg_3
+        arg_4
 
         Returns
         -------
@@ -764,10 +744,8 @@ class inchi(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-        arg_2: str | sqltypes.Text
-
+        arg_1
+        arg_2
 
         Returns
         -------
@@ -787,8 +765,7 @@ class inchikey(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
+        arg_1
 
         Returns
         -------
@@ -801,7 +778,6 @@ class inchikey(GenericFunction):
 
 class matchexact(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "matchexact"
 
@@ -823,7 +799,6 @@ class matchexact(GenericFunction):
 
 class matchgross(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "matchgross"
 
@@ -845,7 +820,6 @@ class matchgross(GenericFunction):
 
 class matchrexact(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "matchrexact"
 
@@ -867,7 +841,6 @@ class matchrexact(GenericFunction):
 
 class matchrsmarts(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "matchrsmarts"
 
@@ -889,7 +862,6 @@ class matchrsmarts(GenericFunction):
 
 class matchrsub(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "matchrsub"
 
@@ -911,7 +883,6 @@ class matchrsub(GenericFunction):
 
 class matchsim(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "matchsim"
 
@@ -933,7 +904,6 @@ class matchsim(GenericFunction):
 
 class matchsmarts(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "matchsmarts"
 
@@ -955,7 +925,6 @@ class matchsmarts(GenericFunction):
 
 class matchsub(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "matchsub"
 
@@ -986,8 +955,7 @@ class molfile(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+        arg_1
 
         Returns
         -------
@@ -1009,10 +977,8 @@ class precachedatabase(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
-        arg_2: str | sqltypes.Text
-
+        arg_1
+        arg_2
 
         Returns
         -------
@@ -1034,8 +1000,7 @@ class rcml(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+        arg_1
 
         Returns
         -------
@@ -1060,10 +1025,8 @@ class rfingerprint(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-        arg_2: str | sqltypes.Text
-
+        arg_1
+        arg_2
 
         Returns
         -------
@@ -1085,8 +1048,7 @@ class rsmiles(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+        arg_1
 
         Returns
         -------
@@ -1108,8 +1070,7 @@ class rxnfile(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+        arg_1
 
         Returns
         -------
@@ -1131,8 +1092,7 @@ class smiles(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+        arg_1
 
         Returns
         -------
@@ -1157,10 +1117,8 @@ class standardize(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-        arg_2: str | sqltypes.Text
-
+        arg_1
+        arg_2
 
         Returns
         -------

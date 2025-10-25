@@ -1,4 +1,4 @@
-"""Auto-generated from data/rdkit_functions.json. Do not edit manually."""
+"""Auto-generated from `data/rdkit/functions.json`. Do not edit manually"""
 
 from typing import Any
 
@@ -22,15 +22,14 @@ class bfp_cmp(GenericFunction):
     def __init__(
         self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
     ) -> None:
-        """
-        Calls the rdkit cartridge function `bfp_cmp`.
+        """Calls the rdkit cartridge function `bfp_cmp`.
 
         Parameters
         ----------
-        fp_1: RdkitBitFingerprint
-            The first RDKit bit fingerprint for comparison.
-        fp_2: RdkitBitFingerprint
-            The second RDKit bit fingerprint for comparison.
+        fp_1
+        The first RDKit bit fingerprint for comparison.
+        fp_2
+        The second RDKit bit fingerprint for comparison.
 
         Returns
         -------
@@ -42,21 +41,19 @@ class bfp_cmp(GenericFunction):
 
 class bfp_eq(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
     ) -> None:
-        """
-        Checks if two bit vector fingerprints are equal. Used for operator overloading.
+        """Checks if two bit vector fingerprints are equal. Used for operator overloading.
 
         Parameters
         ----------
-        fp_1: RdkitBitFingerprint
-            The first bit vector fingerprint for comparison.
-        fp_2: RdkitBitFingerprint
-            The second bit vector fingerprint for comparison.
+        fp_1
+        The first bit vector fingerprint for comparison.
+        fp_2
+        The second bit vector fingerprint for comparison.
 
         Returns
         -------
@@ -68,21 +65,19 @@ class bfp_eq(GenericFunction):
 
 class bfp_ge(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
     ) -> None:
-        """
-        Returns whether the first bit fingerprint is greater than or equal to the second bit fingerprint. Used for operator overloading.
+        """Returns whether the first bit fingerprint is greater than or equal to the second bit fingerprint. Used for operator overloading.
 
         Parameters
         ----------
-        fp_1: RdkitBitFingerprint
-            The first bit fingerprint.
-        fp_2: RdkitBitFingerprint
-            The second bit fingerprint.
+        fp_1
+        The first bit fingerprint.
+        fp_2
+        The second bit fingerprint.
 
         Returns
         -------
@@ -94,21 +89,19 @@ class bfp_ge(GenericFunction):
 
 class bfp_gt(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
     ) -> None:
-        """
-        Returns whether the first bit vector fingerprint is 'greater than' the second bit vector fingerprint. Used internally for operator overloading.
+        """Returns whether the first bit vector fingerprint is 'greater than' the second bit vector fingerprint. Used internally for operator overloading.
 
         Parameters
         ----------
-        fp_1: RdkitBitFingerprint
-            The first bit vector fingerprint.
-        fp_2: RdkitBitFingerprint
-            The second bit vector fingerprint for comparison.
+        fp_1
+        The first bit vector fingerprint.
+        fp_2
+        The second bit vector fingerprint for comparison.
 
         Returns
         -------
@@ -120,17 +113,15 @@ class bfp_gt(GenericFunction):
 
 class bfp_in(GenericFunction):
     type = RdkitBitFingerprint()
-
     inherit_cache = True
 
     def __init__(self, input: CString, **kwargs: Any) -> None:
-        """
-        Converts a string representation into an RDKit bit fingerprint. Used for input conversion from the client.
+        """Converts a string representation into an RDKit bit fingerprint. Used for input conversion from the client.
 
         Parameters
         ----------
-        input: CString
-            The string representation of the bit fingerprint.
+        input
+        The string representation of the bit fingerprint.
 
         Returns
         -------
@@ -142,21 +133,19 @@ class bfp_in(GenericFunction):
 
 class bfp_lt(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
     ) -> None:
-        """
-        Returns a boolean indicating whether or not the first bit fingerprint is less than the second bit fingerprint. Used internally for operator overloading.
+        """Returns a boolean indicating whether or not the first bit fingerprint is less than the second bit fingerprint. Used internally for operator overloading.
 
         Parameters
         ----------
-        fp_1: RdkitBitFingerprint
-            The first bit fingerprint to compare.
-        fp_2: RdkitBitFingerprint
-            The second bit fingerprint to compare.
+        fp_1
+        The first bit fingerprint to compare.
+        fp_2
+        The second bit fingerprint to compare.
 
         Returns
         -------
@@ -168,21 +157,19 @@ class bfp_lt(GenericFunction):
 
 class bfp_ne(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, bfp1: RdkitBitFingerprint, bfp2: RdkitBitFingerprint, **kwargs: Any
     ) -> None:
-        """
-        Compares two bit vector fingerprints for inequality. Used internally for operator overloading.
+        """Compares two bit vector fingerprints for inequality. Used internally for operator overloading.
 
         Parameters
         ----------
-        bfp1: RdkitBitFingerprint
-            The first bit vector fingerprint.
-        bfp2: RdkitBitFingerprint
-            The second bit vector fingerprint.
+        bfp1
+        The first bit vector fingerprint.
+        bfp2
+        The second bit vector fingerprint.
 
         Returns
         -------
@@ -194,17 +181,15 @@ class bfp_ne(GenericFunction):
 
 class bfp_out(GenericFunction):
     type = CString()
-
     inherit_cache = True
 
     def __init__(self, fp: RdkitBitFingerprint, **kwargs: Any) -> None:
-        """
-        Returns a bytea with the binary string representation of the fingerprint. Used internally to return fingerprint values to the client.
+        """Returns a bytea with the binary string representation of the fingerprint. Used internally to return fingerprint values to the client.
 
         Parameters
         ----------
-        fp: RdkitBitFingerprint
-            The bit vector fingerprint to convert to a binary string representation.
+        fp
+        The bit vector fingerprint to convert to a binary string representation.
 
         Returns
         -------
@@ -216,21 +201,19 @@ class bfp_out(GenericFunction):
 
 class fmcs_smiles_transition(GenericFunction):
     type = sqltypes.Text()
-
     inherit_cache = True
 
     def __init__(
         self, arg_1: sqltypes.Text, arg_2: sqltypes.Text, **kwargs: Any
     ) -> None:
-        """
-        TODO
+        """TODO
 
         Parameters
         ----------
-        arg_1: sqltypes.Text
-            TODO.
-        arg_2: sqltypes.Text
-            TODO.
+        arg_1
+        TODO.
+        arg_2
+        TODO.
 
         Returns
         -------
@@ -244,15 +227,14 @@ class mol_cmp(GenericFunction):
     inherit_cache = True
 
     def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
-        """
-        Compares two RDKit molecules.
+        """Compares two RDKit molecules.
 
         Parameters
         ----------
-        mol_1: RdkitMol
-            The first RDKit molecule to compare.
-        mol_2: RdkitMol
-            The second RDKit molecule to compare.
+        mol_1
+        The first RDKit molecule to compare.
+        mol_2
+        The second RDKit molecule to compare.
 
         Returns
         -------
@@ -264,19 +246,17 @@ class mol_cmp(GenericFunction):
 
 class mol_eq(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
-        """
-        Checks if two RDKit molecules are equal. Used internally for operator overloading.
+        """Checks if two RDKit molecules are equal. Used internally for operator overloading.
 
         Parameters
         ----------
-        mol_1: RdkitMol
-            The first RDKit molecule to compare.
-        mol_2: RdkitMol
-            The second RDKit molecule to compare.
+        mol_1
+        The first RDKit molecule to compare.
+        mol_2
+        The second RDKit molecule to compare.
 
         Returns
         -------
@@ -288,19 +268,17 @@ class mol_eq(GenericFunction):
 
 class mol_ge(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(self, arg_1: RdkitMol, arg_2: RdkitMol, **kwargs: Any) -> None:
-        """
-        Checks if the first RDKit molecule is a superstructure of, or identical to, the second RDKit molecule. Used internally for operator overloading.
+        """Checks if the first RDKit molecule is a superstructure of, or identical to, the second RDKit molecule. Used internally for operator overloading.
 
         Parameters
         ----------
-        arg_1: RdkitMol
-            The RDKit molecule to be checked as the potential superstructure.
-        arg_2: RdkitMol
-            The RDKit molecule to be checked as the potential substructure.
+        arg_1
+        The RDKit molecule to be checked as the potential superstructure.
+        arg_2
+        The RDKit molecule to be checked as the potential substructure.
 
         Returns
         -------
@@ -312,19 +290,17 @@ class mol_ge(GenericFunction):
 
 class mol_gt(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
-        """
-        Compares two RDKit molecules to determine if the first molecule is greater than the second, based on an internal canonical ordering. Used internally for operator overloading.
+        """Compares two RDKit molecules to determine if the first molecule is greater than the second, based on an internal canonical ordering. Used internally for operator overloading.
 
         Parameters
         ----------
-        mol_1: RdkitMol
-            The first RDKit molecule for comparison.
-        mol_2: RdkitMol
-            The second RDKit molecule for comparison.
+        mol_1
+        The first RDKit molecule for comparison.
+        mol_2
+        The second RDKit molecule for comparison.
 
         Returns
         -------
@@ -336,17 +312,15 @@ class mol_gt(GenericFunction):
 
 class mol_in(GenericFunction):
     type = RdkitMol()
-
     inherit_cache = True
 
     def __init__(self, mol_str: CString, **kwargs: Any) -> None:
-        """
-        Internal function used to load the molecule from the client input.
+        """Internal function used to load the molecule from the client input.
 
         Parameters
         ----------
-        mol_str: CString
-            The string representation of the molecule.
+        mol_str
+        The string representation of the molecule.
 
         Returns
         -------
@@ -358,19 +332,17 @@ class mol_in(GenericFunction):
 
 class mol_le(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
-        """
-        Compares two RDKit molecules to check if the first is less than or equal to the second. Used internally for operator overloading
+        """Compares two RDKit molecules to check if the first is less than or equal to the second. Used internally for operator overloading
 
         Parameters
         ----------
-        mol_1: RdkitMol
-            The first RDKit molecule for comparison.
-        mol_2: RdkitMol
-            The second RDKit molecule for comparison.
+        mol_1
+        The first RDKit molecule for comparison.
+        mol_2
+        The second RDKit molecule for comparison.
 
         Returns
         -------
@@ -382,19 +354,17 @@ class mol_le(GenericFunction):
 
 class mol_lt(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
-        """
-        Compares two RDKit molecules to determine if the first molecule is less than the second molecule. Used internally for operator overloading
+        """Compares two RDKit molecules to determine if the first molecule is less than the second molecule. Used internally for operator overloading
 
         Parameters
         ----------
-        mol_1: RdkitMol
-            The first RDKit molecule.
-        mol_2: RdkitMol
-            The second RDKit molecule.
+        mol_1
+        The first RDKit molecule.
+        mol_2
+        The second RDKit molecule.
 
         Returns
         -------
@@ -406,19 +376,17 @@ class mol_lt(GenericFunction):
 
 class mol_ne(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
-        """
-        Returns a boolean indicating whether or not two molecules are not equal. Used internally for the operator overloading
+        """Returns a boolean indicating whether or not two molecules are not equal. Used internally for the operator overloading
 
         Parameters
         ----------
-        mol_1: RdkitMol
-            The first molecule to compare.
-        mol_2: RdkitMol
-            The second molecule to compare.
+        mol_1
+        The first molecule to compare.
+        mol_2
+        The second molecule to compare.
 
         Returns
         -------
@@ -430,17 +398,15 @@ class mol_ne(GenericFunction):
 
 class mol_out(GenericFunction):
     type = CString()
-
     inherit_cache = True
 
     def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
-        """
-        Calls the RDKit cartridge function `mol_out` to return a string representation of the molecule. Used internally for displaying molecules in query results.
+        """Calls the RDKit cartridge function `mol_out` to return a string representation of the molecule. Used internally for displaying molecules in query results.
 
         Parameters
         ----------
-        mol: RdkitMol
-            The RDKit molecule to be converted to a string.
+        mol
+        The RDKit molecule to be converted to a string.
 
         Returns
         -------
@@ -452,17 +418,15 @@ class mol_out(GenericFunction):
 
 class qmol_in(GenericFunction):
     type = RdkitQMol()
-
     inherit_cache = True
 
     def __init__(self, mol_str: CString, **kwargs: Any) -> None:
-        """
-        Constructs an RDKit query molecule from a string representation. This function is used internally for receiving a query molecule from the client.
+        """Constructs an RDKit query molecule from a string representation. This function is used internally for receiving a query molecule from the client.
 
         Parameters
         ----------
-        mol_str: CString
-            The string representation of the query molecule
+        mol_str
+        The string representation of the query molecule
 
         Returns
         -------
@@ -474,17 +438,15 @@ class qmol_in(GenericFunction):
 
 class qmol_out(GenericFunction):
     type = CString()
-
     inherit_cache = True
 
     def __init__(self, mol: RdkitQMol, **kwargs: Any) -> None:
-        """
-        Returns the SMARTS string for a query molecule. This function is used internally for sending the result of a query molecule to the client.
+        """Returns the SMARTS string for a query molecule. This function is used internally for sending the result of a query molecule to the client.
 
         Parameters
         ----------
-        mol: RdkitQMol
-            The query molecule.
+        mol
+        The query molecule.
 
         Returns
         -------
@@ -496,21 +458,19 @@ class qmol_out(GenericFunction):
 
 class reaction_eq(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, rxn_1: RdkitReaction, rxn_2: RdkitReaction, **kwargs: Any
     ) -> None:
-        """
-        Checks if two RDKit reactions are equivalent. Used internally for the operator overloading.
+        """Checks if two RDKit reactions are equivalent. Used internally for the operator overloading.
 
         Parameters
         ----------
-        rxn_1: RdkitReaction
-            The first RDKit reaction.
-        rxn_2: RdkitReaction
-            The second RDKit reaction.
+        rxn_1
+        The first RDKit reaction.
+        rxn_2
+        The second RDKit reaction.
 
         Returns
         -------
@@ -522,17 +482,15 @@ class reaction_eq(GenericFunction):
 
 class reaction_in(GenericFunction):
     type = RdkitReaction()
-
     inherit_cache = True
 
     def __init__(self, rxn_str: CString, **kwargs: Any) -> None:
-        """
-        Converts a string representation of a chemical reaction into an RDKit reaction object.
+        """Converts a string representation of a chemical reaction into an RDKit reaction object.
 
         Parameters
         ----------
-        rxn_str: CString
-            The string representation of the chemical reaction, typically in reaction SMILES format.
+        rxn_str
+        The string representation of the chemical reaction, typically in reaction SMILES format.
 
         Returns
         -------
@@ -544,21 +502,19 @@ class reaction_in(GenericFunction):
 
 class reaction_ne(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, rxn_1: RdkitReaction, rxn_2: RdkitReaction, **kwargs: Any
     ) -> None:
-        """
-        Returns true if the two reactions are not equal. Used internally for the operator overloading
+        """Returns true if the two reactions are not equal. Used internally for the operator overloading
 
         Parameters
         ----------
-        rxn_1: RdkitReaction
-            The first RDKit reaction.
-        rxn_2: RdkitReaction
-            The second RDKit reaction.
+        rxn_1
+        The first RDKit reaction.
+        rxn_2
+        The second RDKit reaction.
 
         Returns
         -------
@@ -570,17 +526,15 @@ class reaction_ne(GenericFunction):
 
 class reaction_out(GenericFunction):
     type = CString()
-
     inherit_cache = True
 
     def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
-        """
-        Internal function: Converts an RDKit reaction object to its string representation.
+        """Internal function: Converts an RDKit reaction object to its string representation.
 
         Parameters
         ----------
-        rxn: RdkitReaction
-            The RDKit reaction object to convert.
+        rxn
+        The RDKit reaction object to convert.
 
         Returns
         -------
@@ -599,15 +553,14 @@ class sfp_cmp(GenericFunction):
         arg_2: RdkitSparseFingerprint,
         **kwargs: Any,
     ) -> None:
-        """
-        Calls the rdkit cartridge function `sfp_cmp`.
+        """Calls the rdkit cartridge function `sfp_cmp`.
 
         Parameters
         ----------
-        arg_1: RdkitSparseFingerprint
-            The first sparse fingerprint to compare.
-        arg_2: RdkitSparseFingerprint
-            The second sparse fingerprint to compare.
+        arg_1
+        The first sparse fingerprint to compare.
+        arg_2
+        The second sparse fingerprint to compare.
 
         Returns
         -------
@@ -619,21 +572,19 @@ class sfp_cmp(GenericFunction):
 
 class sfp_eq(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
     ) -> None:
-        """
-        Returns a boolean indicating whether or not the two sparse fingerprint arguments are equal. Used for the operator overloading
+        """Returns a boolean indicating whether or not the two sparse fingerprint arguments are equal. Used for the operator overloading
 
         Parameters
         ----------
-        fp_1: RdkitSparseFingerprint
-            The first sparse fingerprint.
-        fp_2: RdkitSparseFingerprint
-            The second sparse fingerprint.
+        fp_1
+        The first sparse fingerprint.
+        fp_2
+        The second sparse fingerprint.
 
         Returns
         -------
@@ -645,21 +596,19 @@ class sfp_eq(GenericFunction):
 
 class sfp_ge(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
     ) -> None:
-        """
-        Returns a boolean indicating whether the first sparse fingerprint is element-wise greater than or equal to the second sparse fingerprint. Used for the operator overloading
+        """Returns a boolean indicating whether the first sparse fingerprint is element-wise greater than or equal to the second sparse fingerprint. Used for the operator overloading
 
         Parameters
         ----------
-        fp_1: RdkitSparseFingerprint
-            The first sparse fingerprint (sfp) for comparison.
-        fp_2: RdkitSparseFingerprint
-            The second sparse fingerprint (sfp) for comparison.
+        fp_1
+        The first sparse fingerprint (sfp) for comparison.
+        fp_2
+        The second sparse fingerprint (sfp) for comparison.
 
         Returns
         -------
@@ -671,21 +620,19 @@ class sfp_ge(GenericFunction):
 
 class sfp_gt(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
     ) -> None:
-        """
-        Returns a boolean indicating whether all elements of the first sparse fingerprint are greater than the corresponding elements of the second sparse fingerprint. Used for the operator overloading
+        """Returns a boolean indicating whether all elements of the first sparse fingerprint are greater than the corresponding elements of the second sparse fingerprint. Used for the operator overloading
 
         Parameters
         ----------
-        fp_1: RdkitSparseFingerprint
-            The first sparse fingerprint for comparison.
-        fp_2: RdkitSparseFingerprint
-            The second sparse fingerprint for comparison.
+        fp_1
+        The first sparse fingerprint for comparison.
+        fp_2
+        The second sparse fingerprint for comparison.
 
         Returns
         -------
@@ -697,17 +644,15 @@ class sfp_gt(GenericFunction):
 
 class sfp_in(GenericFunction):
     type = RdkitSparseFingerprint()
-
     inherit_cache = True
 
     def __init__(self, fp_string: CString, **kwargs: Any) -> None:
-        """
-        Internal function, that constructs an RDKit sparse fingerprint (sfp) from a string representation.
+        """Internal function, that constructs an RDKit sparse fingerprint (sfp) from a string representation.
 
         Parameters
         ----------
-        fp_string: CString
-            The string representation of the sparse fingerprint.
+        fp_string
+        The string representation of the sparse fingerprint.
 
         Returns
         -------
@@ -719,21 +664,19 @@ class sfp_in(GenericFunction):
 
 class sfp_le(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
     ) -> None:
-        """
-        Returns a boolean indicating whether the first sparse fingerprint is element-wise less than or equal to the second sparse fingerprint. Used for the operator overloading
+        """Returns a boolean indicating whether the first sparse fingerprint is element-wise less than or equal to the second sparse fingerprint. Used for the operator overloading
 
         Parameters
         ----------
-        fp_1: RdkitSparseFingerprint
-            The first RDKit sparse fingerprint.
-        fp_2: RdkitSparseFingerprint
-            The second RDKit sparse fingerprint.
+        fp_1
+        The first RDKit sparse fingerprint.
+        fp_2
+        The second RDKit sparse fingerprint.
 
         Returns
         -------
@@ -745,21 +688,19 @@ class sfp_le(GenericFunction):
 
 class sfp_lt(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
     ) -> None:
-        """
-        Returns a boolean indicating whether the first sparse fingerprint is less than the second sparse fingerprint. Used for the operator overloading
+        """Returns a boolean indicating whether the first sparse fingerprint is less than the second sparse fingerprint. Used for the operator overloading
 
         Parameters
         ----------
-        fp_1: RdkitSparseFingerprint
-            The first sparse fingerprint to compare.
-        fp_2: RdkitSparseFingerprint
-            The second sparse fingerprint to compare.
+        fp_1
+        The first sparse fingerprint to compare.
+        fp_2
+        The second sparse fingerprint to compare.
 
         Returns
         -------
@@ -771,21 +712,19 @@ class sfp_lt(GenericFunction):
 
 class sfp_ne(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
         self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
     ) -> None:
-        """
-        Returns a boolean indicating whether two sparse fingerprints are not equal. Used for the operator overloading
+        """Returns a boolean indicating whether two sparse fingerprints are not equal. Used for the operator overloading
 
         Parameters
         ----------
-        fp_1: RdkitSparseFingerprint
-            The first sparse fingerprint.
-        fp_2: RdkitSparseFingerprint
-            The second sparse fingerprint.
+        fp_1
+        The first sparse fingerprint.
+        fp_2
+        The second sparse fingerprint.
 
         Returns
         -------
@@ -797,17 +736,15 @@ class sfp_ne(GenericFunction):
 
 class sfp_out(GenericFunction):
     type = CString()
-
     inherit_cache = True
 
     def __init__(self, fp: RdkitSparseFingerprint, **kwargs: Any) -> None:
-        """
-        Internal function, that returns a string representation of a sparse fingerprint.
+        """Internal function, that returns a string representation of a sparse fingerprint.
 
         Parameters
         ----------
-        fp: RdkitSparseFingerprint
-            The sparse fingerprint to be converted to a string.
+        fp
+        The sparse fingerprint to be converted to a string.
 
         Returns
         -------
@@ -819,7 +756,6 @@ class sfp_out(GenericFunction):
 
 class tanimoto_sml_op(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
 
     def __init__(
@@ -828,15 +764,14 @@ class tanimoto_sml_op(GenericFunction):
         fp_2: RdkitSparseFingerprint | RdkitBitFingerprint,
         **kwargs: Any,
     ) -> None:
-        """
-        Calculates the Tanimoto similarity between two fingerprints of the same type and returns a boolean result. Used internally for operator overloading.
+        """Calculates the Tanimoto similarity between two fingerprints of the same type and returns a boolean result. Used internally for operator overloading.
 
         Parameters
         ----------
-        fp_1: RdkitSparseFingerprint | RdkitBitFingerprint
-            The first fingerprint, which can be either a sparse fingerprint (sfp) or a bit vector fingerprint (bfp).
-        fp_2: RdkitSparseFingerprint | RdkitBitFingerprint
-            The second fingerprint, which must be of the same type as the first fingerprint (either sfp or bfp).
+        fp_1
+        The first fingerprint, which can be either a sparse fingerprint (sfp) or a bit vector fingerprint (bfp).
+        fp_2
+        The second fingerprint, which must be of the same type as the first fingerprint (either sfp or bfp).
 
         Returns
         -------
@@ -848,17 +783,15 @@ class tanimoto_sml_op(GenericFunction):
 
 class xqmol_in(GenericFunction):
     type = RdkitXQMol()
-
     inherit_cache = True
 
     def __init__(self, arg_1: CString, **kwargs: Any) -> None:
-        """
-        Internal function: Constructs a query molecule from an input string.
+        """Internal function: Constructs a query molecule from an input string.
 
         Parameters
         ----------
-        arg_1: CString
-            The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).
+        arg_1
+        The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).
 
         Returns
         -------
@@ -870,17 +803,15 @@ class xqmol_in(GenericFunction):
 
 class xqmol_out(GenericFunction):
     type = CString()
-
     inherit_cache = True
 
     def __init__(self, arg_1: RdkitXQMol, **kwargs: Any) -> None:
-        """
-        Internal function used to retrieve the string representation of an `RdkitXQMol` object.
+        """Internal function used to retrieve the string representation of an `RdkitXQMol` object.
 
         Parameters
         ----------
-        arg_1: RdkitXQMol
-            The RDKit query molecule to convert to a string.
+        arg_1
+        The RDKit query molecule to convert to a string.
 
         Returns
         -------

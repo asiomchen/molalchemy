@@ -1,22 +1,15 @@
-"""Auto-generated from data/bingo_functions.json. Do not edit manually."""
+"""Auto-generated from `data/bingo/functions.json`. Do not edit manually"""
 
 from typing import Any
 
 from sqlalchemy import types as sqltypes
 from sqlalchemy.sql.functions import GenericFunction
 
-from molalchemy.bingo.types import (
-    BingoBinaryMol,
-    BingoMol,
-)
 from molalchemy.types import CString
-
-AnyBingoMol = BingoMol | BingoBinaryMol
 
 
 class _exact_internal(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "_exact_internal"
 
@@ -31,12 +24,9 @@ class _exact_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
-        arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-        arg_3: str | sqltypes.Text
-
+        arg_1
+        arg_2
+        arg_3
 
         Returns
         -------
@@ -69,7 +59,6 @@ class _get_block_count(GenericFunction):
 
 class _get_profiling_info(GenericFunction):
     type = CString()
-
     inherit_cache = True
     name = "_get_profiling_info"
 
@@ -111,7 +100,6 @@ class _get_structures_count(GenericFunction):
 
 class _gross_internal(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "_gross_internal"
 
@@ -126,12 +114,9 @@ class _gross_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
-        arg_2: str | sqltypes.Text
-
-        arg_3: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
+        arg_1
+        arg_2
+        arg_3
 
         Returns
         -------
@@ -157,12 +142,9 @@ class _internal_func_011(GenericFunction):
 
         Parameters
         ----------
-        arg_1: int | sqltypes.Integer
-
-        arg_2: str | sqltypes.Text
-
-        arg_3: str | sqltypes.Text
-
+        arg_1
+        arg_2
+        arg_3
 
         Returns
         -------
@@ -184,10 +166,8 @@ class _internal_func_012(GenericFunction):
 
         Parameters
         ----------
-        arg_1: int | sqltypes.Integer
-
-        arg_2: str | sqltypes.Text
-
+        arg_1
+        arg_2
 
         Returns
         -------
@@ -200,7 +180,6 @@ class _internal_func_012(GenericFunction):
 
 class _internal_func_check(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "_internal_func_check"
 
@@ -209,8 +188,7 @@ class _internal_func_check(GenericFunction):
 
         Parameters
         ----------
-        arg_1: int | sqltypes.Integer
-
+        arg_1
 
         Returns
         -------
@@ -223,7 +201,6 @@ class _internal_func_check(GenericFunction):
 
 class _match_mass_great(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "_match_mass_great"
 
@@ -245,7 +222,6 @@ class _match_mass_great(GenericFunction):
 
 class _match_mass_less(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "_match_mass_less"
 
@@ -327,7 +303,6 @@ class _reset_profiling_info(GenericFunction):
 
 class _rexact_internal(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "_rexact_internal"
 
@@ -342,12 +317,9 @@ class _rexact_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
-        arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-        arg_3: str | sqltypes.Text
-
+        arg_1
+        arg_2
+        arg_3
 
         Returns
         -------
@@ -360,7 +332,6 @@ class _rexact_internal(GenericFunction):
 
 class _rsmarts_internal(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "_rsmarts_internal"
 
@@ -375,12 +346,9 @@ class _rsmarts_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
-        arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-        arg_3: str | sqltypes.Text
-
+        arg_1
+        arg_2
+        arg_3
 
         Returns
         -------
@@ -393,7 +361,6 @@ class _rsmarts_internal(GenericFunction):
 
 class _rsub_internal(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "_rsub_internal"
 
@@ -408,12 +375,9 @@ class _rsub_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
-        arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-        arg_3: str | sqltypes.Text
-
+        arg_1
+        arg_2
+        arg_3
 
         Returns
         -------
@@ -426,7 +390,6 @@ class _rsub_internal(GenericFunction):
 
 class _sim_internal(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "_sim_internal"
 
@@ -443,16 +406,11 @@ class _sim_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1: float | sqltypes.Float
-
-        arg_2: float | sqltypes.Float
-
-        arg_3: str | sqltypes.Text
-
-        arg_4: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-        arg_5: str | sqltypes.Text
-
+        arg_1
+        arg_2
+        arg_3
+        arg_4
+        arg_5
 
         Returns
         -------
@@ -465,7 +423,6 @@ class _sim_internal(GenericFunction):
 
 class _smarts_internal(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "_smarts_internal"
 
@@ -480,12 +437,9 @@ class _smarts_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
-        arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-        arg_3: str | sqltypes.Text
-
+        arg_1
+        arg_2
+        arg_3
 
         Returns
         -------
@@ -498,7 +452,6 @@ class _smarts_internal(GenericFunction):
 
 class _sub_internal(GenericFunction):
     type = sqltypes.Boolean()
-
     inherit_cache = True
     name = "_sub_internal"
 
@@ -513,12 +466,9 @@ class _sub_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1: str | sqltypes.Text
-
-        arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary
-
-        arg_3: str | sqltypes.Text
-
+        arg_1
+        arg_2
+        arg_3
 
         Returns
         -------

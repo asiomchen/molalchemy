@@ -2274,7 +2274,7 @@
         "default": null,
         "description": "The SMARTS string representing the reaction.",
         "name": "rxn_str",
-        "type": "CString"
+        "type": "CString | Cast[Any]"
       }
     ],
     "description": "Returns a reaction object for a SMARTS string.",
