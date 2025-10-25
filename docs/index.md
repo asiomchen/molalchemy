@@ -9,7 +9,7 @@
 [![pypi version](https://img.shields.io/pypi/v/molalchemy.svg)](https://pypi.org/project/molalchemy/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/molalchemy)
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/molalchemy?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/molalchemy)
-[![license](https://img.shields.io/github/license/asiomchen/molalchemy)](LICENSE)
+[![license](https://img.shields.io/github/license/asiomchen/molalchemy)](https://github.com/asiomchen/molalchemy/blob/main/LICENSE)
 [![python versions](https://shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)]()
 ![Codecov (with branch)](https://img.shields.io/codecov/c/github/asiomchen/molalchemy/main)
 [![powered by rdkit](https://img.shields.io/badge/Powered%20by-RDKit-3838ff.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEXc3NwUFP8UPP9kZP+MjP+0tP////9ZXZotAAAAAXRSTlMAQObYZgAAAAFiS0dEBmFmuH0AAAAHdElNRQfmAwsPGi+MyC9RAAAAQElEQVQI12NgQABGQUEBMENISUkRLKBsbGwEEhIyBgJFsICLC0iIUdnExcUZwnANQWfApKCK4doRBsKtQFgKAQC5Ww1JEHSEkAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wMy0xMVQxNToyNjo0NyswMDowMDzr2J4AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDMtMTFUMTU6MjY6NDcrMDA6MDBNtmAiAAAAAElFTkSuQmCC)](https://www.rdkit.org/)
@@ -246,6 +246,7 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](https:
 - [RDKit](https://www.rdkit.org/) - Open-source cheminformatics toolkit
 - [Bingo](https://lifescience.opensource.epam.com/bingo/) - Chemical database cartridge
 - [SQLAlchemy](https://sqlalchemy.org/) - Python SQL toolkit
+- [Riccardo Vianello](https://github.com/rvianello) - This project was in part inspired by his work on [django-rdkit](https://github.com/rdkit/django-rdkit) and [razi](https://github.com/rvianello/razi) - the tool very similar in idea to molalchemy (but I learned about it only after starting this project).
 
 ## 📧 Contact
 
