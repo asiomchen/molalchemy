@@ -4,6 +4,8 @@ from pathlib import Path
 
 from jinja2 import Environment
 
+TARGET = "rdkit"
+
 HEADERS = """
 \"\"\"Auto-generated from data/rdkit_functions.json. Do not edit manually.\"\"\"
 from molalchemy.rdkit.types import RdkitMol, RdkitReaction, RdkitBitFingerprint, RdkitSparseFingerprint, RdkitQMol, RdkitXQMol
@@ -15,13 +17,14 @@ from sqlalchemy.sql.functions import GenericFunction, Function
 from typing import Any
 """
 
-DATA_PATH = Path("data/rdkit_functions.json")
+DATA_PATH = Path(f"data/{TARGET}/functions.json")
 
-MODULE_PATH = "src/molalchemy/rdkit/functions"
+MODULE_PATH = f"src/molalchemy/{TARGET}/functions"
 
 AFTER_HEADERS = defaultdict(str)
 EXTRA_MEMBERS = defaultdict(list)
-AFTER_HEADERS["general"] = Path("data/extra_rdkit.py_").open("r").read()
+
+AFTER_HEADERS["general"] = Path(f"data/{TARGET}/extra.py_").open("r").read()
 EXTRA_MEMBERS["general"] = [
     "mol_has_substructure",
     "rxn_has_smarts",

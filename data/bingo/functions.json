@@ -492,10 +492,10 @@
         "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
       },
       {
-        "default": null,
-        "description": "",
-        "name": "arg_2",
-        "type": "sqltypes.Boolean"
+        "default": false,
+        "description": "If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.",
+        "name": "use_pos",
+        "type": "sqltypes.Boolean | bool"
       }
     ],
     "description": "Calculates the compact representation of a molecule.",
@@ -515,9 +515,9 @@
         "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
       },
       {
-        "default": null,
-        "description": "",
-        "name": "arg_2",
+        "default": false,
+        "description": "If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.",
+        "name": "use_pos",
         "type": "sqltypes.Boolean | bool"
       }
     ],
@@ -568,26 +568,26 @@
     "args": [
       {
         "default": null,
-        "description": "Input molecule in any supported format",
-        "name": "mol",
+        "description": "Name of the table containing the molecules to export",
+        "name": "table",
         "type": "str | sqltypes.Text"
       },
       {
         "default": null,
-        "description": "",
-        "name": "arg_2",
+        "description": "Name of the column containing the molecules to export",
+        "name": "column",
         "type": "str | sqltypes.Text"
       },
       {
         "default": null,
-        "description": "",
-        "name": "arg_3",
+        "description": "Space-separated list of other columns to include in the SDF file as SD data fields",
+        "name": "other_columns",
         "type": "str | sqltypes.Text"
       },
       {
         "default": null,
-        "description": "",
-        "name": "arg_4",
+        "description": "Path to the output SDF file",
+        "name": "outfile",
         "type": "str | sqltypes.Text"
       }
     ],

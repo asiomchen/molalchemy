@@ -33,19 +33,16 @@ uv run pytest tests/bingo/ -v
 uv run mkdocs serve
 ```
 
+### Working with SQL functions
+
+All the SQL functions modules are generated automatically from the data in `./data` directory. Files are using `dev_scripts/gen_bingo_func.py` and `dev_scripts/gen_rdkit_func.py` scripts.
+
+
 ### 🧪 **Intermediate Contributions**
 
 #### RDKit/Bingo Function Implementation
 
-Many RDKit/Bingo PostgreSQL functions are not yet wrapped in our Python API. This is a great way to learn the codebase while adding valuable functionality.
-
-**Steps:**
-1. Research the PostgreSQL function in RDKit/Bingo docs
-2. Add the function to `src/molalchemy/rdkit/functions.py`
-3. Add type hints and docstrings
-4. Create comprehensive tests
-5. Add usage examples
-
+ As the RDKit/Bingo PostgreSQL functions are generated automatically from templates, 
 #### Performance Benchmarking
 
 Create benchmarks to measure and track molalchemy performance over time.

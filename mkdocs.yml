@@ -78,6 +78,7 @@ plugins:
         python:
           options:
             docstring_style: numpy
+            show_source: true
           inventories:
             - https://docs.python.org/objects.inv
             - https://www.rdkit.org/docs/objects.inv

@@ -4,6 +4,8 @@ from pathlib import Path
 
 from jinja2 import Environment
 
+TARGET = "bingo"
+
 HEADERS = """
 \"\"\"Auto-generated from data/bingo_functions.json. Do not edit manually.\"\"\"
 from molalchemy.types import CString
@@ -20,9 +22,13 @@ AnyBingoMol = BingoMol | BingoBinaryMol
 
 \n\n
 """
+DATA_PATH = Path(f"data/{TARGET}/functions.json")
+
+MODULE_PATH = f"src/molalchemy/{TARGET}/functions"
+
 AFTER_HEADERS = defaultdict(str)
 EXTRA_MEMBERS = defaultdict(list)
-AFTER_HEADERS["general"] = Path("data/extra_bingo.py_").open("r").read()
+AFTER_HEADERS["general"] = Path(f"data/{TARGET}/extra.py_").open("r").read()
 EXTRA_MEMBERS["general"] = [
     "has_substructure",
     "matches_smarts",
@@ -30,9 +36,6 @@ EXTRA_MEMBERS["general"] = [
     "similarity",
 ]
 
-DATA_PATH = Path("data/bingo_functions.json")
-
-MODULE_PATH = "src/molalchemy/bingo/functions"
 
 _TEMPLATE = """
 class {{ func_name }}(GenericFunction):

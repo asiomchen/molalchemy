@@ -255,5 +255,11 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 - **LinkedIn**: [Anton Siomchen](https://www.linkedin.com/in/anton-siomchen/)
 
 ---
-
+docker build --progress=plain \
+  --build-arg rdkit_git_ref=Release_2025_03_6 \
+  --build-arg boost_dev_version=1.81.0 \
+  --build-arg postgres_image_version=16.10 \
+  -t antonsiomchen/cheminfo-db:postgres-16.10-rdkit-2025_03_6 \
+  -f docker/Dockerfile.rdkit \
+  .
 **molalchemy** - Making chemical databases as easy as regular databases! 🧪✨

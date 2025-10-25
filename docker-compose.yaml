@@ -27,9 +27,9 @@ services:
     build:
       dockerfile: docker/Dockerfile.rdkit
       context: .
-      args:
-        - rdkit_git_ref=Release_2025_03
-        - boost_dev_version=1.81
+      # args:
+      #   - rdkit_git_ref=Release_2025_03
+      #   - boost_dev_version=1.81
     restart: always
     ports:
       - 5432:5432

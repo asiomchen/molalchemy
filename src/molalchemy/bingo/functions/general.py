@@ -7,10 +7,7 @@ from sqlalchemy.sql import text
 from sqlalchemy.sql.elements import BinaryExpression, ColumnElement
 from sqlalchemy.sql.functions import GenericFunction
 
-from molalchemy.bingo.types import (
-    BingoBinaryMol,
-    BingoMol,
-)
+from molalchemy.bingo.types import BingoBinaryMol, BingoMol
 
 AnyBingoMol = BingoMol | BingoBinaryMol
 
@@ -256,7 +253,7 @@ class compactmolecule(GenericFunction):
     def __init__(
         self,
         mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
-        arg_2: sqltypes.Boolean,
+        use_pos: sqltypes.Boolean | bool = False,
         **kwargs: Any,
     ) -> None:
         """Calculates the compact representation of a molecule.
@@ -265,15 +262,15 @@ class compactmolecule(GenericFunction):
         ----------
         mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary
             Input molecule in any supported format
-        arg_2: sqltypes.Boolean
-
+        use_pos: sqltypes.Boolean | bool = False
+            If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
 
         Returns
         -------
         Function[bytes | sqltypes.LargeBinary]
             SQLAlchemy function
         """
-        super().__init__(mol, arg_2, **kwargs)
+        super().__init__(mol, use_pos, **kwargs)
         self.packagenames = ("bingo",)
 
 
@@ -284,7 +281,7 @@ class compactreaction(GenericFunction):
     def __init__(
         self,
         rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
-        arg_2: sqltypes.Boolean | bool,
+        use_pos: sqltypes.Boolean | bool = False,
         **kwargs: Any,
     ) -> None:
         """Calls the rdkit cartridge function `compactreaction`.
@@ -293,15 +290,15 @@ class compactreaction(GenericFunction):
         ----------
         rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary
             Input reaction in any supported format
-        arg_2: sqltypes.Boolean | bool
-
+        use_pos: sqltypes.Boolean | bool = False
+            If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
 
         Returns
         -------
         Function[bytes | sqltypes.LargeBinary]
             SQLAlchemy function
         """
-        super().__init__(rxn, arg_2, **kwargs)
+        super().__init__(rxn, use_pos, **kwargs)
         self.packagenames = ("bingo",)
 
 
@@ -345,31 +342,31 @@ class exportsdf(GenericFunction):
 
     def __init__(
         self,
-        mol: str | sqltypes.Text,
-        arg_2: str | sqltypes.Text,
-        arg_3: str | sqltypes.Text,
-        arg_4: str | sqltypes.Text,
+        table: str | sqltypes.Text,
+        column: str | sqltypes.Text,
+        other_columns: str | sqltypes.Text,
+        outfile: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
         """Exports molecules to an SDF format.
 
         Parameters
         ----------
-        mol: str | sqltypes.Text
-            Input molecule in any supported format
-        arg_2: str | sqltypes.Text
-
-        arg_3: str | sqltypes.Text
-
-        arg_4: str | sqltypes.Text
-
+        table: str | sqltypes.Text
+            Name of the table containing the molecules to export
+        column: str | sqltypes.Text
+            Name of the column containing the molecules to export
+        other_columns: str | sqltypes.Text
+            Space-separated list of other columns to include in the SDF file as SD data fields
+        outfile: str | sqltypes.Text
+            Path to the output SDF file
 
         Returns
         -------
         Function[None | sqltypes.NullType]
             SQLAlchemy function
         """
-        super().__init__(mol, arg_2, arg_3, arg_4, **kwargs)
+        super().__init__(table, column, other_columns, outfile, **kwargs)
         self.packagenames = ("bingo",)
 
 
