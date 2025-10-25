@@ -30,3 +30,7 @@ repos:
       language: system
       files: ^(README\.md|CHANGELOG\.md|ROADMAP\.md|CONTRIBUTING\.md)$
       pass_filenames: false
+    - id: update-functions
+      name: Update generated function wrappers
+      language: system
+      entry: make update-func

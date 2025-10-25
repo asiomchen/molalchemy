@@ -44,7 +44,7 @@ def json_to_function_code(func_name: str, data: dict, template) -> str:
         params_list.append(param_str)
 
         # Add parameter description for docstring
-        param_doc = f"{param['name']}"
+        param_doc = f"\t{param['name']}"
         if param["description"]:
             param_doc += f"\n        {param['description']}"
         doc_param_list.append(param_doc)
@@ -224,6 +224,8 @@ def generate_functions(
 
     with init_path.open("w") as f:
         # Write imports
+        INIT_HEADER = Path(f"data/{target}/init.txt").read_text()
+        f.write(INIT_HEADER + "\n\n")
         for group, members in sorted(group_members.items()):
             if members:
                 f.write(f"from .{group} import " + ", ".join(sorted(members)) + "\n")

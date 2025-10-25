@@ -1,4 +1,5 @@
-"""Auto-generated from `data/bingo/functions.json`. Do not edit manually
+"""Auto-generated from `data/bingo/functions.json`. Do not edit manually.
+This file defines public Bingo PostgreSQL function wrappers for use with SQLAlchemy.
 """
 
 

@@ -1,4 +1,6 @@
-"""Auto-generated from `data/rdkit/functions.json`. Do not edit manually"""
+"""Auto-generated from `data/rdkit/functions.json`. Do not edit manually.
+This file defines internal RDKit PostgreSQL function wrappers for use with SQLAlchemy. You probably don't want to use these directly.
+"""
 
 from typing import Any
 
@@ -26,9 +28,9 @@ class bfp_cmp(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first RDKit bit fingerprint for comparison.
-        fp_2
+                fp_2
         The second RDKit bit fingerprint for comparison.
 
         Returns
@@ -50,9 +52,9 @@ class bfp_eq(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first bit vector fingerprint for comparison.
-        fp_2
+                fp_2
         The second bit vector fingerprint for comparison.
 
         Returns
@@ -74,9 +76,9 @@ class bfp_ge(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first bit fingerprint.
-        fp_2
+                fp_2
         The second bit fingerprint.
 
         Returns
@@ -98,9 +100,9 @@ class bfp_gt(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first bit vector fingerprint.
-        fp_2
+                fp_2
         The second bit vector fingerprint for comparison.
 
         Returns
@@ -120,7 +122,7 @@ class bfp_in(GenericFunction):
 
         Parameters
         ----------
-        input
+                input
         The string representation of the bit fingerprint.
 
         Returns
@@ -142,9 +144,9 @@ class bfp_lt(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first bit fingerprint to compare.
-        fp_2
+                fp_2
         The second bit fingerprint to compare.
 
         Returns
@@ -166,9 +168,9 @@ class bfp_ne(GenericFunction):
 
         Parameters
         ----------
-        bfp1
+                bfp1
         The first bit vector fingerprint.
-        bfp2
+                bfp2
         The second bit vector fingerprint.
 
         Returns
@@ -188,7 +190,7 @@ class bfp_out(GenericFunction):
 
         Parameters
         ----------
-        fp
+                fp
         The bit vector fingerprint to convert to a binary string representation.
 
         Returns
@@ -210,9 +212,9 @@ class fmcs_smiles_transition(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
         TODO.
-        arg_2
+                arg_2
         TODO.
 
         Returns
@@ -231,9 +233,9 @@ class mol_cmp(GenericFunction):
 
         Parameters
         ----------
-        mol_1
+                mol_1
         The first RDKit molecule to compare.
-        mol_2
+                mol_2
         The second RDKit molecule to compare.
 
         Returns
@@ -253,9 +255,9 @@ class mol_eq(GenericFunction):
 
         Parameters
         ----------
-        mol_1
+                mol_1
         The first RDKit molecule to compare.
-        mol_2
+                mol_2
         The second RDKit molecule to compare.
 
         Returns
@@ -275,9 +277,9 @@ class mol_ge(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
         The RDKit molecule to be checked as the potential superstructure.
-        arg_2
+                arg_2
         The RDKit molecule to be checked as the potential substructure.
 
         Returns
@@ -297,9 +299,9 @@ class mol_gt(GenericFunction):
 
         Parameters
         ----------
-        mol_1
+                mol_1
         The first RDKit molecule for comparison.
-        mol_2
+                mol_2
         The second RDKit molecule for comparison.
 
         Returns
@@ -319,7 +321,7 @@ class mol_in(GenericFunction):
 
         Parameters
         ----------
-        mol_str
+                mol_str
         The string representation of the molecule.
 
         Returns
@@ -339,9 +341,9 @@ class mol_le(GenericFunction):
 
         Parameters
         ----------
-        mol_1
+                mol_1
         The first RDKit molecule for comparison.
-        mol_2
+                mol_2
         The second RDKit molecule for comparison.
 
         Returns
@@ -361,9 +363,9 @@ class mol_lt(GenericFunction):
 
         Parameters
         ----------
-        mol_1
+                mol_1
         The first RDKit molecule.
-        mol_2
+                mol_2
         The second RDKit molecule.
 
         Returns
@@ -383,9 +385,9 @@ class mol_ne(GenericFunction):
 
         Parameters
         ----------
-        mol_1
+                mol_1
         The first molecule to compare.
-        mol_2
+                mol_2
         The second molecule to compare.
 
         Returns
@@ -405,7 +407,7 @@ class mol_out(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule to be converted to a string.
 
         Returns
@@ -425,7 +427,7 @@ class qmol_in(GenericFunction):
 
         Parameters
         ----------
-        mol_str
+                mol_str
         The string representation of the query molecule
 
         Returns
@@ -445,7 +447,7 @@ class qmol_out(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The query molecule.
 
         Returns
@@ -467,9 +469,9 @@ class reaction_eq(GenericFunction):
 
         Parameters
         ----------
-        rxn_1
+                rxn_1
         The first RDKit reaction.
-        rxn_2
+                rxn_2
         The second RDKit reaction.
 
         Returns
@@ -489,7 +491,7 @@ class reaction_in(GenericFunction):
 
         Parameters
         ----------
-        rxn_str
+                rxn_str
         The string representation of the chemical reaction, typically in reaction SMILES format.
 
         Returns
@@ -511,9 +513,9 @@ class reaction_ne(GenericFunction):
 
         Parameters
         ----------
-        rxn_1
+                rxn_1
         The first RDKit reaction.
-        rxn_2
+                rxn_2
         The second RDKit reaction.
 
         Returns
@@ -533,7 +535,7 @@ class reaction_out(GenericFunction):
 
         Parameters
         ----------
-        rxn
+                rxn
         The RDKit reaction object to convert.
 
         Returns
@@ -557,9 +559,9 @@ class sfp_cmp(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
         The first sparse fingerprint to compare.
-        arg_2
+                arg_2
         The second sparse fingerprint to compare.
 
         Returns
@@ -581,9 +583,9 @@ class sfp_eq(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first sparse fingerprint.
-        fp_2
+                fp_2
         The second sparse fingerprint.
 
         Returns
@@ -605,9 +607,9 @@ class sfp_ge(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first sparse fingerprint (sfp) for comparison.
-        fp_2
+                fp_2
         The second sparse fingerprint (sfp) for comparison.
 
         Returns
@@ -629,9 +631,9 @@ class sfp_gt(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first sparse fingerprint for comparison.
-        fp_2
+                fp_2
         The second sparse fingerprint for comparison.
 
         Returns
@@ -651,7 +653,7 @@ class sfp_in(GenericFunction):
 
         Parameters
         ----------
-        fp_string
+                fp_string
         The string representation of the sparse fingerprint.
 
         Returns
@@ -673,9 +675,9 @@ class sfp_le(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first RDKit sparse fingerprint.
-        fp_2
+                fp_2
         The second RDKit sparse fingerprint.
 
         Returns
@@ -697,9 +699,9 @@ class sfp_lt(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first sparse fingerprint to compare.
-        fp_2
+                fp_2
         The second sparse fingerprint to compare.
 
         Returns
@@ -721,9 +723,9 @@ class sfp_ne(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first sparse fingerprint.
-        fp_2
+                fp_2
         The second sparse fingerprint.
 
         Returns
@@ -743,7 +745,7 @@ class sfp_out(GenericFunction):
 
         Parameters
         ----------
-        fp
+                fp
         The sparse fingerprint to be converted to a string.
 
         Returns
@@ -768,9 +770,9 @@ class tanimoto_sml_op(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first fingerprint, which can be either a sparse fingerprint (sfp) or a bit vector fingerprint (bfp).
-        fp_2
+                fp_2
         The second fingerprint, which must be of the same type as the first fingerprint (either sfp or bfp).
 
         Returns
@@ -790,7 +792,7 @@ class xqmol_in(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
         The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).
 
         Returns
@@ -810,7 +812,7 @@ class xqmol_out(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
         The RDKit query molecule to convert to a string.
 
         Returns

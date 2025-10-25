@@ -1,4 +1,6 @@
-"""Auto-generated from `data/bingo/functions.json`. Do not edit manually"""
+"""Auto-generated from `data/bingo/functions.json`. Do not edit manually.
+This file defines public Bingo PostgreSQL function wrappers for use with SQLAlchemy.
+"""
 
 from typing import Any, Literal
 
@@ -143,9 +145,9 @@ class aam(GenericFunction):
 
         Parameters
         ----------
-        rxn
+                rxn
         Input reaction
-        strategy
+                strategy
         Strategy for handling existing atom mapping (default is 'KEEP').
                 - 'CLEAR': Remove all existing mappings and compute new ones
                 - 'DISCARD': Remove all mappings without computing new ones
@@ -172,7 +174,7 @@ class cansmiles(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         Input molecule in any supported format
 
         Returns
@@ -195,7 +197,7 @@ class checkmolecule(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         Input molecule in any supported format
 
         Returns
@@ -218,7 +220,7 @@ class checkreaction(GenericFunction):
 
         Parameters
         ----------
-        rxn
+                rxn
         Input reaction in any supported format
 
         Returns
@@ -241,7 +243,7 @@ class cml(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         Input molecule in any supported format
 
         Returns
@@ -267,9 +269,9 @@ class compactmolecule(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         Input molecule in any supported format
-        use_pos
+                use_pos
         If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
 
         Returns
@@ -295,9 +297,9 @@ class compactreaction(GenericFunction):
 
         Parameters
         ----------
-        rxn
+                rxn
         Input reaction in any supported format
-        use_pos
+                use_pos
         If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
 
         Returns
@@ -325,10 +327,10 @@ class exportrdf(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
+                arg_1
+                arg_2
+                arg_3
+                arg_4
 
         Returns
         -------
@@ -355,13 +357,13 @@ class exportsdf(GenericFunction):
 
         Parameters
         ----------
-        table
+                table
         Name of the table containing the molecules to export
-        column
+                column
         Name of the column containing the molecules to export
-        other_columns
+                other_columns
         Space-separated list of other columns to include in the SDF file as SD data fields
-        outfile
+                outfile
         Path to the output SDF file
 
         Returns
@@ -382,7 +384,7 @@ class filetoblob(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -402,7 +404,7 @@ class filetotext(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -427,8 +429,8 @@ class fingerprint(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
+                arg_1
+                arg_2
 
         Returns
         -------
@@ -448,7 +450,7 @@ class getblockcount(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -490,7 +492,7 @@ class getmass(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -510,7 +512,7 @@ class getname(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -536,11 +538,11 @@ class getsimilarity(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         Input molecule or molecular column in any supported format
-        query
+                query
         Query molecule in any supported format
-        metric
+                metric
         string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional “alpha” and “beta” parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).
 
         Returns
@@ -561,7 +563,7 @@ class getstructurescount(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -606,8 +608,8 @@ class getweight(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
+                arg_1
+                arg_2
 
         Returns
         -------
@@ -629,7 +631,7 @@ class gross(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -656,10 +658,10 @@ class importrdf(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
+                arg_1
+                arg_2
+                arg_3
+                arg_4
 
         Returns
         -------
@@ -686,10 +688,10 @@ class importsdf(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
+                arg_1
+                arg_2
+                arg_3
+                arg_4
 
         Returns
         -------
@@ -716,10 +718,10 @@ class importsmiles(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
+                arg_1
+                arg_2
+                arg_3
+                arg_4
 
         Returns
         -------
@@ -744,8 +746,8 @@ class inchi(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
+                arg_1
+                arg_2
 
         Returns
         -------
@@ -765,7 +767,7 @@ class inchikey(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -955,7 +957,7 @@ class molfile(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -977,8 +979,8 @@ class precachedatabase(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
+                arg_1
+                arg_2
 
         Returns
         -------
@@ -1000,7 +1002,7 @@ class rcml(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -1025,8 +1027,8 @@ class rfingerprint(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
+                arg_1
+                arg_2
 
         Returns
         -------
@@ -1048,7 +1050,7 @@ class rsmiles(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -1070,7 +1072,7 @@ class rxnfile(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -1092,7 +1094,7 @@ class smiles(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -1117,8 +1119,8 @@ class standardize(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
+                arg_1
+                arg_2
 
         Returns
         -------

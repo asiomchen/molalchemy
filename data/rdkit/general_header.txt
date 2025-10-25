@@ -1,4 +1,5 @@
-"""Auto-generated from `data/rdkit/functions.json`. Do not edit manually
+"""Auto-generated from `data/rdkit/functions.json`. Do not edit manually.
+This file defines public RDKit PostgreSQL function wrappers for use with SQLAlchemy.
 """
 
 from sqlalchemy import BinaryExpression, Function

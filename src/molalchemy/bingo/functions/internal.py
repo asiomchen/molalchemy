@@ -1,4 +1,6 @@
-"""Auto-generated from `data/bingo/functions.json`. Do not edit manually"""
+"""Auto-generated from `data/bingo/functions.json`. Do not edit manually.
+This file defines internal Bingo PostgreSQL function wrappers for use with SQLAlchemy.
+"""
 
 from typing import Any
 
@@ -24,9 +26,9 @@ class _exact_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+                arg_1
+                arg_2
+                arg_3
 
         Returns
         -------
@@ -114,9 +116,9 @@ class _gross_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+                arg_1
+                arg_2
+                arg_3
 
         Returns
         -------
@@ -142,9 +144,9 @@ class _internal_func_011(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+                arg_1
+                arg_2
+                arg_3
 
         Returns
         -------
@@ -166,8 +168,8 @@ class _internal_func_012(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
+                arg_1
+                arg_2
 
         Returns
         -------
@@ -188,7 +190,7 @@ class _internal_func_check(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
 
         Returns
         -------
@@ -317,9 +319,9 @@ class _rexact_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+                arg_1
+                arg_2
+                arg_3
 
         Returns
         -------
@@ -346,9 +348,9 @@ class _rsmarts_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+                arg_1
+                arg_2
+                arg_3
 
         Returns
         -------
@@ -375,9 +377,9 @@ class _rsub_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+                arg_1
+                arg_2
+                arg_3
 
         Returns
         -------
@@ -406,11 +408,11 @@ class _sim_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
-        arg_5
+                arg_1
+                arg_2
+                arg_3
+                arg_4
+                arg_5
 
         Returns
         -------
@@ -437,9 +439,9 @@ class _smarts_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+                arg_1
+                arg_2
+                arg_3
 
         Returns
         -------
@@ -466,9 +468,9 @@ class _sub_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+                arg_1
+                arg_2
+                arg_3
 
         Returns
         -------

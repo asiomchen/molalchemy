@@ -1,4 +1,6 @@
-"""Auto-generated from `data/rdkit/functions.json`. Do not edit manually"""
+"""Auto-generated from `data/rdkit/functions.json`. Do not edit manually.
+This file defines public RDKit PostgreSQL function wrappers for use with SQLAlchemy.
+"""
 
 from typing import Any
 
@@ -91,9 +93,9 @@ class add(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first sparse fingerprint.
-        fp_2
+                fp_2
         The second sparse fingerprint.
 
         Returns
@@ -115,9 +117,9 @@ class all_values_gt(GenericFunction):
 
         Parameters
         ----------
-        fp
+                fp
         The sparse fingerprint to check.
-        value
+                value
         The integer value to compare against.
 
         Returns
@@ -139,9 +141,9 @@ class all_values_lt(GenericFunction):
 
         Parameters
         ----------
-        fp
+                fp
         The sparse fingerprint (sfp) to check.
-        value
+                value
         The integer value to compare against the sfp elements.
 
         Returns
@@ -161,7 +163,7 @@ class atompair_fp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to generate the fingerprint.
 
         Returns
@@ -181,7 +183,7 @@ class atompairbv_fp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to compute the fingerprint for.
 
         Returns
@@ -207,11 +209,11 @@ class avalon_fp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule for which to generate the fingerprint.
-        arg_2
+                arg_2
         TODO
-        arg_3
+                arg_3
         TODO
 
         Returns
@@ -231,7 +233,7 @@ class bfp_from_binary_text(GenericFunction):
 
         Parameters
         ----------
-        input
+                input
         The binary string representation of the fingerprint.
 
         Returns
@@ -253,9 +255,9 @@ class bfp_le(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first bit vector fingerprint for comparison.
-        fp_2
+                fp_2
         The second bit vector fingerprint for comparison.
 
         Returns
@@ -275,7 +277,7 @@ class bfp_to_binary_text(GenericFunction):
 
         Parameters
         ----------
-        fp
+                fp
         The bit vector fingerprint (bfp) to convert.
 
         Returns
@@ -297,9 +299,9 @@ class dice_dist(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first fingerprint (bfp) for the distance calculation.
-        fp_2
+                fp_2
         The second fingerprint (bfp) for the distance calculation.
 
         Returns
@@ -324,9 +326,9 @@ class dice_sml(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first fingerprint (either sparse or bit vector) for comparison.
-        fp_2
+                fp_2
         The second fingerprint (either sparse or bit vector) for comparison.
 
         Returns
@@ -351,9 +353,9 @@ class dice_sml_op(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
         The first fingerprint.
-        arg_2
+                arg_2
         The second fingerprint of the same type as the first.
 
         Returns
@@ -375,9 +377,9 @@ class featmorgan_fp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to generate the fingerprint.
-        radius
+                radius
         The radius for the fingerprint generation. This argument is optional and defaults to 2.
 
         Returns
@@ -399,9 +401,9 @@ class featmorganbv_fp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to generate the fingerprint.
-        radius
+                radius
         The radius for the fingerprint generation.
 
         Returns
@@ -421,7 +423,7 @@ class fmcs(GenericFunction):
 
         Parameters
         ----------
-        mols
+                mols
         A set of molecules for which to calculate the MCS.
 
         Returns
@@ -446,9 +448,9 @@ class fmcs_smiles(GenericFunction):
 
         Parameters
         ----------
-        molecules
+                molecules
         A space-separated string of SMILES representations of molecules for which to calculate the MCS.
-        json
+                json
         An optional JSON string used to provide parameters to the MCS code.
 
         Returns
@@ -468,7 +470,7 @@ class is_valid_ctab(GenericFunction):
 
         Parameters
         ----------
-        input
+                input
         The CTAB (mol block) string to validate.
 
         Returns
@@ -488,7 +490,7 @@ class is_valid_mol_pkl(GenericFunction):
 
         Parameters
         ----------
-        input
+                input
         A binary string (bytea) representing a molecule.
 
         Returns
@@ -508,7 +510,7 @@ class is_valid_smarts(GenericFunction):
 
         Parameters
         ----------
-        input
+                input
         The SMARTS string to validate.
 
         Returns
@@ -528,7 +530,7 @@ class is_valid_smiles(GenericFunction):
 
         Parameters
         ----------
-        input
+                input
         The SMILES string to validate.
 
         Returns
@@ -548,7 +550,7 @@ class layered_fp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to generate the layered fingerprint.
 
         Returns
@@ -568,7 +570,7 @@ class maccs_fp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to generate the MACCS fingerprint.
 
         Returns
@@ -593,9 +595,9 @@ class mol_adjust_query_properties(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to which additional query information will be attached.
-        query_parameters
+                query_parameters
         A string with additional query parameters (optional)
 
         Returns
@@ -615,7 +617,7 @@ class mol_amw(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the AMW.
 
         Returns
@@ -635,7 +637,7 @@ class mol_chi0n(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule.
 
         Returns
@@ -655,7 +657,7 @@ class mol_chi0v(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the Chi0v value.
 
         Returns
@@ -675,7 +677,7 @@ class mol_chi1n(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
         The molecule for which to calculate the Chi1n value.
 
         Returns
@@ -695,7 +697,7 @@ class mol_chi1v(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule.
 
         Returns
@@ -715,7 +717,7 @@ class mol_chi2n(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the Chi2n value.
 
         Returns
@@ -735,7 +737,7 @@ class mol_chi2v(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule.
 
         Returns
@@ -755,7 +757,7 @@ class mol_chi3n(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the Chi3n value.
 
         Returns
@@ -775,7 +777,7 @@ class mol_chi3v(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the Chi3v value.
 
         Returns
@@ -795,7 +797,7 @@ class mol_chi4n(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the Chi4n value.
 
         Returns
@@ -815,7 +817,7 @@ class mol_chi4v(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to calculate the Chi4v value for.
 
         Returns
@@ -835,7 +837,7 @@ class mol_exactmw(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the exact molecular weight.
 
         Returns
@@ -861,11 +863,11 @@ class mol_formula(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to get the molecular formula.
-        include_isotopes
+                include_isotopes
         Controls whether isotope information is included in the formula.
-        use_deuterium_tritium_symbols
+                use_deuterium_tritium_symbols
         Controls whether "D" and "T" are used instead of [2H] and [3H].
 
         Returns
@@ -885,7 +887,7 @@ class mol_fractioncsp3(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the fraction of sp3 hybridized carbons.
 
         Returns
@@ -905,9 +907,9 @@ class mol_from_ctab(GenericFunction):
 
         Parameters
         ----------
-        ctab
+                ctab
         The CTAB (mol block) string from which to create the molecule.
-        arg_2
+                arg_2
         A boolean indicating whether the molecule's coordinates should be saved.
 
         Returns
@@ -927,7 +929,7 @@ class mol_from_json(GenericFunction):
 
         Parameters
         ----------
-        json_str
+                json_str
         A commonchem JSON string representing a molecule.
 
         Returns
@@ -947,7 +949,7 @@ class mol_from_pkl(GenericFunction):
 
         Parameters
         ----------
-        bytea
+                bytea
         A binary string representation of the molecule.
 
         Returns
@@ -967,7 +969,7 @@ class mol_from_smiles(GenericFunction):
 
         Parameters
         ----------
-        smiles
+                smiles
         The SMILES string to convert to a molecule.
 
         Returns
@@ -987,7 +989,7 @@ class mol_hallkieralpha(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule.
 
         Returns
@@ -1006,7 +1008,7 @@ class mol_hba(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the number of Lipinski H-bond acceptors.
 
         Returns
@@ -1025,7 +1027,7 @@ class mol_hbd(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the number of Lipinski H-bond donors.
 
         Returns
@@ -1045,9 +1047,9 @@ class mol_inchi(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule for which to generate the InChI.
-        arg_2
+                arg_2
         Additional parameters to pass to the generator (TODO)
 
         Returns
@@ -1067,9 +1069,9 @@ class mol_inchikey(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule for which to generate the InChI key.
-        arg_2
+                arg_2
         Additional parameters to pass to the generator  (TODO)
 
         Returns
@@ -1089,7 +1091,7 @@ class mol_kappa1(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule.
 
         Returns
@@ -1109,7 +1111,7 @@ class mol_kappa2(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the kappa2 value.
 
         Returns
@@ -1129,7 +1131,7 @@ class mol_kappa3(GenericFunction):
 
         Parameters
         ----------
-        mol_1
+                mol_1
         The molecule for which to calculate the kappa3 value.
 
         Returns
@@ -1149,7 +1151,7 @@ class mol_labuteasa(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate Labute's approximate surface area.
 
         Returns
@@ -1169,7 +1171,7 @@ class mol_logp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the MolLogP.
 
         Returns
@@ -1189,7 +1191,7 @@ class mol_murckoscaffold(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule for which to compute the Murcko scaffold.
 
         Returns
@@ -1214,9 +1216,9 @@ class mol_nm_hash(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to generate the hash.
-        hash_type
+                hash_type
         The type of hash to generate. Legal values are 'AnonymousGraph', 'ElementGraph', 'CanonicalSmiles', 'MurckoScaffold', 'ExtendedMurcko', 'MolFormula', 'AtomBondCounts', 'DegreeVector', 'Mesomer', 'HetAtomTautomer', 'HetAtomProtomer', 'RedoxPair', 'Regioisomer', 'NetCharge', 'SmallWorldIndexBR', 'SmallWorldIndexBRL', 'ArthorSubstructureOrder'. The default is 'AnonymousGraph'.
 
         Returns
@@ -1235,7 +1237,7 @@ class mol_numaliphaticcarbocycles(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to analyze.
 
         Returns
@@ -1254,7 +1256,7 @@ class mol_numaliphaticheterocycles(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule.
 
         Returns
@@ -1273,7 +1275,7 @@ class mol_numaliphaticrings(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the number of aliphatic rings.
 
         Returns
@@ -1292,7 +1294,7 @@ class mol_numamidebonds(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule for which to calculate the number of amide bonds.
 
         Returns
@@ -1311,7 +1313,7 @@ class mol_numaromaticcarbocycles(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule.
 
         Returns
@@ -1330,7 +1332,7 @@ class mol_numaromaticheterocycles(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule.
 
         Returns
@@ -1349,7 +1351,7 @@ class mol_numaromaticrings(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to analyze.
 
         Returns
@@ -1368,7 +1370,7 @@ class mol_numatoms(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule.
 
         Returns
@@ -1387,7 +1389,7 @@ class mol_numbridgeheadatoms(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to calculate the number of bridgehead atoms for.
 
         Returns
@@ -1406,7 +1408,7 @@ class mol_numheavyatoms(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to analyze.
 
         Returns
@@ -1425,7 +1427,7 @@ class mol_numheteroatoms(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule.
 
         Returns
@@ -1444,7 +1446,7 @@ class mol_numheterocycles(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to count the number of heteroatoms.
 
         Returns
@@ -1463,7 +1465,7 @@ class mol_numrings(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the number of rings.
 
         Returns
@@ -1482,7 +1484,7 @@ class mol_numrotatablebonds(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to calculate the number of rotatable bonds for.
 
         Returns
@@ -1501,7 +1503,7 @@ class mol_numsaturatedcarbocycles(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the number of saturated carbocycles.
 
         Returns
@@ -1520,7 +1522,7 @@ class mol_numsaturatedheterocycles(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to analyze.
 
         Returns
@@ -1539,7 +1541,7 @@ class mol_numsaturatedrings(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the number of saturated rings.
 
         Returns
@@ -1558,7 +1560,7 @@ class mol_numspiroatoms(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule.
 
         Returns
@@ -1578,7 +1580,7 @@ class mol_phi(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the Kier Phi value.
 
         Returns
@@ -1598,7 +1600,7 @@ class mol_send(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule to be serialized.
 
         Returns
@@ -1624,10 +1626,10 @@ class mol_to_ctab(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to generate the CTAB string.
-        arg_2
-        arg_3
+                arg_2
+                arg_3
 
         Returns
         -------
@@ -1646,7 +1648,7 @@ class mol_to_cxsmarts(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to convert to CXSMARTS.
 
         Returns
@@ -1666,7 +1668,7 @@ class mol_to_cxsmiles(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to convert.
 
         Returns
@@ -1686,7 +1688,7 @@ class mol_to_json(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to convert to commonchem JSON.
 
         Returns
@@ -1706,7 +1708,7 @@ class mol_to_pkl(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The RDKit molecule to be converted to a binary string.
 
         Returns
@@ -1726,7 +1728,7 @@ class mol_to_smarts(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to convert to a SMARTS string.
 
         Returns
@@ -1746,7 +1748,7 @@ class mol_to_smiles(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to convert to SMILES.
 
         Returns
@@ -1774,15 +1776,15 @@ class mol_to_svg(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to be drawn.
-        arg_2
+                arg_2
         An optional string to use as the legend for the drawing.
-        width
+                width
         The optional width of the generated SVG image.
-        height
+                height
         The optional height of the generated SVG image.
-        arg_5
+                arg_5
 
         Returns
         -------
@@ -1806,9 +1808,9 @@ class mol_to_v3kctab(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to convert to a V3000 CTAB string.
-        create_depiction
+                create_depiction
         Controls whether or not 2D coordinates will be generated for molecules that don't have coordinates.
 
         Returns
@@ -1836,15 +1838,15 @@ class mol_to_xqmol(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+                arg_1
         The RDKit molecule to be converted.
-        arg_2
+                arg_2
         A boolean parameter for the conversion process.
-        arg_3
+                arg_3
         Another boolean parameter for the conversion process.
-        arg_4
+                arg_4
         A third boolean parameter for the conversion process.
-        arg_5
+                arg_5
         A string parameter for the conversion process.
 
         Returns
@@ -1864,7 +1866,7 @@ class mol_tpsa(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to calculate the topological polar surface area.
 
         Returns
@@ -1886,9 +1888,9 @@ class morgan_fp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to generate the fingerprint.
-        radius
+                radius
         The radius for the Morgan fingerprint generation. Defaults to 2.
 
         Returns
@@ -1910,9 +1912,9 @@ class morganbv_fp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to generate the fingerprint.
-        radius
+                radius
         The radius for the Morgan fingerprint calculation.
 
         Returns
@@ -1934,9 +1936,9 @@ class qmol_from_ctab(GenericFunction):
 
         Parameters
         ----------
-        ctab
+                ctab
         A CTAB (mol block) string.
-        keep_conformer
+                keep_conformer
         Controls whether or not the coordinates are saved.
 
         Returns
@@ -1956,7 +1958,7 @@ class qmol_from_json(GenericFunction):
 
         Parameters
         ----------
-        json
+                json
         The commonchem JSON string representing the query molecule.
 
         Returns
@@ -1976,7 +1978,7 @@ class qmol_from_smarts(GenericFunction):
 
         Parameters
         ----------
-        smarts
+                smarts
         The SMARTS string representing the query molecule.
 
         Returns
@@ -1996,7 +1998,7 @@ class qmol_from_smiles(GenericFunction):
 
         Parameters
         ----------
-        smiles
+                smiles
         The SMILES string to convert into a query molecule.
 
         Returns
@@ -2016,7 +2018,7 @@ class qmol_send(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The query molecule to be converted.
 
         Returns
@@ -2036,7 +2038,7 @@ class rdkit_fp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to generate the fingerprint.
 
         Returns
@@ -2096,9 +2098,9 @@ class reaction_difference_fp(GenericFunction):
 
         Parameters
         ----------
-        rxn_1
+                rxn_1
         The RDKit reaction object.
-        fp_type
+                fp_type
         Integer denoting the fingerprint type. Likely 1 (AtomPairFP), 2 (TopologicalTorsionFP), or 3 (MorganFP).
 
         Returns
@@ -2118,7 +2120,7 @@ class reaction_from_ctab(GenericFunction):
 
         Parameters
         ----------
-        rxn_str
+                rxn_str
         The CTAB (reaction block) string representing the reaction.
 
         Returns
@@ -2138,7 +2140,7 @@ class reaction_from_smarts(GenericFunction):
 
         Parameters
         ----------
-        rxn_str
+                rxn_str
         The SMARTS string representing the reaction.
 
         Returns
@@ -2158,7 +2160,7 @@ class reaction_from_smiles(GenericFunction):
 
         Parameters
         ----------
-        rxn_str
+                rxn_str
         The reaction SMILES string to convert into an RDKit reaction object.
 
         Returns
@@ -2177,7 +2179,7 @@ class reaction_numagents(GenericFunction):
 
         Parameters
         ----------
-        rxn
+                rxn
         The RDKit reaction molecule.
 
         Returns
@@ -2196,7 +2198,7 @@ class reaction_numproducts(GenericFunction):
 
         Parameters
         ----------
-        rxn
+                rxn
         The RDKit reaction object.
 
         Returns
@@ -2215,7 +2217,7 @@ class reaction_numreactants(GenericFunction):
 
         Parameters
         ----------
-        rxn
+                rxn
         The RDKit reaction object.
 
         Returns
@@ -2235,7 +2237,7 @@ class reaction_send(GenericFunction):
 
         Parameters
         ----------
-        rxn
+                rxn
         The RDKit reaction object to be sent.
 
         Returns
@@ -2257,9 +2259,9 @@ class reaction_structural_bfp(GenericFunction):
 
         Parameters
         ----------
-        rxn
+                rxn
         The RDKit reaction object.
-        radius
+                radius
         The radius to use for the fingerprint generation.
 
         Returns
@@ -2279,7 +2281,7 @@ class reaction_to_ctab(GenericFunction):
 
         Parameters
         ----------
-        reaction
+                reaction
         The RDKit reaction object to convert.
 
         Returns
@@ -2299,7 +2301,7 @@ class reaction_to_smarts(GenericFunction):
 
         Parameters
         ----------
-        rxn
+                rxn
         The RDKit reaction object to convert.
 
         Returns
@@ -2319,7 +2321,7 @@ class reaction_to_smiles(GenericFunction):
 
         Parameters
         ----------
-        rxn
+                rxn
         The RDKit reaction object.
 
         Returns
@@ -2347,15 +2349,15 @@ class reaction_to_svg(GenericFunction):
 
         Parameters
         ----------
-        rxn
+                rxn
         The RDKit reaction object to be drawn.
-        highlight_reactants
+                highlight_reactants
         If true, highlights the reactants in the SVG drawing.
-        width
+                width
         The desired width of the SVG image.
-        height
+                height
         The desired height of the SVG image.
-        params
+                params
         An optional string for other drawing parameters? [TODO]
 
         Returns
@@ -2380,9 +2382,9 @@ class rsubstruct(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule (or query molecule/reaction) to be searched within.
-        query
+                query
         The molecule (or reaction) to check as a substructure.
 
         Returns
@@ -2402,9 +2404,9 @@ class rsubstruct_chiral(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to search within.
-        query_mol
+                query_mol
         The molecule to search for as a substructure.
 
         Returns
@@ -2426,9 +2428,9 @@ class rsubstruct_query(GenericFunction):
 
         Parameters
         ----------
-        mol_1
+                mol_1
         The molecule to be searched within.
-        mol_2
+                mol_2
         The substructure molecule to search for.
 
         Returns
@@ -2450,9 +2452,9 @@ class rsubstructfp(GenericFunction):
 
         Parameters
         ----------
-        rxn_1
+                rxn_1
         The first RDKit reaction.
-        rxn_2
+                rxn_2
         The second RDKit reaction, which is checked as a substructure.
 
         Returns
@@ -2471,7 +2473,7 @@ class size(GenericFunction):
 
         Parameters
         ----------
-        bfp
+                bfp
         The bit vector fingerprint.
 
         Returns
@@ -2496,9 +2498,9 @@ class substruct(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The first molecule.
-        query
+                query
         The second molecule, which is checked as a substructure of the first.
 
         Returns
@@ -2518,9 +2520,9 @@ class substruct_chiral(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to be searched for the substructure.
-        query
+                query
         The substructure molecule to search for within the first molecule. Chirality is considered.
 
         Returns
@@ -2545,11 +2547,11 @@ class substruct_count(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule to search within.
-        query
+                query
         The substructure to search for.
-        unique
+                unique
         Toggles whether or not the matches are uniquified.
 
         Returns
@@ -2574,11 +2576,11 @@ class substruct_count_chiral(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The target RDKit molecule to search within.
-        query
+                query
         The RDKit molecule or query molecule to search for as a chiral substructure.
-        unique
+                unique
         A boolean flag indicating whether to count only unique chiral substructure matches (true) or all matches (false).
 
         Returns
@@ -2600,9 +2602,9 @@ class substruct_query(GenericFunction):
 
         Parameters
         ----------
-        mol_1
+                mol_1
         The molecule to search within.
-        mol_2
+                mol_2
         The molecule or query molecule to search for as a substructure.
 
         Returns
@@ -2624,9 +2626,9 @@ class substructfp(GenericFunction):
 
         Parameters
         ----------
-        rxn_1
+                rxn_1
         The first RDKit reaction.
-        rxn_2
+                rxn_2
         The second RDKit reaction, which is checked as a substructure of the first.
 
         Returns
@@ -2648,9 +2650,9 @@ class subtract(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first sparse fingerprint (sfp).
-        fp_2
+                fp_2
         The second sparse fingerprint (sfp) to subtract.
 
         Returns
@@ -2672,9 +2674,9 @@ class tanimoto_dist(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first fingerprint to compare.
-        fp_2
+                fp_2
         The second fingerprint to compare.
 
         Returns
@@ -2699,9 +2701,9 @@ class tanimoto_sml(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first fingerprint to compare.
-        fp_2
+                fp_2
         The second fingerprint to compare.
 
         Returns
@@ -2721,7 +2723,7 @@ class torsion_fp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to generate the fingerprint.
 
         Returns
@@ -2741,7 +2743,7 @@ class torsionbv_fp(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         The molecule for which to generate the fingerprint.
 
         Returns
@@ -2768,13 +2770,13 @@ class tversky_sml(GenericFunction):
 
         Parameters
         ----------
-        fp_1
+                fp_1
         The first fingerprint.
-        fp_2
+                fp_2
         The second fingerprint.
-        alpha
+                alpha
         The alpha parameter for the Tversky similarity.
-        beta
+                beta
         The beta parameter for the Tversky similarity.
 
         Returns
@@ -2794,7 +2796,7 @@ class xqmol_send(GenericFunction):
 
         Parameters
         ----------
-        mol
+                mol
         An RDKit extended query molecule.
 
         Returns
