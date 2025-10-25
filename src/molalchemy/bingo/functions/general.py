@@ -145,14 +145,16 @@ class aam(GenericFunction):
 
         Parameters
         ----------
-                rxn
-        Input reaction
-                strategy
-        Strategy for handling existing atom mapping (default is 'KEEP').
+        rxn
+            Input reaction
+        strategy
+            Strategy for handling existing atom mapping (default is 'KEEP').
                 - 'CLEAR': Remove all existing mappings and compute new ones
                 - 'DISCARD': Remove all mappings without computing new ones
                 - 'ALTER': Modify existing mappings
                 - 'KEEP': Keep existing mappings and map unmapped atoms
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -174,8 +176,10 @@ class cansmiles(GenericFunction):
 
         Parameters
         ----------
-                mol
-        Input molecule in any supported format
+        mol
+            Input molecule in any supported format
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -197,8 +201,10 @@ class checkmolecule(GenericFunction):
 
         Parameters
         ----------
-                mol
-        Input molecule in any supported format
+        mol
+            Input molecule in any supported format
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -220,8 +226,10 @@ class checkreaction(GenericFunction):
 
         Parameters
         ----------
-                rxn
-        Input reaction in any supported format
+        rxn
+            Input reaction in any supported format
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -243,8 +251,10 @@ class cml(GenericFunction):
 
         Parameters
         ----------
-                mol
-        Input molecule in any supported format
+        mol
+            Input molecule in any supported format
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -269,10 +279,12 @@ class compactmolecule(GenericFunction):
 
         Parameters
         ----------
-                mol
-        Input molecule in any supported format
-                use_pos
-        If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
+        mol
+            Input molecule in any supported format
+        use_pos
+            If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -297,10 +309,12 @@ class compactreaction(GenericFunction):
 
         Parameters
         ----------
-                rxn
-        Input reaction in any supported format
-                use_pos
-        If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
+        rxn
+            Input reaction in any supported format
+        use_pos
+            If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -327,10 +341,12 @@ class exportrdf(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
-                arg_4
+        arg_1
+        arg_2
+        arg_3
+        arg_4
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -357,14 +373,16 @@ class exportsdf(GenericFunction):
 
         Parameters
         ----------
-                table
-        Name of the table containing the molecules to export
-                column
-        Name of the column containing the molecules to export
-                other_columns
-        Space-separated list of other columns to include in the SDF file as SD data fields
-                outfile
-        Path to the output SDF file
+        table
+            Name of the table containing the molecules to export
+        column
+            Name of the column containing the molecules to export
+        other_columns
+            Space-separated list of other columns to include in the SDF file as SD data fields
+        outfile
+            Path to the output SDF file
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -384,7 +402,9 @@ class filetoblob(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -404,7 +424,9 @@ class filetotext(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -429,8 +451,10 @@ class fingerprint(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
+        arg_1
+        arg_2
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -450,7 +474,9 @@ class getblockcount(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -471,6 +497,8 @@ class getindexstructurescount(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -492,7 +520,9 @@ class getmass(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -512,7 +542,9 @@ class getname(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -538,12 +570,14 @@ class getsimilarity(GenericFunction):
 
         Parameters
         ----------
-                mol
-        Input molecule or molecular column in any supported format
-                query
-        Query molecule in any supported format
-                metric
-        string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional “alpha” and “beta” parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).
+        mol
+            Input molecule or molecular column in any supported format
+        query
+            Query molecule in any supported format
+        metric
+            string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional “alpha” and “beta” parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -563,7 +597,9 @@ class getstructurescount(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -584,6 +620,8 @@ class getversion(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -608,8 +646,10 @@ class getweight(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
+        arg_1
+        arg_2
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -631,7 +671,9 @@ class gross(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -658,10 +700,12 @@ class importrdf(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
-                arg_4
+        arg_1
+        arg_2
+        arg_3
+        arg_4
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -688,10 +732,12 @@ class importsdf(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
-                arg_4
+        arg_1
+        arg_2
+        arg_3
+        arg_4
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -718,10 +764,12 @@ class importsmiles(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
-                arg_4
+        arg_1
+        arg_2
+        arg_3
+        arg_4
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -746,8 +794,10 @@ class inchi(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
+        arg_1
+        arg_2
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -767,7 +817,9 @@ class inchikey(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -789,6 +841,8 @@ class matchexact(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -810,6 +864,8 @@ class matchgross(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -831,6 +887,8 @@ class matchrexact(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -852,6 +910,8 @@ class matchrsmarts(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -873,6 +933,8 @@ class matchrsub(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -894,6 +956,8 @@ class matchsim(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -915,6 +979,8 @@ class matchsmarts(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -936,6 +1002,8 @@ class matchsub(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -957,7 +1025,9 @@ class molfile(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -979,8 +1049,10 @@ class precachedatabase(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
+        arg_1
+        arg_2
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1002,7 +1074,9 @@ class rcml(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1027,8 +1101,10 @@ class rfingerprint(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
+        arg_1
+        arg_2
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1050,7 +1126,9 @@ class rsmiles(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1072,7 +1150,9 @@ class rxnfile(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1094,7 +1174,9 @@ class smiles(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1119,8 +1201,10 @@ class standardize(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
+        arg_1
+        arg_2
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------

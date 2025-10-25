@@ -28,10 +28,12 @@ class bfp_cmp(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first RDKit bit fingerprint for comparison.
-                fp_2
-        The second RDKit bit fingerprint for comparison.
+        fp_1
+            The first RDKit bit fingerprint for comparison.
+        fp_2
+            The second RDKit bit fingerprint for comparison.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -52,10 +54,12 @@ class bfp_eq(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first bit vector fingerprint for comparison.
-                fp_2
-        The second bit vector fingerprint for comparison.
+        fp_1
+            The first bit vector fingerprint for comparison.
+        fp_2
+            The second bit vector fingerprint for comparison.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -76,10 +80,12 @@ class bfp_ge(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first bit fingerprint.
-                fp_2
-        The second bit fingerprint.
+        fp_1
+            The first bit fingerprint.
+        fp_2
+            The second bit fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -100,10 +106,12 @@ class bfp_gt(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first bit vector fingerprint.
-                fp_2
-        The second bit vector fingerprint for comparison.
+        fp_1
+            The first bit vector fingerprint.
+        fp_2
+            The second bit vector fingerprint for comparison.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -122,8 +130,10 @@ class bfp_in(GenericFunction):
 
         Parameters
         ----------
-                input
-        The string representation of the bit fingerprint.
+        input
+            The string representation of the bit fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -144,10 +154,12 @@ class bfp_lt(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first bit fingerprint to compare.
-                fp_2
-        The second bit fingerprint to compare.
+        fp_1
+            The first bit fingerprint to compare.
+        fp_2
+            The second bit fingerprint to compare.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -168,10 +180,12 @@ class bfp_ne(GenericFunction):
 
         Parameters
         ----------
-                bfp1
-        The first bit vector fingerprint.
-                bfp2
-        The second bit vector fingerprint.
+        bfp1
+            The first bit vector fingerprint.
+        bfp2
+            The second bit vector fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -190,8 +204,10 @@ class bfp_out(GenericFunction):
 
         Parameters
         ----------
-                fp
-        The bit vector fingerprint to convert to a binary string representation.
+        fp
+            The bit vector fingerprint to convert to a binary string representation.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -212,10 +228,12 @@ class fmcs_smiles_transition(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-        TODO.
-                arg_2
-        TODO.
+        arg_1
+            TODO.
+        arg_2
+            TODO.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -233,10 +251,12 @@ class mol_cmp(GenericFunction):
 
         Parameters
         ----------
-                mol_1
-        The first RDKit molecule to compare.
-                mol_2
-        The second RDKit molecule to compare.
+        mol_1
+            The first RDKit molecule to compare.
+        mol_2
+            The second RDKit molecule to compare.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -255,10 +275,12 @@ class mol_eq(GenericFunction):
 
         Parameters
         ----------
-                mol_1
-        The first RDKit molecule to compare.
-                mol_2
-        The second RDKit molecule to compare.
+        mol_1
+            The first RDKit molecule to compare.
+        mol_2
+            The second RDKit molecule to compare.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -277,10 +299,12 @@ class mol_ge(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-        The RDKit molecule to be checked as the potential superstructure.
-                arg_2
-        The RDKit molecule to be checked as the potential substructure.
+        arg_1
+            The RDKit molecule to be checked as the potential superstructure.
+        arg_2
+            The RDKit molecule to be checked as the potential substructure.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -299,10 +323,12 @@ class mol_gt(GenericFunction):
 
         Parameters
         ----------
-                mol_1
-        The first RDKit molecule for comparison.
-                mol_2
-        The second RDKit molecule for comparison.
+        mol_1
+            The first RDKit molecule for comparison.
+        mol_2
+            The second RDKit molecule for comparison.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -321,8 +347,10 @@ class mol_in(GenericFunction):
 
         Parameters
         ----------
-                mol_str
-        The string representation of the molecule.
+        mol_str
+            The string representation of the molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -341,10 +369,12 @@ class mol_le(GenericFunction):
 
         Parameters
         ----------
-                mol_1
-        The first RDKit molecule for comparison.
-                mol_2
-        The second RDKit molecule for comparison.
+        mol_1
+            The first RDKit molecule for comparison.
+        mol_2
+            The second RDKit molecule for comparison.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -363,10 +393,12 @@ class mol_lt(GenericFunction):
 
         Parameters
         ----------
-                mol_1
-        The first RDKit molecule.
-                mol_2
-        The second RDKit molecule.
+        mol_1
+            The first RDKit molecule.
+        mol_2
+            The second RDKit molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -385,10 +417,12 @@ class mol_ne(GenericFunction):
 
         Parameters
         ----------
-                mol_1
-        The first molecule to compare.
-                mol_2
-        The second molecule to compare.
+        mol_1
+            The first molecule to compare.
+        mol_2
+            The second molecule to compare.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -407,8 +441,10 @@ class mol_out(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule to be converted to a string.
+        mol
+            The RDKit molecule to be converted to a string.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -427,8 +463,10 @@ class qmol_in(GenericFunction):
 
         Parameters
         ----------
-                mol_str
-        The string representation of the query molecule
+        mol_str
+            The string representation of the query molecule
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -447,8 +485,10 @@ class qmol_out(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The query molecule.
+        mol
+            The query molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -469,10 +509,12 @@ class reaction_eq(GenericFunction):
 
         Parameters
         ----------
-                rxn_1
-        The first RDKit reaction.
-                rxn_2
-        The second RDKit reaction.
+        rxn_1
+            The first RDKit reaction.
+        rxn_2
+            The second RDKit reaction.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -491,8 +533,10 @@ class reaction_in(GenericFunction):
 
         Parameters
         ----------
-                rxn_str
-        The string representation of the chemical reaction, typically in reaction SMILES format.
+        rxn_str
+            The string representation of the chemical reaction, typically in reaction SMILES format.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -513,10 +557,12 @@ class reaction_ne(GenericFunction):
 
         Parameters
         ----------
-                rxn_1
-        The first RDKit reaction.
-                rxn_2
-        The second RDKit reaction.
+        rxn_1
+            The first RDKit reaction.
+        rxn_2
+            The second RDKit reaction.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -535,8 +581,10 @@ class reaction_out(GenericFunction):
 
         Parameters
         ----------
-                rxn
-        The RDKit reaction object to convert.
+        rxn
+            The RDKit reaction object to convert.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -559,10 +607,12 @@ class sfp_cmp(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-        The first sparse fingerprint to compare.
-                arg_2
-        The second sparse fingerprint to compare.
+        arg_1
+            The first sparse fingerprint to compare.
+        arg_2
+            The second sparse fingerprint to compare.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -583,10 +633,12 @@ class sfp_eq(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first sparse fingerprint.
-                fp_2
-        The second sparse fingerprint.
+        fp_1
+            The first sparse fingerprint.
+        fp_2
+            The second sparse fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -607,10 +659,12 @@ class sfp_ge(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first sparse fingerprint (sfp) for comparison.
-                fp_2
-        The second sparse fingerprint (sfp) for comparison.
+        fp_1
+            The first sparse fingerprint (sfp) for comparison.
+        fp_2
+            The second sparse fingerprint (sfp) for comparison.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -631,10 +685,12 @@ class sfp_gt(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first sparse fingerprint for comparison.
-                fp_2
-        The second sparse fingerprint for comparison.
+        fp_1
+            The first sparse fingerprint for comparison.
+        fp_2
+            The second sparse fingerprint for comparison.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -653,8 +709,10 @@ class sfp_in(GenericFunction):
 
         Parameters
         ----------
-                fp_string
-        The string representation of the sparse fingerprint.
+        fp_string
+            The string representation of the sparse fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -675,10 +733,12 @@ class sfp_le(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first RDKit sparse fingerprint.
-                fp_2
-        The second RDKit sparse fingerprint.
+        fp_1
+            The first RDKit sparse fingerprint.
+        fp_2
+            The second RDKit sparse fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -699,10 +759,12 @@ class sfp_lt(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first sparse fingerprint to compare.
-                fp_2
-        The second sparse fingerprint to compare.
+        fp_1
+            The first sparse fingerprint to compare.
+        fp_2
+            The second sparse fingerprint to compare.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -723,10 +785,12 @@ class sfp_ne(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first sparse fingerprint.
-                fp_2
-        The second sparse fingerprint.
+        fp_1
+            The first sparse fingerprint.
+        fp_2
+            The second sparse fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -745,8 +809,10 @@ class sfp_out(GenericFunction):
 
         Parameters
         ----------
-                fp
-        The sparse fingerprint to be converted to a string.
+        fp
+            The sparse fingerprint to be converted to a string.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -770,10 +836,12 @@ class tanimoto_sml_op(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first fingerprint, which can be either a sparse fingerprint (sfp) or a bit vector fingerprint (bfp).
-                fp_2
-        The second fingerprint, which must be of the same type as the first fingerprint (either sfp or bfp).
+        fp_1
+            The first fingerprint, which can be either a sparse fingerprint (sfp) or a bit vector fingerprint (bfp).
+        fp_2
+            The second fingerprint, which must be of the same type as the first fingerprint (either sfp or bfp).
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -792,8 +860,10 @@ class xqmol_in(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-        The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).
+        arg_1
+            The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -812,8 +882,10 @@ class xqmol_out(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-        The RDKit query molecule to convert to a string.
+        arg_1
+            The RDKit query molecule to convert to a string.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------

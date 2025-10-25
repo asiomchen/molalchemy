@@ -35,7 +35,7 @@ uv run mkdocs serve
 
 ### Working with SQL functions
 
-All the SQL functions modules are generated automatically from the data in `./data` directory. Files are using `dev_scripts/gen_bingo_func.py` and `dev_scripts/gen_rdkit_func.py` scripts.
+All the SQL functions modules are generated automatically from the data in `./data` directory. Files are using `dev_scripts/gen_functions.py` script and Jinja2 templates in `dev_scripts/templates/` directory.
 
 
 ### 🧪 **Intermediate Contributions**

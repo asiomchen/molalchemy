@@ -44,9 +44,9 @@ def json_to_function_code(func_name: str, data: dict, template) -> str:
         params_list.append(param_str)
 
         # Add parameter description for docstring
-        param_doc = f"\t{param['name']}"
+        param_doc = f"{param['name']}"
         if param["description"]:
-            param_doc += f"\n        {param['description']}"
+            param_doc += f"\n\t    {param['description']}"
         doc_param_list.append(param_doc)
         arg_names.append(param["name"])
 

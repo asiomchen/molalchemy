@@ -93,10 +93,12 @@ class add(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first sparse fingerprint.
-                fp_2
-        The second sparse fingerprint.
+        fp_1
+            The first sparse fingerprint.
+        fp_2
+            The second sparse fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -117,10 +119,12 @@ class all_values_gt(GenericFunction):
 
         Parameters
         ----------
-                fp
-        The sparse fingerprint to check.
-                value
-        The integer value to compare against.
+        fp
+            The sparse fingerprint to check.
+        value
+            The integer value to compare against.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -141,10 +145,12 @@ class all_values_lt(GenericFunction):
 
         Parameters
         ----------
-                fp
-        The sparse fingerprint (sfp) to check.
-                value
-        The integer value to compare against the sfp elements.
+        fp
+            The sparse fingerprint (sfp) to check.
+        value
+            The integer value to compare against the sfp elements.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -163,8 +169,10 @@ class atompair_fp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to generate the fingerprint.
+        mol
+            The molecule for which to generate the fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -183,8 +191,10 @@ class atompairbv_fp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to compute the fingerprint for.
+        mol
+            The molecule to compute the fingerprint for.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -209,12 +219,14 @@ class avalon_fp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule for which to generate the fingerprint.
-                arg_2
-        TODO
-                arg_3
-        TODO
+        mol
+            The RDKit molecule for which to generate the fingerprint.
+        arg_2
+            TODO
+        arg_3
+            TODO
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -233,8 +245,10 @@ class bfp_from_binary_text(GenericFunction):
 
         Parameters
         ----------
-                input
-        The binary string representation of the fingerprint.
+        input
+            The binary string representation of the fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -255,10 +269,12 @@ class bfp_le(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first bit vector fingerprint for comparison.
-                fp_2
-        The second bit vector fingerprint for comparison.
+        fp_1
+            The first bit vector fingerprint for comparison.
+        fp_2
+            The second bit vector fingerprint for comparison.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -277,8 +293,10 @@ class bfp_to_binary_text(GenericFunction):
 
         Parameters
         ----------
-                fp
-        The bit vector fingerprint (bfp) to convert.
+        fp
+            The bit vector fingerprint (bfp) to convert.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -299,10 +317,12 @@ class dice_dist(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first fingerprint (bfp) for the distance calculation.
-                fp_2
-        The second fingerprint (bfp) for the distance calculation.
+        fp_1
+            The first fingerprint (bfp) for the distance calculation.
+        fp_2
+            The second fingerprint (bfp) for the distance calculation.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -326,10 +346,12 @@ class dice_sml(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first fingerprint (either sparse or bit vector) for comparison.
-                fp_2
-        The second fingerprint (either sparse or bit vector) for comparison.
+        fp_1
+            The first fingerprint (either sparse or bit vector) for comparison.
+        fp_2
+            The second fingerprint (either sparse or bit vector) for comparison.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -353,10 +375,12 @@ class dice_sml_op(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-        The first fingerprint.
-                arg_2
-        The second fingerprint of the same type as the first.
+        arg_1
+            The first fingerprint.
+        arg_2
+            The second fingerprint of the same type as the first.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -377,10 +401,12 @@ class featmorgan_fp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to generate the fingerprint.
-                radius
-        The radius for the fingerprint generation. This argument is optional and defaults to 2.
+        mol
+            The molecule for which to generate the fingerprint.
+        radius
+            The radius for the fingerprint generation. This argument is optional and defaults to 2.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -401,10 +427,12 @@ class featmorganbv_fp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to generate the fingerprint.
-                radius
-        The radius for the fingerprint generation.
+        mol
+            The molecule for which to generate the fingerprint.
+        radius
+            The radius for the fingerprint generation.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -423,8 +451,10 @@ class fmcs(GenericFunction):
 
         Parameters
         ----------
-                mols
-        A set of molecules for which to calculate the MCS.
+        mols
+            A set of molecules for which to calculate the MCS.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -448,10 +478,12 @@ class fmcs_smiles(GenericFunction):
 
         Parameters
         ----------
-                molecules
-        A space-separated string of SMILES representations of molecules for which to calculate the MCS.
-                json
-        An optional JSON string used to provide parameters to the MCS code.
+        molecules
+            A space-separated string of SMILES representations of molecules for which to calculate the MCS.
+        json
+            An optional JSON string used to provide parameters to the MCS code.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -470,8 +502,10 @@ class is_valid_ctab(GenericFunction):
 
         Parameters
         ----------
-                input
-        The CTAB (mol block) string to validate.
+        input
+            The CTAB (mol block) string to validate.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -490,8 +524,10 @@ class is_valid_mol_pkl(GenericFunction):
 
         Parameters
         ----------
-                input
-        A binary string (bytea) representing a molecule.
+        input
+            A binary string (bytea) representing a molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -510,8 +546,10 @@ class is_valid_smarts(GenericFunction):
 
         Parameters
         ----------
-                input
-        The SMARTS string to validate.
+        input
+            The SMARTS string to validate.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -530,8 +568,10 @@ class is_valid_smiles(GenericFunction):
 
         Parameters
         ----------
-                input
-        The SMILES string to validate.
+        input
+            The SMILES string to validate.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -550,8 +590,10 @@ class layered_fp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to generate the layered fingerprint.
+        mol
+            The molecule for which to generate the layered fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -570,8 +612,10 @@ class maccs_fp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to generate the MACCS fingerprint.
+        mol
+            The molecule for which to generate the MACCS fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -595,10 +639,12 @@ class mol_adjust_query_properties(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to which additional query information will be attached.
-                query_parameters
-        A string with additional query parameters (optional)
+        mol
+            The molecule to which additional query information will be attached.
+        query_parameters
+            A string with additional query parameters (optional)
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -617,8 +663,10 @@ class mol_amw(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the AMW.
+        mol
+            The molecule for which to calculate the AMW.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -637,8 +685,10 @@ class mol_chi0n(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule.
+        mol
+            The RDKit molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -657,8 +707,10 @@ class mol_chi0v(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the Chi0v value.
+        mol
+            The molecule for which to calculate the Chi0v value.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -677,8 +729,10 @@ class mol_chi1n(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-        The molecule for which to calculate the Chi1n value.
+        arg_1
+            The molecule for which to calculate the Chi1n value.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -697,8 +751,10 @@ class mol_chi1v(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule.
+        mol
+            The RDKit molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -717,8 +773,10 @@ class mol_chi2n(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the Chi2n value.
+        mol
+            The molecule for which to calculate the Chi2n value.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -737,8 +795,10 @@ class mol_chi2v(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule.
+        mol
+            The RDKit molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -757,8 +817,10 @@ class mol_chi3n(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the Chi3n value.
+        mol
+            The molecule for which to calculate the Chi3n value.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -777,8 +839,10 @@ class mol_chi3v(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the Chi3v value.
+        mol
+            The molecule for which to calculate the Chi3v value.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -797,8 +861,10 @@ class mol_chi4n(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the Chi4n value.
+        mol
+            The molecule for which to calculate the Chi4n value.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -817,8 +883,10 @@ class mol_chi4v(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to calculate the Chi4v value for.
+        mol
+            The molecule to calculate the Chi4v value for.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -837,8 +905,10 @@ class mol_exactmw(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the exact molecular weight.
+        mol
+            The molecule for which to calculate the exact molecular weight.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -863,12 +933,14 @@ class mol_formula(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to get the molecular formula.
-                include_isotopes
-        Controls whether isotope information is included in the formula.
-                use_deuterium_tritium_symbols
-        Controls whether "D" and "T" are used instead of [2H] and [3H].
+        mol
+            The molecule for which to get the molecular formula.
+        include_isotopes
+            Controls whether isotope information is included in the formula.
+        use_deuterium_tritium_symbols
+            Controls whether "D" and "T" are used instead of [2H] and [3H].
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -887,8 +959,10 @@ class mol_fractioncsp3(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the fraction of sp3 hybridized carbons.
+        mol
+            The molecule for which to calculate the fraction of sp3 hybridized carbons.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -907,10 +981,12 @@ class mol_from_ctab(GenericFunction):
 
         Parameters
         ----------
-                ctab
-        The CTAB (mol block) string from which to create the molecule.
-                arg_2
-        A boolean indicating whether the molecule's coordinates should be saved.
+        ctab
+            The CTAB (mol block) string from which to create the molecule.
+        arg_2
+            A boolean indicating whether the molecule's coordinates should be saved.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -929,8 +1005,10 @@ class mol_from_json(GenericFunction):
 
         Parameters
         ----------
-                json_str
-        A commonchem JSON string representing a molecule.
+        json_str
+            A commonchem JSON string representing a molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -949,8 +1027,10 @@ class mol_from_pkl(GenericFunction):
 
         Parameters
         ----------
-                bytea
-        A binary string representation of the molecule.
+        bytea
+            A binary string representation of the molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -969,8 +1049,10 @@ class mol_from_smiles(GenericFunction):
 
         Parameters
         ----------
-                smiles
-        The SMILES string to convert to a molecule.
+        smiles
+            The SMILES string to convert to a molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -989,8 +1071,10 @@ class mol_hallkieralpha(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule.
+        mol
+            The RDKit molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1008,8 +1092,10 @@ class mol_hba(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the number of Lipinski H-bond acceptors.
+        mol
+            The molecule for which to calculate the number of Lipinski H-bond acceptors.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1027,8 +1113,10 @@ class mol_hbd(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the number of Lipinski H-bond donors.
+        mol
+            The molecule for which to calculate the number of Lipinski H-bond donors.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1047,10 +1135,12 @@ class mol_inchi(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule for which to generate the InChI.
-                arg_2
-        Additional parameters to pass to the generator (TODO)
+        mol
+            The RDKit molecule for which to generate the InChI.
+        arg_2
+            Additional parameters to pass to the generator (TODO)
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1069,10 +1159,12 @@ class mol_inchikey(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule for which to generate the InChI key.
-                arg_2
-        Additional parameters to pass to the generator  (TODO)
+        mol
+            The RDKit molecule for which to generate the InChI key.
+        arg_2
+            Additional parameters to pass to the generator  (TODO)
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1091,8 +1183,10 @@ class mol_kappa1(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule.
+        mol
+            The RDKit molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1111,8 +1205,10 @@ class mol_kappa2(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the kappa2 value.
+        mol
+            The molecule for which to calculate the kappa2 value.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1131,8 +1227,10 @@ class mol_kappa3(GenericFunction):
 
         Parameters
         ----------
-                mol_1
-        The molecule for which to calculate the kappa3 value.
+        mol_1
+            The molecule for which to calculate the kappa3 value.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1151,8 +1249,10 @@ class mol_labuteasa(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate Labute's approximate surface area.
+        mol
+            The molecule for which to calculate Labute's approximate surface area.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1171,8 +1271,10 @@ class mol_logp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the MolLogP.
+        mol
+            The molecule for which to calculate the MolLogP.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1191,8 +1293,10 @@ class mol_murckoscaffold(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule for which to compute the Murcko scaffold.
+        mol
+            The RDKit molecule for which to compute the Murcko scaffold.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1216,10 +1320,12 @@ class mol_nm_hash(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to generate the hash.
-                hash_type
-        The type of hash to generate. Legal values are 'AnonymousGraph', 'ElementGraph', 'CanonicalSmiles', 'MurckoScaffold', 'ExtendedMurcko', 'MolFormula', 'AtomBondCounts', 'DegreeVector', 'Mesomer', 'HetAtomTautomer', 'HetAtomProtomer', 'RedoxPair', 'Regioisomer', 'NetCharge', 'SmallWorldIndexBR', 'SmallWorldIndexBRL', 'ArthorSubstructureOrder'. The default is 'AnonymousGraph'.
+        mol
+            The molecule for which to generate the hash.
+        hash_type
+            The type of hash to generate. Legal values are 'AnonymousGraph', 'ElementGraph', 'CanonicalSmiles', 'MurckoScaffold', 'ExtendedMurcko', 'MolFormula', 'AtomBondCounts', 'DegreeVector', 'Mesomer', 'HetAtomTautomer', 'HetAtomProtomer', 'RedoxPair', 'Regioisomer', 'NetCharge', 'SmallWorldIndexBR', 'SmallWorldIndexBRL', 'ArthorSubstructureOrder'. The default is 'AnonymousGraph'.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1237,8 +1343,10 @@ class mol_numaliphaticcarbocycles(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to analyze.
+        mol
+            The molecule to analyze.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1256,8 +1364,10 @@ class mol_numaliphaticheterocycles(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule.
+        mol
+            The RDKit molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1275,8 +1385,10 @@ class mol_numaliphaticrings(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the number of aliphatic rings.
+        mol
+            The molecule for which to calculate the number of aliphatic rings.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1294,8 +1406,10 @@ class mol_numamidebonds(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule for which to calculate the number of amide bonds.
+        mol
+            The RDKit molecule for which to calculate the number of amide bonds.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1313,8 +1427,10 @@ class mol_numaromaticcarbocycles(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule.
+        mol
+            The RDKit molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1332,8 +1448,10 @@ class mol_numaromaticheterocycles(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule.
+        mol
+            The RDKit molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1351,8 +1469,10 @@ class mol_numaromaticrings(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to analyze.
+        mol
+            The molecule to analyze.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1370,8 +1490,10 @@ class mol_numatoms(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule.
+        mol
+            The RDKit molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1389,8 +1511,10 @@ class mol_numbridgeheadatoms(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to calculate the number of bridgehead atoms for.
+        mol
+            The molecule to calculate the number of bridgehead atoms for.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1408,8 +1532,10 @@ class mol_numheavyatoms(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to analyze.
+        mol
+            The molecule to analyze.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1427,8 +1553,10 @@ class mol_numheteroatoms(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule.
+        mol
+            The RDKit molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1446,8 +1574,10 @@ class mol_numheterocycles(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to count the number of heteroatoms.
+        mol
+            The molecule for which to count the number of heteroatoms.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1465,8 +1595,10 @@ class mol_numrings(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the number of rings.
+        mol
+            The molecule for which to calculate the number of rings.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1484,8 +1616,10 @@ class mol_numrotatablebonds(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to calculate the number of rotatable bonds for.
+        mol
+            The molecule to calculate the number of rotatable bonds for.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1503,8 +1637,10 @@ class mol_numsaturatedcarbocycles(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the number of saturated carbocycles.
+        mol
+            The molecule for which to calculate the number of saturated carbocycles.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1522,8 +1658,10 @@ class mol_numsaturatedheterocycles(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to analyze.
+        mol
+            The molecule to analyze.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1541,8 +1679,10 @@ class mol_numsaturatedrings(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the number of saturated rings.
+        mol
+            The molecule for which to calculate the number of saturated rings.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1560,8 +1700,10 @@ class mol_numspiroatoms(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule.
+        mol
+            The RDKit molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1580,8 +1722,10 @@ class mol_phi(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the Kier Phi value.
+        mol
+            The molecule for which to calculate the Kier Phi value.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1600,8 +1744,10 @@ class mol_send(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule to be serialized.
+        mol
+            The RDKit molecule to be serialized.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1626,10 +1772,12 @@ class mol_to_ctab(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to generate the CTAB string.
-                arg_2
-                arg_3
+        mol
+            The molecule for which to generate the CTAB string.
+        arg_2
+        arg_3
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1648,8 +1796,10 @@ class mol_to_cxsmarts(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to convert to CXSMARTS.
+        mol
+            The molecule to convert to CXSMARTS.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1668,8 +1818,10 @@ class mol_to_cxsmiles(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to convert.
+        mol
+            The molecule to convert.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1688,8 +1840,10 @@ class mol_to_json(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to convert to commonchem JSON.
+        mol
+            The molecule to convert to commonchem JSON.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1708,8 +1862,10 @@ class mol_to_pkl(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The RDKit molecule to be converted to a binary string.
+        mol
+            The RDKit molecule to be converted to a binary string.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1728,8 +1884,10 @@ class mol_to_smarts(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to convert to a SMARTS string.
+        mol
+            The molecule to convert to a SMARTS string.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1748,8 +1906,10 @@ class mol_to_smiles(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to convert to SMILES.
+        mol
+            The molecule to convert to SMILES.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1776,15 +1936,17 @@ class mol_to_svg(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to be drawn.
-                arg_2
-        An optional string to use as the legend for the drawing.
-                width
-        The optional width of the generated SVG image.
-                height
-        The optional height of the generated SVG image.
-                arg_5
+        mol
+            The molecule to be drawn.
+        arg_2
+            An optional string to use as the legend for the drawing.
+        width
+            The optional width of the generated SVG image.
+        height
+            The optional height of the generated SVG image.
+        arg_5
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1808,10 +1970,12 @@ class mol_to_v3kctab(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to convert to a V3000 CTAB string.
-                create_depiction
-        Controls whether or not 2D coordinates will be generated for molecules that don't have coordinates.
+        mol
+            The molecule to convert to a V3000 CTAB string.
+        create_depiction
+            Controls whether or not 2D coordinates will be generated for molecules that don't have coordinates.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1838,16 +2002,18 @@ class mol_to_xqmol(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-        The RDKit molecule to be converted.
-                arg_2
-        A boolean parameter for the conversion process.
-                arg_3
-        Another boolean parameter for the conversion process.
-                arg_4
-        A third boolean parameter for the conversion process.
-                arg_5
-        A string parameter for the conversion process.
+        arg_1
+            The RDKit molecule to be converted.
+        arg_2
+            A boolean parameter for the conversion process.
+        arg_3
+            Another boolean parameter for the conversion process.
+        arg_4
+            A third boolean parameter for the conversion process.
+        arg_5
+            A string parameter for the conversion process.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1866,8 +2032,10 @@ class mol_tpsa(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to calculate the topological polar surface area.
+        mol
+            The molecule for which to calculate the topological polar surface area.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1888,10 +2056,12 @@ class morgan_fp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to generate the fingerprint.
-                radius
-        The radius for the Morgan fingerprint generation. Defaults to 2.
+        mol
+            The molecule for which to generate the fingerprint.
+        radius
+            The radius for the Morgan fingerprint generation. Defaults to 2.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1912,10 +2082,12 @@ class morganbv_fp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to generate the fingerprint.
-                radius
-        The radius for the Morgan fingerprint calculation.
+        mol
+            The molecule for which to generate the fingerprint.
+        radius
+            The radius for the Morgan fingerprint calculation.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1936,10 +2108,12 @@ class qmol_from_ctab(GenericFunction):
 
         Parameters
         ----------
-                ctab
-        A CTAB (mol block) string.
-                keep_conformer
-        Controls whether or not the coordinates are saved.
+        ctab
+            A CTAB (mol block) string.
+        keep_conformer
+            Controls whether or not the coordinates are saved.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1958,8 +2132,10 @@ class qmol_from_json(GenericFunction):
 
         Parameters
         ----------
-                json
-        The commonchem JSON string representing the query molecule.
+        json
+            The commonchem JSON string representing the query molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1978,8 +2154,10 @@ class qmol_from_smarts(GenericFunction):
 
         Parameters
         ----------
-                smarts
-        The SMARTS string representing the query molecule.
+        smarts
+            The SMARTS string representing the query molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -1998,8 +2176,10 @@ class qmol_from_smiles(GenericFunction):
 
         Parameters
         ----------
-                smiles
-        The SMILES string to convert into a query molecule.
+        smiles
+            The SMILES string to convert into a query molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2018,8 +2198,10 @@ class qmol_send(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The query molecule to be converted.
+        mol
+            The query molecule to be converted.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2038,8 +2220,10 @@ class rdkit_fp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to generate the fingerprint.
+        mol
+            The molecule for which to generate the fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2059,6 +2243,8 @@ class rdkit_toolkit_version(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2078,6 +2264,8 @@ class rdkit_version(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2098,10 +2286,12 @@ class reaction_difference_fp(GenericFunction):
 
         Parameters
         ----------
-                rxn_1
-        The RDKit reaction object.
-                fp_type
-        Integer denoting the fingerprint type. Likely 1 (AtomPairFP), 2 (TopologicalTorsionFP), or 3 (MorganFP).
+        rxn_1
+            The RDKit reaction object.
+        fp_type
+            Integer denoting the fingerprint type. Likely 1 (AtomPairFP), 2 (TopologicalTorsionFP), or 3 (MorganFP).
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2120,8 +2310,10 @@ class reaction_from_ctab(GenericFunction):
 
         Parameters
         ----------
-                rxn_str
-        The CTAB (reaction block) string representing the reaction.
+        rxn_str
+            The CTAB (reaction block) string representing the reaction.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2140,8 +2332,10 @@ class reaction_from_smarts(GenericFunction):
 
         Parameters
         ----------
-                rxn_str
-        The SMARTS string representing the reaction.
+        rxn_str
+            The SMARTS string representing the reaction.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2160,8 +2354,10 @@ class reaction_from_smiles(GenericFunction):
 
         Parameters
         ----------
-                rxn_str
-        The reaction SMILES string to convert into an RDKit reaction object.
+        rxn_str
+            The reaction SMILES string to convert into an RDKit reaction object.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2179,8 +2375,10 @@ class reaction_numagents(GenericFunction):
 
         Parameters
         ----------
-                rxn
-        The RDKit reaction molecule.
+        rxn
+            The RDKit reaction molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2198,8 +2396,10 @@ class reaction_numproducts(GenericFunction):
 
         Parameters
         ----------
-                rxn
-        The RDKit reaction object.
+        rxn
+            The RDKit reaction object.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2217,8 +2417,10 @@ class reaction_numreactants(GenericFunction):
 
         Parameters
         ----------
-                rxn
-        The RDKit reaction object.
+        rxn
+            The RDKit reaction object.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2237,8 +2439,10 @@ class reaction_send(GenericFunction):
 
         Parameters
         ----------
-                rxn
-        The RDKit reaction object to be sent.
+        rxn
+            The RDKit reaction object to be sent.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2259,10 +2463,12 @@ class reaction_structural_bfp(GenericFunction):
 
         Parameters
         ----------
-                rxn
-        The RDKit reaction object.
-                radius
-        The radius to use for the fingerprint generation.
+        rxn
+            The RDKit reaction object.
+        radius
+            The radius to use for the fingerprint generation.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2281,8 +2487,10 @@ class reaction_to_ctab(GenericFunction):
 
         Parameters
         ----------
-                reaction
-        The RDKit reaction object to convert.
+        reaction
+            The RDKit reaction object to convert.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2301,8 +2509,10 @@ class reaction_to_smarts(GenericFunction):
 
         Parameters
         ----------
-                rxn
-        The RDKit reaction object to convert.
+        rxn
+            The RDKit reaction object to convert.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2321,8 +2531,10 @@ class reaction_to_smiles(GenericFunction):
 
         Parameters
         ----------
-                rxn
-        The RDKit reaction object.
+        rxn
+            The RDKit reaction object.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2349,16 +2561,18 @@ class reaction_to_svg(GenericFunction):
 
         Parameters
         ----------
-                rxn
-        The RDKit reaction object to be drawn.
-                highlight_reactants
-        If true, highlights the reactants in the SVG drawing.
-                width
-        The desired width of the SVG image.
-                height
-        The desired height of the SVG image.
-                params
-        An optional string for other drawing parameters? [TODO]
+        rxn
+            The RDKit reaction object to be drawn.
+        highlight_reactants
+            If true, highlights the reactants in the SVG drawing.
+        width
+            The desired width of the SVG image.
+        height
+            The desired height of the SVG image.
+        params
+            An optional string for other drawing parameters? [TODO]
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2382,10 +2596,12 @@ class rsubstruct(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule (or query molecule/reaction) to be searched within.
-                query
-        The molecule (or reaction) to check as a substructure.
+        mol
+            The molecule (or query molecule/reaction) to be searched within.
+        query
+            The molecule (or reaction) to check as a substructure.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2404,10 +2620,12 @@ class rsubstruct_chiral(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to search within.
-                query_mol
-        The molecule to search for as a substructure.
+        mol
+            The molecule to search within.
+        query_mol
+            The molecule to search for as a substructure.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2428,10 +2646,12 @@ class rsubstruct_query(GenericFunction):
 
         Parameters
         ----------
-                mol_1
-        The molecule to be searched within.
-                mol_2
-        The substructure molecule to search for.
+        mol_1
+            The molecule to be searched within.
+        mol_2
+            The substructure molecule to search for.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2452,10 +2672,12 @@ class rsubstructfp(GenericFunction):
 
         Parameters
         ----------
-                rxn_1
-        The first RDKit reaction.
-                rxn_2
-        The second RDKit reaction, which is checked as a substructure.
+        rxn_1
+            The first RDKit reaction.
+        rxn_2
+            The second RDKit reaction, which is checked as a substructure.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2473,8 +2695,10 @@ class size(GenericFunction):
 
         Parameters
         ----------
-                bfp
-        The bit vector fingerprint.
+        bfp
+            The bit vector fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2498,10 +2722,12 @@ class substruct(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The first molecule.
-                query
-        The second molecule, which is checked as a substructure of the first.
+        mol
+            The first molecule.
+        query
+            The second molecule, which is checked as a substructure of the first.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2520,10 +2746,12 @@ class substruct_chiral(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to be searched for the substructure.
-                query
-        The substructure molecule to search for within the first molecule. Chirality is considered.
+        mol
+            The molecule to be searched for the substructure.
+        query
+            The substructure molecule to search for within the first molecule. Chirality is considered.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2547,12 +2775,14 @@ class substruct_count(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule to search within.
-                query
-        The substructure to search for.
-                unique
-        Toggles whether or not the matches are uniquified.
+        mol
+            The molecule to search within.
+        query
+            The substructure to search for.
+        unique
+            Toggles whether or not the matches are uniquified.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2576,12 +2806,14 @@ class substruct_count_chiral(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The target RDKit molecule to search within.
-                query
-        The RDKit molecule or query molecule to search for as a chiral substructure.
-                unique
-        A boolean flag indicating whether to count only unique chiral substructure matches (true) or all matches (false).
+        mol
+            The target RDKit molecule to search within.
+        query
+            The RDKit molecule or query molecule to search for as a chiral substructure.
+        unique
+            A boolean flag indicating whether to count only unique chiral substructure matches (true) or all matches (false).
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2602,10 +2834,12 @@ class substruct_query(GenericFunction):
 
         Parameters
         ----------
-                mol_1
-        The molecule to search within.
-                mol_2
-        The molecule or query molecule to search for as a substructure.
+        mol_1
+            The molecule to search within.
+        mol_2
+            The molecule or query molecule to search for as a substructure.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2626,10 +2860,12 @@ class substructfp(GenericFunction):
 
         Parameters
         ----------
-                rxn_1
-        The first RDKit reaction.
-                rxn_2
-        The second RDKit reaction, which is checked as a substructure of the first.
+        rxn_1
+            The first RDKit reaction.
+        rxn_2
+            The second RDKit reaction, which is checked as a substructure of the first.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2650,10 +2886,12 @@ class subtract(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first sparse fingerprint (sfp).
-                fp_2
-        The second sparse fingerprint (sfp) to subtract.
+        fp_1
+            The first sparse fingerprint (sfp).
+        fp_2
+            The second sparse fingerprint (sfp) to subtract.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2674,10 +2912,12 @@ class tanimoto_dist(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first fingerprint to compare.
-                fp_2
-        The second fingerprint to compare.
+        fp_1
+            The first fingerprint to compare.
+        fp_2
+            The second fingerprint to compare.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2701,10 +2941,12 @@ class tanimoto_sml(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first fingerprint to compare.
-                fp_2
-        The second fingerprint to compare.
+        fp_1
+            The first fingerprint to compare.
+        fp_2
+            The second fingerprint to compare.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2723,8 +2965,10 @@ class torsion_fp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to generate the fingerprint.
+        mol
+            The molecule for which to generate the fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2743,8 +2987,10 @@ class torsionbv_fp(GenericFunction):
 
         Parameters
         ----------
-                mol
-        The molecule for which to generate the fingerprint.
+        mol
+            The molecule for which to generate the fingerprint.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2770,14 +3016,16 @@ class tversky_sml(GenericFunction):
 
         Parameters
         ----------
-                fp_1
-        The first fingerprint.
-                fp_2
-        The second fingerprint.
-                alpha
-        The alpha parameter for the Tversky similarity.
-                beta
-        The beta parameter for the Tversky similarity.
+        fp_1
+            The first fingerprint.
+        fp_2
+            The second fingerprint.
+        alpha
+            The alpha parameter for the Tversky similarity.
+        beta
+            The beta parameter for the Tversky similarity.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -2796,8 +3044,10 @@ class xqmol_send(GenericFunction):
 
         Parameters
         ----------
-                mol
-        An RDKit extended query molecule.
+        mol
+            An RDKit extended query molecule.
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------

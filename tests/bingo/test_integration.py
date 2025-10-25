@@ -339,7 +339,7 @@ class TestBingoQueryVariations:
         smarts_expr = bingo_func.matches_smarts(
             self.compounds.c.structure, benzene_smarts
         )
-        equals_expr = bingo_func.equals(self.compounds.c.structure, ethanol)
+        equals_expr = self.compounds.c.structure == ethanol
         similarity_expr = bingo_func.similarity(
             self.compounds.c.structure, ethanol, 0.7
         )

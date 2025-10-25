@@ -26,9 +26,11 @@ class _exact_internal(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
+        arg_1
+        arg_2
+        arg_3
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -49,6 +51,8 @@ class _get_block_count(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -70,6 +74,8 @@ class _get_profiling_info(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -90,6 +96,8 @@ class _get_structures_count(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -116,9 +124,11 @@ class _gross_internal(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
+        arg_1
+        arg_2
+        arg_3
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -144,9 +154,11 @@ class _internal_func_011(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
+        arg_1
+        arg_2
+        arg_3
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -168,8 +180,10 @@ class _internal_func_012(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
+        arg_1
+        arg_2
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -190,7 +204,9 @@ class _internal_func_check(GenericFunction):
 
         Parameters
         ----------
-                arg_1
+        arg_1
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -212,6 +228,8 @@ class _match_mass_great(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -233,6 +251,8 @@ class _match_mass_less(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -253,6 +273,8 @@ class _precache_database(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -273,6 +295,8 @@ class _print_profiling_info(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -293,6 +317,8 @@ class _reset_profiling_info(GenericFunction):
         Parameters
         ----------
 
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -319,9 +345,11 @@ class _rexact_internal(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
+        arg_1
+        arg_2
+        arg_3
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -348,9 +376,11 @@ class _rsmarts_internal(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
+        arg_1
+        arg_2
+        arg_3
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -377,9 +407,11 @@ class _rsub_internal(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
+        arg_1
+        arg_2
+        arg_3
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -408,11 +440,13 @@ class _sim_internal(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
-                arg_4
-                arg_5
+        arg_1
+        arg_2
+        arg_3
+        arg_4
+        arg_5
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -439,9 +473,11 @@ class _smarts_internal(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
+        arg_1
+        arg_2
+        arg_3
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
@@ -468,9 +504,11 @@ class _sub_internal(GenericFunction):
 
         Parameters
         ----------
-                arg_1
-                arg_2
-                arg_3
+        arg_1
+        arg_2
+        arg_3
+        kwargs : Any
+            Additional keyword arguments passed to the `GenericFunction`.
 
         Returns
         -------
