@@ -2,6 +2,7 @@
 This file defines public RDKit PostgreSQL function wrappers for use with SQLAlchemy.
 """
 
+
 from sqlalchemy import BinaryExpression, Function
 from sqlalchemy.sql import cast, func
 from sqlalchemy.sql.elements import ColumnElement

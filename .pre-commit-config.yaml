@@ -12,6 +12,19 @@ repos:
     -   id: check-added-large-files
         args: ['--maxkb=1000']
     -   id: check-merge-conflict
+- repo: local
+  hooks:
+    - id: sync-docs
+      name: Sync documentation files
+      entry: make sync-docs
+      language: system
+      files: ^(README\.md|CHANGELOG\.md|ROADMAP\.md|CONTRIBUTING\.md)$
+      pass_filenames: false
+    # - id: update-functions
+    #   name: Update generated function wrappers
+    #   language: system
+    #   entry: make update-func
+
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version.
   rev: v0.14.2
@@ -22,15 +35,3 @@ repos:
       types_or: [ python, pyi ]
     # Run the formatter.
     - id: ruff-format
-- repo: local
-  hooks:
-    - id: sync-docs
-      name: Sync documentation files
-      entry: make sync-docs
-      language: system
-      files: ^(README\.md|CHANGELOG\.md|ROADMAP\.md|CONTRIBUTING\.md)$
-      pass_filenames: false
-    - id: update-functions
-      name: Update generated function wrappers
-      language: system
-      entry: make update-func
