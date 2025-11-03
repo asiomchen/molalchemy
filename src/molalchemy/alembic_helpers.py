@@ -4,9 +4,9 @@ This module provides utilities for Alembic migrations when using RDKit types and
 It automatically handles the necessary imports and some utility functions for RDKit and Bingo functionality.
 """
 
+from alembic import op
 from loguru import logger
 
-from alembic import op
 from molalchemy.bingo.types import BingoBaseType
 from molalchemy.rdkit.types import RdkitBaseType
 
