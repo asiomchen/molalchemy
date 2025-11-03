@@ -7,11 +7,11 @@
 
 
 [![pypi version](https://img.shields.io/pypi/v/molalchemy.svg)](https://pypi.org/project/molalchemy/)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/molalchemy)
-[![PyPI Downloads](https://static.pepy.tech/personalized-badge/molalchemy?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/molalchemy)
 [![license](https://img.shields.io/github/license/asiomchen/molalchemy)](https://github.com/asiomchen/molalchemy/blob/main/LICENSE)
-[![python versions](https://shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)]()
-![Codecov (with branch)](https://img.shields.io/codecov/c/github/asiomchen/molalchemy/main)
+[![python versions](https://shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue)]()
+![PyPI - Downloads](https://img.shields.io/pypi/dm/molalchemy)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/molalchemy?period=total&units=INTERNATIONAL_SYSTEM&left_color=GREY&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/molalchemy)
+[![codecov](https://codecov.io/gh/asiomchen/molalchemy/graph/badge.svg?token=B1GKJTDZCK)](https://codecov.io/gh/asiomchen/molalchemy)
 [![powered by rdkit](https://img.shields.io/badge/Powered%20by-RDKit-3838ff.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEXc3NwUFP8UPP9kZP+MjP+0tP////9ZXZotAAAAAXRSTlMAQObYZgAAAAFiS0dEBmFmuH0AAAAHdElNRQfmAwsPGi+MyC9RAAAAQElEQVQI12NgQABGQUEBMENISUkRLKBsbGwEEhIyBgJFsICLC0iIUdnExcUZwnANQWfApKCK4doRBsKtQFgKAQC5Ww1JEHSEkAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wMy0xMVQxNToyNjo0NyswMDowMDzr2J4AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDMtMTFUMTU6MjY6NDcrMDA6MDBNtmAiAAAAAElFTkSuQmCC)](https://www.rdkit.org/)
 [![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-306998?logo=python&logoColor=white)](https://www.sqlalchemy.org/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
@@ -32,6 +32,7 @@ molalchemy provides seamless integration between python and chemical databases, 
 - **Chemical Cartridge Integration**: Support for Bingo and RDKit PostgreSQL cartridges
 - **Substructure Search**: Efficient substructure and similarity searching
 - **Chemical Indexing**: High-performance chemical structure indexing
+- **Alembic Integration**: Automatic handling of extensions and imports in database migrations
 - **Typing**: As much type hints as possible - no need to remember yet another abstract function name
 - **Easy Integration**: Drop-in replacement for standard SQLAlchemy types
 
@@ -58,12 +59,42 @@ pip install .
 ### Prerequisites
 
 - Python 3.10+
-
 - SQLAlchemy 2.0+
-
 - rdkit 2024.3.1+
-
 - Running PostgreSQL with chemical cartridge (Bingo or RDKit) (see [`docker-compose.yaml`](https://github.com/asiomchen/molalchemy/blob/main/docker-compose.yaml) for a ready-to-use setup)
+
+For development or testing, you can use the provided Docker setup:
+
+```bash
+# For RDKit cartridge
+docker-compose up rdkit
+
+# For Bingo cartridge  
+docker-compose up bingo
+```
+
+## 📁 Project Structure
+
+```
+molalchemy/
+├── src/molalchemy/
+│   ├── types.py              # Base type definitions
+│   ├── helpers.py            # Common utilities
+│   ├── alembic_helpers.py    # Alembic integration utilities
+│   ├── bingo/               # Bingo PostgreSQL cartridge support
+│   │   ├── types.py         # Bingo-specific types
+│   │   ├── index.py         # Bingo indexing
+│   │   ├── comparators.py   # SQLAlchemy comparators
+│   │   └── functions/       # Bingo database functions
+│   └── rdkit/               # RDKit PostgreSQL cartridge support
+│       ├── types.py         # RDKit-specific types
+│       ├── index.py         # RDKit indexing  
+│       ├── comparators.py   # SQLAlchemy comparators
+│       └── functions/       # RDKit database functions
+├── tests/                   # Test suite
+├── docs/                    # Documentation
+└── dev_scripts/             # Development utilities
+```
 
 
 ## 🔧 Quick Start
@@ -88,8 +119,8 @@ from molalchemy.bingo.index import (
     BingoBinaryRxnIndex    # Binary reaction indexing
 )
 from molalchemy.bingo.functions import (
-    mol,                   # Molecule functions
-    rxn                    # Reaction functions
+    # Individual function imports available, see documentation
+    # for complete list of chemical analysis functions
 )
 ```
 
@@ -97,16 +128,19 @@ from molalchemy.bingo.functions import (
 
 ```python
 from molalchemy.rdkit.types import (
-    RDKitMol,              # RDKit molecule type
-    # Additional types available...
+    RdkitMol,              # RDKit molecule type with configurable return formats
+    RdkitBitFingerprint,   # Binary fingerprints (bfp)
+    RdkitSparseFingerprint,# Sparse fingerprints (sfp)
+    RdkitReaction,         # Chemical reactions
+    RdkitQMol,             # Query molecules
+    RdkitXQMol,            # Extended query molecules
 )
 from molalchemy.rdkit.index import (
-    RDKitIndex,         # RDKit molecule indexing (just GIST index)
+    RdkitIndex,            # RDKit molecule indexing (GIST index)
 )
 from molalchemy.rdkit.functions import (
-    mol,                   # RDKit molecule functions
-    fp,                    # Fingerprint functions
-    rxn                    # Reaction functions
+    # Individual function imports available, see documentation
+    # for complete list of 150+ RDKit functions
 )
 ```
 
@@ -131,50 +165,91 @@ class Molecule(Base):
     )
 ```
 
-### Binary Storage with Format Conversion
+### Configurable Return Types
 
 ```python
-from molalchemy.bingo.types import BingoBinaryMol
+from molalchemy.rdkit.types import RdkitMol
 
-class OptimizedMolecule(Base):
-    __tablename__ = 'optimized_molecules'
+class MoleculeWithFormats(Base):
+    __tablename__ = 'molecules_formatted'
     
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    # Store as binary, return as SMILES
-    structure: Mapped[bytes] = mapped_column(
-        BingoBinaryMol(preserve_pos=False, return_type="smiles")
-    )
-    # Store as binary, return as Molfile (with coordinates)
-    structure_3d: Mapped[bytes] = mapped_column(
-        BingoBinaryMol(preserve_pos=True, return_type="molfile")
-    )
+    # Return as SMILES string (default)
+    structure_smiles: Mapped[str] = mapped_column(RdkitMol())
+    # Return as RDKit Mol object
+    structure_mol: Mapped[bytes] = mapped_column(RdkitMol(return_type="mol"))
+    # Return as raw bytes
+    structure_bytes: Mapped[bytes] = mapped_column(RdkitMol(return_type="bytes"))
 ```
 
 ### Using Chemical Functions
 
-`mol` provides all static methods for functional-style queries. Under the hood it uses SQLAlchemy's `func` to call the corresponding database functions, but provides type hints and syntax highlighting in IDEs.
+The chemical functions are available as individual imports from the functions modules. Under the hood they use SQLAlchemy's `func` to call the corresponding database functions, and provide type hints and syntax highlighting in IDEs.
 
 ```python
-from molalchemy.bingo.functions import mol
+from molalchemy.bingo.functions import smiles, getweight, gross, inchikey
 
-# Calculate molecular properties
+# Calculate molecular properties using Bingo functions
 results = session.query(
     Molecule.name,
-    mol.get_weight(Molecule.structure).label('molecular_weight'),
-    mol.gross_formula(Molecule.structure).label('formula'),
-    mol.to_canonical(Molecule.structure).label('canonical_smiles')
+    getweight(Molecule.structure).label('molecular_weight'),
+    gross(Molecule.structure).label('formula'),
+    smiles(Molecule.structure).label('canonical_smiles')
 ).all()
 
 # Validate molecular structures
+from molalchemy.bingo.functions import checkmolecule
+
 invalid_molecules = session.query(Molecule).filter(
-    mol.check_molecule(Molecule.structure).isnot(None)
+    checkmolecule(Molecule.structure).isnot(None)
 ).all()
 
 # Format conversions
 inchi_keys = session.query(
     Molecule.id,
-    mol.to_inchikey(Molecule.structure).label('inchikey')
+    inchikey(Molecule.structure).label('inchikey')
 ).all()
+```
+
+For RDKit functions:
+
+```python
+from molalchemy.rdkit.functions import mol_amw, mol_formula, mol_inchikey
+
+# Calculate molecular properties using RDKit functions
+results = session.query(
+    Molecule.name,
+    mol_amw(Molecule.structure).label('molecular_weight'),
+    mol_formula(Molecule.structure).label('formula'),
+    mol_inchikey(Molecule.structure).label('inchikey')
+).all()
+```
+
+### Alembic Database Migrations
+
+Molalchemy provides utilities for Alembic integration.For automatic import handling in migrations, the library provides type rendering utilities that ensure proper import statements are generated for molalchemy types.
+
+```python
+# ...
+from molalchemy import alembic_helpers
+# ...
+
+def run_migrations_offline():
+    # ...
+    context.configure(
+        # ...
+        render_item=alembic_helpers.render_item,
+    )
+    # ...
+
+
+def run_migrations_online():
+    # ...
+    context.configure(
+        # ...
+        render_item=alembic_helpers.render_item,
+    )
+    # ...
 ```
 
 
@@ -201,14 +276,17 @@ source .venv/bin/activate
 ### Running Tests
 
 ```bash
-# Run all tests
+# Run all tests with coverage
+make test
+
+# Or use uv directly
 uv run pytest
 
 # Run specific test module
 uv run pytest tests/bingo/
 
 # Run with coverage
-uv run pytest --cov=molalchemy
+uv run pytest --cov=src/molalchemy
 ```
 
 ### Code Quality
@@ -217,6 +295,21 @@ This project uses modern Python development tools:
 - **uv**: For virtual environment and dependency management
 - **Ruff**: For linting and formatting
 - **pytest**: For testing
+
+### Building Function Bindings
+
+The chemical function bindings are automatically generated from cartridge documentation:
+
+```bash
+# Update RDKit function bindings
+make update-rdkit-func
+
+# Update Bingo function bindings  
+make update-bingo-func
+
+# Update all function bindings
+make update-func
+```
 
 ## 📚 Documentation
 
@@ -243,10 +336,15 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](https:
 
 ## 🙏 Acknowledgments
 
+### Core Technologies
 - [RDKit](https://www.rdkit.org/) - Open-source cheminformatics toolkit
-- [Bingo](https://lifescience.opensource.epam.com/bingo/) - Chemical database cartridge
-- [SQLAlchemy](https://sqlalchemy.org/) - Python SQL toolkit
-- [Riccardo Vianello](https://github.com/rvianello) - This project was in part inspired by his work on [django-rdkit](https://github.com/rdkit/django-rdkit) and [razi](https://github.com/rvianello/razi) - the tool very similar in idea to molalchemy (but I learned about it only after starting this project).
+- [Bingo](https://lifescience.opensource.epam.com/bingo/) - Chemical database cartridge by EPAM
+- [SQLAlchemy](https://sqlalchemy.org/) - Python SQL toolkit and ORM
+
+### Inspiration and Similar Projects
+- [GeoAlchemy2](https://github.com/geoalchemy/geoalchemy2) - Spatial extension for SQLAlchemy, served as architectural inspiration for cartridge integration patterns
+- [ord-schema](https://github.com/open-reaction-database/ord-schema) - Open Reaction Database schema, is one of the few projects using custom chemical types with SQLAlchemy
+- [Riccardo Vianello](https://github.com/rvianello) - His work on [django-rdkit](https://github.com/rdkit/django-rdkit) and [razi](https://github.com/rvianello/razi) provided valuable insights for chemical database integration (discovered after starting this project)
 
 ## 📧 Contact
 
@@ -256,11 +354,5 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](https:
 - **LinkedIn**: [Anton Siomchen](https://www.linkedin.com/in/anton-siomchen/)
 
 ---
-docker build --progress=plain \
-  --build-arg rdkit_git_ref=Release_2025_03_6 \
-  --build-arg boost_dev_version=1.81.0 \
-  --build-arg postgres_image_version=16.10 \
-  -t antonsiomchen/cheminfo-db:postgres-16.10-rdkit-2025_03_6 \
-  -f docker/Dockerfile.rdkit \
-  .
+
 **molalchemy** - Making chemical databases as easy as regular databases! 🧪✨
