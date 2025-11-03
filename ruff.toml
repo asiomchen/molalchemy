@@ -1,3 +1,4 @@
+required-version = ">=0.14.3"
 extend-exclude = ["update_proxy_stubs.py"]
 include = ["pyproject.toml", "src/**/*.py", "scripts/**/*.py", "docs/**/*.ipynb"]
 
