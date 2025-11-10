@@ -63,7 +63,7 @@ jobs:
           name: ${{ inputs.dist-artifact-name }}
           path: dist/
       - name: Sign the dists with Sigstore🔏
-        uses: sigstore/gh-action-sigstore-python@v3.0.0
+        uses: sigstore/gh-action-sigstore-python@v3.1.0
         with:
           inputs: >-
             ./dist/*.tar.gz
