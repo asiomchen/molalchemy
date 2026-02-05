@@ -21,6 +21,16 @@ from molalchemy.rdkit.types import (
 )
 from molalchemy.types import CString
 
+from ._types import (
+    AnyRdkitBitFingerprintLike,
+    AnyRdkitFingerprintLike,
+    AnyRdkitMolLike,
+    AnyRdkitQMolLike,
+    AnyRdkitReactionLike,
+    AnyRdkitSparseFingerprintLike,
+    AnyRdkitXQMolLike,
+)
+
 
 def mol_has_substructure(
     mol_column: ColumnElement[RdkitMol], query: str
@@ -87,7 +97,10 @@ class add(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitSparseFingerprintLike,
+        fp_2: AnyRdkitSparseFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Calls the rdkit cartridge function `add`.
 
@@ -113,7 +126,10 @@ class all_values_gt(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp: RdkitSparseFingerprint, value: int | sqltypes.Integer, **kwargs: Any
+        self,
+        fp: AnyRdkitSparseFingerprintLike,
+        value: int | sqltypes.Integer,
+        **kwargs: Any,
     ) -> None:
         """Returns a boolean indicating whether or not all elements of the sfp argument are greater than the int argument.
 
@@ -139,7 +155,10 @@ class all_values_lt(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp: RdkitSparseFingerprint, value: int | sqltypes.Integer, **kwargs: Any
+        self,
+        fp: AnyRdkitSparseFingerprintLike,
+        value: int | sqltypes.Integer,
+        **kwargs: Any,
     ) -> None:
         """Returns a boolean indicating whether or not all elements of the sfp argument are less than the int argument.
 
@@ -164,7 +183,7 @@ class atompair_fp(GenericFunction):
     type = RdkitSparseFingerprint()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns an sfp which is the count-based atom-pair fingerprint for a molecule.
 
         Parameters
@@ -186,7 +205,7 @@ class atompairbv_fp(GenericFunction):
     type = RdkitBitFingerprint()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns a bit vector atom-pair fingerprint for a molecule.
 
         Parameters
@@ -210,7 +229,7 @@ class avalon_fp(GenericFunction):
 
     def __init__(
         self,
-        mol: RdkitMol,
+        mol: AnyRdkitMolLike,
         arg_2: sqltypes.Boolean,
         arg_3: int | sqltypes.Integer,
         **kwargs: Any,
@@ -263,7 +282,10 @@ class bfp_le(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitBitFingerprintLike,
+        fp_2: AnyRdkitBitFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns whether the first bit fingerprint is less than or equal to the second bit fingerprint. Used for operator overloading.
 
@@ -288,7 +310,7 @@ class bfp_to_binary_text(GenericFunction):
     type = sqltypes.LargeBinary()
     inherit_cache = True
 
-    def __init__(self, fp: RdkitBitFingerprint, **kwargs: Any) -> None:
+    def __init__(self, fp: AnyRdkitBitFingerprintLike, **kwargs: Any) -> None:
         """Calls the rdkit cartridge function `bfp_to_binary_text`.
 
         Parameters
@@ -311,7 +333,10 @@ class dice_dist(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitBitFingerprintLike,
+        fp_2: AnyRdkitBitFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns the Dice distance between two fingerprints of the same type (either two sfp or two bfp values).
 
@@ -338,8 +363,8 @@ class dice_sml(GenericFunction):
 
     def __init__(
         self,
-        fp_1: RdkitSparseFingerprint | RdkitBitFingerprint,
-        fp_2: RdkitSparseFingerprint | RdkitBitFingerprint,
+        fp_1: AnyRdkitFingerprintLike,
+        fp_2: AnyRdkitFingerprintLike,
         **kwargs: Any,
     ) -> None:
         """Returns the Dice similarity between two fingerprints of the same type (either two sparse fingerprints or two bit vector fingerprints).
@@ -367,8 +392,8 @@ class dice_sml_op(GenericFunction):
 
     def __init__(
         self,
-        arg_1: RdkitSparseFingerprint | RdkitBitFingerprint,
-        arg_2: RdkitSparseFingerprint | RdkitBitFingerprint,
+        arg_1: AnyRdkitFingerprintLike,
+        arg_2: AnyRdkitFingerprintLike,
         **kwargs: Any,
     ) -> None:
         """Returns the Dice similarity between two fingerprints of the same type (either two sfp or two bfp values).
@@ -395,7 +420,7 @@ class featmorgan_fp(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, mol: RdkitMol, radius: int | sqltypes.Integer = 2, **kwargs: Any
+        self, mol: AnyRdkitMolLike, radius: int | sqltypes.Integer = 2, **kwargs: Any
     ) -> None:
         """Returns a count-based Morgan fingerprint for a molecule using chemical-feature invariants. This is an FCFP-like fingerprint.
 
@@ -421,7 +446,7 @@ class featmorganbv_fp(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, mol: RdkitMol, radius: int | sqltypes.Integer = 2, **kwargs: Any
+        self, mol: AnyRdkitMolLike, radius: int | sqltypes.Integer = 2, **kwargs: Any
     ) -> None:
         """Returns a bit vector Morgan fingerprint for a molecule using chemical-feature invariants. The second argument provides the radius. This is an FCFP-like fingerprint.
 
@@ -446,7 +471,7 @@ class fmcs(GenericFunction):
     type = sqltypes.Text()
     inherit_cache = True
 
-    def __init__(self, mols: RdkitMol | sqltypes.Text, **kwargs: Any) -> None:
+    def __init__(self, mols: AnyRdkitMolLike, **kwargs: Any) -> None:
         """An aggregation function that calculates the Maximum Common Substructure (MCS) for a set of molecules.
 
         Parameters
@@ -585,7 +610,7 @@ class layered_fp(GenericFunction):
     type = RdkitBitFingerprint()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns a bit vector which is the layered fingerprint for a molecule. This is an experimental substructure fingerprint using hashed molecular subgraphs.
 
         Parameters
@@ -607,7 +632,7 @@ class maccs_fp(GenericFunction):
     type = RdkitBitFingerprint()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns a bit vector which is the MACCS fingerprint for a molecule.
 
         Parameters
@@ -631,7 +656,7 @@ class mol_adjust_query_properties(GenericFunction):
 
     def __init__(
         self,
-        mol: RdkitMol | RdkitQMol,
+        mol: AnyRdkitMolLike | AnyRdkitQMolLike,
         query_parameters: CString | Cast[Any] = cast("", CString),
         **kwargs: Any,
     ) -> None:
@@ -658,7 +683,7 @@ class mol_amw(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the AMW for a molecule.
 
         Parameters
@@ -680,7 +705,7 @@ class mol_chi0n(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Chi0n value for a molecule.
 
         Parameters
@@ -702,7 +727,7 @@ class mol_chi0v(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Chi0v value for a molecule.
 
         Parameters
@@ -724,7 +749,7 @@ class mol_chi1n(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, arg_1: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, arg_1: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Chi1n value for a molecule.
 
         Parameters
@@ -746,7 +771,7 @@ class mol_chi1v(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Chi1v value for a molecule.
 
         Parameters
@@ -768,7 +793,7 @@ class mol_chi2n(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Chi2n value for a molecule.
 
         Parameters
@@ -790,7 +815,7 @@ class mol_chi2v(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Chi2v value for a molecule.
 
         Parameters
@@ -812,7 +837,7 @@ class mol_chi3n(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Chi3n value for a molecule.
 
         Parameters
@@ -834,7 +859,7 @@ class mol_chi3v(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Chi3v value for a molecule.
 
         Parameters
@@ -856,7 +881,7 @@ class mol_chi4n(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Chi4n value for a molecule.
 
         Parameters
@@ -878,7 +903,7 @@ class mol_chi4v(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Chi4v value for a molecule.
 
         Parameters
@@ -900,7 +925,7 @@ class mol_exactmw(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the exact molecular weight for a molecule.
 
         Parameters
@@ -924,7 +949,7 @@ class mol_formula(GenericFunction):
 
     def __init__(
         self,
-        mol: RdkitMol,
+        mol: AnyRdkitMolLike,
         include_isotopes: bool | sqltypes.Boolean = False,
         use_deuterium_tritium_symbols: bool | sqltypes.Boolean = True,
         **kwargs: Any,
@@ -954,7 +979,7 @@ class mol_fractioncsp3(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the fraction of carbons that are sp3 hybridized in a molecule.
 
         Parameters
@@ -1066,7 +1091,7 @@ class mol_hallkieralpha(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Hall-Kier alpha value for a molecule.
 
         Parameters
@@ -1087,7 +1112,7 @@ class mol_hallkieralpha(GenericFunction):
 class mol_hba(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Calls the rdkit cartridge function `mol_hba`.
 
         Parameters
@@ -1108,7 +1133,7 @@ class mol_hba(GenericFunction):
 class mol_hbd(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of Lipinski H-bond donors (i.e. number of Os and Ns that have at least one H) for a molecule.
 
         Parameters
@@ -1130,7 +1155,7 @@ class mol_inchi(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, arg_2: CString, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, arg_2: CString, **kwargs: Any) -> None:
         """Returns an InChI (International Chemical Identifier) for the given molecule. This function requires that the RDKit be built with InChI support.
 
         Parameters
@@ -1154,7 +1179,7 @@ class mol_inchikey(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, arg_2: CString, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, arg_2: CString, **kwargs: Any) -> None:
         """Returns an InChI key for the molecule. Requires RDKit to be built with InChI support.
 
         Parameters
@@ -1178,7 +1203,7 @@ class mol_kappa1(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the kappa1 value for a molecule.
 
         Parameters
@@ -1200,7 +1225,7 @@ class mol_kappa2(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the kappa2 value for a molecule.
 
         Parameters
@@ -1222,7 +1247,7 @@ class mol_kappa3(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol_1: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol_1: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the kappa3 value for a molecule.
 
         Parameters
@@ -1244,7 +1269,7 @@ class mol_labuteasa(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns Labute's approximate surface area (ASA) for a molecule.
 
         Parameters
@@ -1266,7 +1291,7 @@ class mol_logp(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the MolLogP for a molecule.
 
         Parameters
@@ -1288,7 +1313,7 @@ class mol_murckoscaffold(GenericFunction):
     type = RdkitMol()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Murcko scaffold for a molecule. The Murcko scaffold consists of all ring systems and the atoms connecting them.
 
         Parameters
@@ -1312,7 +1337,7 @@ class mol_nm_hash(GenericFunction):
 
     def __init__(
         self,
-        mol: RdkitMol,
+        mol: AnyRdkitMolLike,
         hash_type: CString | Cast[Any] = cast("AnonymousGraph", CString),
         **kwargs: Any,
     ) -> None:
@@ -1338,7 +1363,7 @@ class mol_nm_hash(GenericFunction):
 class mol_numaliphaticcarbocycles(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of aliphatic (at least one non-aromatic bond) carbocycles in a molecule.
 
         Parameters
@@ -1359,7 +1384,7 @@ class mol_numaliphaticcarbocycles(GenericFunction):
 class mol_numaliphaticheterocycles(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of aliphatic (at least one non-aromatic bond) heterocycles in a molecule.
 
         Parameters
@@ -1380,7 +1405,7 @@ class mol_numaliphaticheterocycles(GenericFunction):
 class mol_numaliphaticrings(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of aliphatic (at least one non-aromatic bond) rings in a molecule.
 
         Parameters
@@ -1401,7 +1426,7 @@ class mol_numaliphaticrings(GenericFunction):
 class mol_numamidebonds(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of amide bonds in a molecule.
 
         Parameters
@@ -1422,7 +1447,7 @@ class mol_numamidebonds(GenericFunction):
 class mol_numaromaticcarbocycles(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Calls the rdkit cartridge function `mol_numaromaticcarbocycles`.
 
         Parameters
@@ -1443,7 +1468,7 @@ class mol_numaromaticcarbocycles(GenericFunction):
 class mol_numaromaticheterocycles(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of aromatic heterocycles in a molecule.
 
         Parameters
@@ -1464,7 +1489,7 @@ class mol_numaromaticheterocycles(GenericFunction):
 class mol_numaromaticrings(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of aromatic rings in a molecule.
 
         Parameters
@@ -1485,7 +1510,7 @@ class mol_numaromaticrings(GenericFunction):
 class mol_numatoms(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the total number of atoms in a molecule.
 
         Parameters
@@ -1506,7 +1531,7 @@ class mol_numatoms(GenericFunction):
 class mol_numbridgeheadatoms(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of bridgehead atoms in a molecule.
 
         Parameters
@@ -1527,7 +1552,7 @@ class mol_numbridgeheadatoms(GenericFunction):
 class mol_numheavyatoms(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of heavy atoms in a molecule.
 
         Parameters
@@ -1548,7 +1573,7 @@ class mol_numheavyatoms(GenericFunction):
 class mol_numheteroatoms(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of heteroatoms in a molecule.
 
         Parameters
@@ -1569,7 +1594,7 @@ class mol_numheteroatoms(GenericFunction):
 class mol_numheterocycles(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of heterocycles in a molecule.
 
         Parameters
@@ -1590,7 +1615,7 @@ class mol_numheterocycles(GenericFunction):
 class mol_numrings(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of rings in a molecule.
 
         Parameters
@@ -1611,7 +1636,7 @@ class mol_numrings(GenericFunction):
 class mol_numrotatablebonds(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of rotatable bonds in a molecule.
 
         Parameters
@@ -1632,7 +1657,7 @@ class mol_numrotatablebonds(GenericFunction):
 class mol_numsaturatedcarbocycles(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of saturated carbocycles in a molecule.
 
         Parameters
@@ -1653,7 +1678,7 @@ class mol_numsaturatedcarbocycles(GenericFunction):
 class mol_numsaturatedheterocycles(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of saturated heterocycles in a molecule.
 
         Parameters
@@ -1674,7 +1699,7 @@ class mol_numsaturatedheterocycles(GenericFunction):
 class mol_numsaturatedrings(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of saturated rings in a molecule.
 
         Parameters
@@ -1695,7 +1720,7 @@ class mol_numsaturatedrings(GenericFunction):
 class mol_numspiroatoms(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the number of spiro atoms in a molecule.
 
         Parameters
@@ -1717,7 +1742,7 @@ class mol_phi(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the Kier Phi value for a molecule.
 
         Parameters
@@ -1739,7 +1764,7 @@ class mol_send(GenericFunction):
     type = sqltypes.LargeBinary()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Serializes an RDKit molecule into a binary string representation.
 
         Parameters
@@ -1763,7 +1788,7 @@ class mol_to_ctab(GenericFunction):
 
     def __init__(
         self,
-        mol: RdkitMol,
+        mol: AnyRdkitMolLike,
         arg_2: sqltypes.Boolean | bool = True,
         arg_3: sqltypes.Boolean | bool = False,
         **kwargs: Any,
@@ -1791,7 +1816,7 @@ class mol_to_cxsmarts(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol | RdkitQMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike | AnyRdkitQMolLike, **kwargs: Any) -> None:
         """Returns the CXSMARTS for a molecule.
 
         Parameters
@@ -1813,7 +1838,7 @@ class mol_to_cxsmiles(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the CXSMILES for a molecule.
 
         Parameters
@@ -1835,7 +1860,7 @@ class mol_to_json(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol | RdkitQMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike | AnyRdkitQMolLike, **kwargs: Any) -> None:
         """Returns the commonchem JSON for a molecule. (*available from the 2021_09 release*)
 
         Parameters
@@ -1857,7 +1882,7 @@ class mol_to_pkl(GenericFunction):
     type = sqltypes.LargeBinary()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns a binary string (bytea) for a molecule. This function is available from the Q3 2012 (2012_09) release.
 
         Parameters
@@ -1879,7 +1904,7 @@ class mol_to_smarts(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol | RdkitQMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike | AnyRdkitQMolLike, **kwargs: Any) -> None:
         """Returns the SMARTS string for a molecule.
 
         Parameters
@@ -1901,7 +1926,7 @@ class mol_to_smiles(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol | RdkitQMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike | AnyRdkitQMolLike, **kwargs: Any) -> None:
         """Returns a canonical SMILES string for a molecule.
 
         Parameters
@@ -1925,7 +1950,7 @@ class mol_to_svg(GenericFunction):
 
     def __init__(
         self,
-        mol: RdkitMol | RdkitQMol,
+        mol: AnyRdkitMolLike | AnyRdkitQMolLike,
         arg_2: CString | Cast[Any] = cast("", CString),
         width: int | sqltypes.Integer = 250,
         height: int | sqltypes.Integer = 200,
@@ -1962,7 +1987,7 @@ class mol_to_v3kctab(GenericFunction):
 
     def __init__(
         self,
-        mol: RdkitMol,
+        mol: AnyRdkitMolLike,
         create_depiction: sqltypes.Boolean | bool = True,
         **kwargs: Any,
     ) -> None:
@@ -1991,7 +2016,7 @@ class mol_to_xqmol(GenericFunction):
 
     def __init__(
         self,
-        arg_1: RdkitMol,
+        arg_1: AnyRdkitMolLike,
         arg_2: sqltypes.Boolean,
         arg_3: sqltypes.Boolean,
         arg_4: sqltypes.Boolean,
@@ -2027,7 +2052,7 @@ class mol_tpsa(GenericFunction):
     type = sqltypes.Float()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns the topological polar surface area for a molecule.
 
         Parameters
@@ -2050,7 +2075,7 @@ class morgan_fp(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, mol: RdkitMol, radius: int | sqltypes.Integer = 2, **kwargs: Any
+        self, mol: AnyRdkitMolLike, radius: int | sqltypes.Integer = 2, **kwargs: Any
     ) -> None:
         """Returns a count-based Morgan fingerprint (sfp) for a molecule using connectivity invariants. This is an ECFP-like fingerprint.
 
@@ -2076,7 +2101,7 @@ class morganbv_fp(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, mol: RdkitMol, radius: int | sqltypes.Integer = 2, **kwargs: Any
+        self, mol: AnyRdkitMolLike, radius: int | sqltypes.Integer = 2, **kwargs: Any
     ) -> None:
         """Returns a bit vector Morgan fingerprint (bfp) for a molecule using connectivity invariants. The second argument provides the radius. This is an ECFP-like fingerprint.
 
@@ -2193,7 +2218,7 @@ class qmol_send(GenericFunction):
     type = sqltypes.LargeBinary()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitQMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitQMolLike, **kwargs: Any) -> None:
         """Returns a binary string (bytea) for a query molecule.
 
         Parameters
@@ -2215,7 +2240,7 @@ class rdkit_fp(GenericFunction):
     type = RdkitBitFingerprint()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns a bit vector fingerprint (bfp) which is the RDKit fingerprint for a molecule. This is a daylight-inspired fingerprint using hashed molecular subgraphs.
 
         Parameters
@@ -2280,7 +2305,10 @@ class reaction_difference_fp(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, rxn_1: RdkitReaction, fp_type: int | sqltypes.Integer, **kwargs: Any
+        self,
+        rxn_1: AnyRdkitReactionLike,
+        fp_type: int | sqltypes.Integer,
+        **kwargs: Any,
     ) -> None:
         """Calculates a sparse fingerprint representing the difference between reactants and products in an RDKit reaction.
 
@@ -2370,7 +2398,7 @@ class reaction_from_smiles(GenericFunction):
 class reaction_numagents(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+    def __init__(self, rxn: AnyRdkitReactionLike, **kwargs: Any) -> None:
         """Returns the number of agents in an RDKit reaction.
 
         Parameters
@@ -2391,7 +2419,7 @@ class reaction_numagents(GenericFunction):
 class reaction_numproducts(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+    def __init__(self, rxn: AnyRdkitReactionLike, **kwargs: Any) -> None:
         """Returns the number of products in an RDKit reaction.
 
         Parameters
@@ -2412,7 +2440,7 @@ class reaction_numproducts(GenericFunction):
 class reaction_numreactants(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+    def __init__(self, rxn: AnyRdkitReactionLike, **kwargs: Any) -> None:
         """Returns the number of reactants in an RDKit reaction.
 
         Parameters
@@ -2434,7 +2462,7 @@ class reaction_send(GenericFunction):
     type = sqltypes.LargeBinary()
     inherit_cache = True
 
-    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+    def __init__(self, rxn: AnyRdkitReactionLike, **kwargs: Any) -> None:
         """Serializes an RDKit reaction into a binary representation.
 
         Parameters
@@ -2457,7 +2485,7 @@ class reaction_structural_bfp(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, rxn: RdkitReaction, radius: int | sqltypes.Integer, **kwargs: Any
+        self, rxn: AnyRdkitReactionLike, radius: int | sqltypes.Integer, **kwargs: Any
     ) -> None:
         """Returns a bit vector fingerprint (bfp) representing the structural features of a chemical reaction. The second argument provides the radius for the fingerprint generation.
 
@@ -2482,7 +2510,7 @@ class reaction_to_ctab(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, reaction: RdkitReaction, **kwargs: Any) -> None:
+    def __init__(self, reaction: AnyRdkitReactionLike, **kwargs: Any) -> None:
         """Returns a CTAB (mol block) string for a reaction.
 
         Parameters
@@ -2504,7 +2532,7 @@ class reaction_to_smarts(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+    def __init__(self, rxn: AnyRdkitReactionLike, **kwargs: Any) -> None:
         """Returns the SMARTS string for a reaction.
 
         Parameters
@@ -2526,7 +2554,7 @@ class reaction_to_smiles(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+    def __init__(self, rxn: AnyRdkitReactionLike, **kwargs: Any) -> None:
         """Returns the SMILES string for a reaction.
 
         Parameters
@@ -2550,7 +2578,7 @@ class reaction_to_svg(GenericFunction):
 
     def __init__(
         self,
-        rxn: RdkitReaction,
+        rxn: AnyRdkitReactionLike,
         highlight_reactants: sqltypes.Boolean,
         width: int | sqltypes.Integer,
         height: int | sqltypes.Integer,
@@ -2588,8 +2616,11 @@ class rsubstruct(GenericFunction):
 
     def __init__(
         self,
-        mol: RdkitQMol | RdkitMol | RdkitXQMol | RdkitReaction,
-        query: RdkitMol | RdkitReaction,
+        mol: AnyRdkitQMolLike
+        | AnyRdkitMolLike
+        | AnyRdkitXQMolLike
+        | AnyRdkitReactionLike,
+        query: AnyRdkitMolLike | AnyRdkitReactionLike,
         **kwargs: Any,
     ) -> None:
         """Returns whether or not the second molecule (or reaction) is a substructure of the first molecule (or query molecule/reaction). Doesn't use chirality in the matching.
@@ -2615,7 +2646,9 @@ class rsubstruct_chiral(GenericFunction):
     type = sqltypes.Boolean()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, query_mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(
+        self, mol: AnyRdkitMolLike, query_mol: AnyRdkitMolLike, **kwargs: Any
+    ) -> None:
         """Calls the rdkit cartridge function `rsubstruct_chiral`. This function returns whether or not the second molecule is a substructure of the first, considering chirality.
 
         Parameters
@@ -2640,7 +2673,10 @@ class rsubstruct_query(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, mol_1: RdkitMol | RdkitXQMol | RdkitQMol, mol_2: RdkitMol, **kwargs: Any
+        self,
+        mol_1: AnyRdkitMolLike | AnyRdkitXQMolLike | AnyRdkitQMolLike,
+        mol_2: AnyRdkitMolLike,
+        **kwargs: Any,
     ) -> None:
         """Returns whether or not the second molecule is a substructure of the first molecule. Doesn't use chirality in the matching.
 
@@ -2666,7 +2702,7 @@ class rsubstructfp(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, rxn_1: RdkitReaction, rxn_2: RdkitReaction, **kwargs: Any
+        self, rxn_1: AnyRdkitReactionLike, rxn_2: AnyRdkitReactionLike, **kwargs: Any
     ) -> None:
         """Returns whether or not the second RDKit reaction is a substructure of the first.
 
@@ -2690,7 +2726,7 @@ class rsubstructfp(GenericFunction):
 class size(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, bfp: RdkitBitFingerprint, **kwargs: Any) -> None:
+    def __init__(self, bfp: AnyRdkitBitFingerprintLike, **kwargs: Any) -> None:
         """Returns the length of (number of bits in) a bit vector fingerprint.
 
         Parameters
@@ -2714,8 +2750,11 @@ class substruct(GenericFunction):
 
     def __init__(
         self,
-        mol: RdkitMol | RdkitReaction,
-        query: RdkitMol | RdkitXQMol | RdkitQMol | RdkitReaction,
+        mol: AnyRdkitMolLike | AnyRdkitReactionLike,
+        query: AnyRdkitMolLike
+        | AnyRdkitXQMolLike
+        | AnyRdkitQMolLike
+        | AnyRdkitReactionLike,
         **kwargs: Any,
     ) -> None:
         """Returns whether or not the second molecule/reaction is a substructure of the first one.
@@ -2741,7 +2780,9 @@ class substruct_chiral(GenericFunction):
     type = sqltypes.Boolean()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, query: RdkitMol, **kwargs: Any) -> None:
+    def __init__(
+        self, mol: AnyRdkitMolLike, query: AnyRdkitMolLike, **kwargs: Any
+    ) -> None:
         """Calls the rdkit cartridge function `substruct_chiral`.
 
         Parameters
@@ -2766,8 +2807,8 @@ class substruct_count(GenericFunction):
 
     def __init__(
         self,
-        mol: RdkitMol,
-        query: RdkitMol | RdkitQMol,
+        mol: AnyRdkitMolLike,
+        query: AnyRdkitMolLike | AnyRdkitQMolLike,
         unique: sqltypes.Boolean | bool = True,
         **kwargs: Any,
     ) -> None:
@@ -2797,8 +2838,8 @@ class substruct_count_chiral(GenericFunction):
 
     def __init__(
         self,
-        mol: RdkitMol,
-        query: RdkitMol | RdkitQMol,
+        mol: AnyRdkitMolLike,
+        query: AnyRdkitMolLike | AnyRdkitQMolLike,
         unique: sqltypes.Boolean,
         **kwargs: Any,
     ) -> None:
@@ -2828,7 +2869,10 @@ class substruct_query(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, mol_1: RdkitMol, mol_2: RdkitMol | RdkitXQMol | RdkitQMol, **kwargs: Any
+        self,
+        mol_1: AnyRdkitMolLike,
+        mol_2: AnyRdkitMolLike | AnyRdkitXQMolLike | AnyRdkitQMolLike,
+        **kwargs: Any,
     ) -> None:
         """Returns whether or not the second molecule is a substructure of the first molecule.
 
@@ -2854,7 +2898,7 @@ class substructfp(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, rxn_1: RdkitReaction, rxn_2: RdkitReaction, **kwargs: Any
+        self, rxn_1: AnyRdkitReactionLike, rxn_2: AnyRdkitReactionLike, **kwargs: Any
     ) -> None:
         """Returns whether or not the second RDKit reaction is a substructure of the first.
 
@@ -2880,7 +2924,10 @@ class subtract(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitSparseFingerprintLike,
+        fp_2: AnyRdkitSparseFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns an sfp formed by the element-wise subtraction of the two sfp arguments.
 
@@ -2906,7 +2953,10 @@ class tanimoto_dist(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitBitFingerprintLike,
+        fp_2: AnyRdkitBitFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns the Tanimoto distance between two bit fingerprints.
 
@@ -2933,8 +2983,8 @@ class tanimoto_sml(GenericFunction):
 
     def __init__(
         self,
-        fp_1: RdkitSparseFingerprint | RdkitBitFingerprint,
-        fp_2: RdkitSparseFingerprint | RdkitBitFingerprint,
+        fp_1: AnyRdkitFingerprintLike,
+        fp_2: AnyRdkitFingerprintLike,
         **kwargs: Any,
     ) -> None:
         """Returns the Tanimoto similarity between two fingerprints of the same type (either two sparse fingerprints or two bit vector fingerprints).
@@ -2960,7 +3010,7 @@ class torsion_fp(GenericFunction):
     type = RdkitSparseFingerprint()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns a sparse vector topological-torsion fingerprint for a molecule.
 
         Parameters
@@ -2982,7 +3032,7 @@ class torsionbv_fp(GenericFunction):
     type = RdkitBitFingerprint()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Returns a bit vector topological-torsion fingerprint for a molecule.
 
         Parameters
@@ -3006,8 +3056,8 @@ class tversky_sml(GenericFunction):
 
     def __init__(
         self,
-        fp_1: RdkitBitFingerprint,
-        fp_2: RdkitBitFingerprint,
+        fp_1: AnyRdkitBitFingerprintLike,
+        fp_2: AnyRdkitBitFingerprintLike,
         alpha: float,
         beta: float,
         **kwargs: Any,
@@ -3039,7 +3089,7 @@ class xqmol_send(GenericFunction):
     type = sqltypes.LargeBinary()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitXQMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitXQMolLike, **kwargs: Any) -> None:
         """Converts `RdkitXQMol` to its binary representation.
 
         Parameters

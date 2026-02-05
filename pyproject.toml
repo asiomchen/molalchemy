@@ -43,6 +43,7 @@ build-backend = "hatchling.build"
 dev = [
     "alembic>=1.17.0",
     "ipykernel>=6.30.1",
+    "jinja2>=3.1.6",
     "mypy>=1.18.2",
     "pandas>=2.3.3",
     "pytest>=8.4.2",
@@ -100,4 +101,6 @@ exclude = [
 
 [tool.mypy]
 plugins = "sqlalchemy.ext.mypy.plugin"
+
+[tool.pyrefly]
 

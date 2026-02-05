@@ -18,12 +18,25 @@ from molalchemy.rdkit.types import (
 )
 from molalchemy.types import CString
 
+from ._types import (
+    AnyRdkitBitFingerprintLike,
+    AnyRdkitFingerprintLike,
+    AnyRdkitMolLike,
+    AnyRdkitQMolLike,
+    AnyRdkitReactionLike,
+    AnyRdkitSparseFingerprintLike,
+    AnyRdkitXQMolLike,
+)
+
 
 class bfp_cmp(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitBitFingerprintLike,
+        fp_2: AnyRdkitBitFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Calls the rdkit cartridge function `bfp_cmp`.
 
@@ -49,7 +62,10 @@ class bfp_eq(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitBitFingerprintLike,
+        fp_2: AnyRdkitBitFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Checks if two bit vector fingerprints are equal. Used for operator overloading.
 
@@ -75,7 +91,10 @@ class bfp_ge(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitBitFingerprintLike,
+        fp_2: AnyRdkitBitFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns whether the first bit fingerprint is greater than or equal to the second bit fingerprint. Used for operator overloading.
 
@@ -101,7 +120,10 @@ class bfp_gt(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitBitFingerprintLike,
+        fp_2: AnyRdkitBitFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns whether the first bit vector fingerprint is 'greater than' the second bit vector fingerprint. Used internally for operator overloading.
 
@@ -149,7 +171,10 @@ class bfp_lt(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitBitFingerprint, fp_2: RdkitBitFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitBitFingerprintLike,
+        fp_2: AnyRdkitBitFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns a boolean indicating whether or not the first bit fingerprint is less than the second bit fingerprint. Used internally for operator overloading.
 
@@ -175,7 +200,10 @@ class bfp_ne(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, bfp1: RdkitBitFingerprint, bfp2: RdkitBitFingerprint, **kwargs: Any
+        self,
+        bfp1: AnyRdkitBitFingerprintLike,
+        bfp2: AnyRdkitBitFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Compares two bit vector fingerprints for inequality. Used internally for operator overloading.
 
@@ -200,7 +228,7 @@ class bfp_out(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, fp: RdkitBitFingerprint, **kwargs: Any) -> None:
+    def __init__(self, fp: AnyRdkitBitFingerprintLike, **kwargs: Any) -> None:
         """Returns a bytea with the binary string representation of the fingerprint. Used internally to return fingerprint values to the client.
 
         Parameters
@@ -247,7 +275,9 @@ class fmcs_smiles_transition(GenericFunction):
 class mol_cmp(GenericFunction):
     inherit_cache = True
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
+    def __init__(
+        self, mol_1: AnyRdkitMolLike, mol_2: AnyRdkitMolLike, **kwargs: Any
+    ) -> None:
         """Compares two RDKit molecules.
 
         Parameters
@@ -271,7 +301,9 @@ class mol_eq(GenericFunction):
     type = sqltypes.Boolean()
     inherit_cache = True
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
+    def __init__(
+        self, mol_1: AnyRdkitMolLike, mol_2: AnyRdkitMolLike, **kwargs: Any
+    ) -> None:
         """Checks if two RDKit molecules are equal. Used internally for operator overloading.
 
         Parameters
@@ -295,7 +327,9 @@ class mol_ge(GenericFunction):
     type = sqltypes.Boolean()
     inherit_cache = True
 
-    def __init__(self, arg_1: RdkitMol, arg_2: RdkitMol, **kwargs: Any) -> None:
+    def __init__(
+        self, arg_1: AnyRdkitMolLike, arg_2: AnyRdkitMolLike, **kwargs: Any
+    ) -> None:
         """Checks if the first RDKit molecule is a superstructure of, or identical to, the second RDKit molecule. Used internally for operator overloading.
 
         Parameters
@@ -319,7 +353,9 @@ class mol_gt(GenericFunction):
     type = sqltypes.Boolean()
     inherit_cache = True
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
+    def __init__(
+        self, mol_1: AnyRdkitMolLike, mol_2: AnyRdkitMolLike, **kwargs: Any
+    ) -> None:
         """Compares two RDKit molecules to determine if the first molecule is greater than the second, based on an internal canonical ordering. Used internally for operator overloading.
 
         Parameters
@@ -365,7 +401,9 @@ class mol_le(GenericFunction):
     type = sqltypes.Boolean()
     inherit_cache = True
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
+    def __init__(
+        self, mol_1: AnyRdkitMolLike, mol_2: AnyRdkitMolLike, **kwargs: Any
+    ) -> None:
         """Compares two RDKit molecules to check if the first is less than or equal to the second. Used internally for operator overloading
 
         Parameters
@@ -389,7 +427,9 @@ class mol_lt(GenericFunction):
     type = sqltypes.Boolean()
     inherit_cache = True
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
+    def __init__(
+        self, mol_1: AnyRdkitMolLike, mol_2: AnyRdkitMolLike, **kwargs: Any
+    ) -> None:
         """Compares two RDKit molecules to determine if the first molecule is less than the second molecule. Used internally for operator overloading
 
         Parameters
@@ -413,7 +453,9 @@ class mol_ne(GenericFunction):
     type = sqltypes.Boolean()
     inherit_cache = True
 
-    def __init__(self, mol_1: RdkitMol, mol_2: RdkitMol, **kwargs: Any) -> None:
+    def __init__(
+        self, mol_1: AnyRdkitMolLike, mol_2: AnyRdkitMolLike, **kwargs: Any
+    ) -> None:
         """Returns a boolean indicating whether or not two molecules are not equal. Used internally for the operator overloading
 
         Parameters
@@ -437,7 +479,7 @@ class mol_out(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitMolLike, **kwargs: Any) -> None:
         """Calls the RDKit cartridge function `mol_out` to return a string representation of the molecule. Used internally for displaying molecules in query results.
 
         Parameters
@@ -481,7 +523,7 @@ class qmol_out(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, mol: RdkitQMol, **kwargs: Any) -> None:
+    def __init__(self, mol: AnyRdkitQMolLike, **kwargs: Any) -> None:
         """Returns the SMARTS string for a query molecule. This function is used internally for sending the result of a query molecule to the client.
 
         Parameters
@@ -504,7 +546,7 @@ class reaction_eq(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, rxn_1: RdkitReaction, rxn_2: RdkitReaction, **kwargs: Any
+        self, rxn_1: AnyRdkitReactionLike, rxn_2: AnyRdkitReactionLike, **kwargs: Any
     ) -> None:
         """Checks if two RDKit reactions are equivalent. Used internally for the operator overloading.
 
@@ -552,7 +594,7 @@ class reaction_ne(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, rxn_1: RdkitReaction, rxn_2: RdkitReaction, **kwargs: Any
+        self, rxn_1: AnyRdkitReactionLike, rxn_2: AnyRdkitReactionLike, **kwargs: Any
     ) -> None:
         """Returns true if the two reactions are not equal. Used internally for the operator overloading
 
@@ -577,7 +619,7 @@ class reaction_out(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, rxn: RdkitReaction, **kwargs: Any) -> None:
+    def __init__(self, rxn: AnyRdkitReactionLike, **kwargs: Any) -> None:
         """Internal function: Converts an RDKit reaction object to its string representation.
 
         Parameters
@@ -600,8 +642,8 @@ class sfp_cmp(GenericFunction):
 
     def __init__(
         self,
-        arg_1: RdkitSparseFingerprint,
-        arg_2: RdkitSparseFingerprint,
+        arg_1: AnyRdkitSparseFingerprintLike,
+        arg_2: AnyRdkitSparseFingerprintLike,
         **kwargs: Any,
     ) -> None:
         """Calls the rdkit cartridge function `sfp_cmp`.
@@ -628,7 +670,10 @@ class sfp_eq(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitSparseFingerprintLike,
+        fp_2: AnyRdkitSparseFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns a boolean indicating whether or not the two sparse fingerprint arguments are equal. Used for the operator overloading
 
@@ -654,7 +699,10 @@ class sfp_ge(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitSparseFingerprintLike,
+        fp_2: AnyRdkitSparseFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns a boolean indicating whether the first sparse fingerprint is element-wise greater than or equal to the second sparse fingerprint. Used for the operator overloading
 
@@ -680,7 +728,10 @@ class sfp_gt(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitSparseFingerprintLike,
+        fp_2: AnyRdkitSparseFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns a boolean indicating whether all elements of the first sparse fingerprint are greater than the corresponding elements of the second sparse fingerprint. Used for the operator overloading
 
@@ -728,7 +779,10 @@ class sfp_le(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitSparseFingerprintLike,
+        fp_2: AnyRdkitSparseFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns a boolean indicating whether the first sparse fingerprint is element-wise less than or equal to the second sparse fingerprint. Used for the operator overloading
 
@@ -754,7 +808,10 @@ class sfp_lt(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitSparseFingerprintLike,
+        fp_2: AnyRdkitSparseFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns a boolean indicating whether the first sparse fingerprint is less than the second sparse fingerprint. Used for the operator overloading
 
@@ -780,7 +837,10 @@ class sfp_ne(GenericFunction):
     inherit_cache = True
 
     def __init__(
-        self, fp_1: RdkitSparseFingerprint, fp_2: RdkitSparseFingerprint, **kwargs: Any
+        self,
+        fp_1: AnyRdkitSparseFingerprintLike,
+        fp_2: AnyRdkitSparseFingerprintLike,
+        **kwargs: Any,
     ) -> None:
         """Returns a boolean indicating whether two sparse fingerprints are not equal. Used for the operator overloading
 
@@ -805,7 +865,7 @@ class sfp_out(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, fp: RdkitSparseFingerprint, **kwargs: Any) -> None:
+    def __init__(self, fp: AnyRdkitSparseFingerprintLike, **kwargs: Any) -> None:
         """Internal function, that returns a string representation of a sparse fingerprint.
 
         Parameters
@@ -829,8 +889,8 @@ class tanimoto_sml_op(GenericFunction):
 
     def __init__(
         self,
-        fp_1: RdkitSparseFingerprint | RdkitBitFingerprint,
-        fp_2: RdkitSparseFingerprint | RdkitBitFingerprint,
+        fp_1: AnyRdkitFingerprintLike,
+        fp_2: AnyRdkitFingerprintLike,
         **kwargs: Any,
     ) -> None:
         """Calculates the Tanimoto similarity between two fingerprints of the same type and returns a boolean result. Used internally for operator overloading.
@@ -878,7 +938,7 @@ class xqmol_out(GenericFunction):
     type = CString()
     inherit_cache = True
 
-    def __init__(self, arg_1: RdkitXQMol, **kwargs: Any) -> None:
+    def __init__(self, arg_1: AnyRdkitXQMolLike, **kwargs: Any) -> None:
         """Internal function used to retrieve the string representation of an `RdkitXQMol` object.
 
         Parameters

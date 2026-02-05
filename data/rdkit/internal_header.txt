@@ -9,6 +9,7 @@ from sqlalchemy.sql.elements import ColumnElement
 
 from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitSparseFingerprint, RdkitQMol, RdkitXQMol, RdkitReaction
 from molalchemy.types import CString
+from ._types import AnyRdkitFingerprintLike, AnyRdkitMolLike, AnyRdkitQMolLike, AnyRdkitSparseFingerprintLike, AnyRdkitBitFingerprintLike, AnyRdkitReactionLike, AnyRdkitXQMolLike
 
 
 from sqlalchemy.sql.functions import GenericFunction

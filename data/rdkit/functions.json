@@ -481,7 +481,7 @@
         "default": null,
         "description": "A set of molecules for which to calculate the MCS.",
         "name": "mols",
-        "type": "RdkitMol | sqltypes.Text"
+        "type": "RdkitMol"
       }
     ],
     "description": "An aggregation function that calculates the Maximum Common Substructure (MCS) for a set of molecules.",
