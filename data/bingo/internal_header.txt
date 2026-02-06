@@ -11,3 +11,11 @@ from sqlalchemy.sql.elements import BinaryExpression
 from sqlalchemy.sql.elements import ColumnElement
 from sqlalchemy.sql.functions import GenericFunction
 from typing import Any, Literal
+from ._types import (
+    AnyBingoBinaryMolLike,
+    AnyBingoBinaryReactionLike,
+    AnyBingoMolLike,
+    AnyBingoMolLikeCombined,
+    AnyBingoReactionLike,
+    AnyBingoReactionLikeCombined,
+)

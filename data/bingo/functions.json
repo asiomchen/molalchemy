@@ -20,7 +20,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `_exact_internal`.",
+    "description": "Calls the bingo cartridge function `_exact_internal`.",
     "group": "internal",
     "name": "_exact_internal",
     "return_type": {
@@ -30,7 +30,7 @@
   },
   "_get_block_count": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `_get_block_count`.",
+    "description": "Calls the bingo cartridge function `_get_block_count`.",
     "group": "internal",
     "name": "_get_block_count",
     "return_type": {
@@ -40,7 +40,7 @@
   },
   "_get_profiling_info": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `_get_profiling_info`.",
+    "description": "Calls the bingo cartridge function `_get_profiling_info`.",
     "group": "internal",
     "name": "_get_profiling_info",
     "return_type": {
@@ -50,7 +50,7 @@
   },
   "_get_structures_count": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `_get_structures_count`.",
+    "description": "Calls the bingo cartridge function `_get_structures_count`.",
     "group": "internal",
     "name": "_get_structures_count",
     "return_type": {
@@ -79,7 +79,7 @@
         "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
       }
     ],
-    "description": "Calls the rdkit cartridge function `_gross_internal`.",
+    "description": "Calls the bingo cartridge function `_gross_internal`.",
     "group": "internal",
     "name": "_gross_internal",
     "return_type": {
@@ -108,7 +108,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `_internal_func_011`.",
+    "description": "Calls the bingo cartridge function `_internal_func_011`.",
     "group": "internal",
     "name": "_internal_func_011",
     "return_type": {
@@ -131,7 +131,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `_internal_func_012`.",
+    "description": "Calls the bingo cartridge function `_internal_func_012`.",
     "group": "internal",
     "name": "_internal_func_012",
     "return_type": {
@@ -148,7 +148,7 @@
         "type": "int | sqltypes.Integer"
       }
     ],
-    "description": "Calls the rdkit cartridge function `_internal_func_check`.",
+    "description": "Calls the bingo cartridge function `_internal_func_check`.",
     "group": "internal",
     "name": "_internal_func_check",
     "return_type": {
@@ -158,7 +158,7 @@
   },
   "_match_mass_great": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `_match_mass_great`.",
+    "description": "Calls the bingo cartridge function `_match_mass_great`.",
     "group": "internal",
     "name": "_match_mass_great",
     "return_type": {
@@ -168,7 +168,7 @@
   },
   "_match_mass_less": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `_match_mass_less`.",
+    "description": "Calls the bingo cartridge function `_match_mass_less`.",
     "group": "internal",
     "name": "_match_mass_less",
     "return_type": {
@@ -178,7 +178,7 @@
   },
   "_precache_database": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `_precache_database`.",
+    "description": "Calls the bingo cartridge function `_precache_database`.",
     "group": "internal",
     "name": "_precache_database",
     "return_type": {
@@ -188,7 +188,7 @@
   },
   "_print_profiling_info": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `_print_profiling_info`.",
+    "description": "Calls the bingo cartridge function `_print_profiling_info`.",
     "group": "internal",
     "name": "_print_profiling_info",
     "return_type": {
@@ -198,7 +198,7 @@
   },
   "_reset_profiling_info": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `_reset_profiling_info`.",
+    "description": "Calls the bingo cartridge function `_reset_profiling_info`.",
     "group": "internal",
     "name": "_reset_profiling_info",
     "return_type": {
@@ -227,7 +227,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `_rexact_internal`.",
+    "description": "Calls the bingo cartridge function `_rexact_internal`.",
     "group": "internal",
     "name": "_rexact_internal",
     "return_type": {
@@ -256,7 +256,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `_rsmarts_internal`.",
+    "description": "Calls the bingo cartridge function `_rsmarts_internal`.",
     "group": "internal",
     "name": "_rsmarts_internal",
     "return_type": {
@@ -285,7 +285,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `_rsub_internal`.",
+    "description": "Calls the bingo cartridge function `_rsub_internal`.",
     "group": "internal",
     "name": "_rsub_internal",
     "return_type": {
@@ -326,7 +326,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `_sim_internal`.",
+    "description": "Calls the bingo cartridge function `_sim_internal`.",
     "group": "internal",
     "name": "_sim_internal",
     "return_type": {
@@ -355,7 +355,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `_smarts_internal`.",
+    "description": "Calls the bingo cartridge function `_smarts_internal`.",
     "group": "internal",
     "name": "_smarts_internal",
     "return_type": {
@@ -384,7 +384,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `_sub_internal`.",
+    "description": "Calls the bingo cartridge function `_sub_internal`.",
     "group": "internal",
     "name": "_sub_internal",
     "return_type": {
@@ -398,7 +398,7 @@
         "default": null,
         "description": "Input reaction",
         "name": "rxn",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "type": "AnyBingoReactionLike | AnyBingoBinaryReactionLike"
       },
       {
         "default": "'KEEP'",
@@ -421,7 +421,7 @@
         "default": null,
         "description": "Input molecule in any supported format",
         "name": "mol",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "type": "AnyBingoMolLike | AnyBingoBinaryMolLike"
       }
     ],
     "description": "Generates the canonical SMILES for a molecule.",
@@ -438,7 +438,7 @@
         "default": null,
         "description": "Input molecule in any supported format",
         "name": "mol",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "type": "AnyBingoMolLike | AnyBingoBinaryMolLike"
       }
     ],
     "description": "Check molecule for validity",
@@ -455,7 +455,7 @@
         "default": null,
         "description": "Input reaction in any supported format",
         "name": "rxn",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "type": "AnyBingoReactionLike | AnyBingoBinaryReactionLike"
       }
     ],
     "description": "Check reaction for validity",
@@ -472,7 +472,7 @@
         "default": null,
         "description": "Input molecule in any supported format",
         "name": "mol",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "type": "AnyBingoMolLike | AnyBingoBinaryMolLike"
       }
     ],
     "description": "Converts a molecule to CML format.",
@@ -489,7 +489,7 @@
         "default": null,
         "description": "Input molecule in any supported format",
         "name": "mol",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "type": "AnyBingoMolLike | AnyBingoBinaryMolLike"
       },
       {
         "default": false,
@@ -512,7 +512,7 @@
         "default": null,
         "description": "Input reaction in any supported format",
         "name": "rxn",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "type": "AnyBingoReactionLike | AnyBingoBinaryReactionLike"
       },
       {
         "default": false,
@@ -521,7 +521,7 @@
         "type": "sqltypes.Boolean | bool"
       }
     ],
-    "description": "Calls the rdkit cartridge function `compactreaction`.",
+    "description": "Calls the bingo cartridge function `compactreaction`.",
     "group": "general",
     "name": "compactreaction",
     "return_type": {
@@ -608,7 +608,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `filetoblob`.",
+    "description": "Calls the bingo cartridge function `filetoblob`.",
     "group": "general",
     "name": "filetoblob",
     "return_type": {
@@ -625,7 +625,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `filetotext`.",
+    "description": "Calls the bingo cartridge function `filetotext`.",
     "group": "general",
     "name": "filetotext",
     "return_type": {
@@ -648,7 +648,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `fingerprint`.",
+    "description": "Calls the bingo cartridge function `fingerprint`.",
     "group": "general",
     "name": "fingerprint",
     "return_type": {
@@ -665,7 +665,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `getblockcount`.",
+    "description": "Calls the bingo cartridge function `getblockcount`.",
     "group": "general",
     "name": "getblockcount",
     "return_type": {
@@ -675,7 +675,7 @@
   },
   "getindexstructurescount": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `getindexstructurescount`.",
+    "description": "Calls the bingo cartridge function `getindexstructurescount`.",
     "group": "general",
     "name": "getindexstructurescount",
     "return_type": {
@@ -689,10 +689,10 @@
         "default": null,
         "description": "",
         "name": "arg_1",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "type": "AnyBingoMolLike | AnyBingoBinaryMolLike"
       }
     ],
-    "description": "Calls the rdkit cartridge function `getmass`.",
+    "description": "Calls the bingo cartridge function `getmass`.",
     "group": "general",
     "name": "getmass",
     "return_type": {
@@ -706,10 +706,10 @@
         "default": null,
         "description": "",
         "name": "arg_1",
-        "type": "str | sqltypes.Text"
+        "type": "AnyBingoMolLike"
       }
     ],
-    "description": "Calls the rdkit cartridge function `getname`.",
+    "description": "Calls the bingo cartridge function `getname`.",
     "group": "general",
     "name": "getname",
     "return_type": {
@@ -723,22 +723,22 @@
         "default": null,
         "description": "Input molecule or molecular column in any supported format",
         "name": "mol",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "type": "AnyBingoMolLike | AnyBingoBinaryMolLike"
       },
       {
         "default": null,
         "description": "Query molecule in any supported format",
         "name": "query",
-        "type": "str | sqltypes.Text"
+        "type": "TextLike"
       },
       {
         "default": "'tanimoto'",
         "description": "string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional \u201calpha\u201d and \u201cbeta\u201d parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).",
         "name": "metric",
-        "type": "str | sqltypes.Text"
+        "type": "TextLike | Literal['tanimoto', 'euclid-sub']"
       }
     ],
-    "description": "Calls the rdkit cartridge function `getsimilarity`.",
+    "description": "Calls the bingo cartridge function `getsimilarity`.",
     "group": "general",
     "name": "getsimilarity",
     "return_type": {
@@ -755,7 +755,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `getstructurescount`.",
+    "description": "Calls the bingo cartridge function `getstructurescount`.",
     "group": "general",
     "name": "getstructurescount",
     "return_type": {
@@ -765,7 +765,7 @@
   },
   "getversion": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `getversion`.",
+    "description": "Calls the bingo cartridge function `getversion`.",
     "group": "general",
     "name": "getversion",
     "return_type": {
@@ -778,8 +778,8 @@
       {
         "default": null,
         "description": "",
-        "name": "arg_1",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "name": "mol",
+        "type": "AnyBingoMolLike | AnyBingoBinaryMolLike"
       },
       {
         "default": null,
@@ -788,7 +788,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `getweight`.",
+    "description": "Calls the bingo cartridge function `getweight`.",
     "group": "general",
     "name": "getweight",
     "return_type": {
@@ -801,11 +801,11 @@
       {
         "default": null,
         "description": "",
-        "name": "arg_1",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "name": "mol",
+        "type": "AnyBingoMolLike | AnyBingoBinaryMolLike"
       }
     ],
-    "description": "Calls the rdkit cartridge function `gross`.",
+    "description": "Calls the bingo cartridge function `gross`.",
     "group": "general",
     "name": "gross",
     "return_type": {
@@ -819,28 +819,28 @@
         "default": null,
         "description": "",
         "name": "arg_1",
-        "type": "str | sqltypes.Text"
+        "type": "TextLike"
       },
       {
         "default": null,
         "description": "",
         "name": "arg_2",
-        "type": "str | sqltypes.Text"
+        "type": "TextLike"
       },
       {
         "default": null,
         "description": "",
         "name": "arg_3",
-        "type": "str | sqltypes.Text"
+        "type": "TextLike"
       },
       {
         "default": null,
         "description": "",
         "name": "arg_4",
-        "type": "str | sqltypes.Text"
+        "type": "TextLike"
       }
     ],
-    "description": "Calls the rdkit cartridge function `importrdf`.",
+    "description": "Calls the bingo cartridge function `importrdf`.",
     "group": "general",
     "name": "importrdf",
     "return_type": {
@@ -875,7 +875,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `importsdf`.",
+    "description": "Calls the bingo cartridge function `importsdf`.",
     "group": "general",
     "name": "importsdf",
     "return_type": {
@@ -910,7 +910,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `importsmiles`.",
+    "description": "Calls the bingo cartridge function `importsmiles`.",
     "group": "general",
     "name": "importsmiles",
     "return_type": {
@@ -923,8 +923,8 @@
       {
         "default": null,
         "description": "",
-        "name": "arg_1",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "name": "mol",
+        "type": "AnyBingoMolLike | AnyBingoBinaryMolLike"
       },
       {
         "default": null,
@@ -933,7 +933,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `inchi`.",
+    "description": "Calls the bingo cartridge function `inchi`.",
     "group": "general",
     "name": "inchi",
     "return_type": {
@@ -946,11 +946,11 @@
       {
         "default": null,
         "description": "",
-        "name": "arg_1",
-        "type": "str | sqltypes.Text"
+        "name": "mol",
+        "type": "AnyBingoMolLike"
       }
     ],
-    "description": "Calls the rdkit cartridge function `inchikey`.",
+    "description": "Calls the bingo cartridge function `inchikey`.",
     "group": "general",
     "name": "inchikey",
     "return_type": {
@@ -960,7 +960,7 @@
   },
   "matchexact": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `matchexact`.",
+    "description": "Calls the bingo cartridge function `matchexact`.",
     "group": "general",
     "name": "matchexact",
     "return_type": {
@@ -970,7 +970,7 @@
   },
   "matchgross": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `matchgross`.",
+    "description": "Calls the bingo cartridge function `matchgross`.",
     "group": "general",
     "name": "matchgross",
     "return_type": {
@@ -980,7 +980,7 @@
   },
   "matchrexact": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `matchrexact`.",
+    "description": "Calls the bingo cartridge function `matchrexact`.",
     "group": "general",
     "name": "matchrexact",
     "return_type": {
@@ -990,7 +990,7 @@
   },
   "matchrsmarts": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `matchrsmarts`.",
+    "description": "Calls the bingo cartridge function `matchrsmarts`.",
     "group": "general",
     "name": "matchrsmarts",
     "return_type": {
@@ -1000,7 +1000,7 @@
   },
   "matchrsub": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `matchrsub`.",
+    "description": "Calls the bingo cartridge function `matchrsub`.",
     "group": "general",
     "name": "matchrsub",
     "return_type": {
@@ -1010,7 +1010,7 @@
   },
   "matchsim": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `matchsim`.",
+    "description": "Calls the bingo cartridge function `matchsim`.",
     "group": "general",
     "name": "matchsim",
     "return_type": {
@@ -1020,7 +1020,7 @@
   },
   "matchsmarts": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `matchsmarts`.",
+    "description": "Calls the bingo cartridge function `matchsmarts`.",
     "group": "general",
     "name": "matchsmarts",
     "return_type": {
@@ -1030,7 +1030,7 @@
   },
   "matchsub": {
     "args": {},
-    "description": "Calls the rdkit cartridge function `matchsub`.",
+    "description": "Calls the bingo cartridge function `matchsub`.",
     "group": "general",
     "name": "matchsub",
     "return_type": {
@@ -1043,11 +1043,11 @@
       {
         "default": null,
         "description": "",
-        "name": "arg_1",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "name": "mol",
+        "type": "AnyBingoMolLike | AnyBingoBinaryMolLike"
       }
     ],
-    "description": "Calls the rdkit cartridge function `molfile`.",
+    "description": "Calls the bingo cartridge function `molfile`.",
     "group": "general",
     "name": "molfile",
     "return_type": {
@@ -1070,7 +1070,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `precachedatabase`.",
+    "description": "Calls the bingo cartridge function `precachedatabase`.",
     "group": "general",
     "name": "precachedatabase",
     "return_type": {
@@ -1083,11 +1083,11 @@
       {
         "default": null,
         "description": "",
-        "name": "arg_1",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "name": "rxn",
+        "type": "AnyBingoReactionLike | AnyBingoBinaryReactionLike"
       }
     ],
-    "description": "Calls the rdkit cartridge function `rcml`.",
+    "description": "Calls the bingo cartridge function `rcml`.",
     "group": "general",
     "name": "rcml",
     "return_type": {
@@ -1100,8 +1100,8 @@
       {
         "default": null,
         "description": "",
-        "name": "arg_1",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "name": "rxn",
+        "type": "AnyBingoReactionLike | AnyBingoBinaryReactionLike"
       },
       {
         "default": null,
@@ -1110,7 +1110,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `rfingerprint`.",
+    "description": "Calls the bingo cartridge function `rfingerprint`.",
     "group": "general",
     "name": "rfingerprint",
     "return_type": {
@@ -1123,11 +1123,11 @@
       {
         "default": null,
         "description": "",
-        "name": "arg_1",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "name": "rxn",
+        "type": "AnyBingoReactionLike | AnyBingoBinaryReactionLike"
       }
     ],
-    "description": "Calls the rdkit cartridge function `rsmiles`.",
+    "description": "Calls the bingo cartridge function `rsmiles`.",
     "group": "general",
     "name": "rsmiles",
     "return_type": {
@@ -1140,11 +1140,11 @@
       {
         "default": null,
         "description": "",
-        "name": "arg_1",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "name": "rxn",
+        "type": "AnyBingoReactionLike | AnyBingoBinaryReactionLike"
       }
     ],
-    "description": "Calls the rdkit cartridge function `rxnfile`.",
+    "description": "Calls the bingo cartridge function `rxnfile`.",
     "group": "general",
     "name": "rxnfile",
     "return_type": {
@@ -1157,11 +1157,11 @@
       {
         "default": null,
         "description": "",
-        "name": "arg_1",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "name": "mol",
+        "type": "AnyBingoMolLike | AnyBingoBinaryMolLike"
       }
     ],
-    "description": "Calls the rdkit cartridge function `smiles`.",
+    "description": "Calls the bingo cartridge function `smiles`.",
     "group": "general",
     "name": "smiles",
     "return_type": {
@@ -1174,8 +1174,8 @@
       {
         "default": null,
         "description": "",
-        "name": "arg_1",
-        "type": "str | sqltypes.Text | bytes | sqltypes.LargeBinary"
+        "name": "mol",
+        "type": "AnyBingoMolLike | AnyBingoBinaryMolLike"
       },
       {
         "default": null,
@@ -1184,7 +1184,7 @@
         "type": "str | sqltypes.Text"
       }
     ],
-    "description": "Calls the rdkit cartridge function `standardize`.",
+    "description": "Calls the bingo cartridge function `standardize`.",
     "group": "general",
     "name": "standardize",
     "return_type": {
