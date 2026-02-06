@@ -5,7 +5,7 @@ chemical data stored in PostgreSQL using the RDKit cartridge.
 """
 
 import functools
-from typing import Literal
+from typing import Literal, Any
 
 from rdkit import Chem
 from sqlalchemy import func
@@ -36,7 +36,7 @@ class RdkitMol(RdkitBaseType):
 
     cache_ok = True
 
-    def get_col_spec(self):
+    def get_col_spec(self, **kwargs: Any) -> str:
         return "mol"
 
     comparator_factory = RdkitMolComparator
@@ -105,7 +105,7 @@ class RdkitBitFingerprint(RdkitBaseType):
     cache_ok = True
     comparator_factory = RdkitFPComparator
 
-    def get_col_spec(self):
+    def get_col_spec(self, **kwargs: Any) -> str:
         return "bfp"
 
 
@@ -120,7 +120,7 @@ class RdkitSparseFingerprint(RdkitBaseType):
     cache_ok = True
     comparator_factory = RdkitFPComparator
 
-    def get_col_spec(self):
+    def get_col_spec(self, **kwargs: Any) -> str:
         return "sfp"
 
 
@@ -142,7 +142,7 @@ class RdkitReaction(RdkitBaseType):
     impl = bytes
     cache_ok = True
 
-    def get_col_spec(self):
+    def get_col_spec(self, **kwargs: Any) -> str:
         return "reaction"
 
     comparator_factory = RdkitMolComparator
@@ -162,9 +162,9 @@ class RdkitReaction(RdkitBaseType):
         from . import functions as rdkit_func
 
         if self.return_type == "mol":
-            return rdkit_func.rxn.to_binary(colexpr, type_=self)
+            return rdkit_func.reaction_send(colexpr, type_=self)
         elif self.return_type == "bytes":
-            return rdkit_func.rxn.to_binary(colexpr, type_=self)
+            return rdkit_func.reaction_send(colexpr, type_=self)
         else:  # smiles
             return colexpr
 
@@ -189,10 +189,10 @@ class RdkitReaction(RdkitBaseType):
 
 
 class RdkitQMol(RdkitBaseType):
-    def get_col_spec(self):
+    def get_col_spec(self, **kwargs: Any) -> str:
         return "qmol"
 
 
 class RdkitXQMol(RdkitBaseType):
-    def get_col_spec(self):
+    def get_col_spec(self, **kwargs: Any) -> str:
         return "xqmol"

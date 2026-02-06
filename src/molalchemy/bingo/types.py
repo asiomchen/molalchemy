@@ -4,7 +4,7 @@ This module provides SQLAlchemy UserDefinedType classes for working with
 chemical molecules and reactions in PostgreSQL using the Bingo cartridge.
 """
 
-from typing import Literal
+from typing import Literal, Any
 
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
@@ -58,7 +58,7 @@ class BingoMol(BingoBaseType):
     cache_ok = True
     comparator_factory = BingoMolComparator
 
-    def get_col_spec(self):
+    def get_col_spec(self, **kwargs: Any) -> str:
         """Get the column specification for this type.
 
         Returns
@@ -143,28 +143,21 @@ class BingoBinaryMol(BingoBaseType):
         self.return_type = return_type
         super().__init__()
 
-    def get_col_spec(self):
-        """Get the column specification for this type.
-
-        Returns
-        -------
-        str
-            The PostgreSQL column type specification ("bytea").
-        """
+    def get_col_spec(self, **kwargs: Any) -> str:
         return "bytea"
 
     def bind_expression(self, bindvalue):
         return func.Bingo.CompactMolecule(bindvalue, self.preserve_pos)
 
-    def column_expression(self, col):
+    def column_expression(self, colexpr):
         if self.return_type == "smiles":
-            return func.Bingo.smiles(col)
+            return func.Bingo.smiles(colexpr)
         elif self.return_type == "molfile":
-            return func.Bingo.molfile(col)
+            return func.Bingo.molfile(colexpr)
         elif self.return_type == "cml":
-            return func.Bingo.cml(col)
+            return func.Bingo.cml(colexpr)
         elif self.return_type == "bytes":
-            return col
+            return colexpr
         else:
             raise ValueError(
                 f"Invalid return_type: {self.return_type}. Available options are 'smiles', 'molfile', 'cml', 'bytes'."
@@ -218,14 +211,7 @@ class BingoReaction(BingoBaseType):
     cache_ok = True
     comparator_factory = BingoRxnComparator
 
-    def get_col_spec(self):
-        """Get the column specification for this type.
-
-        Returns
-        -------
-        str
-            The PostgreSQL column type specification ("varchar").
-        """
+    def get_col_spec(self, **kwargs: Any) -> str:
         return "varchar"
 
 
@@ -274,12 +260,5 @@ class BingoBinaryReaction(BingoBaseType):
     cache_ok = True
     comparator_factory = BingoRxnComparator
 
-    def get_col_spec(self):
-        """Get the column specification for this type.
-
-        Returns
-        -------
-        str
-            The PostgreSQL column type specification ("bytea").
-        """
+    def get_col_spec(self, **kwargs: Any) -> str:
         return "bytea"
