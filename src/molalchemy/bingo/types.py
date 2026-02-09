@@ -58,6 +58,9 @@ class BingoMol(BingoBaseType):
     cache_ok = True
     comparator_factory = BingoMolComparator
 
+    def __repr__(self):
+        return "BingoMol()"
+
     def get_col_spec(self, **kwargs: Any) -> str:
         """Get the column specification for this type.
 
@@ -143,6 +146,9 @@ class BingoBinaryMol(BingoBaseType):
         self.return_type = return_type
         super().__init__()
 
+    def __repr__(self):
+        return f"BingoBinaryMol(preserve_pos={self.preserve_pos!r}, return_type={self.return_type!r})"
+
     def get_col_spec(self, **kwargs: Any) -> str:
         return "bytea"
 
@@ -211,6 +217,9 @@ class BingoReaction(BingoBaseType):
     cache_ok = True
     comparator_factory = BingoRxnComparator
 
+    def __repr__(self):
+        return "BingoReaction()"
+
     def get_col_spec(self, **kwargs: Any) -> str:
         return "varchar"
 
@@ -259,6 +268,9 @@ class BingoBinaryReaction(BingoBaseType):
 
     cache_ok = True
     comparator_factory = BingoRxnComparator
+
+    def __repr__(self):
+        return "BingoBinaryReaction()"
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "bytea"

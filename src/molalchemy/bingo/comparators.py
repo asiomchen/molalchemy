@@ -35,7 +35,9 @@ class BingoMolComparator(UserDefinedType.Comparator):
         --------
         >>> mol_column.has_substructure('c1ccccc1')  # benzene ring
         """
-        return self.expr.op("@")(text(f"('{query}', '{parameters}')::bingo.sub"))
+        return self.expr.op("@")(
+            text("(:query, :params)\\:\\:bingo.sub").bindparams(query=query, params=parameters)
+        )
 
     def has_smarts(self, query: str, parameters: str = ""):
         """
@@ -57,7 +59,9 @@ class BingoMolComparator(UserDefinedType.Comparator):
         --------
         >>> mol_column.has_smarts('[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1')  # aromatic ring
         """
-        return self.expr.op("@")(text(f"('{query}', '{parameters}')::bingo.smarts"))
+        return self.expr.op("@")(
+            text("(:query, :params)\\:\\:bingo.smarts").bindparams(query=query, params=parameters)
+        )
 
     def equals(self, query: str, parameters: str = ""):
         """
@@ -79,7 +83,9 @@ class BingoMolComparator(UserDefinedType.Comparator):
         --------
         >>> mol_column.equals('CCO')  # ethanol exact match
         """
-        return self.expr.op("@")(text(f"('{query}', '{parameters}')::bingo.exact"))
+        return self.expr.op("@")(
+            text("(:query, :params)\\:\\:bingo.exact").bindparams(query=query, params=parameters)
+        )
 
 
 class BingoRxnComparator(UserDefinedType.Comparator):
@@ -89,6 +95,9 @@ class BingoRxnComparator(UserDefinedType.Comparator):
     This class provides methods for chemical reaction searching including
     reaction substructure matching, SMARTS pattern matching, and exact reaction matching.
     """
+
+    def __eq__(self, other: str):
+        return self.equals(other)
 
     def has_substructure(self, query: str, parameters: str = ""):
         """
@@ -110,7 +119,9 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         --------
         >>> rxn_column.has_substructure('c1ccccc1>>c1ccc(O)cc1')  # phenol formation
         """
-        return self.expr.op("@")(text(f"('{query}', '{parameters}')::bingo.rsub"))
+        return self.expr.op("@")(
+            text("(:query, :params)\\:\\:bingo.rsub").bindparams(query=query, params=parameters)
+        )
 
     def has_smarts(self, query: str, parameters: str = ""):
         """
@@ -132,7 +143,9 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         --------
         >>> rxn_column.has_smarts('[C:1]>>[C:1][O]')  # C-O bond formation
         """
-        return self.expr.op("@")(text(f"('{query}', '{parameters}')::bingo.rsmarts"))
+        return self.expr.op("@")(
+            text("(:query, :params)\\:\\:bingo.rsmarts").bindparams(query=query, params=parameters)
+        )
 
     def equals(self, query: str, parameters: str = ""):
         """
@@ -154,4 +167,6 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         --------
         >>> rxn_column.has_equals('CCO>>CC=O')  # ethanol to acetaldehyde exact match
         """
-        return self.expr.op("@")(text(f"('{query}', '{parameters}')::bingo.rexact"))
+        return self.expr.op("@")(
+            text("(:query, :params)\\:\\:bingo.rexact").bindparams(query=query, params=parameters)
+        )
