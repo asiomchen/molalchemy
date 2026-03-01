@@ -32,7 +32,9 @@ molalchemy provides seamless integration between python and chemical databases, 
 - **Chemical Cartridge Integration**: Support for Bingo and RDKit PostgreSQL cartridges
 - **Substructure Search**: Efficient substructure and similarity searching
 - **Chemical Indexing**: High-performance chemical structure indexing
-- **Alembic Integration**: Automatic handling of extensions and imports in database migrations
+- **Input Validation**: Molecules and reactions are validated before being sent to the database
+- **Similarity Threshold Management**: Get/set Tanimoto and Dice thresholds with a context manager
+- **Alembic Integration**: Automatic handling of extensions, types, and indexes in database migrations
 - **Typing**: As much type hints as possible - no need to remember yet another abstract function name
 - **Easy Integration**: Drop-in replacement for standard SQLAlchemy types
 
@@ -88,8 +90,9 @@ molalchemy/
 │   │   └── functions/       # Bingo database functions
 │   └── rdkit/               # RDKit PostgreSQL cartridge support
 │       ├── types.py         # RDKit-specific types
-│       ├── index.py         # RDKit indexing  
+│       ├── index.py         # RDKit indexing
 │       ├── comparators.py   # SQLAlchemy comparators
+│       ├── settings.py      # Similarity threshold management
 │       └── functions/       # RDKit database functions
 ├── tests/                   # Test suite
 ├── docs/                    # Documentation
@@ -99,7 +102,13 @@ molalchemy/
 
 ## 🔧 Quick Start
 
-To learn how to use molalchemy, check out the [Quick Start - RDKit](https://molalchemy.readthedocs.io/en/latest/tutorials/01_Getting_Started_rdkit_ORM/) and [Quick Start - Bingo](https://molalchemy.readthedocs.io/en/latest/tutorials/01_Getting_Started_bingo_ORM/) tutorials in the documentation.
+To learn how to use molalchemy, check out the tutorials in the [documentation](https://molalchemy.readthedocs.io/):
+
+- [Quick Start - RDKit ORM](https://molalchemy.readthedocs.io/en/latest/tutorials/01_Getting_Started_rdkit_ORM/) - Molecules, substructure search, fingerprints, similarity
+- [Quick Start - RDKit Core](https://molalchemy.readthedocs.io/en/latest/tutorials/02_Getting_Started_rdkit_Core/) - Same features using SQLAlchemy Core API
+- [Quick Start - Bingo ORM](https://molalchemy.readthedocs.io/en/latest/tutorials/01_Getting_Started_bingo_ORM/) - Bingo cartridge with ORM
+- [Similarity Thresholds](https://molalchemy.readthedocs.io/en/latest/tutorials/04_Similarity_Threshold_Settings/) - Managing RDKit similarity thresholds
+- [Chemical Reactions](https://molalchemy.readthedocs.io/en/latest/tutorials/05_Reactions_rdkit_ORM/) - Storing and querying reactions
 
 ## 🏗️ Supported Cartridges
 
@@ -131,12 +140,17 @@ from molalchemy.rdkit.types import (
     RdkitMol,              # RDKit molecule type with configurable return formats
     RdkitBitFingerprint,   # Binary fingerprints (bfp)
     RdkitSparseFingerprint,# Sparse fingerprints (sfp)
-    RdkitReaction,         # Chemical reactions
+    RdkitReaction,         # Chemical reactions with input validation
     RdkitQMol,             # Query molecules
     RdkitXQMol,            # Extended query molecules
 )
 from molalchemy.rdkit.index import (
     RdkitIndex,            # RDKit molecule indexing (GIST index)
+)
+from molalchemy.rdkit.settings import (
+    get_tanimoto_threshold, set_tanimoto_threshold,  # Tanimoto threshold management
+    get_dice_threshold, set_dice_threshold,          # Dice threshold management
+    similarity_threshold,                            # Context manager for temporary thresholds
 )
 from molalchemy.rdkit.functions import (
     # Individual function imports available, see documentation
@@ -180,6 +194,51 @@ class MoleculeWithFormats(Base):
     structure_mol: Mapped[bytes] = mapped_column(RdkitMol(return_type="mol"))
     # Return as raw bytes
     structure_bytes: Mapped[bytes] = mapped_column(RdkitMol(return_type="bytes"))
+```
+
+### Similarity Threshold Management
+
+RDKit PostgreSQL uses GUC variables to control similarity search behavior. MolAlchemy provides helpers to manage these thresholds:
+
+```python
+from molalchemy.rdkit.settings import (
+    get_tanimoto_threshold,
+    set_tanimoto_threshold,
+    similarity_threshold,
+)
+
+# Get/set thresholds directly
+print(get_tanimoto_threshold(session))  # 0.5 (default)
+set_tanimoto_threshold(session, 0.3)
+
+# Use context manager for temporary changes
+with similarity_threshold(session, tanimoto=0.1, dice=0.2):
+    # Thresholds are active inside the block
+    results = session.execute(query).all()
+# Original thresholds are restored automatically
+```
+
+### Chemical Reactions
+
+Store and query chemical reactions using `RdkitReaction`:
+
+```python
+from molalchemy.rdkit.types import RdkitReaction
+from molalchemy.rdkit.functions import rxn_has_smarts, reaction_numreactants
+
+class Reaction(Base):
+    __tablename__ = 'reactions'
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
+    rxn: Mapped[str] = mapped_column(RdkitReaction())
+
+# Insert with validation (invalid SMARTS raises ValueError)
+session.add(Reaction(name="Amide formation", rxn="[C:1](=O)[OH].[N:2]>>[C:1](=O)[N:2]"))
+
+# Reaction substructure search
+results = session.execute(
+    select(Reaction).where(rxn_has_smarts(Reaction.rxn, ">>[C:1][N:2]"))
+).all()
 ```
 
 ### Using Chemical Functions
