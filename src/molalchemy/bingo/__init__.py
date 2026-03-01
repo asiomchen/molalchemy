@@ -18,6 +18,4 @@ __all__ = [
     "BingoReaction",
     "BingoRxnIndex",
     "BingoRxnProxy",
-    "bingo_func",
-    "bingo_rxn_func",
 ]

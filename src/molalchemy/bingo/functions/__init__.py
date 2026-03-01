@@ -5,6 +5,8 @@ These function classes wrap Bingo PostgreSQL functions, enabling various chemica
 """
 
 from .general import (
+    AnyBingoMol,
+    AnyBingoReaction,
     aam,
     cansmiles,
     checkmolecule,
@@ -75,6 +77,8 @@ from .internal import (
 )
 
 __all__ = [
+    "AnyBingoMol",
+    "AnyBingoReaction",
     "_exact_internal",
     "_get_block_count",
     "_get_profiling_info",

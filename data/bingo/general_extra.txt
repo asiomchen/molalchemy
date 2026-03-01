@@ -1,16 +1,16 @@
 def has_substructure(
-    mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""
+    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
 ):
     """
     Perform substructure search on a molecule column.
 
     Parameters
     ----------
-    mol_column : ColumnElement
+    mol : ColumnElement
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
-    query : str
+    query : TextLike
         Query molecule as SMILES, SMARTS, or Molfile string.
-    parameters : str, optional
+    parameters : TextLike, optional
         Search parameters for customizing the matching behavior (default is "").
         Examples: "TAU" for tautomer search, "RES" for resonance search.
 
@@ -18,24 +18,24 @@ def has_substructure(
     -------
     BinaryExpression
         SQLAlchemy expression for substructure matching that can be used in WHERE clauses.
-
+    
     """
-    return mol_column.op("@")(text(f"('{query}', '{parameters}')::bingo.sub"))
+    return mol.op("@")(text(f"('{query}', '{parameters}')::bingo.sub"))
 
 
 def matches_smarts(
-    mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""
+    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
 ):
     """
     Perform SMARTS pattern matching on a molecule column.
 
     Parameters
     ----------
-    mol_column : ColumnElement
+    mol : ColumnElement[AnyBingoMol]
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
-    query : str
+    query : TextLike
         SMARTS pattern string for matching.
-    parameters : str, optional
+    parameters : TextLike, optional
         Search parameters for customizing the matching behavior (default is "").
 
     Returns
@@ -44,20 +44,20 @@ def matches_smarts(
         SQLAlchemy expression for SMARTS matching that can be used in WHERE clauses.
 
     """
-    return mol_column.op("@")(text(f"('{query}', '{parameters}')::bingo.smarts"))
+    return mol.op("@")(text(f"('{query}', '{parameters}')::bingo.smarts"))
 
 
-def mol_equals(mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""):
+def mol_equals(mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""):
     """
     Perform exact structure matching on a molecule column.
 
     Parameters
     ----------
-    mol_column : ColumnElement
+    mol : ColumnElement[AnyBingoMol]
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
-    query : str
+    query : TextLike
         Query molecule as SMILES or Molfile string for exact matching.
-    parameters : str, optional
+    parameters : TextLike, optional
         Search parameters for customizing the matching behavior (default is "").
         Examples: "TAU" for tautomer matching, "STE" for stereochemistry.
 
@@ -67,15 +67,15 @@ def mol_equals(mol_column: ColumnElement[AnyBingoMol], query: str, parameters: s
         SQLAlchemy expression for exact matching that can be used in WHERE clauses.
 
     """
-    return mol_column.op("@")(text(f"('{query}', '{parameters}')::bingo.exact"))
+    return mol.op("@")(text(f"('{query}', '{parameters}')::bingo.exact"))
 
 
 def similarity(
-    mol_column: ColumnElement[AnyBingoMol],
-    query: str,
+    mol: ColumnElement[AnyBingoMol],
+    query: TextLike,
     bottom: float = 0.0,
     top: float = 1.0,
-    metric: str = "Tanimoto",
+    metric: TextLike = "Tanimoto",
 ) -> BinaryExpression:
     """
     Perform similarity search on a molecule column. This should be used in WHERE clauses, as it
@@ -83,15 +83,15 @@ def similarity(
 
     Parameters
     ----------
-    mol_column : ColumnElement
+    mol : AnyBingoMolLike | AnyBingoBinaryMolLike
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
-    query : str
+    query : TextLike
         Query molecule as SMILES or Molfile string for similarity comparison.
     bottom : float, optional
         Minimum similarity threshold (default is 0.0).
     top : float, optional
         Maximum similarity threshold (default is 1.0).
-    metric : str, optional
+    metric : TextLike, optional
         Similarity metric to use (default is "Tanimoto").
         Other options include "Dice", "Cosine", etc.
 
@@ -101,6 +101,6 @@ def similarity(
         SQLAlchemy expression for similarity matching that can be used in WHERE clauses.
 
     """
-    return mol_column.op("%")(
+    return mol.op("%")(
         text(f"('{query}', {bottom}, {top}, '{metric}')::bingo.sim")
     )

@@ -1,3 +1,5 @@
+"""Helper functions for working with Bingo molecule and reaction columns in modern IDEs. Work iprogress"""
+
 from sqlalchemy import Column
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 
@@ -38,7 +40,7 @@ def bingo_col(column: Column | InstrumentedAttribute) -> BingoMolProxy:
     """
     if isinstance(column, InstrumentedAttribute | Column):
         if isinstance(column.type, BingoMol) or isinstance(column.type, BingoBinaryMol):
-            return column
+            return column  # type: ignore
         else:
             raise TypeError("Column is not of type BingoMol or BingoBinaryMol")
     else:
@@ -77,7 +79,7 @@ def bingo_rxn_col(column: Column | InstrumentedAttribute) -> BingoRxnProxy:
         if isinstance(column.type, BingoReaction) or isinstance(
             column.type, BingoBinaryReaction
         ):
-            return column
+            return column  # type: ignore
         else:
             raise TypeError(
                 "Column is not of type BingoReaction or BingoBinaryReaction"

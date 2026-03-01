@@ -9,31 +9,34 @@ from sqlalchemy.sql import text
 from sqlalchemy.sql.elements import BinaryExpression, ColumnElement
 from sqlalchemy.sql.functions import GenericFunction
 
-from molalchemy.bingo.types import (
-    BingoBinaryMol,
-    BingoBinaryReaction,
-    BingoMol,
-    BingoReaction,
+from ._types import (
+    AnyBingoBinaryMolLike,
+    AnyBingoBinaryReactionLike,
+    AnyBingoMolLike,
+    AnyBingoMolLikeCombined,
+    AnyBingoReactionLike,
+    AnyBingoReactionLikeCombined,
+    TextLike,
 )
 
-AnyBingoMol = BingoMol | BingoBinaryMol
-
-AnyBingoReaction = BingoReaction | BingoBinaryReaction
+# Backward compatibility aliases
+AnyBingoMol = AnyBingoMolLikeCombined
+AnyBingoReaction = AnyBingoReactionLikeCombined
 
 
 def has_substructure(
-    mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""
+    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
 ):
     """
     Perform substructure search on a molecule column.
 
     Parameters
     ----------
-    mol_column : ColumnElement
+    mol : ColumnElement
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
-    query : str
+    query : TextLike
         Query molecule as SMILES, SMARTS, or Molfile string.
-    parameters : str, optional
+    parameters : TextLike, optional
         Search parameters for customizing the matching behavior (default is "").
         Examples: "TAU" for tautomer search, "RES" for resonance search.
 
@@ -43,22 +46,22 @@ def has_substructure(
         SQLAlchemy expression for substructure matching that can be used in WHERE clauses.
 
     """
-    return mol_column.op("@")(text(f"('{query}', '{parameters}')::bingo.sub"))
+    return mol.op("@")(text(f"('{query}', '{parameters}')::bingo.sub"))
 
 
 def matches_smarts(
-    mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""
+    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
 ):
     """
     Perform SMARTS pattern matching on a molecule column.
 
     Parameters
     ----------
-    mol_column : ColumnElement
+    mol : ColumnElement[AnyBingoMol]
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
-    query : str
+    query : TextLike
         SMARTS pattern string for matching.
-    parameters : str, optional
+    parameters : TextLike, optional
         Search parameters for customizing the matching behavior (default is "").
 
     Returns
@@ -67,22 +70,22 @@ def matches_smarts(
         SQLAlchemy expression for SMARTS matching that can be used in WHERE clauses.
 
     """
-    return mol_column.op("@")(text(f"('{query}', '{parameters}')::bingo.smarts"))
+    return mol.op("@")(text(f"('{query}', '{parameters}')::bingo.smarts"))
 
 
 def mol_equals(
-    mol_column: ColumnElement[AnyBingoMol], query: str, parameters: str = ""
+    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
 ):
     """
     Perform exact structure matching on a molecule column.
 
     Parameters
     ----------
-    mol_column : ColumnElement
+    mol : ColumnElement[AnyBingoMol]
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
-    query : str
+    query : TextLike
         Query molecule as SMILES or Molfile string for exact matching.
-    parameters : str, optional
+    parameters : TextLike, optional
         Search parameters for customizing the matching behavior (default is "").
         Examples: "TAU" for tautomer matching, "STE" for stereochemistry.
 
@@ -92,15 +95,15 @@ def mol_equals(
         SQLAlchemy expression for exact matching that can be used in WHERE clauses.
 
     """
-    return mol_column.op("@")(text(f"('{query}', '{parameters}')::bingo.exact"))
+    return mol.op("@")(text(f"('{query}', '{parameters}')::bingo.exact"))
 
 
 def similarity(
-    mol_column: ColumnElement[AnyBingoMol],
-    query: str,
+    mol: ColumnElement[AnyBingoMol],
+    query: TextLike,
     bottom: float = 0.0,
     top: float = 1.0,
-    metric: str = "Tanimoto",
+    metric: TextLike = "Tanimoto",
 ) -> BinaryExpression:
     """
     Perform similarity search on a molecule column. This should be used in WHERE clauses, as it
@@ -108,15 +111,15 @@ def similarity(
 
     Parameters
     ----------
-    mol_column : ColumnElement
+    mol : AnyBingoMolLike | AnyBingoBinaryMolLike
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
-    query : str
+    query : TextLike
         Query molecule as SMILES or Molfile string for similarity comparison.
     bottom : float, optional
         Minimum similarity threshold (default is 0.0).
     top : float, optional
         Maximum similarity threshold (default is 1.0).
-    metric : str, optional
+    metric : TextLike, optional
         Similarity metric to use (default is "Tanimoto").
         Other options include "Dice", "Cosine", etc.
 
@@ -126,9 +129,7 @@ def similarity(
         SQLAlchemy expression for similarity matching that can be used in WHERE clauses.
 
     """
-    return mol_column.op("%")(
-        text(f"('{query}', {bottom}, {top}, '{metric}')::bingo.sim")
-    )
+    return mol.op("%")(text(f"('{query}', {bottom}, {top}, '{metric}')::bingo.sim"))
 
 
 class aam(GenericFunction):
@@ -137,7 +138,7 @@ class aam(GenericFunction):
 
     def __init__(
         self,
-        rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
+        rxn: AnyBingoReactionLike | AnyBingoBinaryReactionLike,
         strategy: sqltypes.Text | Literal["CLEAR", "DISCARD", "ALTER", "KEEP"] = "KEEP",
         **kwargs: Any,
     ) -> None:
@@ -170,7 +171,7 @@ class cansmiles(GenericFunction):
     name = "cansmiles"
 
     def __init__(
-        self, mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, mol: AnyBingoMolLike | AnyBingoBinaryMolLike, **kwargs: Any
     ) -> None:
         """Generates the canonical SMILES for a molecule.
 
@@ -195,7 +196,7 @@ class checkmolecule(GenericFunction):
     name = "checkmolecule"
 
     def __init__(
-        self, mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, mol: AnyBingoMolLike | AnyBingoBinaryMolLike, **kwargs: Any
     ) -> None:
         """Check molecule for validity
 
@@ -220,7 +221,7 @@ class checkreaction(GenericFunction):
     name = "checkreaction"
 
     def __init__(
-        self, rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, rxn: AnyBingoReactionLike | AnyBingoBinaryReactionLike, **kwargs: Any
     ) -> None:
         """Check reaction for validity
 
@@ -245,7 +246,7 @@ class cml(GenericFunction):
     name = "cml"
 
     def __init__(
-        self, mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, mol: AnyBingoMolLike | AnyBingoBinaryMolLike, **kwargs: Any
     ) -> None:
         """Converts a molecule to CML format.
 
@@ -271,7 +272,7 @@ class compactmolecule(GenericFunction):
 
     def __init__(
         self,
-        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
+        mol: AnyBingoMolLike | AnyBingoBinaryMolLike,
         use_pos: sqltypes.Boolean | bool = False,
         **kwargs: Any,
     ) -> None:
@@ -301,11 +302,11 @@ class compactreaction(GenericFunction):
 
     def __init__(
         self,
-        rxn: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
+        rxn: AnyBingoReactionLike | AnyBingoBinaryReactionLike,
         use_pos: sqltypes.Boolean | bool = False,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `compactreaction`.
+        """Calls the bingo cartridge function `compactreaction`.
 
         Parameters
         ----------
@@ -398,7 +399,7 @@ class filetoblob(GenericFunction):
     name = "filetoblob"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `filetoblob`.
+        """Calls the bingo cartridge function `filetoblob`.
 
         Parameters
         ----------
@@ -420,7 +421,7 @@ class filetotext(GenericFunction):
     name = "filetotext"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `filetotext`.
+        """Calls the bingo cartridge function `filetotext`.
 
         Parameters
         ----------
@@ -447,7 +448,7 @@ class fingerprint(GenericFunction):
         arg_2: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `fingerprint`.
+        """Calls the bingo cartridge function `fingerprint`.
 
         Parameters
         ----------
@@ -470,7 +471,7 @@ class getblockcount(GenericFunction):
     name = "getblockcount"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `getblockcount`.
+        """Calls the bingo cartridge function `getblockcount`.
 
         Parameters
         ----------
@@ -492,7 +493,7 @@ class getindexstructurescount(GenericFunction):
     name = "getindexstructurescount"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `getindexstructurescount`.
+        """Calls the bingo cartridge function `getindexstructurescount`.
 
         Parameters
         ----------
@@ -514,9 +515,9 @@ class getmass(GenericFunction):
     name = "getmass"
 
     def __init__(
-        self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, arg_1: AnyBingoMolLike | AnyBingoBinaryMolLike, **kwargs: Any
     ) -> None:
-        """Calls the rdkit cartridge function `getmass`.
+        """Calls the bingo cartridge function `getmass`.
 
         Parameters
         ----------
@@ -537,8 +538,8 @@ class getname(GenericFunction):
     inherit_cache = True
     name = "getname"
 
-    def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `getname`.
+    def __init__(self, arg_1: AnyBingoMolLike, **kwargs: Any) -> None:
+        """Calls the bingo cartridge function `getname`.
 
         Parameters
         ----------
@@ -561,12 +562,12 @@ class getsimilarity(GenericFunction):
 
     def __init__(
         self,
-        mol: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
-        query: str | sqltypes.Text,
-        metric: str | sqltypes.Text = "tanimoto",
+        mol: AnyBingoMolLike | AnyBingoBinaryMolLike,
+        query: TextLike,
+        metric: TextLike | Literal["tanimoto", "euclid-sub"] = "tanimoto",
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `getsimilarity`.
+        """Calls the bingo cartridge function `getsimilarity`.
 
         Parameters
         ----------
@@ -593,7 +594,7 @@ class getstructurescount(GenericFunction):
     name = "getstructurescount"
 
     def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `getstructurescount`.
+        """Calls the bingo cartridge function `getstructurescount`.
 
         Parameters
         ----------
@@ -615,7 +616,7 @@ class getversion(GenericFunction):
     name = "getversion"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `getversion`.
+        """Calls the bingo cartridge function `getversion`.
 
         Parameters
         ----------
@@ -638,15 +639,15 @@ class getweight(GenericFunction):
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
+        mol: AnyBingoMolLike | AnyBingoBinaryMolLike,
         arg_2: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `getweight`.
+        """Calls the bingo cartridge function `getweight`.
 
         Parameters
         ----------
-        arg_1
+        mol
         arg_2
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -656,7 +657,7 @@ class getweight(GenericFunction):
         Function[float | sqltypes.Float]
             SQLAlchemy function
         """
-        super().__init__(arg_1, arg_2, **kwargs)
+        super().__init__(mol, arg_2, **kwargs)
         self.packagenames = ("bingo",)
 
 
@@ -665,13 +666,13 @@ class gross(GenericFunction):
     name = "gross"
 
     def __init__(
-        self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, mol: AnyBingoMolLike | AnyBingoBinaryMolLike, **kwargs: Any
     ) -> None:
-        """Calls the rdkit cartridge function `gross`.
+        """Calls the bingo cartridge function `gross`.
 
         Parameters
         ----------
-        arg_1
+        mol
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -680,7 +681,7 @@ class gross(GenericFunction):
         Function[str | sqltypes.Text]
             SQLAlchemy function
         """
-        super().__init__(arg_1, **kwargs)
+        super().__init__(mol, **kwargs)
         self.packagenames = ("bingo",)
 
 
@@ -690,13 +691,13 @@ class importrdf(GenericFunction):
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text,
-        arg_2: str | sqltypes.Text,
-        arg_3: str | sqltypes.Text,
-        arg_4: str | sqltypes.Text,
+        arg_1: TextLike,
+        arg_2: TextLike,
+        arg_3: TextLike,
+        arg_4: TextLike,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `importrdf`.
+        """Calls the bingo cartridge function `importrdf`.
 
         Parameters
         ----------
@@ -728,7 +729,7 @@ class importsdf(GenericFunction):
         arg_4: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `importsdf`.
+        """Calls the bingo cartridge function `importsdf`.
 
         Parameters
         ----------
@@ -760,7 +761,7 @@ class importsmiles(GenericFunction):
         arg_4: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `importsmiles`.
+        """Calls the bingo cartridge function `importsmiles`.
 
         Parameters
         ----------
@@ -786,15 +787,15 @@ class inchi(GenericFunction):
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
+        mol: AnyBingoMolLike | AnyBingoBinaryMolLike,
         arg_2: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `inchi`.
+        """Calls the bingo cartridge function `inchi`.
 
         Parameters
         ----------
-        arg_1
+        mol
         arg_2
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -804,7 +805,7 @@ class inchi(GenericFunction):
         Function[str | sqltypes.Text]
             SQLAlchemy function
         """
-        super().__init__(arg_1, arg_2, **kwargs)
+        super().__init__(mol, arg_2, **kwargs)
         self.packagenames = ("bingo",)
 
 
@@ -812,12 +813,12 @@ class inchikey(GenericFunction):
     inherit_cache = True
     name = "inchikey"
 
-    def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `inchikey`.
+    def __init__(self, mol: AnyBingoMolLike, **kwargs: Any) -> None:
+        """Calls the bingo cartridge function `inchikey`.
 
         Parameters
         ----------
-        arg_1
+        mol
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -826,7 +827,7 @@ class inchikey(GenericFunction):
         Function[str | sqltypes.Text]
             SQLAlchemy function
         """
-        super().__init__(arg_1, **kwargs)
+        super().__init__(mol, **kwargs)
         self.packagenames = ("bingo",)
 
 
@@ -836,7 +837,7 @@ class matchexact(GenericFunction):
     name = "matchexact"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `matchexact`.
+        """Calls the bingo cartridge function `matchexact`.
 
         Parameters
         ----------
@@ -859,7 +860,7 @@ class matchgross(GenericFunction):
     name = "matchgross"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `matchgross`.
+        """Calls the bingo cartridge function `matchgross`.
 
         Parameters
         ----------
@@ -882,7 +883,7 @@ class matchrexact(GenericFunction):
     name = "matchrexact"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `matchrexact`.
+        """Calls the bingo cartridge function `matchrexact`.
 
         Parameters
         ----------
@@ -905,7 +906,7 @@ class matchrsmarts(GenericFunction):
     name = "matchrsmarts"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `matchrsmarts`.
+        """Calls the bingo cartridge function `matchrsmarts`.
 
         Parameters
         ----------
@@ -928,7 +929,7 @@ class matchrsub(GenericFunction):
     name = "matchrsub"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `matchrsub`.
+        """Calls the bingo cartridge function `matchrsub`.
 
         Parameters
         ----------
@@ -951,7 +952,7 @@ class matchsim(GenericFunction):
     name = "matchsim"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `matchsim`.
+        """Calls the bingo cartridge function `matchsim`.
 
         Parameters
         ----------
@@ -974,7 +975,7 @@ class matchsmarts(GenericFunction):
     name = "matchsmarts"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `matchsmarts`.
+        """Calls the bingo cartridge function `matchsmarts`.
 
         Parameters
         ----------
@@ -997,7 +998,7 @@ class matchsub(GenericFunction):
     name = "matchsub"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `matchsub`.
+        """Calls the bingo cartridge function `matchsub`.
 
         Parameters
         ----------
@@ -1019,13 +1020,13 @@ class molfile(GenericFunction):
     name = "molfile"
 
     def __init__(
-        self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, mol: AnyBingoMolLike | AnyBingoBinaryMolLike, **kwargs: Any
     ) -> None:
-        """Calls the rdkit cartridge function `molfile`.
+        """Calls the bingo cartridge function `molfile`.
 
         Parameters
         ----------
-        arg_1
+        mol
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1034,7 +1035,7 @@ class molfile(GenericFunction):
         Function[str | sqltypes.Text]
             SQLAlchemy function
         """
-        super().__init__(arg_1, **kwargs)
+        super().__init__(mol, **kwargs)
         self.packagenames = ("bingo",)
 
 
@@ -1045,7 +1046,7 @@ class precachedatabase(GenericFunction):
     def __init__(
         self, arg_1: str | sqltypes.Text, arg_2: str | sqltypes.Text, **kwargs: Any
     ) -> None:
-        """Calls the rdkit cartridge function `precachedatabase`.
+        """Calls the bingo cartridge function `precachedatabase`.
 
         Parameters
         ----------
@@ -1068,13 +1069,13 @@ class rcml(GenericFunction):
     name = "rcml"
 
     def __init__(
-        self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, rxn: AnyBingoReactionLike | AnyBingoBinaryReactionLike, **kwargs: Any
     ) -> None:
-        """Calls the rdkit cartridge function `rcml`.
+        """Calls the bingo cartridge function `rcml`.
 
         Parameters
         ----------
-        arg_1
+        rxn
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1083,7 +1084,7 @@ class rcml(GenericFunction):
         Function[str | sqltypes.Text]
             SQLAlchemy function
         """
-        super().__init__(arg_1, **kwargs)
+        super().__init__(rxn, **kwargs)
         self.packagenames = ("bingo",)
 
 
@@ -1093,15 +1094,15 @@ class rfingerprint(GenericFunction):
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
+        rxn: AnyBingoReactionLike | AnyBingoBinaryReactionLike,
         arg_2: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `rfingerprint`.
+        """Calls the bingo cartridge function `rfingerprint`.
 
         Parameters
         ----------
-        arg_1
+        rxn
         arg_2
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -1111,7 +1112,7 @@ class rfingerprint(GenericFunction):
         Function[bytes | sqltypes.LargeBinary]
             SQLAlchemy function
         """
-        super().__init__(arg_1, arg_2, **kwargs)
+        super().__init__(rxn, arg_2, **kwargs)
         self.packagenames = ("bingo",)
 
 
@@ -1120,13 +1121,13 @@ class rsmiles(GenericFunction):
     name = "rsmiles"
 
     def __init__(
-        self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, rxn: AnyBingoReactionLike | AnyBingoBinaryReactionLike, **kwargs: Any
     ) -> None:
-        """Calls the rdkit cartridge function `rsmiles`.
+        """Calls the bingo cartridge function `rsmiles`.
 
         Parameters
         ----------
-        arg_1
+        rxn
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1135,7 +1136,7 @@ class rsmiles(GenericFunction):
         Function[str | sqltypes.Text]
             SQLAlchemy function
         """
-        super().__init__(arg_1, **kwargs)
+        super().__init__(rxn, **kwargs)
         self.packagenames = ("bingo",)
 
 
@@ -1144,13 +1145,13 @@ class rxnfile(GenericFunction):
     name = "rxnfile"
 
     def __init__(
-        self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, rxn: AnyBingoReactionLike | AnyBingoBinaryReactionLike, **kwargs: Any
     ) -> None:
-        """Calls the rdkit cartridge function `rxnfile`.
+        """Calls the bingo cartridge function `rxnfile`.
 
         Parameters
         ----------
-        arg_1
+        rxn
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1159,7 +1160,7 @@ class rxnfile(GenericFunction):
         Function[str | sqltypes.Text]
             SQLAlchemy function
         """
-        super().__init__(arg_1, **kwargs)
+        super().__init__(rxn, **kwargs)
         self.packagenames = ("bingo",)
 
 
@@ -1168,13 +1169,13 @@ class smiles(GenericFunction):
     name = "smiles"
 
     def __init__(
-        self, arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary, **kwargs: Any
+        self, mol: AnyBingoMolLike | AnyBingoBinaryMolLike, **kwargs: Any
     ) -> None:
-        """Calls the rdkit cartridge function `smiles`.
+        """Calls the bingo cartridge function `smiles`.
 
         Parameters
         ----------
-        arg_1
+        mol
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1183,7 +1184,7 @@ class smiles(GenericFunction):
         Function[str | sqltypes.Text]
             SQLAlchemy function
         """
-        super().__init__(arg_1, **kwargs)
+        super().__init__(mol, **kwargs)
         self.packagenames = ("bingo",)
 
 
@@ -1193,15 +1194,15 @@ class standardize(GenericFunction):
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
+        mol: AnyBingoMolLike | AnyBingoBinaryMolLike,
         arg_2: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `standardize`.
+        """Calls the bingo cartridge function `standardize`.
 
         Parameters
         ----------
-        arg_1
+        mol
         arg_2
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -1211,5 +1212,5 @@ class standardize(GenericFunction):
         Function[str | sqltypes.Text]
             SQLAlchemy function
         """
-        super().__init__(arg_1, arg_2, **kwargs)
+        super().__init__(mol, arg_2, **kwargs)
         self.packagenames = ("bingo",)

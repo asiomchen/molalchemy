@@ -7,5 +7,5 @@ class CString(UserDefinedType):
     impl = str
     cache_ok = True
 
-    def get_col_spec(self):
+    def get_col_spec(self, **kwargs) -> str:
         return "cstring"

@@ -22,7 +22,7 @@ class _exact_internal(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `_exact_internal`.
+        """Calls the bingo cartridge function `_exact_internal`.
 
         Parameters
         ----------
@@ -46,7 +46,7 @@ class _get_block_count(GenericFunction):
     name = "_get_block_count"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `_get_block_count`.
+        """Calls the bingo cartridge function `_get_block_count`.
 
         Parameters
         ----------
@@ -69,7 +69,7 @@ class _get_profiling_info(GenericFunction):
     name = "_get_profiling_info"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `_get_profiling_info`.
+        """Calls the bingo cartridge function `_get_profiling_info`.
 
         Parameters
         ----------
@@ -91,7 +91,7 @@ class _get_structures_count(GenericFunction):
     name = "_get_structures_count"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `_get_structures_count`.
+        """Calls the bingo cartridge function `_get_structures_count`.
 
         Parameters
         ----------
@@ -120,7 +120,7 @@ class _gross_internal(GenericFunction):
         arg_3: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `_gross_internal`.
+        """Calls the bingo cartridge function `_gross_internal`.
 
         Parameters
         ----------
@@ -150,7 +150,7 @@ class _internal_func_011(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `_internal_func_011`.
+        """Calls the bingo cartridge function `_internal_func_011`.
 
         Parameters
         ----------
@@ -176,7 +176,7 @@ class _internal_func_012(GenericFunction):
     def __init__(
         self, arg_1: int | sqltypes.Integer, arg_2: str | sqltypes.Text, **kwargs: Any
     ) -> None:
-        """Calls the rdkit cartridge function `_internal_func_012`.
+        """Calls the bingo cartridge function `_internal_func_012`.
 
         Parameters
         ----------
@@ -200,7 +200,7 @@ class _internal_func_check(GenericFunction):
     name = "_internal_func_check"
 
     def __init__(self, arg_1: int | sqltypes.Integer, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `_internal_func_check`.
+        """Calls the bingo cartridge function `_internal_func_check`.
 
         Parameters
         ----------
@@ -223,7 +223,7 @@ class _match_mass_great(GenericFunction):
     name = "_match_mass_great"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `_match_mass_great`.
+        """Calls the bingo cartridge function `_match_mass_great`.
 
         Parameters
         ----------
@@ -246,7 +246,7 @@ class _match_mass_less(GenericFunction):
     name = "_match_mass_less"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `_match_mass_less`.
+        """Calls the bingo cartridge function `_match_mass_less`.
 
         Parameters
         ----------
@@ -268,7 +268,7 @@ class _precache_database(GenericFunction):
     name = "_precache_database"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `_precache_database`.
+        """Calls the bingo cartridge function `_precache_database`.
 
         Parameters
         ----------
@@ -290,7 +290,7 @@ class _print_profiling_info(GenericFunction):
     name = "_print_profiling_info"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `_print_profiling_info`.
+        """Calls the bingo cartridge function `_print_profiling_info`.
 
         Parameters
         ----------
@@ -312,7 +312,7 @@ class _reset_profiling_info(GenericFunction):
     name = "_reset_profiling_info"
 
     def __init__(self, **kwargs: Any) -> None:
-        """Calls the rdkit cartridge function `_reset_profiling_info`.
+        """Calls the bingo cartridge function `_reset_profiling_info`.
 
         Parameters
         ----------
@@ -341,7 +341,7 @@ class _rexact_internal(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `_rexact_internal`.
+        """Calls the bingo cartridge function `_rexact_internal`.
 
         Parameters
         ----------
@@ -372,7 +372,7 @@ class _rsmarts_internal(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `_rsmarts_internal`.
+        """Calls the bingo cartridge function `_rsmarts_internal`.
 
         Parameters
         ----------
@@ -403,7 +403,7 @@ class _rsub_internal(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `_rsub_internal`.
+        """Calls the bingo cartridge function `_rsub_internal`.
 
         Parameters
         ----------
@@ -436,7 +436,7 @@ class _sim_internal(GenericFunction):
         arg_5: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `_sim_internal`.
+        """Calls the bingo cartridge function `_sim_internal`.
 
         Parameters
         ----------
@@ -469,7 +469,7 @@ class _smarts_internal(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `_smarts_internal`.
+        """Calls the bingo cartridge function `_smarts_internal`.
 
         Parameters
         ----------
@@ -500,7 +500,7 @@ class _sub_internal(GenericFunction):
         arg_3: str | sqltypes.Text,
         **kwargs: Any,
     ) -> None:
-        """Calls the rdkit cartridge function `_sub_internal`.
+        """Calls the bingo cartridge function `_sub_internal`.
 
         Parameters
         ----------

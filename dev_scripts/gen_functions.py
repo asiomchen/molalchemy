@@ -38,6 +38,14 @@ def json_to_function_code(func_name: str, data: dict, template) -> str:
 
     # Process function arguments
     for param in data["args"]:
+        if param["type"].startswith("Rdkit"):
+            if "Sparse" in param["type"] and "Bit" in param["type"]:
+                param["type"] = "AnyRdkitFingerprintLike"
+            else:
+                param_t = param["type"].split("|")
+                param["type"] = " | ".join(
+                    [f"Any{t.replace(' ', '')}Like" for t in param_t]
+                )
         param_str = f"{param['name']}: {param['type']}"
         if param["default"] is not None:
             param_str += f" = {param['default']}"

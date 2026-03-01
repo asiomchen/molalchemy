@@ -4,7 +4,9 @@
       "has_substructure",
       "matches_smarts",
       "mol_equals",
-      "similarity"
+      "similarity",
+      "AnyBingoMol",
+      "AnyBingoReaction"
     ]
   }
 }
