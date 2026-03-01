@@ -1,9 +1,9 @@
 /* Light mode colors */
 :root {
   --molalchemy-primary: #138c53;
-  --molalchemy-secondary: #274729;
+  --molalchemy-secondary: #138c53;
   --molalchemy-light-bg: #138c53;
-  --molalchemy-light-accent: #274729;
+  --molalchemy-light-accent: #138c53;
 
   /* Primary color shades */
   --md-primary-fg-color: var(--molalchemy-primary);
@@ -33,9 +33,9 @@
 /* Dark mode colors */
 [data-md-color-scheme="slate"] {
   --molalchemy-primary: #138c53;
-  --molalchemy-secondary: #343a40;
+  --molalchemy-secondary: #138c53;
   --molalchemy-dark-bg: #138c53;
-  --molalchemy-dark-accent: #343a40;
+  --molalchemy-dark-accent: #138c53;
 
   /* Primary color shades for dark mode */
   --md-primary-fg-color: var(--molalchemy-primary);
