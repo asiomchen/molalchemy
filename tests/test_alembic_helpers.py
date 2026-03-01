@@ -9,12 +9,19 @@ from molalchemy.alembic_helpers import (
     drop_rdkit_extension,
     render_item,
 )
+from molalchemy.bingo.index import (
+    BingoBinaryMolIndex,
+    BingoBinaryRxnIndex,
+    BingoMolIndex,
+    BingoRxnIndex,
+)
 from molalchemy.bingo.types import (
     BingoBinaryMol,
     BingoBinaryReaction,
     BingoMol,
     BingoReaction,
 )
+from molalchemy.rdkit.index import RdkitIndex
 from molalchemy.rdkit.types import (
     RdkitBitFingerprint,
     RdkitMol,
@@ -192,3 +199,86 @@ class TestExtensionFunctions:
         """Test that drop_rdkit_extension executes correct SQL."""
         drop_rdkit_extension()
         mock_op.execute.assert_called_once_with("DROP EXTENSION IF EXISTS rdkit;")
+
+
+# All index variants with expected module, class name, and constructor repr
+ALL_INDEXES = [
+    (
+        RdkitIndex("idx_mol", "structure"),
+        "molalchemy.rdkit.index",
+        "RdkitIndex",
+        "RdkitIndex('idx_mol', 'structure')",
+    ),
+    (
+        BingoMolIndex("idx_mol", "structure"),
+        "molalchemy.bingo.index",
+        "BingoMolIndex",
+        "BingoMolIndex('idx_mol', 'structure')",
+    ),
+    (
+        BingoBinaryMolIndex("idx_bmol", "structure_bin"),
+        "molalchemy.bingo.index",
+        "BingoBinaryMolIndex",
+        "BingoBinaryMolIndex('idx_bmol', 'structure_bin')",
+    ),
+    (
+        BingoRxnIndex("idx_rxn", "reaction"),
+        "molalchemy.bingo.index",
+        "BingoRxnIndex",
+        "BingoRxnIndex('idx_rxn', 'reaction')",
+    ),
+    (
+        BingoBinaryRxnIndex("idx_brxn", "reaction_bin"),
+        "molalchemy.bingo.index",
+        "BingoBinaryRxnIndex",
+        "BingoBinaryRxnIndex('idx_brxn', 'reaction_bin')",
+    ),
+]
+
+
+class TestRenderAllIndexes:
+    """Test render_item for all index variants."""
+
+    @pytest.mark.parametrize(
+        ("instance", "expected_module", "class_name", "expected_repr"),
+        ALL_INDEXES,
+        ids=[t[3] for t in ALL_INDEXES],
+    )
+    def test_render_all_indexes(
+        self, instance, expected_module, class_name, expected_repr
+    ):
+        """Test that render_item produces correct import and repr for every index."""
+        autogen_context = Mock()
+        autogen_context.imports = set()
+
+        result = render_item("index", instance, autogen_context)
+
+        expected_import = f"from {expected_module} import {class_name}"
+        assert expected_import in autogen_context.imports
+        assert result == expected_repr
+
+    @pytest.mark.parametrize(
+        ("instance", "expected_module", "class_name", "expected_repr"),
+        ALL_INDEXES,
+        ids=[t[3] for t in ALL_INDEXES],
+    )
+    def test_repr_roundtrip(self, instance, expected_module, class_name, expected_repr):
+        """Test that repr produces a valid constructor call string."""
+        assert repr(instance) == expected_repr
+
+    def test_render_unknown_index_returns_false(self):
+        """Test that an unknown index type returns False."""
+        from sqlalchemy import Index
+
+        autogen_context = Mock()
+        autogen_context.imports = set()
+
+        result = render_item("index", Index("idx_plain", "col"), autogen_context)
+
+        assert result is False
+        assert len(autogen_context.imports) == 0
+
+    def test_rdkit_index_multiple_expressions(self):
+        """Test RdkitIndex repr with multiple expressions."""
+        idx = RdkitIndex("idx_multi", "col1", "col2")
+        assert repr(idx) == "RdkitIndex('idx_multi', 'col1', 'col2')"

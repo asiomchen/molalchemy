@@ -8,6 +8,7 @@ import functools
 from typing import Any, Literal
 
 from rdkit import Chem
+from rdkit.Chem import AllChem, rdChemReactions
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
@@ -170,6 +171,33 @@ class RdkitReaction(RdkitBaseType):
     def __repr__(self):
         return f"RdkitReaction(return_type={self.return_type!r})"
 
+    def bind_processor(self, dialect):
+        del dialect
+
+        def process(value):
+            if value is None:
+                return None
+            if isinstance(value, rdChemReactions.ChemicalReaction):
+                return rdChemReactions.ReactionToSmarts(value)
+            if isinstance(value, str):
+                try:
+                    rxn = AllChem.ReactionFromSmarts(value)
+                except ValueError:
+                    rxn = None
+                if rxn is None:
+                    raise ValueError(
+                        f"Invalid reaction SMILES/SMARTS string: {value!r}"
+                    )
+                return value
+            raise ValueError(
+                "Value must be a reaction SMILES/SMARTS string or a ChemicalReaction object"
+            )
+
+        return process
+
+    def bind_expression(self, bindvalue):
+        return func.reaction_from_smarts(bindvalue)
+
     def column_expression(self, colexpr):
         from . import functions as rdkit_func
 
@@ -182,14 +210,13 @@ class RdkitReaction(RdkitBaseType):
         del dialect, coltype
 
         def process(value, return_type):
-            from rdkit.Chem import AllChem
-
             if value is None:
                 return None
             if return_type == "mol":
-                # If we have bytes from rxn_send, create reaction from binary
                 if isinstance(value, bytes | memoryview):
                     return AllChem.ChemicalReaction(bytes(value))
+                else:
+                    return AllChem.ReactionFromSmarts(str(value))
             elif return_type == "bytes":
                 return bytes(value) if isinstance(value, memoryview) else value
             else:  # smiles

@@ -20,4 +20,10 @@ class RdkitIndex(Index):
 
     def __init__(self, name: str, *expressions, **kw):
         kw["postgresql_using"] = "gist"
+        self._rdkit_name = name
+        self._rdkit_expressions = expressions
         super().__init__(name, *expressions, **kw)
+
+    def __repr__(self):
+        expr_reprs = ", ".join(repr(e) for e in self._rdkit_expressions)
+        return f"RdkitIndex({self._rdkit_name!r}, {expr_reprs})"

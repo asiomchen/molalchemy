@@ -252,6 +252,49 @@ class TestRdkitReaction:
         assert test_table.c.reaction.type.__class__ == RdkitReaction
         assert isinstance(test_table.c.reaction.type, RdkitReaction)
 
+    def test_bind_processor(self):
+        """Test bind_processor for different input types."""
+        rdkit_rxn = RdkitReaction()
+        processor = rdkit_rxn.bind_processor(None)
+
+        # Test with valid reaction SMILES/SMARTS string
+        rxn_smarts = "[C:1](=O)[OH].[N:2]>>[C:1](=O)[N:2]"
+        processed = processor(rxn_smarts)
+        assert isinstance(processed, str)
+        assert processed == rxn_smarts
+
+        # Test with ChemicalReaction object
+        rxn_obj = rdChemReactions.ReactionFromSmarts(rxn_smarts)
+        processed = processor(rxn_obj)
+        assert isinstance(processed, str)
+        # Round-trip through ReactionToSmarts should produce valid SMARTS
+        rxn_roundtrip = rdChemReactions.ReactionFromSmarts(processed)
+        assert rxn_roundtrip is not None
+
+        # Test with None
+        processed = processor(None)
+        assert processed is None
+
+        # Test with invalid string
+        with pytest.raises(ValueError, match="Invalid reaction SMILES/SMARTS string"):
+            processor("not_a_reaction")
+
+        # Test with invalid type
+        with pytest.raises(
+            ValueError, match="Value must be a reaction SMILES/SMARTS string"
+        ):
+            processor(123)
+
+    def test_result_processor_mol_string_fallback(self):
+        """Test result_processor returns ChemicalReaction for string input with return_type='mol'."""
+        rdkit_rxn = RdkitReaction(return_type="mol")
+        processor = rdkit_rxn.result_processor(None, None)
+
+        rxn_smarts = "[C:1](=O)[OH].[N:2]>>[C:1](=O)[N:2]"
+        result = processor(rxn_smarts)
+        assert isinstance(result, AllChem.ChemicalReaction)
+        assert result.GetNumReactantTemplates() == 2
+
 
 class TestTypesIntegration:
     """Integration tests for RDKit types."""

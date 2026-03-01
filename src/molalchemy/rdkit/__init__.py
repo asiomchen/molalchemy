@@ -1,5 +1,12 @@
 from .comparators import RdkitFPComparator, RdkitMolComparator
 from .index import RdkitIndex
+from .settings import (
+    get_dice_threshold,
+    get_tanimoto_threshold,
+    set_dice_threshold,
+    set_tanimoto_threshold,
+    similarity_threshold,
+)
 from .types import (
     RdkitBitFingerprint,
     RdkitMol,
@@ -19,4 +26,9 @@ __all__ = [
     "RdkitReaction",
     "RdkitSparseFingerprint",
     "RdkitXQMol",
+    "get_dice_threshold",
+    "get_tanimoto_threshold",
+    "set_dice_threshold",
+    "set_tanimoto_threshold",
+    "similarity_threshold",
 ]
