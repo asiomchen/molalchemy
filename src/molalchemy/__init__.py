@@ -8,7 +8,6 @@ from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitSparseFin
 
 logger.disable("molalchemy")
 __all__ = [
-    "__version__",
     "BingoBinaryMol",
     "BingoBinaryMolIndex",
     "BingoMol",
@@ -17,4 +16,5 @@ __all__ = [
     "RdkitIndex",
     "RdkitMol",
     "RdkitSparseFingerprint",
+    "__version__",
 ]

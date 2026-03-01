@@ -5,7 +5,7 @@ chemical data stored in PostgreSQL using the RDKit cartridge.
 """
 
 import functools
-from typing import Literal, Any
+from typing import Any, Literal
 
 from rdkit import Chem
 from sqlalchemy import func

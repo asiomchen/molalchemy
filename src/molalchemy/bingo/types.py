@@ -4,7 +4,7 @@ This module provides SQLAlchemy UserDefinedType classes for working with
 chemical molecules and reactions in PostgreSQL using the Bingo cartridge.
 """
 
-from typing import Literal, Any
+from typing import Any, Literal
 
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType

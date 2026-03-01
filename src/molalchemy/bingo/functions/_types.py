@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, TypeVar
+from typing import (
+    TypeAlias,  # pragma: no cover
+    TypeVar,
+)
 
 from sqlalchemy import Column, Function
 from sqlalchemy.orm import InstrumentedAttribute, Mapped
@@ -11,7 +14,7 @@ from molalchemy.bingo.types import (
     BingoMol,
     BingoReaction,
 )
-from typing import TypeAlias  # pragma: no cover
+
 """
 Type aliases for Bingo-SQLAlchemy integration.
 These aliases make it easier to annotate columns, mapped attributes,
