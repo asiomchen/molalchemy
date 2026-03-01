@@ -7,7 +7,9 @@ It automatically handles the necessary imports and some utility functions for RD
 from alembic import op
 from loguru import logger
 
+from molalchemy.bingo.index import _BingoIndexBase
 from molalchemy.bingo.types import BingoBaseType
+from molalchemy.rdkit.index import RdkitIndex
 from molalchemy.rdkit.types import RdkitBaseType
 
 _TYPE_TO_MODULE = {
@@ -42,6 +44,17 @@ def render_item(obj_type, obj, autogen_context):
             if isinstance(obj, base_type):
                 autogen_context.imports.add(f"from {module} import {import_name}")
                 return f"{obj!r}"
+
+    if obj_type == "index":
+        if isinstance(obj, RdkitIndex):
+            autogen_context.imports.add("from molalchemy.rdkit.index import RdkitIndex")
+            return f"{obj!r}"
+        if isinstance(obj, _BingoIndexBase):
+            class_name = obj.__class__.__name__
+            autogen_context.imports.add(
+                f"from molalchemy.bingo.index import {class_name}"
+            )
+            return f"{obj!r}"
 
     # Default rendering for other objects
     return False

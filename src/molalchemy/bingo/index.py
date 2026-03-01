@@ -17,7 +17,28 @@ from sqlalchemy.schema import Index
 #         compiler.preparer.format_table(expr.table),
 #         compiler.process(expr, include_table=False)
 #     )
-class BingoMolIndex(Index):
+class _BingoIndexBase(Index):
+    """Base class for Bingo index types with common __repr__ logic."""
+
+    _bingo_op_class: str
+
+    def __init__(self, name, mol_column):
+        self._bingo_name = name
+        self._bingo_column = mol_column
+        super().__init__(
+            name,
+            mol_column,
+            postgresql_using="bingo_idx",
+            postgresql_ops={mol_column: self._bingo_op_class},
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__}({self._bingo_name!r}, {self._bingo_column!r})"
+        )
+
+
+class BingoMolIndex(_BingoIndexBase):
     """
     Bingo index for molecule columns.
 
@@ -61,16 +82,10 @@ class BingoMolIndex(Index):
     ```
     """
 
-    def __init__(self, name, mol_column):
-        super().__init__(
-            name,
-            mol_column,
-            postgresql_using="bingo_idx",
-            postgresql_ops={mol_column: "bingo.molecule"},
-        )
+    _bingo_op_class = "bingo.molecule"
 
 
-class BingoBinaryMolIndex(Index):
+class BingoBinaryMolIndex(_BingoIndexBase):
     """
     Bingo index for binary molecule columns.
 
@@ -115,16 +130,10 @@ class BingoBinaryMolIndex(Index):
     ```
     """
 
-    def __init__(self, name, mol_column):
-        super().__init__(
-            name,
-            mol_column,
-            postgresql_using="bingo_idx",
-            postgresql_ops={mol_column: "bingo.bmolecule"},
-        )
+    _bingo_op_class = "bingo.bmolecule"
 
 
-class BingoRxnIndex(Index):
+class BingoRxnIndex(_BingoIndexBase):
     """
     Bingo index for reaction columns.
 
@@ -169,16 +178,10 @@ class BingoRxnIndex(Index):
     ```
     """
 
-    def __init__(self, name, mol_column):
-        super().__init__(
-            name,
-            mol_column,
-            postgresql_using="bingo_idx",
-            postgresql_ops={mol_column: "bingo.reaction"},
-        )
+    _bingo_op_class = "bingo.reaction"
 
 
-class BingoBinaryRxnIndex(Index):
+class BingoBinaryRxnIndex(_BingoIndexBase):
     """
     Bingo index for binary reaction columns.
 
@@ -223,10 +226,4 @@ class BingoBinaryRxnIndex(Index):
     ```
     """
 
-    def __init__(self, name, mol_column):
-        super().__init__(
-            name,
-            mol_column,
-            postgresql_using="bingo_idx",
-            postgresql_ops={mol_column: "bingo.breaction"},
-        )
+    _bingo_op_class = "bingo.breaction"

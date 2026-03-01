@@ -187,8 +187,8 @@ class TestBingoIndexes:
 
         assert isinstance(mol_index, Index)
         assert isinstance(binary_index, Index)
-        assert type(mol_index).__bases__ == (Index,)
-        assert type(binary_index).__bases__ == (Index,)
+        assert issubclass(type(mol_index), Index)
+        assert issubclass(type(binary_index), Index)
 
 
 class TestBingoIndexCreation:
