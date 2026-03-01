@@ -2,12 +2,7 @@
 services:
 
   bingo:
-    build:
-      dockerfile: docker/Dockerfile.bingo
-      context: .
-      args:
-        - POSTGRES_VERSION=17.6
-        - BINGO_VERSION=1.34.0
+    image: antonsiomchen/cheminfo-db:postgres16.13-bingo1.40.0
     restart: always
     # set shared memory limit when using docker compose
     shm_size: 1024mb
@@ -24,16 +19,13 @@ services:
     # volumes:
     #   - db_data:/var/lib/postgresql/data
   rdkit:
-    build:
-      dockerfile: docker/Dockerfile.rdkit
-      context: .
-      # args:
-      #   - rdkit_git_ref=Release_2025_03
-      #   - boost_dev_version=1.81
+    image: antonsiomchen/cheminfo-db:postgres18.3-rdkit2025.09.6
     restart: always
     ports:
       - 5432:5432
     environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
       POSTGRES_PASSWORD: example
 
 

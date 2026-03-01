@@ -199,10 +199,20 @@ class RdkitReaction(RdkitBaseType):
 
 
 class RdkitQMol(RdkitBaseType):
+    cache_ok = True
+
+    def __repr__(self):
+        return "RdkitQMol()"
+
     def get_col_spec(self, **kwargs: Any) -> str:
         return "qmol"
 
 
 class RdkitXQMol(RdkitBaseType):
+    cache_ok = True
+
+    def __repr__(self):
+        return "RdkitXQMol()"
+
     def get_col_spec(self, **kwargs: Any) -> str:
         return "xqmol"
