@@ -9,7 +9,12 @@ from molalchemy.alembic_helpers import (
     drop_rdkit_extension,
     render_item,
 )
-from molalchemy.bingo.types import BingoBinaryMol, BingoBinaryReaction, BingoMol, BingoReaction
+from molalchemy.bingo.types import (
+    BingoBinaryMol,
+    BingoBinaryReaction,
+    BingoMol,
+    BingoReaction,
+)
 from molalchemy.rdkit.types import (
     RdkitBitFingerprint,
     RdkitMol,
@@ -22,21 +27,71 @@ from molalchemy.rdkit.types import (
 # All type variants with expected module, class name, and constructor repr
 ALL_TYPES = [
     # RDKit types
-    (RdkitMol(), "molalchemy.rdkit.types", "RdkitMol", "RdkitMol(return_type='smiles')"),
-    (RdkitMol(return_type="mol"), "molalchemy.rdkit.types", "RdkitMol", "RdkitMol(return_type='mol')"),
-    (RdkitMol(return_type="bytes"), "molalchemy.rdkit.types", "RdkitMol", "RdkitMol(return_type='bytes')"),
-    (RdkitBitFingerprint(), "molalchemy.rdkit.types", "RdkitBitFingerprint", "RdkitBitFingerprint()"),
-    (RdkitSparseFingerprint(), "molalchemy.rdkit.types", "RdkitSparseFingerprint", "RdkitSparseFingerprint()"),
-    (RdkitReaction(), "molalchemy.rdkit.types", "RdkitReaction", "RdkitReaction(return_type='smiles')"),
-    (RdkitReaction(return_type="mol"), "molalchemy.rdkit.types", "RdkitReaction", "RdkitReaction(return_type='mol')"),
+    (
+        RdkitMol(),
+        "molalchemy.rdkit.types",
+        "RdkitMol",
+        "RdkitMol(return_type='smiles')",
+    ),
+    (
+        RdkitMol(return_type="mol"),
+        "molalchemy.rdkit.types",
+        "RdkitMol",
+        "RdkitMol(return_type='mol')",
+    ),
+    (
+        RdkitMol(return_type="bytes"),
+        "molalchemy.rdkit.types",
+        "RdkitMol",
+        "RdkitMol(return_type='bytes')",
+    ),
+    (
+        RdkitBitFingerprint(),
+        "molalchemy.rdkit.types",
+        "RdkitBitFingerprint",
+        "RdkitBitFingerprint()",
+    ),
+    (
+        RdkitSparseFingerprint(),
+        "molalchemy.rdkit.types",
+        "RdkitSparseFingerprint",
+        "RdkitSparseFingerprint()",
+    ),
+    (
+        RdkitReaction(),
+        "molalchemy.rdkit.types",
+        "RdkitReaction",
+        "RdkitReaction(return_type='smiles')",
+    ),
+    (
+        RdkitReaction(return_type="mol"),
+        "molalchemy.rdkit.types",
+        "RdkitReaction",
+        "RdkitReaction(return_type='mol')",
+    ),
     (RdkitQMol(), "molalchemy.rdkit.types", "RdkitQMol", "RdkitQMol()"),
     (RdkitXQMol(), "molalchemy.rdkit.types", "RdkitXQMol", "RdkitXQMol()"),
     # Bingo types
     (BingoMol(), "molalchemy.bingo.types", "BingoMol", "BingoMol()"),
-    (BingoBinaryMol(), "molalchemy.bingo.types", "BingoBinaryMol", "BingoBinaryMol(preserve_pos=False, return_type='smiles')"),
-    (BingoBinaryMol(preserve_pos=True, return_type="molfile"), "molalchemy.bingo.types", "BingoBinaryMol", "BingoBinaryMol(preserve_pos=True, return_type='molfile')"),
+    (
+        BingoBinaryMol(),
+        "molalchemy.bingo.types",
+        "BingoBinaryMol",
+        "BingoBinaryMol(preserve_pos=False, return_type='smiles')",
+    ),
+    (
+        BingoBinaryMol(preserve_pos=True, return_type="molfile"),
+        "molalchemy.bingo.types",
+        "BingoBinaryMol",
+        "BingoBinaryMol(preserve_pos=True, return_type='molfile')",
+    ),
     (BingoReaction(), "molalchemy.bingo.types", "BingoReaction", "BingoReaction()"),
-    (BingoBinaryReaction(), "molalchemy.bingo.types", "BingoBinaryReaction", "BingoBinaryReaction()"),
+    (
+        BingoBinaryReaction(),
+        "molalchemy.bingo.types",
+        "BingoBinaryReaction",
+        "BingoBinaryReaction()",
+    ),
 ]
 
 
@@ -48,7 +103,9 @@ class TestRenderAllTypes:
         ALL_TYPES,
         ids=[t[3] for t in ALL_TYPES],
     )
-    def test_render_all_types(self, instance, expected_module, class_name, expected_repr):
+    def test_render_all_types(
+        self, instance, expected_module, class_name, expected_repr
+    ):
         """Test that render_item produces correct import and repr for every type."""
         autogen_context = Mock()
         autogen_context.imports = set()
@@ -69,7 +126,7 @@ class TestRenderAllTypes:
         # Import the class into local namespace for eval
         mod = __import__(expected_module, fromlist=[class_name])
         cls = getattr(mod, class_name)
-        reconstructed = eval(repr(instance), {class_name: cls})  # noqa: S307
+        reconstructed = eval(repr(instance), {class_name: cls})
         assert repr(reconstructed) == repr(instance)
 
     @pytest.mark.parametrize(
@@ -77,7 +134,9 @@ class TestRenderAllTypes:
         ALL_TYPES,
         ids=[t[3] for t in ALL_TYPES],
     )
-    def test_rendered_type_is_valid_constructor(self, instance, expected_module, class_name, expected_repr):
+    def test_rendered_type_is_valid_constructor(
+        self, instance, expected_module, class_name, expected_repr
+    ):
         """Test that the rendered string is exactly the constructor call."""
         autogen_context = Mock()
         autogen_context.imports = set()
@@ -133,4 +192,3 @@ class TestExtensionFunctions:
         """Test that drop_rdkit_extension executes correct SQL."""
         drop_rdkit_extension()
         mock_op.execute.assert_called_once_with("DROP EXTENSION IF EXISTS rdkit;")
-

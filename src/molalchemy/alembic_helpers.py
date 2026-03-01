@@ -34,7 +34,6 @@ def drop_rdkit_extension():
     op.execute("DROP EXTENSION IF EXISTS rdkit;")
 
 
-
 def render_item(obj_type, obj, autogen_context):
     logger.debug(f"Rendering item: {obj_type}, {obj}")
     if obj_type == "type":
