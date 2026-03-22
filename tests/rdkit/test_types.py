@@ -107,8 +107,30 @@ class TestRdkitMol:
         assert processed is None
 
         # Test with invalid type
-        with pytest.raises(ValueError):
+        from molalchemy.exceptions import InvalidMoleculeError
+
+        with pytest.raises(InvalidMoleculeError):
             processor(123)  # Invalid type
+
+    def test_bind_processor_invalid_smiles(self):
+        """Test that invalid SMILES raises InvalidMoleculeError."""
+        from molalchemy.exceptions import InvalidMoleculeError
+
+        rdkit_mol = RdkitMol()
+        processor = rdkit_mol.bind_processor(None)
+
+        with pytest.raises(InvalidMoleculeError, match="Invalid SMILES"):
+            processor("not_valid_smiles")
+
+    def test_bind_processor_invalid_type(self):
+        """Test that invalid type raises InvalidMoleculeError."""
+        from molalchemy.exceptions import InvalidMoleculeError
+
+        rdkit_mol = RdkitMol()
+        processor = rdkit_mol.bind_processor(None)
+
+        with pytest.raises(InvalidMoleculeError, match="SMILES string or an RDKit Mol"):
+            processor(123)
 
 
 class TestRdkitBitFingerprint:

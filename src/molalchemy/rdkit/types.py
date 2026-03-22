@@ -12,6 +12,7 @@ from rdkit.Chem import AllChem, rdChemReactions
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
+from molalchemy.exceptions import InvalidMoleculeError
 from molalchemy.rdkit.comparators import RdkitFPComparator, RdkitMolComparator
 
 
@@ -66,10 +67,12 @@ class RdkitMol(RdkitBaseType):
             if isinstance(value, str):
                 mol = Chem.MolFromSmiles(value)
                 if mol is None:
-                    raise ValueError(f"Invalid SMILES string: {value!r}")
+                    raise InvalidMoleculeError(f"Invalid SMILES string: {value!r}")
                 value = mol
             if not isinstance(value, Chem.Mol):
-                raise ValueError("Value must be a SMILES string or an RDKit Mol object")
+                raise InvalidMoleculeError(
+                    "Value must be a SMILES string or an RDKit Mol object"
+                )
             return value.ToBinary()
 
         return process
