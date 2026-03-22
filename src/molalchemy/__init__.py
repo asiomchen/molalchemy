@@ -13,6 +13,11 @@ from molalchemy.bingo.types import (
     BingoMol,
     BingoReaction,
 )
+from molalchemy.exceptions import (
+    InvalidMoleculeError,
+    InvalidReactionError,
+    MolAlchemyError,
+)
 from molalchemy.rdkit.index import RdkitIndex
 from molalchemy.rdkit.types import (
     RdkitBitFingerprint,
@@ -33,6 +38,9 @@ __all__ = [
     "BingoMolIndex",
     "BingoReaction",
     "BingoRxnIndex",
+    "InvalidMoleculeError",
+    "InvalidReactionError",
+    "MolAlchemyError",
     "RdkitBitFingerprint",
     "RdkitIndex",
     "RdkitMol",

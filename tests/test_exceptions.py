@@ -28,3 +28,18 @@ class TestExceptionHierarchy:
     def test_exception_message(self):
         err = InvalidMoleculeError("bad SMILES")
         assert str(err) == "bad SMILES"
+
+
+class TestExceptionExports:
+    """Test exceptions are importable from top-level package."""
+
+    def test_import_from_top_level(self):
+        from molalchemy import (
+            InvalidMoleculeError,
+            InvalidReactionError,
+            MolAlchemyError,
+        )
+
+        assert MolAlchemyError is not None
+        assert InvalidMoleculeError is not None
+        assert InvalidReactionError is not None
