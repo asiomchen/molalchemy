@@ -12,7 +12,7 @@ from rdkit.Chem import AllChem, rdChemReactions
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
-from molalchemy.exceptions import InvalidMoleculeError
+from molalchemy.exceptions import InvalidMoleculeError, InvalidReactionError
 from molalchemy.rdkit.comparators import RdkitFPComparator, RdkitMolComparator
 
 
@@ -188,11 +188,11 @@ class RdkitReaction(RdkitBaseType):
                 except ValueError:
                     rxn = None
                 if rxn is None:
-                    raise ValueError(
-                        f"Invalid reaction SMILES/SMARTS string: {value!r}"
+                    raise InvalidReactionError(
+                        f"Invalid reaction SMARTS string: {value!r}"
                     )
                 return value
-            raise ValueError(
+            raise InvalidReactionError(
                 "Value must be a reaction SMILES/SMARTS string or a ChemicalReaction object"
             )
 

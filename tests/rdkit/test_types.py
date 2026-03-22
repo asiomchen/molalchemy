@@ -298,12 +298,37 @@ class TestRdkitReaction:
         assert processed is None
 
         # Test with invalid string
-        with pytest.raises(ValueError, match="Invalid reaction SMILES/SMARTS string"):
+        from molalchemy.exceptions import InvalidReactionError
+
+        with pytest.raises(InvalidReactionError, match="Invalid reaction SMARTS"):
             processor("not_a_reaction")
 
         # Test with invalid type
         with pytest.raises(
-            ValueError, match="Value must be a reaction SMILES/SMARTS string"
+            InvalidReactionError, match="Value must be a reaction SMILES/SMARTS string"
+        ):
+            processor(123)
+
+    def test_bind_processor_invalid_reaction_raises_custom_exception(self):
+        """Test that invalid reaction string raises InvalidReactionError."""
+        from molalchemy.exceptions import InvalidReactionError
+
+        rdkit_rxn = RdkitReaction()
+        processor = rdkit_rxn.bind_processor(None)
+
+        with pytest.raises(InvalidReactionError, match="Invalid reaction SMARTS"):
+            processor("not_a_reaction")
+
+    def test_bind_processor_invalid_type_raises_custom_exception(self):
+        """Test that invalid type raises InvalidReactionError."""
+        from molalchemy.exceptions import InvalidReactionError
+
+        rdkit_rxn = RdkitReaction()
+        processor = rdkit_rxn.bind_processor(None)
+
+        with pytest.raises(
+            InvalidReactionError,
+            match="reaction SMILES/SMARTS string or a ChemicalReaction",
         ):
             processor(123)
 
