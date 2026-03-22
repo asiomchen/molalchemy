@@ -202,10 +202,10 @@ def example_function(param: str) -> str:
 ```
 
 **Documentation checklist:**
-- ⬜ NumPy-style docstrings for all public functions
-- ⬜ Working code examples in docstrings, if applicable
-- ⬜ Update relevant documentation files
-- ⬜ Test documentation builds: `uv run mkdocs serve`
+- [ ] NumPy-style docstrings for all public functions
+- [ ] Working code examples in docstrings, if applicable
+- [ ] Update relevant documentation files
+- [ ] Test documentation builds: `uv run mkdocs serve`
 
 #### 5. **Commit Guidelines**
 
@@ -230,12 +230,12 @@ git commit -m "test: add edge cases for similarity functions"
 ### Pull Request Process
 
 #### 1. **Before Submitting**
-- ⬜ Tests pass: `uv run pytest`
-- ⬜ Code is formatted: `uv run ruff format .`
-- ⬜ Linting passes: `uv run ruff check .`
-- ⬜ Type checking passes: `uv run mypy src/`
-- ⬜ Documentation builds: `uv run mkdocs serve`
-- ⬜ Changelog updated (if applicable)
+- [ ] Tests pass: `uv run pytest`
+- [ ] Code is formatted: `uv run ruff format .`
+- [ ] Linting passes: `uv run ruff check .`
+- [ ] Type checking passes: `uv run mypy src/`
+- [ ] Documentation builds: `uv run mkdocs serve`
+- [ ] Changelog updated (if applicable)
 
 #### 2. **Pull Request Template**
 ```markdown
@@ -243,26 +243,26 @@ git commit -m "test: add edge cases for similarity functions"
 Brief description of changes
 
 ## Type of Change
-- ⬜ Bug fix
-- ⬜ New feature
-- ⬜ Documentation update
-- ⬜ Performance improvement
-- ⬜ Code refactoring
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Documentation update
+- [ ] Performance improvement
+- [ ] Code refactoring
 
 ## Testing
-- ⬜ Tests added/updated
-- ⬜ All tests pass
-- ⬜ Manual testing performed
+- [ ] Tests added/updated
+- [ ] All tests pass
+- [ ] Manual testing performed
 
 ## Documentation
-- ⬜ Docstrings added/updated
-- ⬜ Documentation updated
-- ⬜ Examples included
+- [ ] Docstrings added/updated
+- [ ] Documentation updated
+- [ ] Examples included
 
 ## Checklist
-- ⬜ Code follows project style guidelines
-- ⬜ Self-review completed
-- ⬜ Ready for review
+- [ ] Code follows project style guidelines
+- [ ] Self-review completed
+- [ ] Ready for review
 ```
 
 ## 🔍 Code Organization

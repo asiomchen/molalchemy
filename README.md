@@ -81,6 +81,7 @@ docker-compose up bingo
 molalchemy/
 ├── src/molalchemy/
 │   ├── types.py              # Base type definitions
+│   ├── exceptions.py         # Custom exception hierarchy
 │   ├── helpers.py            # Common utilities
 │   ├── alembic_helpers.py    # Alembic integration utilities
 │   ├── bingo/               # Bingo PostgreSQL cartridge support
@@ -232,7 +233,7 @@ class Reaction(Base):
     name: Mapped[str] = mapped_column(String(100))
     rxn: Mapped[str] = mapped_column(RdkitReaction())
 
-# Insert with validation (invalid SMARTS raises ValueError)
+# Insert with validation (invalid SMARTS raises InvalidReactionError)
 session.add(Reaction(name="Amide formation", rxn="[C:1](=O)[OH].[N:2]>>[C:1](=O)[N:2]"))
 
 # Reaction substructure search
