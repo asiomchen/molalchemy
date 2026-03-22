@@ -98,6 +98,7 @@ nav:
     - RDKit - Reactions: tutorials/05_Reactions_rdkit_ORM.ipynb
     - Contributing: tutorials/contribute.md
   - API:
+    - molalchemy.exceptions: api/exceptions.md
     - molalchemy.bingo:
         - bingo.types: api/bingo/types.md
         - bingo.functions: api/bingo/functions.md
