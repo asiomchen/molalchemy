@@ -204,6 +204,20 @@ class TestBingoComparatorReturnTypes:
         assert isinstance(result, ColumnElement)
 
 
+class TestBingoComparatorExports:
+    """Test comparators are exported from bingo subpackage."""
+
+    def test_import_mol_comparator_from_bingo(self):
+        from molalchemy.bingo import BingoMolComparator
+
+        assert BingoMolComparator is not None
+
+    def test_import_rxn_comparator_from_bingo(self):
+        from molalchemy.bingo import BingoRxnComparator
+
+        assert BingoRxnComparator is not None
+
+
 class TestBingoComparatorInQueries:
     """Test bingo comparator in actual SQL queries."""
 
