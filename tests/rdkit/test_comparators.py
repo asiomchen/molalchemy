@@ -1,6 +1,6 @@
 """Tests for RDKit comparators."""
 
-from sqlalchemy import Column, Integer, MetaData, String, Table
+from sqlalchemy import Column, ColumnElement, Integer, MetaData, String, Table
 from sqlalchemy.sql import select
 
 from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitSparseFingerprint
@@ -171,6 +171,44 @@ class TestRdkitFPComparator:
         assert "#" in dice_compiled
         assert ":sparse_fp_" in tanimoto_compiled
         assert ":sparse_fp_" in dice_compiled
+
+
+class TestComparatorReturnTypes:
+    """Test that comparator methods return properly typed expressions."""
+
+    def setup_method(self):
+        self.metadata = MetaData()
+        self.test_table = Table(
+            "test_compounds",
+            self.metadata,
+            Column("id", Integer, primary_key=True),
+            Column("structure", RdkitMol()),
+            Column("fingerprint", RdkitBitFingerprint()),
+        )
+
+    def test_has_substructure_returns_column_element(self):
+        result = self.test_table.c.structure.has_substructure("CCO")
+        assert isinstance(result, ColumnElement)
+
+    def test_is_substructure_of_returns_column_element(self):
+        result = self.test_table.c.structure.is_substructure_of("CCO")
+        assert isinstance(result, ColumnElement)
+
+    def test_equals_returns_column_element(self):
+        result = self.test_table.c.structure.equals("CCO")
+        assert isinstance(result, ColumnElement)
+
+    def test_tanimoto_returns_column_element(self):
+        result = self.test_table.c.fingerprint.tanimoto(b"fp")
+        assert isinstance(result, ColumnElement)
+
+    def test_dice_returns_column_element(self):
+        result = self.test_table.c.fingerprint.dice(b"fp")
+        assert isinstance(result, ColumnElement)
+
+    def test_nearest_neighbors_returns_column_element(self):
+        result = self.test_table.c.fingerprint.nearest_neighbors(b"fp")
+        assert isinstance(result, ColumnElement)
 
 
 class TestRdkitComparatorInQueries:
