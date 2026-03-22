@@ -1,6 +1,6 @@
 """Tests for bingo comparators."""
 
-from sqlalchemy import Column, Integer, MetaData, String, Table
+from sqlalchemy import Column, ColumnElement, Integer, MetaData, String, Table
 from sqlalchemy.sql import select
 
 from molalchemy.bingo.types import BingoBinaryMol, BingoMol
@@ -177,6 +177,45 @@ class TestBingoMolComparatorWithBinaryType:
         assert "@" in compiled
         assert "bingo.exact" in compiled
         assert query in compiled
+
+
+class TestBingoComparatorReturnTypes:
+    """Test that Bingo comparator methods return properly typed expressions."""
+
+    def setup_method(self):
+        self.metadata = MetaData()
+        self.test_table = Table(
+            "test_compounds",
+            self.metadata,
+            Column("id", Integer, primary_key=True),
+            Column("mol", BingoMol()),
+        )
+
+    def test_has_substructure_returns_column_element(self):
+        result = self.test_table.c.mol.has_substructure("CCO")
+        assert isinstance(result, ColumnElement)
+
+    def test_has_smarts_returns_column_element(self):
+        result = self.test_table.c.mol.has_smarts("[#6]")
+        assert isinstance(result, ColumnElement)
+
+    def test_equals_returns_column_element(self):
+        result = self.test_table.c.mol.equals("CCO")
+        assert isinstance(result, ColumnElement)
+
+
+class TestBingoComparatorExports:
+    """Test comparators are exported from bingo subpackage."""
+
+    def test_import_mol_comparator_from_bingo(self):
+        from molalchemy.bingo import BingoMolComparator
+
+        assert BingoMolComparator is not None
+
+    def test_import_rxn_comparator_from_bingo(self):
+        from molalchemy.bingo import BingoRxnComparator
+
+        assert BingoRxnComparator is not None
 
 
 class TestBingoComparatorInQueries:

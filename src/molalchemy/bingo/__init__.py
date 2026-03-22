@@ -1,3 +1,4 @@
+from .comparators import BingoMolComparator, BingoRxnComparator
 from .index import (
     BingoBinaryMolIndex,
     BingoBinaryRxnIndex,
@@ -13,9 +14,11 @@ __all__ = [
     "BingoBinaryReaction",
     "BingoBinaryRxnIndex",
     "BingoMol",
+    "BingoMolComparator",
     "BingoMolIndex",
     "BingoMolProxy",
     "BingoReaction",
+    "BingoRxnComparator",
     "BingoRxnIndex",
     "BingoRxnProxy",
 ]

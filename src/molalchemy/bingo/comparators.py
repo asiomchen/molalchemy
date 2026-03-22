@@ -1,6 +1,6 @@
 """Bingo SQLAlchemy comparators for chemical structure searching."""
 
-from sqlalchemy import text
+from sqlalchemy import ColumnElement, text
 from sqlalchemy.types import UserDefinedType
 
 
@@ -12,10 +12,10 @@ class BingoMolComparator(UserDefinedType.Comparator):
     substructure matching, SMARTS pattern matching, and exact structure matching.
     """
 
-    def __eq__(self, other: str):
+    def __eq__(self, other: str) -> ColumnElement[bool]:
         return self.equals(other)
 
-    def has_substructure(self, query: str, parameters: str = ""):
+    def has_substructure(self, query: str, parameters: str = "") -> ColumnElement[bool]:
         """
         Check if the molecular structure contains a given substructure.
 
@@ -28,7 +28,7 @@ class BingoMolComparator(UserDefinedType.Comparator):
 
         Returns
         -------
-        sqlalchemy expression
+        ColumnElement[bool]
             A SQLAlchemy expression for the substructure match operation.
 
         Examples
@@ -41,7 +41,7 @@ class BingoMolComparator(UserDefinedType.Comparator):
             )
         )
 
-    def has_smarts(self, query: str, parameters: str = ""):
+    def has_smarts(self, query: str, parameters: str = "") -> ColumnElement[bool]:
         """
         Check if the molecular structure matches a SMARTS pattern.
 
@@ -54,7 +54,7 @@ class BingoMolComparator(UserDefinedType.Comparator):
 
         Returns
         -------
-        sqlalchemy expression
+        ColumnElement[bool]
             A SQLAlchemy expression for the SMARTS pattern match operation.
 
         Examples
@@ -67,7 +67,7 @@ class BingoMolComparator(UserDefinedType.Comparator):
             )
         )
 
-    def equals(self, query: str, parameters: str = ""):
+    def equals(self, query: str, parameters: str = "") -> ColumnElement[bool]:
         """
         Check if the molecular structure exactly matches the given structure.
 
@@ -80,7 +80,7 @@ class BingoMolComparator(UserDefinedType.Comparator):
 
         Returns
         -------
-        sqlalchemy expression
+        ColumnElement[bool]
             A SQLAlchemy expression for the exact structure match operation.
 
         Examples
@@ -102,10 +102,10 @@ class BingoRxnComparator(UserDefinedType.Comparator):
     reaction substructure matching, SMARTS pattern matching, and exact reaction matching.
     """
 
-    def __eq__(self, other: str):
+    def __eq__(self, other: str) -> ColumnElement[bool]:
         return self.equals(other)
 
-    def has_substructure(self, query: str, parameters: str = ""):
+    def has_substructure(self, query: str, parameters: str = "") -> ColumnElement[bool]:
         """
         Check if the reaction contains a given substructure pattern.
 
@@ -118,7 +118,7 @@ class BingoRxnComparator(UserDefinedType.Comparator):
 
         Returns
         -------
-        sqlalchemy expression
+        ColumnElement[bool]
             A SQLAlchemy expression for the reaction substructure match operation.
 
         Examples
@@ -131,7 +131,7 @@ class BingoRxnComparator(UserDefinedType.Comparator):
             )
         )
 
-    def has_smarts(self, query: str, parameters: str = ""):
+    def has_smarts(self, query: str, parameters: str = "") -> ColumnElement[bool]:
         """
         Check if the reaction matches a SMARTS pattern.
 
@@ -144,7 +144,7 @@ class BingoRxnComparator(UserDefinedType.Comparator):
 
         Returns
         -------
-        sqlalchemy expression
+        ColumnElement[bool]
             A SQLAlchemy expression for the reaction SMARTS pattern match operation.
 
         Examples
@@ -157,7 +157,7 @@ class BingoRxnComparator(UserDefinedType.Comparator):
             )
         )
 
-    def equals(self, query: str, parameters: str = ""):
+    def equals(self, query: str, parameters: str = "") -> ColumnElement[bool]:
         """
         Check if the reaction exactly matches the given reaction.
 
@@ -170,7 +170,7 @@ class BingoRxnComparator(UserDefinedType.Comparator):
 
         Returns
         -------
-        sqlalchemy expression
+        ColumnElement[bool]
             A SQLAlchemy expression for the exact reaction match operation.
 
         Examples
