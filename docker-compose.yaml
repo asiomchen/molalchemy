@@ -13,20 +13,20 @@ services:
     #    tmpfs:
     #      size: 134217728 # 128*2^20 bytes = 128Mb
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: postgres
     ports:
       - 5432:5432
     # volumes:
     #   - db_data:/var/lib/postgresql/data
   rdkit:
-    image: antonsiomchen/cheminfo-db:postgres18.3-rdkit2025.09.6
+    image: antonsiomchen/cheminfo-db:postgres18-rdkit2025.09.6
     restart: always
     ports:
       - 5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: postgres
 
 
 
