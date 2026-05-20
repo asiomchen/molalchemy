@@ -14,7 +14,7 @@ def mol_has_substructure(
     mol_column : ColumnElement[molalchemy.rdkit.types.RdkitMol]
         The database column containing the molecular structure to search.
     query : str
-        The query substructure as a string (SMILES, SMARTS, or other format).
+        The query substructure as a string (SMILES, or SMARTS)
 
     Returns
     -------
@@ -23,8 +23,11 @@ def mol_has_substructure(
 
     Examples
     --------
-    >>> from sqlalchemy import select
+    >>> from sqlalchemy import select, cast
+    >>> from molalchemy.rdkit.types import RdkitQMol
     >>> query = select(Molecule).where(has_substructure(Molecule.structure, "C=O"))
+    >>> # Search for molecules containing a aromatic carbon as SMARTS
+    >>> query = select(Molecule).where(has_substructure(Molecule.structure, cast("[cH]", RdkitQMol)))
     """
     return mol_column.op("@>")(query)
 

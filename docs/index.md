@@ -24,8 +24,6 @@ molalchemy provides seamless integration between python and chemical databases, 
 
 **This project was originally supposed to be a part of RDKit UGM 2025 hackathon, but COVID had other plans for me. Currently it is in alpha stage as a proof of concept. Contributions are welcome!**
 
-**To give it a hackathon vibe, I build this PoC in couple hours, so expect some rough edges and missing features.**
-
 ## 🚀 Features
 
 - **Chemical Data Types**: Custom SQLAlchemy types for molecules, reactions and fingerprints

@@ -11,9 +11,9 @@ class MolAlchemyError(Exception):
     """Base exception for all molalchemy errors."""
 
 
-class InvalidMoleculeError(MolAlchemyError):
+class InvalidMoleculeError(MolAlchemyError, ValueError):
     """Raised when an invalid molecule representation is encountered."""
 
 
-class InvalidReactionError(MolAlchemyError):
+class InvalidReactionError(MolAlchemyError, ValueError):
     """Raised when an invalid reaction representation is encountered."""
