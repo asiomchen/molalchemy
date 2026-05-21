@@ -73,6 +73,19 @@ docker-compose up rdkit
 docker-compose up bingo
 ```
 
+For runtime smoke validation against both cartridges, use the dedicated smoke
+compose setup:
+
+```bash
+make smoke
+```
+
+If the default smoke ports are already in use, override them:
+
+```bash
+BINGO_SMOKE_PORT=15432 RDKIT_SMOKE_PORT=15433 make smoke
+```
+
 ## 📁 Project Structure
 
 ```
@@ -345,6 +358,9 @@ uv run pytest tests/bingo/
 
 # Run with coverage
 uv run pytest --cov=src/molalchemy
+
+# Run real Bingo and RDKit smoke validation
+make smoke
 ```
 
 ### Code Quality

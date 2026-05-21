@@ -1,7 +1,26 @@
 
+SMOKE_COMPOSE ?= docker-compose.smoke.yaml
+SMOKE_PROJECT ?= molalchemy-smoke
+BINGO_SMOKE_PORT ?= 55432
+RDKIT_SMOKE_PORT ?= 55433
+
 
 test:
 	@uv run pytest tests/ --cov=src/molalchemy --cov-report=term-missing --cov-report=xml
+
+smoke-up:
+	@BINGO_SMOKE_PORT=$(BINGO_SMOKE_PORT) RDKIT_SMOKE_PORT=$(RDKIT_SMOKE_PORT) docker compose -p $(SMOKE_PROJECT) -f $(SMOKE_COMPOSE) up -d
+
+smoke-test:
+	@BINGO_DATABASE_URL=postgresql+psycopg://postgres:postgres@127.0.0.1:$(BINGO_SMOKE_PORT)/postgres uv run python dev_scripts/validate_bingo_helpers.py
+	@RDKIT_DATABASE_URL=postgresql+psycopg://postgres:postgres@127.0.0.1:$(RDKIT_SMOKE_PORT)/postgres uv run python dev_scripts/validate_rdkit_helpers.py
+
+smoke-down:
+	@BINGO_SMOKE_PORT=$(BINGO_SMOKE_PORT) RDKIT_SMOKE_PORT=$(RDKIT_SMOKE_PORT) docker compose -p $(SMOKE_PROJECT) -f $(SMOKE_COMPOSE) down -v
+
+smoke:
+	@$(MAKE) smoke-up
+	@status=0; $(MAKE) smoke-test || status=$$?; $(MAKE) smoke-down; exit $$status
 
 sync-docs:
 	@cp README.md docs/index.md
