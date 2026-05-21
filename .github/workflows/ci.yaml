@@ -56,10 +56,40 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
+  integration-smoke:
+    name: Cartridge smoke tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.9.9"
+          python-version: "3.10"
+
+      - name: Start cartridge databases
+        run: make smoke-up
+
+      - name: Run cartridge smoke tests
+        run: make smoke-test
+
+      - name: Stop cartridge databases
+        if: always()
+        run: make smoke-down
+
   build-and-create-signed-release:
     name: Build distribution📦 & create Github Release
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: test
+    needs: [test, integration-smoke]
     permissions:
       contents: write
       id-token: write

@@ -29,6 +29,9 @@ docker-compose up -d bingo  # or rdkit
 # 5. Run tests to ensure everything works
 uv run pytest tests/bingo/ -v
 
+# Optional: run real Bingo and RDKit smoke validation
+make smoke
+
 # 6. Start the documentation server
 uv run mkdocs serve
 ```
@@ -388,6 +391,19 @@ docker-compose up -d bingo
 # RDKit database  
 docker-compose up -d rdkit
 
+```
+
+For a local smoke run that starts both cartridges on non-default ports and runs
+the runtime helper checks:
+
+```bash
+make smoke
+```
+
+If those ports are already in use:
+
+```bash
+BINGO_SMOKE_PORT=15432 RDKIT_SMOKE_PORT=15433 make smoke
 ```
 
 #### **Connect to Database**

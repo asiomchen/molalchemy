@@ -1,0 +1,17 @@
+services:
+  bingo:
+    image: antonsiomchen/cheminfo-db:postgres16.13-bingo1.40.0
+    shm_size: 1024mb
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "${BINGO_SMOKE_PORT:-55432}:5432"
+
+  rdkit:
+    image: antonsiomchen/cheminfo-db:postgres18-rdkit2025.09.6
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "${RDKIT_SMOKE_PORT:-55433}:5432"

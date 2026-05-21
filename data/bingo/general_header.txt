@@ -2,7 +2,6 @@
 This file defines public Bingo PostgreSQL function wrappers for use with SQLAlchemy.
 """
 
-
 from typing import Any, Literal
 
 from sqlalchemy import tuple_
