@@ -76,11 +76,15 @@ def main() -> None:
             ],
         )
 
-    substructure_stmt = select(molecules.c.name).where(
-        molecules.c.mol.has_substructure("c1ccccc1")
+    substructure_stmt = (
+        select(molecules.c.name)
+        .where(molecules.c.mol.has_substructure("c1ccccc1"))
+        .order_by(molecules.c.id)
     )
-    functional_substructure_stmt = select(molecules.c.name).where(
-        rdkit_func.mol_has_substructure(molecules.c.mol, "c1ccccc1")
+    functional_substructure_stmt = (
+        select(molecules.c.name)
+        .where(rdkit_func.mol_has_substructure(molecules.c.mol, "c1ccccc1"))
+        .order_by(molecules.c.id)
     )
     exact_stmt = select(molecules.c.name).where(molecules.c.mol.equals("CCO"))
     query_fp = rdkit_func.morganbv_fp(rdkit_func.mol_from_smiles("CCO"))

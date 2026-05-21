@@ -100,14 +100,18 @@ def main() -> None:
     exact_stmt = select(compounds.c.name).where(
         bingo_func.mol_equals(compounds.c.structure, "CCO")
     )
-    similarity_with_column_stmt = select(compounds.c.name).where(
-        bingo_func.similarity(
-            compounds.c.structure,
-            compounds.c.query_structure,
-            0.95,
-            1.0,
-            "Tanimoto",
+    similarity_with_column_stmt = (
+        select(compounds.c.name)
+        .where(
+            bingo_func.similarity(
+                compounds.c.structure,
+                compounds.c.query_structure,
+                0.95,
+                1.0,
+                "Tanimoto",
+            )
         )
+        .order_by(compounds.c.id)
     )
     smarts_stmt = select(compounds.c.name).where(
         bingo_func.matches_smarts(compounds.c.structure, "[#6]-[#8]")
