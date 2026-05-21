@@ -231,6 +231,15 @@ class BingoBinaryReaction(BingoBaseType):
     format in PostgreSQL. It provides storage efficiency and fast comparison
     operations for reaction data.
 
+    Parameters
+    ----------
+    preserve_pos : bool, default False
+        Whether to preserve atom coordinates when converting to binary format.
+        If `True`, coordinates are stored; if `False`, they are discarded.
+
+    Warnings
+    --------
+    When `preserve_pos=True`, only inputs with present atomic coordinates should be used, otherwise conversion can return `NULL`.
 
     Examples
     --------
@@ -269,8 +278,17 @@ class BingoBinaryReaction(BingoBaseType):
     cache_ok = True
     comparator_factory = BingoRxnComparator
 
+    def __init__(self, preserve_pos: bool = False):
+        self.preserve_pos = preserve_pos
+        super().__init__()
+
     def __repr__(self):
+        if self.preserve_pos:
+            return "BingoBinaryReaction(preserve_pos=True)"
         return "BingoBinaryReaction()"
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "bytea"
+
+    def bind_expression(self, bindvalue):
+        return func.Bingo.CompactReaction(bindvalue, self.preserve_pos)
