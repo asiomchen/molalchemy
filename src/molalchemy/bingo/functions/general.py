@@ -4,8 +4,8 @@ This file defines public Bingo PostgreSQL function wrappers for use with SQLAlch
 
 from typing import Any, Literal
 
+from sqlalchemy import tuple_
 from sqlalchemy import types as sqltypes
-from sqlalchemy.sql import text
 from sqlalchemy.sql.elements import BinaryExpression, ColumnElement
 from sqlalchemy.sql.functions import GenericFunction
 
@@ -22,6 +22,18 @@ from ._types import (
 # Backward compatibility aliases
 AnyBingoMol = AnyBingoMolLikeCombined
 AnyBingoReaction = AnyBingoReactionLikeCombined
+
+
+class _BingoSearchType(sqltypes.UserDefinedType):
+    """SQLAlchemy type wrapper for casting search tuples to Bingo composite types."""
+
+    cache_ok = True
+
+    def __init__(self, type_name: str) -> None:
+        self.type_name = type_name
+
+    def get_col_spec(self, **kw: Any) -> str:
+        return self.type_name
 
 
 def has_substructure(
@@ -46,7 +58,7 @@ def has_substructure(
         SQLAlchemy expression for substructure matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(text(f"('{query}', '{parameters}')::bingo.sub"))
+    return mol.op("@")(tuple_(query, parameters).cast(_BingoSearchType("bingo.sub")))
 
 
 def matches_smarts(
@@ -70,7 +82,7 @@ def matches_smarts(
         SQLAlchemy expression for SMARTS matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(text(f"('{query}', '{parameters}')::bingo.smarts"))
+    return mol.op("@")(tuple_(query, parameters).cast(_BingoSearchType("bingo.smarts")))
 
 
 def mol_equals(
@@ -95,7 +107,7 @@ def mol_equals(
         SQLAlchemy expression for exact matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(text(f"('{query}', '{parameters}')::bingo.exact"))
+    return mol.op("@")(tuple_(query, parameters).cast(_BingoSearchType("bingo.exact")))
 
 
 def similarity(
@@ -129,7 +141,9 @@ def similarity(
         SQLAlchemy expression for similarity matching that can be used in WHERE clauses.
 
     """
-    return mol.op("%")(text(f"('{query}', {bottom}, {top}, '{metric}')::bingo.sim"))
+    return mol.op("@")(
+        tuple_(bottom, top, query, metric).cast(_BingoSearchType("bingo.sim"))
+    )
 
 
 class aam(GenericFunction):
