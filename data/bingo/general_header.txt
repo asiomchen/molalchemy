@@ -3,20 +3,21 @@ This file defines public Bingo PostgreSQL function wrappers for use with SQLAlch
 """
 
 
-from sqlalchemy import types as sqltypes
-from sqlalchemy.sql import text
-from sqlalchemy.sql.elements import BinaryExpression
-from sqlalchemy.sql.elements import ColumnElement
-from sqlalchemy.sql.functions import GenericFunction
 from typing import Any, Literal
+
+from sqlalchemy import tuple_
+from sqlalchemy import types as sqltypes
+from sqlalchemy.sql.elements import BinaryExpression, ColumnElement
+from sqlalchemy.sql.functions import GenericFunction
+
 from ._types import (
-    TextLike,
     AnyBingoBinaryMolLike,
     AnyBingoBinaryReactionLike,
     AnyBingoMolLike,
     AnyBingoMolLikeCombined,
     AnyBingoReactionLike,
     AnyBingoReactionLikeCombined,
+    TextLike,
 )
 
 # Backward compatibility aliases
@@ -24,3 +25,13 @@ AnyBingoMol = AnyBingoMolLikeCombined
 AnyBingoReaction = AnyBingoReactionLikeCombined
 
 
+class _BingoSearchType(sqltypes.UserDefinedType):
+    """SQLAlchemy type wrapper for casting search tuples to Bingo composite types."""
+
+    cache_ok = True
+
+    def __init__(self, type_name: str) -> None:
+        self.type_name = type_name
+
+    def get_col_spec(self, **kw: Any) -> str:
+        return self.type_name

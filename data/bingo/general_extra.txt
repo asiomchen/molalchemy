@@ -20,7 +20,7 @@ def has_substructure(
         SQLAlchemy expression for substructure matching that can be used in WHERE clauses.
     
     """
-    return mol.op("@")(text(f"('{query}', '{parameters}')::bingo.sub"))
+    return mol.op("@")(tuple_(query, parameters).cast(_BingoSearchType("bingo.sub")))
 
 
 def matches_smarts(
@@ -44,7 +44,7 @@ def matches_smarts(
         SQLAlchemy expression for SMARTS matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(text(f"('{query}', '{parameters}')::bingo.smarts"))
+    return mol.op("@")(tuple_(query, parameters).cast(_BingoSearchType("bingo.smarts")))
 
 
 def mol_equals(mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""):
@@ -67,7 +67,7 @@ def mol_equals(mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: Tex
         SQLAlchemy expression for exact matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(text(f"('{query}', '{parameters}')::bingo.exact"))
+    return mol.op("@")(tuple_(query, parameters).cast(_BingoSearchType("bingo.exact")))
 
 
 def similarity(
@@ -101,6 +101,6 @@ def similarity(
         SQLAlchemy expression for similarity matching that can be used in WHERE clauses.
 
     """
-    return mol.op("%")(
-        text(f"('{query}', {bottom}, {top}, '{metric}')::bingo.sim")
+    return mol.op("@")(
+        tuple_(bottom, top, query, metric).cast(_BingoSearchType("bingo.sim"))
     )

@@ -2,9 +2,15 @@
 
 import pytest
 from sqlalchemy import Column, Integer, MetaData, String, Table
+from sqlalchemy.dialects import postgresql
 
-from molalchemy.bingo.comparators import BingoMolComparator
-from molalchemy.bingo.types import BingoBinaryMol, BingoMol
+from molalchemy.bingo.comparators import BingoMolComparator, BingoRxnComparator
+from molalchemy.bingo.types import (
+    BingoBinaryMol,
+    BingoBinaryReaction,
+    BingoMol,
+    BingoReaction,
+)
 
 
 class TestBingoMol:
@@ -91,6 +97,97 @@ class TestBingoBinaryMol:
         assert str(expr) == expected_sql
 
 
+class TestBingoReaction:
+    """Test BingoReaction type."""
+
+    def test_bingo_reaction_cache_ok(self):
+        """Test that BingoReaction has cache_ok=True."""
+        bingo_reaction = BingoReaction()
+        assert bingo_reaction.cache_ok is True
+
+    def test_bingo_reaction_col_spec(self):
+        """Test that BingoReaction returns correct column specification."""
+        bingo_reaction = BingoReaction()
+        assert bingo_reaction.get_col_spec() == "varchar"
+
+    def test_bingo_reaction_comparator_factory(self):
+        """Test that BingoReaction uses BingoRxnComparator."""
+        bingo_reaction = BingoReaction()
+        assert bingo_reaction.comparator_factory == BingoRxnComparator
+
+    def test_bingo_reaction_in_table_definition(self):
+        """Test BingoReaction can be used in table definition."""
+        metadata = MetaData()
+        test_table = Table(
+            "test_reactions",
+            metadata,
+            Column("id", Integer, primary_key=True),
+            Column("name", String(100)),
+            Column("rxn", BingoReaction()),
+        )
+
+        assert test_table.c.rxn.type.__class__ == BingoReaction
+        assert isinstance(test_table.c.rxn.type, BingoReaction)
+
+
+class TestBingoBinaryReaction:
+    """Test BingoBinaryReaction type."""
+
+    def test_bingo_binary_reaction_cache_ok(self):
+        """Test that BingoBinaryReaction has cache_ok=True."""
+        bingo_binary_reaction = BingoBinaryReaction()
+        assert bingo_binary_reaction.cache_ok is True
+
+    def test_bingo_binary_reaction_col_spec(self):
+        """Test that BingoBinaryReaction returns correct column specification."""
+        bingo_binary_reaction = BingoBinaryReaction()
+        assert bingo_binary_reaction.get_col_spec() == "bytea"
+
+    def test_bingo_binary_reaction_comparator_factory(self):
+        """Test that BingoBinaryReaction uses BingoRxnComparator."""
+        bingo_binary_reaction = BingoBinaryReaction()
+        assert bingo_binary_reaction.comparator_factory == BingoRxnComparator
+
+    def test_bingo_binary_reaction_in_table_definition(self):
+        """Test BingoBinaryReaction can be used in table definition."""
+        metadata = MetaData()
+        test_table = Table(
+            "test_binary_reactions",
+            metadata,
+            Column("id", Integer, primary_key=True),
+            Column("name", String(100)),
+            Column("rxn", BingoBinaryReaction()),
+        )
+
+        assert test_table.c.rxn.type.__class__ == BingoBinaryReaction
+        assert isinstance(test_table.c.rxn.type, BingoBinaryReaction)
+
+    @pytest.mark.parametrize(
+        "preserve_pos",
+        [
+            False,
+            True,
+        ],
+    )
+    def test_insert_uses_compact_reaction(self, preserve_pos):
+        """Test inserts convert reaction text to Bingo binary reaction data."""
+        metadata = MetaData()
+        test_table = Table(
+            "test_binary_reactions",
+            metadata,
+            Column("id", Integer, primary_key=True),
+            Column("rxn", BingoBinaryReaction(preserve_pos=preserve_pos)),
+        )
+
+        stmt = test_table.insert().values(id=1, rxn="CCO>>CC=O")
+        compiled_statement = stmt.compile(dialect=postgresql.dialect())
+        compiled = str(compiled_statement)
+
+        assert "Bingo.CompactReaction" in compiled
+        assert compiled_statement.params["rxn"] == "CCO>>CC=O"
+        assert preserve_pos in compiled_statement.params.values()
+
+
 class TestTypesIntegration:
     """Integration tests for bingo types."""
 
@@ -109,3 +206,22 @@ class TestTypesIntegration:
 
         assert bingo_mol.cache_ok is True
         assert bingo_binary_mol.cache_ok is True
+
+    def test_reaction_types_have_same_comparator(self):
+        """Test that both reaction types use the same comparator."""
+        bingo_reaction = BingoReaction()
+        bingo_binary_reaction = BingoBinaryReaction()
+
+        assert (
+            bingo_reaction.comparator_factory
+            == bingo_binary_reaction.comparator_factory
+        )
+        assert bingo_reaction.comparator_factory == BingoRxnComparator
+
+    def test_reaction_types_are_cache_ok(self):
+        """Test that both reaction types have cache_ok=True."""
+        bingo_reaction = BingoReaction()
+        bingo_binary_reaction = BingoBinaryReaction()
+
+        assert bingo_reaction.cache_ok is True
+        assert bingo_binary_reaction.cache_ok is True
