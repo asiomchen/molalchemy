@@ -1,5 +1,6 @@
 site_name: "MolAlchemy"
 site_description: "A set of tools for handling chemical data in databases and data science workflows"
+site_url: "https://molalchemy.readthedocs.io/"
 repo_url: "https://github.com/asiomchen/molalchemy"
 repo_name: "asiomchen/molalchemy"
 copyright: Copyright 2025
@@ -96,7 +97,9 @@ nav:
     - Migrations with Alembic: tutorials/03_alembic_migrations.md
     - RDKit - Settings: tutorials/04_Similarity_Threshold_Settings.ipynb
     - RDKit - Reactions: tutorials/05_Reactions_rdkit_ORM.ipynb
-    - Contributing: tutorials/contribute.md
+    - Bingo - Reactions and Binary Storage: tutorials/06_bingo_reactions_binary.ipynb
+    - RDKit - Descriptors and Advanced Queries: tutorials/07_rdkit_descriptors_advanced.ipynb
+    - Contributing: tutorials/contribute.ipynb
   - API:
     - molalchemy.exceptions: api/exceptions.md
     - molalchemy.bingo:
@@ -107,6 +110,9 @@ nav:
         - rdkit.types: api/rdkit/types.md
         - rdkit.functions: api/rdkit/functions.md
         - rdkit.index: api/rdkit/db_index.md
+  - Cartridge Manuals:
+    - Bingo PostgreSQL: bingo-postgres-manual.md
+    - RDKit PostgreSQL: rdkit-postgres-manual.md
 
   - Contributing: CONTRIBUTING.md
   - Changelog: CHANGELOG.md
@@ -130,4 +136,3 @@ extra:
     link: https://www.linkedin.com/in/anton-siomchen/
   - icon: fontawesome/brands/docker
     link: https://hub.docker.com/
-  

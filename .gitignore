@@ -215,6 +215,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 *.ipynb
+!docs/tutorials/*.ipynb
 src/molalchemy/_version.py
 alembic.ini
 alembic/

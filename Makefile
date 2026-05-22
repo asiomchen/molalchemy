@@ -22,6 +22,10 @@ smoke:
 	@$(MAKE) smoke-up
 	@status=0; $(MAKE) smoke-test || status=$$?; $(MAKE) smoke-down; exit $$status
 
+
+docs-test:
+	@JUPYTER_PLATFORM_DIRS=1 uv run mkdocs build --strict --site-dir /tmp/molalchemy-site
+
 sync-docs:
 	@cp README.md docs/index.md
 	@cp CHANGELOG.md docs/
