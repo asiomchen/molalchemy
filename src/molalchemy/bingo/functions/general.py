@@ -160,9 +160,9 @@ class aam(GenericFunction):
 
         Parameters
         ----------
-        rxn
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
             Input reaction
-        strategy
+        strategy : sqltypes.Text | Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP']
             Strategy for handling existing atom mapping (default is 'KEEP').
                 - 'CLEAR': Remove all existing mappings and compute new ones
                 - 'DISCARD': Remove all mappings without computing new ones
@@ -191,7 +191,7 @@ class cansmiles(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Input molecule in any supported format
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -216,7 +216,7 @@ class checkmolecule(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Input molecule in any supported format
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -241,7 +241,7 @@ class checkreaction(GenericFunction):
 
         Parameters
         ----------
-        rxn
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
             Input reaction in any supported format
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -266,7 +266,7 @@ class cml(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Input molecule in any supported format
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -294,9 +294,9 @@ class compactmolecule(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Input molecule in any supported format
-        use_pos
+        use_pos : sqltypes.Boolean | bool
             If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -324,9 +324,9 @@ class compactreaction(GenericFunction):
 
         Parameters
         ----------
-        rxn
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
             Input reaction in any supported format
-        use_pos
+        use_pos : sqltypes.Boolean | bool
             If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -356,10 +356,14 @@ class exportrdf(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_4 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -388,13 +392,13 @@ class exportsdf(GenericFunction):
 
         Parameters
         ----------
-        table
+        table : str | sqltypes.Text
             Name of the table containing the molecules to export
-        column
+        column : str | sqltypes.Text
             Name of the column containing the molecules to export
-        other_columns
+        other_columns : str | sqltypes.Text
             Space-separated list of other columns to include in the SDF file as SD data fields
-        outfile
+        outfile : str | sqltypes.Text
             Path to the output SDF file
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -417,7 +421,8 @@ class filetoblob(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -439,7 +444,8 @@ class filetotext(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -466,8 +472,10 @@ class fingerprint(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
+        arg_1 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -489,7 +497,8 @@ class getblockcount(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -535,7 +544,8 @@ class getmass(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -557,7 +567,8 @@ class getname(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : AnyBingoMolLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -585,11 +596,11 @@ class getsimilarity(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Input molecule or molecular column in any supported format
-        query
+        query : TextLike
             Query molecule in any supported format
-        metric
+        metric : TextLike | Literal['tanimoto', 'euclid-sub']
             string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional “alpha” and “beta” parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -612,7 +623,8 @@ class getstructurescount(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -661,8 +673,10 @@ class getweight(GenericFunction):
 
         Parameters
         ----------
-        mol
-        arg_2
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -686,7 +700,8 @@ class gross(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -715,10 +730,14 @@ class importrdf(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
+        arg_1 : TextLike
+            Undocumented cartridge parameter.
+        arg_2 : TextLike
+            Undocumented cartridge parameter.
+        arg_3 : TextLike
+            Undocumented cartridge parameter.
+        arg_4 : TextLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -747,10 +766,14 @@ class importsdf(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_4 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -779,10 +802,14 @@ class importsmiles(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_4 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -809,8 +836,10 @@ class inchi(GenericFunction):
 
         Parameters
         ----------
-        mol
-        arg_2
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -832,7 +861,8 @@ class inchikey(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1040,7 +1070,8 @@ class molfile(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1064,8 +1095,10 @@ class precachedatabase(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1089,7 +1122,8 @@ class rcml(GenericFunction):
 
         Parameters
         ----------
-        rxn
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1116,8 +1150,10 @@ class rfingerprint(GenericFunction):
 
         Parameters
         ----------
-        rxn
-        arg_2
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1141,7 +1177,8 @@ class rsmiles(GenericFunction):
 
         Parameters
         ----------
-        rxn
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1165,7 +1202,8 @@ class rxnfile(GenericFunction):
 
         Parameters
         ----------
-        rxn
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1189,7 +1227,8 @@ class smiles(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1216,8 +1255,10 @@ class standardize(GenericFunction):
 
         Parameters
         ----------
-        mol
-        arg_2
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 

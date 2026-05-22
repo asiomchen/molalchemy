@@ -26,9 +26,12 @@ class _exact_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -124,9 +127,12 @@ class _gross_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -154,9 +160,12 @@ class _internal_func_011(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+        arg_1 : int | sqltypes.Integer
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -180,8 +189,10 @@ class _internal_func_012(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
+        arg_1 : int | sqltypes.Integer
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -204,7 +215,8 @@ class _internal_func_check(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : int | sqltypes.Integer
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -345,9 +357,12 @@ class _rexact_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -376,9 +391,12 @@ class _rsmarts_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -407,9 +425,12 @@ class _rsub_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -440,11 +461,16 @@ class _sim_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
-        arg_5
+        arg_1 : float | sqltypes.Float
+            Undocumented cartridge parameter.
+        arg_2 : float | sqltypes.Float
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_4 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Undocumented cartridge parameter.
+        arg_5 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -473,9 +499,12 @@ class _smarts_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -504,9 +533,12 @@ class _sub_internal(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
