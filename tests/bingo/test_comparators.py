@@ -1,9 +1,15 @@
 """Tests for bingo comparators."""
 
 from sqlalchemy import Column, ColumnElement, Integer, MetaData, String, Table
+from sqlalchemy.dialects import postgresql
 from sqlalchemy.sql import select
 
-from molalchemy.bingo.types import BingoBinaryMol, BingoMol
+from molalchemy.bingo.types import (
+    BingoBinaryMol,
+    BingoBinaryReaction,
+    BingoMol,
+    BingoReaction,
+)
 
 
 class TestBingoMolComparator:
@@ -179,6 +185,105 @@ class TestBingoMolComparatorWithBinaryType:
         assert query in compiled
 
 
+class TestBingoRxnComparator:
+    """Test BingoRxnComparator methods."""
+
+    def setup_method(self):
+        """Set up test tables with Bingo reaction columns."""
+        self.metadata = MetaData()
+        self.test_table = Table(
+            "test_reactions",
+            self.metadata,
+            Column("id", Integer, primary_key=True),
+            Column("rxn", BingoReaction()),
+            Column("query_rxn", String),
+        )
+        self.binary_table = Table(
+            "test_binary_reactions",
+            self.metadata,
+            Column("id", Integer, primary_key=True),
+            Column("rxn", BingoBinaryReaction()),
+        )
+        self.rxn_column = self.test_table.c.rxn
+
+    def test_reaction_has_substructure_query_generation(self):
+        """Test reaction substructure query generation."""
+        query = "CCO>>CC=O"
+
+        result = self.rxn_column.has_substructure(query)
+        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
+
+        assert "@" in compiled
+        assert "bingo.rsub" in compiled
+        assert query in compiled
+
+    def test_reaction_has_smarts_query_generation(self):
+        """Test reaction SMARTS query generation."""
+        query = "[C:1]>>[C:1][O]"
+
+        result = self.rxn_column.has_smarts(query)
+        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
+
+        assert "@" in compiled
+        assert "bingo.rsmarts" in compiled
+        assert query in compiled
+
+    def test_reaction_equals_query_generation(self):
+        """Test exact reaction query generation."""
+        query = "CCO>>CC=O"
+
+        result = self.rxn_column.equals(query)
+        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
+
+        assert "@" in compiled
+        assert "bingo.rexact" in compiled
+        assert query in compiled
+
+    def test_binary_reaction_has_substructure(self):
+        """Test reaction comparator works with binary reaction type."""
+        query = "C=C>>CC"
+
+        result = self.binary_table.c.rxn.has_substructure(query)
+        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
+
+        assert "@" in compiled
+        assert "bingo.rsub" in compiled
+        assert query in compiled
+
+    def test_multiple_reaction_comparators_keep_distinct_bound_values(self):
+        """Multiple reaction predicates must not reuse the same bind names."""
+        substructure = "C=C>>CC"
+        exact = "CCO>>CC=O"
+
+        stmt = select(self.test_table).where(
+            self.rxn_column.has_substructure(substructure)
+            | self.rxn_column.equals(exact)
+        )
+
+        compiled = stmt.compile(dialect=postgresql.dialect())
+
+        assert "bingo.rsub" in str(compiled)
+        assert "bingo.rexact" in str(compiled)
+        assert substructure in compiled.params.values()
+        assert exact in compiled.params.values()
+
+    def test_reaction_comparator_accepts_query_column_expression(self):
+        """Reaction comparator query inputs can be SQLAlchemy expressions."""
+        stmt = select(self.test_table).where(
+            self.rxn_column.has_substructure(self.test_table.c.query_rxn)
+        )
+
+        compiled = str(
+            stmt.compile(
+                dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
+            )
+        )
+
+        assert "test_reactions.query_rxn" in compiled
+        assert "'test_reactions.query_rxn'" not in compiled
+        assert "bingo.rsub" in compiled
+
+
 class TestBingoComparatorReturnTypes:
     """Test that Bingo comparator methods return properly typed expressions."""
 
@@ -230,6 +335,7 @@ class TestBingoComparatorInQueries:
             Column("id", Integer, primary_key=True),
             Column("name", String(100)),
             Column("structure", BingoMol()),
+            Column("query_structure", String),
         )
 
     def test_has_substructure_in_select_query(self):
@@ -263,3 +369,39 @@ class TestBingoComparatorInQueries:
         assert "bingo.exact" in compiled
         assert benzene in compiled
         assert ethanol in compiled
+
+    def test_multiple_comparators_keep_distinct_bound_values(self):
+        """Multiple comparator predicates must not reuse the same bind names."""
+        benzene = "c1ccccc1"
+        ethanol = "CCO"
+
+        stmt = select(self.test_table).where(
+            self.test_table.c.structure.has_substructure(benzene)
+            | self.test_table.c.structure.equals(ethanol)
+        )
+
+        compiled = stmt.compile(dialect=postgresql.dialect())
+
+        assert "bingo.sub" in str(compiled)
+        assert "bingo.exact" in str(compiled)
+        assert benzene in compiled.params.values()
+        assert ethanol in compiled.params.values()
+
+    def test_comparator_accepts_query_column_expression(self):
+        """Comparator query inputs can be SQLAlchemy expressions, not only strings."""
+        stmt = select(self.test_table).where(
+            self.test_table.c.structure.has_substructure(
+                self.test_table.c.query_structure
+            )
+        )
+
+        compiled = str(
+            stmt.compile(
+                dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
+            )
+        )
+
+        assert "test_molecules.query_structure" not in compiled
+        assert "compounds.query_structure" in compiled
+        assert "'compounds.query_structure'" not in compiled
+        assert "bingo.sub" in compiled

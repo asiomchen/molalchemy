@@ -1,7 +1,5 @@
 """Integration tests for bingo query structure."""
 
-import re
-
 from sqlalchemy import Column, Integer, MetaData, String, Table, and_, or_, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -106,7 +104,8 @@ class TestBingoQueryIntegration:
         assert query in compiled
         assert parameters in compiled
         assert "bingo.sub" in compiled
-        assert re.search(r"max\s*=\s*5.*\:\:bingo\.sub", compiled)
+        assert "CAST" in compiled
+        assert "AS bingo.sub" in compiled
 
     def test_binary_mol_query_structure(self):
         """Test query structure with binary molecule type."""
