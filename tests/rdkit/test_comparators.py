@@ -1,9 +1,27 @@
 """Tests for RDKit comparators."""
 
-from sqlalchemy import Column, ColumnElement, Integer, MetaData, String, Table
+import pytest
+from sqlalchemy import (
+    Column,
+    ColumnElement,
+    Integer,
+    MetaData,
+    String,
+    Table,
+    bindparam,
+    cast,
+)
+from sqlalchemy.dialects import postgresql
 from sqlalchemy.sql import select
 
-from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitSparseFingerprint
+from molalchemy.rdkit import RdkitMolComparator, RdkitReactionComparator
+from molalchemy.rdkit.types import (
+    RdkitBitFingerprint,
+    RdkitMol,
+    RdkitQMol,
+    RdkitReaction,
+    RdkitSparseFingerprint,
+)
 
 
 class TestRdkitMolComparator:
@@ -21,39 +39,30 @@ class TestRdkitMolComparator:
         )
         self.mol_column = self.test_table.c.structure
 
-    def test_has_substructure_query_generation(self):
-        """Test has_substructure query generation."""
-        query = "c1ccccc1"  # benzene
+    @pytest.mark.parametrize(
+        ("method_name", "query", "operator"),
+        [
+            ("has_substructure", "c1ccccc1", "@>"),
+            ("is_substructure_of", "CCOCC", "<@"),
+            ("equals", "CCO", "@="),
+            ("not_equals", "CCN", "@<>"),
+            ("has_query_substructure", cast("[cH]", RdkitQMol), "@>>"),
+            ("is_query_substructure_of", cast("[cH]", RdkitQMol), "<<@"),
+        ],
+    )
+    def test_methods_compile_to_expected_operators(self, method_name, query, operator):
+        """Live RDKit molecule operators are exposed directly on the comparator."""
+        result = getattr(self.mol_column, method_name)(query)
+        compiled = result.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
 
-        result = self.mol_column.has_substructure(query)
-
-        # Check that the result is a proper SQLAlchemy expression
-        assert hasattr(result, "left")
-        assert hasattr(result, "right")
-        assert hasattr(result, "operator")
-
-        # Check that we can compile it to SQL (basic check)
-        compiled = str(result.compile())
-        assert "@>" in compiled
-        # The query value will be a bind parameter, not literal
-        assert ":structure_" in compiled
-
-    def test_equals_query_generation(self):
-        """Test equals query generation."""
-        query = "CCO"  # ethanol
-
-        result = self.mol_column.equals(query)
-
-        # Check that the result is a proper SQLAlchemy expression
-        assert hasattr(result, "left")
-        assert hasattr(result, "right")
-        assert hasattr(result, "operator")
-
-        # Check that we can compile it to SQL (basic check)
-        compiled = str(result.compile())
-        assert "@=" in compiled
-        # The query value will be a bind parameter, not literal
-        assert ":structure_" in compiled
+        assert operator in sql
+        if isinstance(query, str):
+            assert "mol_from_pkl" in sql
+            assert query in compiled.params.values()
+        else:
+            assert "CAST" in sql
+            assert "qmol" in sql
 
     def test_query_with_special_characters(self):
         """Test query with special molecular structures."""
@@ -65,6 +74,41 @@ class TestRdkitMolComparator:
         assert "@=" in compiled
         # The query value will be a bind parameter, not literal
         assert ":structure_" in compiled
+
+    def test_string_queries_compile_via_molecule_coercion(self):
+        stmt = select(self.test_table).where(
+            self.mol_column.has_substructure("x' OR 1=1 --")
+        )
+
+        compiled = stmt.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert "mol_from_pkl" in sql
+        assert "x' OR 1=1 --" not in sql
+        assert "x' OR 1=1 --" in compiled.params.values()
+
+    def test_query_expressions_are_preserved(self):
+        stmt = select(self.test_table).where(
+            self.mol_column.has_query_substructure(cast("[cH]", RdkitQMol))
+        )
+
+        compiled = stmt.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert "CAST(" in sql
+        assert " AS qmol)" in sql
+        assert "mol_from_pkl" not in sql
+        assert "[cH]" in compiled.params.values()
+
+    def test_has_smarts_uses_function_backed_search(self):
+        result = self.mol_column.has_smarts("[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1")
+        compiled = result.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert "@>" in sql
+        assert "substruct(" not in sql
+        assert "qmol_from_smarts" in sql
+        assert "[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1" in compiled.params.values()
 
     def test_invalid_operator(self):
         """Test that invalid operators raise appropriate errors."""
@@ -173,6 +217,93 @@ class TestRdkitFPComparator:
         assert ":sparse_fp_" in dice_compiled
 
 
+class TestRdkitReactionComparator:
+    """Test RdkitReactionComparator methods."""
+
+    def setup_method(self):
+        """Set up test table with RdkitReaction columns."""
+        self.metadata = MetaData()
+        self.test_table = Table(
+            "test_reactions",
+            self.metadata,
+            Column("id", Integer, primary_key=True),
+            Column("rxn", RdkitReaction()),
+            Column("query_rxn", RdkitReaction()),
+        )
+        self.rxn_column = self.test_table.c.rxn
+
+    @pytest.mark.parametrize(
+        ("method_name", "query", "operator"),
+        [
+            ("has_substructure", "[C:1]>>[C:1][O]", "@>"),
+            ("is_substructure_of", "[C:1][O]>>[C:1]", "<@"),
+            ("equals", "[C:1]>>[C:1]", "@="),
+            ("not_equals", "[C:1]>>[C:1][Cl]", "@<>"),
+            ("has_substructure_fp", "[C:1]>>[C:1][Br]", "?>"),
+            ("is_substructure_fp_of", "[C:1][Br]>>[C:1]", "?<"),
+        ],
+    )
+    def test_methods_compile_to_expected_operator(self, method_name, query, operator):
+        """Live RDKit reaction operators are exposed directly on the comparator."""
+        result = getattr(self.rxn_column, method_name)(query)
+        compiled = result.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert operator in sql
+        assert "reaction_from_smarts" in sql
+        assert query in compiled.params.values()
+
+    def test_string_queries_compile_via_reaction_coercion(self):
+        """String queries must bind as reactions, not raw text."""
+        stmt = select(self.test_table).where(
+            self.rxn_column.has_substructure("x' OR 1=1 -- >> [C:1]")
+        )
+
+        compiled = stmt.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert "reaction_from_smarts" in sql
+        assert "x' OR 1=1 -- >> [C:1]" not in sql
+        assert "x' OR 1=1 -- >> [C:1]" in compiled.params.values()
+
+    def test_bindparam_queries_compile_via_reaction_coercion(self):
+        stmt = select(self.test_table).where(
+            self.rxn_column.equals(bindparam("query_rxn"))
+        )
+
+        compiled = stmt.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert "@=" in sql
+        assert "reaction_from_smarts" in sql
+        assert "%(query_rxn)s" in sql
+
+    def test_query_column_expressions_are_preserved(self):
+        stmt = select(self.test_table).where(
+            self.rxn_column.has_substructure(self.test_table.c.query_rxn)
+        )
+
+        compiled = str(
+            stmt.compile(
+                dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
+            )
+        )
+
+        assert "test_reactions.query_rxn" in compiled
+        assert "'test_reactions.query_rxn'" not in compiled
+        assert "reaction_from_smarts" not in compiled
+
+    def test_has_smarts_uses_function_backed_search(self):
+        result = self.rxn_column.has_smarts("[C:1]>>[C:1][O]")
+        compiled = result.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert "substruct(" in sql
+        assert "@>" not in sql
+        assert "reaction_from_smarts" in sql
+        assert "[C:1]>>[C:1][O]" in compiled.params.values()
+
+
 class TestComparatorReturnTypes:
     """Test that comparator methods return properly typed expressions."""
 
@@ -184,10 +315,15 @@ class TestComparatorReturnTypes:
             Column("id", Integer, primary_key=True),
             Column("structure", RdkitMol()),
             Column("fingerprint", RdkitBitFingerprint()),
+            Column("reaction", RdkitReaction()),
         )
 
     def test_has_substructure_returns_column_element(self):
         result = self.test_table.c.structure.has_substructure("CCO")
+        assert isinstance(result, ColumnElement)
+
+    def test_has_smarts_returns_column_element(self):
+        result = self.test_table.c.structure.has_smarts("[#6]")
         assert isinstance(result, ColumnElement)
 
     def test_is_substructure_of_returns_column_element(self):
@@ -196,6 +332,22 @@ class TestComparatorReturnTypes:
 
     def test_equals_returns_column_element(self):
         result = self.test_table.c.structure.equals("CCO")
+        assert isinstance(result, ColumnElement)
+
+    def test_not_equals_returns_column_element(self):
+        result = self.test_table.c.structure.not_equals("CCN")
+        assert isinstance(result, ColumnElement)
+
+    def test_has_query_substructure_returns_column_element(self):
+        result = self.test_table.c.structure.has_query_substructure(
+            cast("[cH]", RdkitQMol)
+        )
+        assert isinstance(result, ColumnElement)
+
+    def test_is_query_substructure_of_returns_column_element(self):
+        result = self.test_table.c.structure.is_query_substructure_of(
+            cast("[cH]", RdkitQMol)
+        )
         assert isinstance(result, ColumnElement)
 
     def test_tanimoto_returns_column_element(self):
@@ -209,6 +361,28 @@ class TestComparatorReturnTypes:
     def test_nearest_neighbors_returns_column_element(self):
         result = self.test_table.c.fingerprint.nearest_neighbors(b"fp")
         assert isinstance(result, ColumnElement)
+
+    def test_reaction_equals_returns_column_element(self):
+        result = self.test_table.c.reaction.equals("[C:1]>>[C:1]")
+        assert isinstance(result, ColumnElement)
+
+    def test_reaction_not_equals_returns_column_element(self):
+        result = self.test_table.c.reaction.not_equals("[C:1]>>[C:1][O]")
+        assert isinstance(result, ColumnElement)
+
+    def test_reaction_has_smarts_returns_column_element(self):
+        result = self.test_table.c.reaction.has_smarts("[C:1]>>[C:1][O]")
+        assert isinstance(result, ColumnElement)
+
+
+class TestRdkitComparatorExports:
+    """Test comparators are exported from the rdkit subpackage."""
+
+    def test_import_mol_comparator_from_rdkit(self):
+        assert RdkitMolComparator is not None
+
+    def test_import_reaction_comparator_from_rdkit(self):
+        assert RdkitReactionComparator is not None
 
 
 class TestRdkitComparatorInQueries:

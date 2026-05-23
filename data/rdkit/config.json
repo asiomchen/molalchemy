@@ -2,9 +2,19 @@
   "general": {
     "extra_members": [
       "mol_equals",
+      "mol_has_smarts",
       "mol_has_substructure",
+      "mol_has_query_substructure",
       "mol_is_substructure_of",
-      "rxn_has_smarts"
+      "mol_is_query_substructure_of",
+      "mol_not_equals",
+      "rxn_equals",
+      "rxn_has_substructure",
+      "rxn_has_substructure_fp",
+      "rxn_has_smarts",
+      "rxn_is_substructure_fp_of",
+      "rxn_is_substructure_of",
+      "rxn_not_equals"
     ]
   }
 }

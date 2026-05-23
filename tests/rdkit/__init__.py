@@ -1,6 +1,10 @@
 """RDKit query structure tests."""
 
-from .test_comparators import TestRdkitFPComparator, TestRdkitMolComparator
+from .test_comparators import (
+    TestRdkitFPComparator,
+    TestRdkitMolComparator,
+    TestRdkitReactionComparator,
+)
 from .test_index import TestRdkitIndex
 from .test_types import (
     TestRdkitBitFingerprint,
@@ -20,5 +24,6 @@ __all__ = [
     "TestRdkitMol",
     "TestRdkitMolComparator",
     "TestRdkitReaction",
+    "TestRdkitReactionComparator",
     "TestRdkitSparseFingerprint",
 ]
