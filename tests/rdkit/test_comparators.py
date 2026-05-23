@@ -45,6 +45,7 @@ class TestRdkitMolComparator:
             ("has_substructure", "c1ccccc1", "@>"),
             ("is_substructure_of", "CCOCC", "<@"),
             ("equals", "CCO", "@="),
+            ("not_equals", "CCN", "@<>"),
             ("has_query_substructure", cast("[cH]", RdkitQMol), "@>>"),
             ("is_query_substructure_of", cast("[cH]", RdkitQMol), "<<@"),
         ],
@@ -98,6 +99,16 @@ class TestRdkitMolComparator:
         assert " AS qmol)" in sql
         assert "mol_from_pkl" not in sql
         assert "[cH]" in compiled.params.values()
+
+    def test_has_smarts_uses_function_backed_search(self):
+        result = self.mol_column.has_smarts("[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1")
+        compiled = result.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert "@>" in sql
+        assert "substruct(" not in sql
+        assert "qmol_from_smarts" in sql
+        assert "[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1" in compiled.params.values()
 
     def test_invalid_operator(self):
         """Test that invalid operators raise appropriate errors."""
@@ -282,6 +293,16 @@ class TestRdkitReactionComparator:
         assert "'test_reactions.query_rxn'" not in compiled
         assert "reaction_from_smarts" not in compiled
 
+    def test_has_smarts_uses_function_backed_search(self):
+        result = self.rxn_column.has_smarts("[C:1]>>[C:1][O]")
+        compiled = result.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert "substruct(" in sql
+        assert "@>" not in sql
+        assert "reaction_from_smarts" in sql
+        assert "[C:1]>>[C:1][O]" in compiled.params.values()
+
 
 class TestComparatorReturnTypes:
     """Test that comparator methods return properly typed expressions."""
@@ -301,12 +322,20 @@ class TestComparatorReturnTypes:
         result = self.test_table.c.structure.has_substructure("CCO")
         assert isinstance(result, ColumnElement)
 
+    def test_has_smarts_returns_column_element(self):
+        result = self.test_table.c.structure.has_smarts("[#6]")
+        assert isinstance(result, ColumnElement)
+
     def test_is_substructure_of_returns_column_element(self):
         result = self.test_table.c.structure.is_substructure_of("CCO")
         assert isinstance(result, ColumnElement)
 
     def test_equals_returns_column_element(self):
         result = self.test_table.c.structure.equals("CCO")
+        assert isinstance(result, ColumnElement)
+
+    def test_not_equals_returns_column_element(self):
+        result = self.test_table.c.structure.not_equals("CCN")
         assert isinstance(result, ColumnElement)
 
     def test_has_query_substructure_returns_column_element(self):
@@ -339,6 +368,10 @@ class TestComparatorReturnTypes:
 
     def test_reaction_not_equals_returns_column_element(self):
         result = self.test_table.c.reaction.not_equals("[C:1]>>[C:1][O]")
+        assert isinstance(result, ColumnElement)
+
+    def test_reaction_has_smarts_returns_column_element(self):
+        result = self.test_table.c.reaction.has_smarts("[C:1]>>[C:1][O]")
         assert isinstance(result, ColumnElement)
 
 

@@ -2,6 +2,7 @@
   "general": {
     "extra_members": [
       "mol_equals",
+      "mol_has_smarts",
       "mol_has_substructure",
       "mol_has_query_substructure",
       "mol_is_substructure_of",

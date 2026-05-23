@@ -37,6 +37,7 @@ def test_any_function_returns_function_object(func):
 @pytest.mark.parametrize(
     ("helper_name", "query", "operator"),
     [
+        ("mol_has_smarts", "[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1", "qmol_from_smarts"),
         ("mol_has_substructure", "c1ccccc1", "@>"),
         ("mol_is_substructure_of", "CCOCC", "<@"),
         ("mol_equals", "CCO", "@="),
@@ -62,6 +63,28 @@ def test_molecule_search_helpers_compile_to_expected_operators(
 
     assert operator in sql
     assert query in compiled.params.values()
+
+
+def test_mol_has_smarts_remains_function_backed():
+    """SMARTS search should reuse the molecule substructure operator path."""
+    structures = Table(
+        "structures",
+        MetaData(),
+        Column("id", Integer),
+        Column("structure", RdkitMol()),
+    )
+
+    stmt = select(structures).where(
+        rdkit_func.mol_has_smarts(
+            structures.c.structure, "[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1"
+        )
+    )
+
+    compiled = stmt.compile(dialect=postgresql.dialect())
+    sql = str(compiled)
+
+    assert "@>" in sql
+    assert "substruct(" not in sql
 
 
 @pytest.mark.parametrize(

@@ -66,6 +66,35 @@ def mol_has_substructure(
     return mol_column.op("@>")(query)
 
 
+def mol_has_smarts(mol_column: ColumnElement, pattern: str) -> Function[bool]:
+    """
+    Perform molecule SMARTS search.
+
+    Checks if the molecular structure in the column contains the query pattern
+    by converting the SMARTS string to a query molecule and reusing the
+    standard molecule substructure operator path.
+
+    Parameters
+    ----------
+    mol_column : ColumnElement
+        The database column containing the molecule to search in.
+    pattern : str
+        The SMARTS pattern to search for.
+
+    Returns
+    -------
+    Function[bool]
+        SQLAlchemy function that returns `True` if the pattern
+        is found in the molecule, `False` otherwise.
+
+    Examples
+    --------
+    >>> from sqlalchemy import select
+    >>> query = select(Molecule).where(mol_has_smarts(Molecule.structure, "[#6]"))
+    """
+    return mol_has_substructure(mol_column, qmol_from_smarts(cast(pattern, CString)))
+
+
 def mol_is_substructure_of(
     mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
 ) -> BinaryExpression:
