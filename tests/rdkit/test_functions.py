@@ -9,12 +9,13 @@ from sqlalchemy import (
     MetaData,
     Table,
     bindparam,
+    cast,
     select,
 )
 from sqlalchemy.dialects import postgresql
 
 from molalchemy.rdkit import functions as rdkit_func
-from molalchemy.rdkit.types import RdkitMol, RdkitReaction
+from molalchemy.rdkit.types import RdkitMol, RdkitQMol, RdkitReaction
 
 all_funcs = rdkit_func.__all__
 
@@ -39,6 +40,7 @@ def test_any_function_returns_function_object(func):
         ("mol_has_substructure", "c1ccccc1", "@>"),
         ("mol_is_substructure_of", "CCOCC", "<@"),
         ("mol_equals", "CCO", "@="),
+        ("mol_not_equals", "CCN", "@<>"),
     ],
 )
 def test_molecule_search_helpers_compile_to_expected_operators(
@@ -60,6 +62,85 @@ def test_molecule_search_helpers_compile_to_expected_operators(
 
     assert operator in sql
     assert query in compiled.params.values()
+
+
+@pytest.mark.parametrize(
+    ("helper_name", "operator"),
+    [
+        ("mol_has_query_substructure", "@>>"),
+        ("mol_is_query_substructure_of", "<<@"),
+    ],
+)
+def test_molecule_query_helpers_compile_to_expected_operators(helper_name, operator):
+    """Query-molecule helper surface should use the live RDKit query operators."""
+    structures = Table(
+        "structures",
+        MetaData(),
+        Column("id", Integer),
+        Column("structure", RdkitMol()),
+    )
+
+    helper = getattr(rdkit_func, helper_name)
+    stmt = select(structures).where(
+        helper(structures.c.structure, cast("[cH]", RdkitQMol))
+    )
+
+    compiled = stmt.compile(dialect=postgresql.dialect())
+    sql = str(compiled)
+
+    assert operator in sql
+    assert "CAST(" in sql
+    assert " AS qmol)" in sql
+    assert "mol_from_pkl" not in sql
+    assert "[cH]" in compiled.params.values()
+
+
+def test_molecule_search_helpers_preserve_bindparam_inputs():
+    """Explicit molecule bind parameters should remain bind parameters."""
+    structures = Table(
+        "structures",
+        MetaData(),
+        Column("id", Integer),
+        Column("structure", RdkitMol()),
+    )
+
+    stmt = select(structures).where(
+        rdkit_func.mol_equals(structures.c.structure, bindparam("query_mol"))
+    )
+
+    compiled = stmt.compile(dialect=postgresql.dialect())
+    sql = str(compiled)
+
+    assert "@=" in sql
+    assert "mol_from_pkl" in sql
+    assert "%(query_mol)s" in sql
+
+
+def test_molecule_query_helpers_preserve_column_expression_inputs():
+    """Query-molecule helpers should keep typed expressions as expressions."""
+    structures = Table(
+        "structures",
+        MetaData(),
+        Column("id", Integer),
+        Column("structure", RdkitMol()),
+        Column("query_structure", RdkitQMol()),
+    )
+
+    stmt = select(structures).where(
+        rdkit_func.mol_has_query_substructure(
+            structures.c.structure, structures.c.query_structure
+        )
+    )
+
+    compiled = str(
+        stmt.compile(
+            dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
+        )
+    )
+
+    assert "structures.query_structure" in compiled
+    assert "'structures.query_structure'" not in compiled
+    assert "mol_from_pkl" not in compiled
 
 
 @pytest.mark.parametrize(

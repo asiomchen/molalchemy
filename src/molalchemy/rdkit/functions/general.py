@@ -33,7 +33,7 @@ from ._types import (
 
 
 def mol_has_substructure(
-    mol_column: ColumnElement[RdkitMol], query: str
+    mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
 ) -> BinaryExpression:
     """
     Perform substructure search.
@@ -45,8 +45,10 @@ def mol_has_substructure(
     ----------
     mol_column : ColumnElement[molalchemy.rdkit.types.RdkitMol]
         The database column containing the molecular structure to search.
-    query : str
-        The query substructure as a string (SMILES, or SMARTS)
+    query : AnyRdkitMolLike
+        The query structure. Plain Python strings are treated as SMILES-like
+        molecule inputs. SMARTS/query searches should use typed SQL expressions
+        such as `cast(..., RdkitQMol)` or `qmol_from_smarts(...)`.
 
     Returns
     -------
@@ -65,7 +67,7 @@ def mol_has_substructure(
 
 
 def mol_is_substructure_of(
-    mol_column: ColumnElement[RdkitMol], query: str
+    mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
 ) -> BinaryExpression:
     """
     Perform reverse substructure search.
@@ -77,8 +79,10 @@ def mol_is_substructure_of(
     ----------
     mol_column : ColumnElement[molalchemy.rdkit.types.RdkitMol]
         The database column containing the molecular structure to search.
-    query : str
-        The query structure as a string (SMILES, or SMARTS)
+    query : AnyRdkitMolLike
+        The query structure. Plain Python strings are treated as SMILES-like
+        molecule inputs. Query-molecule searches should use typed SQL
+        expressions such as `cast(..., RdkitQMol)` or `qmol_from_smarts(...)`.
 
     Returns
     -------
@@ -88,7 +92,9 @@ def mol_is_substructure_of(
     return mol_column.op("<@")(query)
 
 
-def mol_equals(mol_column: ColumnElement[RdkitMol], query: str) -> BinaryExpression:
+def mol_equals(
+    mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
+) -> BinaryExpression:
     """
     Perform exact structure matching.
 
@@ -99,8 +105,9 @@ def mol_equals(mol_column: ColumnElement[RdkitMol], query: str) -> BinaryExpress
     ----------
     mol_column : ColumnElement[molalchemy.rdkit.types.RdkitMol]
         The database column containing the molecular structure to compare.
-    query : str
-        The query structure as a string (SMILES, or SMARTS)
+    query : AnyRdkitMolLike
+        The query structure. Plain Python strings are treated as SMILES-like
+        molecule inputs.
 
     Returns
     -------
@@ -108,6 +115,46 @@ def mol_equals(mol_column: ColumnElement[RdkitMol], query: str) -> BinaryExpress
         SQLAlchemy binary expression for the exact match search.
     """
     return mol_column.op("@=")(query)
+
+
+def mol_not_equals(
+    mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
+) -> BinaryExpression:
+    """
+    Perform negative exact structure matching.
+
+    Checks if the molecular structure in the column differs from
+    the query using the `@<>` operator.
+    """
+    return mol_column.op("@<>")(query)
+
+
+def mol_has_query_substructure(
+    mol_column: ColumnElement[RdkitMol],
+    query: AnyRdkitMolLike | AnyRdkitQMolLike | AnyRdkitXQMolLike,
+) -> BinaryExpression:
+    """
+    Perform query-substructure search.
+
+    Checks if the molecular structure in the column contains the query
+    using the `@>>` operator. Use `RdkitQMol` or `RdkitXQMol` expressions
+    for SMARTS/query semantics.
+    """
+    return mol_column.op("@>>")(query)
+
+
+def mol_is_query_substructure_of(
+    mol_column: ColumnElement[RdkitMol],
+    query: AnyRdkitMolLike | AnyRdkitQMolLike | AnyRdkitXQMolLike,
+) -> BinaryExpression:
+    """
+    Perform reverse query-substructure search.
+
+    Checks if the query contains the molecular structure in the column
+    using the `<<@` operator. Use `RdkitQMol` or `RdkitXQMol` expressions
+    for SMARTS/query semantics.
+    """
+    return mol_column.op("<<@")(query)
 
 
 def rxn_has_substructure(

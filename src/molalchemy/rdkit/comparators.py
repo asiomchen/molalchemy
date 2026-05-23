@@ -5,26 +5,28 @@ from sqlalchemy.types import UserDefinedType
 
 
 class RdkitMolComparator(UserDefinedType.Comparator):
-    def has_substructure(self, query: str) -> ColumnElement[bool]:
+    def has_substructure(self, query: Any) -> ColumnElement[bool]:
         """Check if this molecule contains `query` as a substructure (@>)."""
         return self.expr.op("@>")(query)
 
-    def is_substructure_of(self, query: str) -> ColumnElement[bool]:
+    def is_substructure_of(self, query: Any) -> ColumnElement[bool]:
         """Check if this molecule is a substructure of `query` (<@)."""
         return self.expr.op("<@")(query)
 
-    def equals(self, query: str) -> ColumnElement[bool]:
+    def equals(self, query: Any) -> ColumnElement[bool]:
         """Check if this molecule is equal to `query` (@=)."""
         return self.expr.op("@=")(query)
 
+    def has_query_substructure(self, query: Any) -> ColumnElement[bool]:
+        """Check if this molecule contains a query substructure `query` (@>>)."""
+        return self.expr.op("@>>")(query)
+
+    def is_query_substructure_of(self, query: Any) -> ColumnElement[bool]:
+        """Check if query structure `query` contains this molecule (<<@)."""
+        return self.expr.op("<<@")(query)
+
 
 class RdkitReactionComparator(UserDefinedType.Comparator):
-    def __eq__(self, other: Any) -> ColumnElement[bool]:
-        return self.equals(other)
-
-    def __ne__(self, other: Any) -> ColumnElement[bool]:
-        return self.not_equals(other)
-
     def has_substructure(self, query: Any) -> ColumnElement[bool]:
         """Check if this reaction contains `query` as a substructure (@>)."""
         return self.expr.op("@>")(query)
