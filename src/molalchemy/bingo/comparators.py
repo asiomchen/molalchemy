@@ -34,6 +34,18 @@ class BingoMolComparator(UserDefinedType.Comparator):
             return super().__eq__(other)
         return self.equals(other)
 
+    def __ne__(self, other: Any) -> ColumnElement[bool]:
+        if isinstance(other, ColumnElement) and not getattr(
+            other, "is_clause_element", False
+        ):
+            return super().__ne__(other)
+        if (
+            isinstance(other, ColumnElement)
+            and getattr(other, "table", None) is not None
+        ):
+            return super().__ne__(other)
+        return self.not_equals(other)
+
     def has_substructure(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
         """
         Check if the molecular structure contains a given substructure.
@@ -138,6 +150,18 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         ):
             return super().__eq__(other)
         return self.equals(other)
+
+    def __ne__(self, other: Any) -> ColumnElement[bool]:
+        if isinstance(other, ColumnElement) and not getattr(
+            other, "is_clause_element", False
+        ):
+            return super().__ne__(other)
+        if (
+            isinstance(other, ColumnElement)
+            and getattr(other, "table", None) is not None
+        ):
+            return super().__ne__(other)
+        return self.not_equals(other)
 
     def has_substructure(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
         """

@@ -130,6 +130,23 @@ class TestBingoMolComparator:
         assert "bingo.exact" in compiled
         assert query in compiled
 
+    def test_ne_operator_delegates_to_negative_exact_match(self):
+        query = "CCO"
+
+        result = self.mol_column != query
+        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
+
+        assert "NOT" in compiled
+        assert "bingo.exact" in compiled
+        assert query in compiled
+
+    def test_ne_operator_with_column_uses_sqlalchemy_inequality(self):
+        result = self.mol_column != self.test_table.c.name
+        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
+
+        assert "!=" in compiled or "<>" in compiled
+        assert "bingo.exact" not in compiled
+
     def test_not_equals_with_parameters(self):
         """Test negative exact match query with parameters."""
         query = "CCO"
@@ -218,6 +235,16 @@ class TestBingoMolComparatorWithBinaryType:
         assert "bingo.exact" in compiled
         assert query in compiled
 
+    def test_binary_mol_ne_operator_delegates_to_negative_exact_match(self):
+        query = "CCO"
+
+        result = self.mol_column != query
+        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
+
+        assert "NOT" in compiled
+        assert "bingo.exact" in compiled
+        assert query in compiled
+
 
 class TestBingoRxnComparator:
     """Test BingoRxnComparator methods."""
@@ -293,6 +320,23 @@ class TestBingoRxnComparator:
         assert "NOT" in compiled
         assert "bingo.rexact" in compiled
         assert query in compiled
+
+    def test_reaction_ne_operator_delegates_to_negative_exact_match(self):
+        query = "CCO>>CC=O"
+
+        result = self.rxn_column != query
+        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
+
+        assert "NOT" in compiled
+        assert "bingo.rexact" in compiled
+        assert query in compiled
+
+    def test_reaction_ne_operator_with_column_uses_sqlalchemy_inequality(self):
+        result = self.rxn_column != self.test_table.c.query_rxn
+        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
+
+        assert "!=" in compiled or "<>" in compiled
+        assert "bingo.rexact" not in compiled
 
     def test_reaction_not_equals_with_parameters(self):
         """Test negative exact reaction query with parameters."""
@@ -381,8 +425,16 @@ class TestBingoComparatorReturnTypes:
         result = self.test_table.c.mol.not_equals("CCO")
         assert isinstance(result, ColumnElement)
 
+    def test_ne_operator_returns_column_element(self):
+        result = self.test_table.c.mol != "CCO"
+        assert isinstance(result, ColumnElement)
+
     def test_reaction_not_equals_returns_column_element(self):
         result = self.test_table.c.rxn.not_equals("CCO>>CC=O")
+        assert isinstance(result, ColumnElement)
+
+    def test_reaction_ne_operator_returns_column_element(self):
+        result = self.test_table.c.rxn != "CCO>>CC=O"
         assert isinstance(result, ColumnElement)
 
 
