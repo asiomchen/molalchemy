@@ -35,6 +35,8 @@ class BingoMolComparator(UserDefinedType.Comparator):
         return self.equals(other)
 
     def __ne__(self, other: Any) -> ColumnElement[bool]:
+        if other is None:
+            return super().__ne__(other)
         if isinstance(other, ColumnElement) and not getattr(
             other, "is_clause_element", False
         ):
@@ -152,6 +154,8 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         return self.equals(other)
 
     def __ne__(self, other: Any) -> ColumnElement[bool]:
+        if other is None:
+            return super().__ne__(other)
         if isinstance(other, ColumnElement) and not getattr(
             other, "is_clause_element", False
         ):

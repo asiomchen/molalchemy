@@ -11,6 +11,8 @@ class RdkitMolComparator(UserDefinedType.Comparator):
     def __eq__(self, other: Any) -> ColumnElement[bool]:
         # Native RDKit mol "=" is already chemical equality; keep "==" mapped to
         # equals() for explicit comparator parity with Bingo and reactions.
+        if other is None:
+            return super().__eq__(other)
         if isinstance(other, ColumnElement) and not getattr(
             other, "is_clause_element", False
         ):
@@ -53,6 +55,8 @@ class RdkitMolComparator(UserDefinedType.Comparator):
 
 class RdkitReactionComparator(UserDefinedType.Comparator):
     def __eq__(self, other: Any) -> ColumnElement[bool]:
+        if other is None:
+            return super().__eq__(other)
         if isinstance(other, ColumnElement) and not getattr(
             other, "is_clause_element", False
         ):

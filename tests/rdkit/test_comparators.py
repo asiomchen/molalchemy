@@ -84,6 +84,15 @@ class TestRdkitMolComparator:
         assert "mol_from_pkl" in sql
         assert "CCO" in compiled.params.values()
 
+    def test_eq_operator_with_none_uses_sql_null_check(self):
+        result = self.mol_column.__eq__(None)
+        compiled = result.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert "IS NULL" in sql
+        assert "@=" not in sql
+        assert "mol_from_pkl" not in sql
+
     def test_string_queries_compile_via_molecule_coercion(self):
         stmt = select(self.test_table).where(
             self.mol_column.has_substructure("x' OR 1=1 --")
@@ -295,6 +304,15 @@ class TestRdkitReactionComparator:
         assert "@=" in sql
         assert "reaction_from_smarts" in sql
         assert "[C:1]>>[C:1]" in compiled.params.values()
+
+    def test_eq_operator_with_none_uses_sql_null_check(self):
+        result = self.rxn_column.__eq__(None)
+        compiled = result.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert "IS NULL" in sql
+        assert "@=" not in sql
+        assert "reaction_from_smarts" not in sql
 
     def test_query_column_expressions_are_preserved(self):
         stmt = select(self.test_table).where(

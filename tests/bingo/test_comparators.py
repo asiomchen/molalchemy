@@ -140,6 +140,13 @@ class TestBingoMolComparator:
         assert "bingo.exact" in compiled
         assert query in compiled
 
+    def test_ne_operator_with_none_uses_sql_not_null_check(self):
+        result = self.mol_column.__ne__(None)
+        compiled = str(result.compile(dialect=postgresql.dialect()))
+
+        assert "IS NOT NULL" in compiled
+        assert "bingo.exact" not in compiled
+
     def test_ne_operator_with_column_uses_sqlalchemy_inequality(self):
         result = self.mol_column != self.test_table.c.name
         compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
@@ -245,6 +252,13 @@ class TestBingoMolComparatorWithBinaryType:
         assert "bingo.exact" in compiled
         assert query in compiled
 
+    def test_binary_mol_ne_operator_with_none_uses_sql_not_null_check(self):
+        result = self.mol_column.__ne__(None)
+        compiled = str(result.compile(dialect=postgresql.dialect()))
+
+        assert "IS NOT NULL" in compiled
+        assert "bingo.exact" not in compiled
+
 
 class TestBingoRxnComparator:
     """Test BingoRxnComparator methods."""
@@ -330,6 +344,13 @@ class TestBingoRxnComparator:
         assert "NOT" in compiled
         assert "bingo.rexact" in compiled
         assert query in compiled
+
+    def test_reaction_ne_operator_with_none_uses_sql_not_null_check(self):
+        result = self.rxn_column.__ne__(None)
+        compiled = str(result.compile(dialect=postgresql.dialect()))
+
+        assert "IS NOT NULL" in compiled
+        assert "bingo.rexact" not in compiled
 
     def test_reaction_ne_operator_with_column_uses_sqlalchemy_inequality(self):
         result = self.rxn_column != self.test_table.c.query_rxn
