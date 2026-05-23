@@ -47,11 +47,11 @@ class BingoMol(BingoBaseType):
     ...     name: Mapped[str] = mapped_column(String(100))
     >>>
     >>> # Usage in queries
-    >>> from molalchemy.bingo.functions import bingo_func
+    >>> from molalchemy.bingo import functions as bingo_func
     >>>
     >>> # Find molecules containing benzene ring
     >>> benzene_derivatives = session.query(Molecule).filter(
-    ...     bingo_func.has_substructure(Molecule.smiles, "c1ccccc1")
+    ...     bingo_func.mol_has_substructure(Molecule.smiles, "c1ccccc1")
     ... ).all()
     """
 
@@ -196,11 +196,11 @@ class BingoReaction(BingoBaseType):
     ...     name: Mapped[str] = mapped_column(String(200))
     >>>
     >>> # Usage in queries
-    >>> from molalchemy.bingo.functions import bingo_rxn_func
+    >>> from molalchemy.bingo import functions as bingo_func
     >>>
     >>> # Find reactions with specific substructure
     >>> oxidation_reactions = session.query(Reaction).filter(
-    ...     bingo_rxn_func.has_reaction_substructure(
+    ...     bingo_func.rxn_has_substructure(
     ...         Reaction.reaction_smiles,
     ...         "[OH]>>[O]"
     ...     )
@@ -259,16 +259,16 @@ class BingoBinaryReaction(BingoBaseType):
     >>>
     >>> # Usage: Binary storage provides faster searching and less storage space
     >>> # Input as reaction SMILES, stored as binary, retrieved as binary
-    >>> from molalchemy.bingo.functions import bingo_rxn_func
+    >>> from molalchemy.bingo import functions as bingo_func
     >>>
     >>> # Convert to binary format when inserting
     >>> rxn = Reaction(name="hydrogenation")
-    >>> # The reaction data would be converted using bingo_rxn_func.to_binary()
+    >>> # The reaction data is converted by BingoBinaryReaction during insertion.
     >>> # during insertion
     >>>
     >>> # Search operations work directly on binary data
     >>> results = session.query(Reaction).filter(
-    ...     bingo_rxn_func.has_reaction_substructure(
+    ...     bingo_func.rxn_has_substructure(
     ...         Reaction.reaction_data,
     ...         "C=C>>CC"
     ...     )

@@ -3,38 +3,15 @@
 from typing import Any
 
 from sqlalchemy import ColumnElement, tuple_
-from sqlalchemy import types as sqltypes
 from sqlalchemy.types import UserDefinedType
 
-
-class _BingoSearchType(sqltypes.UserDefinedType):
-    """SQLAlchemy type wrapper for casting search tuples to Bingo search types."""
-
-    cache_ok = True
-    allowed_types = (
-        "bingo.sub",
-        "bingo.smarts",
-        "bingo.exact",
-        "bingo.rsub",
-        "bingo.rsmarts",
-        "bingo.rexact",
-    )
-
-    def __init__(self, type_name: str) -> None:
-        if type_name not in self.allowed_types:
-            raise ValueError(
-                f"Invalid Bingo search type: {type_name}. Allowed types are: {self.allowed_types}"
-            )
-        self.type_name = type_name
-
-    def get_col_spec(self, **kw: Any) -> str:
-        return self.type_name
+from molalchemy.bingo.search import _bingo_search as _build_bingo_search
 
 
 def _bingo_search(
     column: ColumnElement[Any], query: Any, parameters: Any, search_type: str
 ) -> ColumnElement[bool]:
-    return column.op("@")(tuple_(query, parameters).cast(_BingoSearchType(search_type)))
+    return _build_bingo_search(column, tuple_(query, parameters), search_type)
 
 
 class BingoMolComparator(UserDefinedType.Comparator):

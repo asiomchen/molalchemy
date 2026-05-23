@@ -9,6 +9,8 @@ from sqlalchemy import types as sqltypes
 from sqlalchemy.sql.elements import BinaryExpression, ColumnElement
 from sqlalchemy.sql.functions import GenericFunction
 
+from molalchemy.bingo.search import _bingo_search
+
 from ._types import (
     AnyBingoBinaryMolLike,
     AnyBingoBinaryReactionLike,
@@ -24,33 +26,9 @@ AnyBingoMol = AnyBingoMolLikeCombined
 AnyBingoReaction = AnyBingoReactionLikeCombined
 
 
-class _BingoSearchType(sqltypes.UserDefinedType):
-    """SQLAlchemy type wrapper for casting search tuples to Bingo search types."""
-
-    cache_ok = True
-    allowed_types = (
-        "bingo.sub",
-        "bingo.smarts",
-        "bingo.exact",
-        "bingo.rsub",
-        "bingo.rsmarts",
-        "bingo.rexact",
-    )
-
-    def __init__(self, type_name: str) -> None:
-        if type_name not in self.allowed_types:
-            raise ValueError(
-                f"Invalid Bingo search type: {type_name}. Allowed types are: {self.allowed_types}"
-            )
-        self.type_name = type_name
-
-    def get_col_spec(self, **kw: Any) -> str:
-        return self.type_name
-
-
-def has_substructure(
+def mol_has_substructure(
     mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
-):
+) -> BinaryExpression:
     """
     Perform substructure search on a molecule column.
 
@@ -70,12 +48,12 @@ def has_substructure(
         SQLAlchemy expression for substructure matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(tuple_(query, parameters).cast(_BingoSearchType("bingo.sub")))
+    return _bingo_search(mol, tuple_(query, parameters), "bingo.sub")
 
 
-def matches_smarts(
+def mol_has_smarts(
     mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
-):
+) -> BinaryExpression:
     """
     Perform SMARTS pattern matching on a molecule column.
 
@@ -94,12 +72,12 @@ def matches_smarts(
         SQLAlchemy expression for SMARTS matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(tuple_(query, parameters).cast(_BingoSearchType("bingo.smarts")))
+    return _bingo_search(mol, tuple_(query, parameters), "bingo.smarts")
 
 
 def mol_equals(
     mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
-):
+) -> BinaryExpression:
     """
     Perform exact structure matching on a molecule column.
 
@@ -119,10 +97,10 @@ def mol_equals(
         SQLAlchemy expression for exact matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(tuple_(query, parameters).cast(_BingoSearchType("bingo.exact")))
+    return _bingo_search(mol, tuple_(query, parameters), "bingo.exact")
 
 
-def similarity(
+def mol_similarity(
     mol: ColumnElement[AnyBingoMol],
     query: TextLike,
     bottom: float = 0.0,
@@ -153,9 +131,79 @@ def similarity(
         SQLAlchemy expression for similarity matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(
-        tuple_(bottom, top, query, metric).cast(_BingoSearchType("bingo.sim"))
-    )
+    return _bingo_search(mol, tuple_(bottom, top, query, metric), "bingo.sim")
+
+
+def rxn_has_substructure(
+    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+) -> BinaryExpression:
+    """
+    Perform substructure search on a reaction column.
+
+    Parameters
+    ----------
+    rxn : ColumnElement[AnyBingoReaction]
+        SQLAlchemy column containing reaction data (reaction SMILES, RXN, or binary).
+    query : TextLike
+        Query reaction as reaction SMILES, SMARTS, or RXN string.
+    parameters : TextLike, optional
+        Search parameters for customizing the matching behavior (default is "").
+
+    Returns
+    -------
+    BinaryExpression
+        SQLAlchemy expression for reaction substructure matching that can be used in WHERE clauses.
+
+    """
+    return _bingo_search(rxn, tuple_(query, parameters), "bingo.rsub")
+
+
+def rxn_has_smarts(
+    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+) -> BinaryExpression:
+    """
+    Perform SMARTS pattern matching on a reaction column.
+
+    Parameters
+    ----------
+    rxn : ColumnElement[AnyBingoReaction]
+        SQLAlchemy column containing reaction data (reaction SMILES, RXN, or binary).
+    query : TextLike
+        Reaction SMARTS pattern string for matching.
+    parameters : TextLike, optional
+        Search parameters for customizing the matching behavior (default is "").
+
+    Returns
+    -------
+    BinaryExpression
+        SQLAlchemy expression for reaction SMARTS matching that can be used in WHERE clauses.
+
+    """
+    return _bingo_search(rxn, tuple_(query, parameters), "bingo.rsmarts")
+
+
+def rxn_equals(
+    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+) -> BinaryExpression:
+    """
+    Perform exact matching on a reaction column.
+
+    Parameters
+    ----------
+    rxn : ColumnElement[AnyBingoReaction]
+        SQLAlchemy column containing reaction data (reaction SMILES, RXN, or binary).
+    query : TextLike
+        Query reaction as reaction SMILES or RXN string for exact matching.
+    parameters : TextLike, optional
+        Search parameters for customizing the matching behavior (default is "").
+
+    Returns
+    -------
+    BinaryExpression
+        SQLAlchemy expression for exact reaction matching that can be used in WHERE clauses.
+
+    """
+    return _bingo_search(rxn, tuple_(query, parameters), "bingo.rexact")
 
 
 class aam(GenericFunction):

@@ -95,7 +95,7 @@ def main() -> None:
         )
 
     substructure_stmt = select(compounds.c.name).where(
-        bingo_func.has_substructure(compounds.c.structure, "c1ccccc1")
+        compounds.c.structure.has_substructure("c1ccccc1")
     )
     exact_stmt = select(compounds.c.name).where(
         bingo_func.mol_equals(compounds.c.structure, "CCO")
@@ -103,7 +103,7 @@ def main() -> None:
     similarity_with_column_stmt = (
         select(compounds.c.name)
         .where(
-            bingo_func.similarity(
+            bingo_func.mol_similarity(
                 compounds.c.structure,
                 compounds.c.query_structure,
                 0.95,
@@ -114,7 +114,7 @@ def main() -> None:
         .order_by(compounds.c.id)
     )
     smarts_stmt = select(compounds.c.name).where(
-        bingo_func.matches_smarts(compounds.c.structure, "[#6]-[#8]")
+        bingo_func.mol_has_smarts(compounds.c.structure, "[#6]-[#8]")
     )
     function_stmt = (
         select(

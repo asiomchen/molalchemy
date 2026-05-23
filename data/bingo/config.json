@@ -1,10 +1,13 @@
 {
   "general": {
     "extra_members": [
-      "has_substructure",
-      "matches_smarts",
+      "mol_has_substructure",
+      "mol_has_smarts",
       "mol_equals",
-      "similarity",
+      "mol_similarity",
+      "rxn_has_substructure",
+      "rxn_has_smarts",
+      "rxn_equals",
       "AnyBingoMol",
       "AnyBingoReaction"
     ]

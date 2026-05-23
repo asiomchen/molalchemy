@@ -21,10 +21,13 @@ The test suite covers all major components of the Bingo integration:
 
 ### 3. Functions (`test_functions.py`)
 - **bingo_func**: Static methods for functional-style queries
-  - `substructure()`: Substructure searching
-  - `smarts()`: SMARTS pattern matching  
-  - `equals()`: Exact structure matching
-  - `similarity()`: Similarity searching with Tanimoto/Dice metrics
+  - `mol_has_substructure()`: Molecular substructure searching
+  - `mol_has_smarts()`: Molecular SMARTS pattern matching
+  - `mol_equals()`: Exact molecular structure matching
+  - `mol_similarity()`: Similarity searching with Tanimoto/Dice metrics
+  - `rxn_has_substructure()`: Reaction substructure searching
+  - `rxn_has_smarts()`: Reaction SMARTS pattern matching
+  - `rxn_equals()`: Exact reaction matching
 - Tests cover SQL generation, parameter handling, and ORM integration
 
 ### 4. Indexes (`test_index.py`)

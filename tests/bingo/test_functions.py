@@ -15,7 +15,7 @@ from sqlalchemy import (
 from sqlalchemy.dialects import postgresql
 
 from molalchemy.bingo import functions as bingo_func
-from molalchemy.bingo.types import BingoMol
+from molalchemy.bingo.types import BingoMol, BingoReaction
 
 all_funcs = bingo_func.__all__
 
@@ -45,7 +45,7 @@ def test_bingo_search_helpers_bind_literal_inputs():
     injected_query = "x' OR 1=1 --"
 
     stmt = select(compounds).where(
-        bingo_func.has_substructure(compounds.c.structure, injected_query)
+        bingo_func.mol_has_substructure(compounds.c.structure, injected_query)
     )
 
     compiled = stmt.compile(dialect=postgresql.dialect())
@@ -89,7 +89,7 @@ def test_bingo_similarity_preserves_column_expression_inputs():
     )
 
     stmt = select(compounds).where(
-        bingo_func.similarity(
+        bingo_func.mol_similarity(
             compounds.c.structure,
             compounds.c.query_structure,
             0.2,
@@ -107,3 +107,45 @@ def test_bingo_similarity_preserves_column_expression_inputs():
     assert "'compounds.query_structure'" not in sql
     assert " @ " in sql
     assert "bingo.sim" in sql
+
+
+@pytest.mark.parametrize(
+    ("helper_name", "column_type", "query", "search_type"),
+    [
+        ("mol_has_substructure", BingoMol(), "c1ccccc1", "bingo.sub"),
+        ("mol_has_smarts", BingoMol(), "[#6]", "bingo.smarts"),
+        ("mol_equals", BingoMol(), "CCO", "bingo.exact"),
+        ("rxn_has_substructure", BingoReaction(), "CCO>>CC=O", "bingo.rsub"),
+        ("rxn_has_smarts", BingoReaction(), "[C:1]>>[C:1][O]", "bingo.rsmarts"),
+        ("rxn_equals", BingoReaction(), "CCO>>CC=O", "bingo.rexact"),
+    ],
+)
+def test_prefixed_search_helpers_compile_to_expected_search_types(
+    helper_name, column_type, query, search_type
+):
+    """Each comparator search operation has a prefixed standalone helper."""
+    structures = Table(
+        "structures",
+        MetaData(),
+        Column("id", Integer),
+        Column("structure", column_type),
+    )
+
+    helper = getattr(bingo_func, helper_name)
+    stmt = select(structures).where(helper(structures.c.structure, query))
+
+    compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
+
+    assert " @ " in compiled
+    assert search_type in compiled
+    assert query in compiled
+
+
+def test_unprefixed_search_helpers_are_not_exported():
+    """Bingo standalone helper names are explicit about molecule vs reaction."""
+    assert "has_substructure" not in bingo_func.__all__
+    assert "matches_smarts" not in bingo_func.__all__
+    assert "similarity" not in bingo_func.__all__
+    assert not hasattr(bingo_func, "has_substructure")
+    assert not hasattr(bingo_func, "matches_smarts")
+    assert not hasattr(bingo_func, "similarity")
