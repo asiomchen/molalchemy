@@ -3,7 +3,15 @@
 from typing import Any
 
 from sqlalchemy import types as sqltypes
-from sqlalchemy.sql.elements import ColumnElement
+from sqlalchemy.sql import operators
+from sqlalchemy.sql.elements import BinaryExpression, ColumnElement
+
+
+class _BingoExactSearchExpression(BinaryExpression[bool]):
+    inherit_cache = True
+
+    def __bool__(self) -> bool:
+        return self._orig[0] == self._orig[1]
 
 
 class _BingoSearchType(sqltypes.UserDefinedType):
@@ -36,4 +44,12 @@ def _bingo_search(
     query_tuple: Any,
     search_type: str,
 ) -> ColumnElement[bool]:
-    return column.op("@")(query_tuple.cast(_BingoSearchType(search_type)))
+    query = query_tuple.cast(_BingoSearchType(search_type))
+    if search_type in ("bingo.exact", "bingo.rexact"):
+        return _BingoExactSearchExpression(
+            column,
+            query,
+            operators.custom_op("@", is_comparison=True),
+            type_=sqltypes.Boolean(),
+        )
+    return column.op("@")(query)

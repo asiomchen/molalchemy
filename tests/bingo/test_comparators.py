@@ -24,6 +24,7 @@ class TestBingoMolComparator:
             Column("id", Integer, primary_key=True),
             Column("name", String(100)),
             Column("mol", BingoMol()),
+            Column("query_mol", String),
         )
         self.mol_column = self.test_table.c.mol
 
@@ -106,6 +107,26 @@ class TestBingoMolComparator:
         assert "@" in compiled
         assert "bingo.exact" in compiled
         assert query in compiled
+
+    def test_eq_operator_with_column_delegates_to_exact_match(self):
+        result = self.mol_column == self.test_table.c.query_mol
+        compiled = str(
+            result.compile(
+                dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
+            )
+        )
+
+        assert "@" in compiled
+        assert "bingo.exact" in compiled
+        assert "test_molecules.query_mol" in compiled
+        assert "'test_molecules.query_mol'" not in compiled
+
+    def test_eq_operator_with_none_uses_sql_null_check(self):
+        result = self.mol_column.__eq__(None)
+        compiled = str(result.compile(dialect=postgresql.dialect()))
+
+        assert "IS NULL" in compiled
+        assert "bingo.exact" not in compiled
 
     def test_equals_with_parameters(self):
         """Test exact match query with parameters."""
@@ -206,6 +227,7 @@ class TestBingoMolComparatorWithBinaryType:
             Column("id", Integer, primary_key=True),
             Column("name", String(100)),
             Column("mol", BingoBinaryMol()),
+            Column("query_mol", String),
         )
         self.mol_column = self.test_table.c.mol
 
@@ -241,6 +263,19 @@ class TestBingoMolComparatorWithBinaryType:
         assert "@" in compiled
         assert "bingo.exact" in compiled
         assert query in compiled
+
+    def test_binary_mol_eq_operator_with_column_delegates_to_exact_match(self):
+        result = self.mol_column == self.test_table.c.query_mol
+        compiled = str(
+            result.compile(
+                dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
+            )
+        )
+
+        assert "@" in compiled
+        assert "bingo.exact" in compiled
+        assert "test_binary_molecules.query_mol" in compiled
+        assert "'test_binary_molecules.query_mol'" not in compiled
 
     def test_binary_mol_ne_operator_delegates_to_negative_exact_match(self):
         query = "CCO"
@@ -323,6 +358,26 @@ class TestBingoRxnComparator:
         assert "@" in compiled
         assert "bingo.rexact" in compiled
         assert query in compiled
+
+    def test_reaction_eq_operator_with_column_delegates_to_exact_match(self):
+        result = self.rxn_column == self.test_table.c.query_rxn
+        compiled = str(
+            result.compile(
+                dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
+            )
+        )
+
+        assert "@" in compiled
+        assert "bingo.rexact" in compiled
+        assert "test_reactions.query_rxn" in compiled
+        assert "'test_reactions.query_rxn'" not in compiled
+
+    def test_reaction_eq_operator_with_none_uses_sql_null_check(self):
+        result = self.rxn_column.__eq__(None)
+        compiled = str(result.compile(dialect=postgresql.dialect()))
+
+        assert "IS NULL" in compiled
+        assert "bingo.rexact" not in compiled
 
     def test_reaction_not_equals_query_generation(self):
         """Test negative exact reaction query generation."""
