@@ -20,7 +20,7 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.schema import CreateTable
 
 from molalchemy.rdkit import functions as rdkit_func
-from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol
+from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitReaction
 from molalchemy.types import CString
 
 DATABASE_URL = os.environ.get(
@@ -59,8 +59,26 @@ def main() -> None:
             Computed("morganbv_fp(mol)", persisted=True),
         ),
     )
+    nullable_molecules = Table(
+        "molalchemy_rdkit_null_validation",
+        metadata,
+        Column("id", Integer, primary_key=True),
+        Column("name", String, nullable=False),
+        Column("mol", RdkitMol()),
+    )
+    nullable_reactions = Table(
+        "molalchemy_rdkit_reaction_null_validation",
+        metadata,
+        Column("id", Integer, primary_key=True),
+        Column("name", String, nullable=False),
+        Column("rxn", RdkitReaction()),
+    )
 
     with engine.begin() as conn:
+        conn.exec_driver_sql(
+            "DROP TABLE IF EXISTS molalchemy_rdkit_reaction_null_validation"
+        )
+        conn.exec_driver_sql("DROP TABLE IF EXISTS molalchemy_rdkit_null_validation")
         conn.exec_driver_sql("DROP TABLE IF EXISTS molalchemy_rdkit_helper_validation")
         metadata.create_all(conn)
         conn.execute(
@@ -73,6 +91,20 @@ def main() -> None:
                     "name": "aspirin",
                     "mol": "CC(=O)OC1=CC=CC=C1C(=O)O",
                 },
+            ],
+        )
+        conn.execute(
+            nullable_molecules.insert(),
+            [
+                {"id": 1, "name": "benzene", "mol": "c1ccccc1"},
+                {"id": 2, "name": "unknown", "mol": None},
+            ],
+        )
+        conn.execute(
+            nullable_reactions.insert(),
+            [
+                {"id": 1, "name": "ethanol oxidation", "rxn": "CCO>>CC=O"},
+                {"id": 2, "name": "unknown reaction", "rxn": None},
             ],
         )
 
@@ -119,8 +151,16 @@ def main() -> None:
         .where(molecules.c.name == "ethanol")
         .limit(1)
     )
+    molecule_null_stmt = select(nullable_molecules.c.name).where(
+        nullable_molecules.c.mol.__eq__(None)
+    )
+    reaction_null_stmt = select(nullable_reactions.c.name).where(
+        nullable_reactions.c.rxn.__eq__(None)
+    )
 
     print(str(CreateTable(molecules).compile(dialect=postgresql.dialect())))
+    print(str(CreateTable(nullable_molecules).compile(dialect=postgresql.dialect())))
+    print(str(CreateTable(nullable_reactions).compile(dialect=postgresql.dialect())))
     print()
     print(substructure_stmt.compile(dialect=postgresql.dialect()))
     print(functional_substructure_stmt.compile(dialect=postgresql.dialect()))
@@ -128,6 +168,8 @@ def main() -> None:
     print(tanimoto_stmt.compile(dialect=postgresql.dialect()))
     print(dice_stmt.compile(dialect=postgresql.dialect()))
     print(function_stmt.compile(dialect=postgresql.dialect()))
+    print(molecule_null_stmt.compile(dialect=postgresql.dialect()))
+    print(reaction_null_stmt.compile(dialect=postgresql.dialect()))
 
     with engine.connect() as conn:
         version = conn.exec_driver_sql("SELECT rdkit_version()").scalar_one()
@@ -139,6 +181,8 @@ def main() -> None:
         tanimoto_rows = conn.execute(tanimoto_stmt).scalars().all()
         dice_rows = conn.execute(dice_stmt).scalars().all()
         function_row = conn.execute(function_stmt).mappings().one()
+        molecule_null_rows = conn.execute(molecule_null_stmt).scalars().all()
+        reaction_null_rows = conn.execute(reaction_null_stmt).scalars().all()
 
     print()
     print(f"RDKit version: {version}")
@@ -148,6 +192,8 @@ def main() -> None:
     print(f"tanimoto fingerprint threshold(CCO): {tanimoto_rows}")
     print(f"dice fingerprint threshold(CCO): {dice_rows}")
     print(f"function wrappers on ethanol: {dict(function_row)}")
+    print(f"mol IS NULL via == None: {molecule_null_rows}")
+    print(f"reaction IS NULL via == None: {reaction_null_rows}")
 
     assert substructure_rows == ["benzene", "aspirin"]
     assert functional_substructure_rows == ["benzene", "aspirin"]
@@ -168,6 +214,8 @@ def main() -> None:
     assert function_row["dice_score"] == 1
     assert function_row["ctab_len"] > 100
     assert function_row["pkl_len"] > 0
+    assert molecule_null_rows == ["unknown"]
+    assert reaction_null_rows == ["unknown reaction"]
 
 
 if __name__ == "__main__":
