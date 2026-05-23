@@ -1,5 +1,5 @@
 extend-exclude = ["update_proxy_stubs.py"]
-include = ["pyproject.toml", "src/**/*.py", "scripts/**/*.py", "docs/**/*.ipynb"]
+include = ["pyproject.toml", "src/**/*.py", "scripts/**/*.py"]
 
 # Same as Black.
 line-length = 88

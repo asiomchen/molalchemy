@@ -1,7 +1,5 @@
 """Integration tests for bingo query structure."""
 
-import re
-
 from sqlalchemy import Column, Integer, MetaData, String, Table, and_, or_, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -48,7 +46,7 @@ class TestBingoQueryIntegration:
 
         # Query using function
         stmt2 = select(self.compounds).where(
-            bingo_func.has_substructure(self.compounds.c.structure, benzene)
+            bingo_func.mol_has_substructure(self.compounds.c.structure, benzene)
         )
 
         # Both should compile successfully
@@ -65,7 +63,7 @@ class TestBingoQueryIntegration:
         ethanol = "CCO"
 
         stmt = select(self.compounds).where(
-            bingo_func.similarity(self.compounds.c.structure, ethanol, 0.7, 1.0)
+            bingo_func.mol_similarity(self.compounds.c.structure, ethanol, 0.7, 1.0)
         )
 
         compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
@@ -106,7 +104,8 @@ class TestBingoQueryIntegration:
         assert query in compiled
         assert parameters in compiled
         assert "bingo.sub" in compiled
-        assert re.search(r"max\s*=\s*5.*\:\:bingo\.sub", compiled)
+        assert "CAST" in compiled
+        assert "AS bingo.sub" in compiled
 
     def test_binary_mol_query_structure(self):
         """Test query structure with binary molecule type."""
@@ -194,7 +193,7 @@ class TestBingoORMIntegration:
 
         # Using function
         stmt2 = select(self.Compound).where(
-            bingo_func.has_substructure(self.Compound.structure, benzene)
+            bingo_func.mol_has_substructure(self.Compound.structure, benzene)
         )
 
         compiled1 = str(stmt1.compile(compile_kwargs={"literal_binds": True}))
@@ -210,7 +209,7 @@ class TestBingoORMIntegration:
         ethanol = "CCO"
 
         stmt = select(self.Compound).where(
-            bingo_func.similarity(self.Compound.structure, ethanol, 0.8)
+            bingo_func.mol_similarity(self.Compound.structure, ethanol, 0.8)
         )
 
         compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
@@ -226,7 +225,7 @@ class TestBingoORMIntegration:
         stmt = select(self.Compound).where(
             and_(
                 self.Compound.structure.has_substructure(benzene),
-                bingo_func.similarity(self.Compound.structure, ethanol, 0.5),
+                bingo_func.mol_similarity(self.Compound.structure, ethanol, 0.5),
             )
         )
 
@@ -333,14 +332,14 @@ class TestBingoQueryVariations:
         benzene_smarts = "[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1"
         ethanol = "CCO"
 
-        substructure_expr = bingo_func.has_substructure(
+        substructure_expr = bingo_func.mol_has_substructure(
             self.compounds.c.structure, benzene
         )
-        smarts_expr = bingo_func.matches_smarts(
+        smarts_expr = bingo_func.mol_has_smarts(
             self.compounds.c.structure, benzene_smarts
         )
         equals_expr = self.compounds.c.structure == ethanol
-        similarity_expr = bingo_func.similarity(
+        similarity_expr = bingo_func.mol_similarity(
             self.compounds.c.structure, ethanol, 0.7
         )
 

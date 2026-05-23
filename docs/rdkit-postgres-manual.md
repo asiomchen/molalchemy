@@ -1,18 +1,18 @@
-## The RDKit database cartridge[¶](#the-rdkit-database-cartridge "Link to this heading")
+## The RDKit database cartridge
 
-## What is this?[¶](#what-is-this "Link to this heading")
+## What is this?
 
 This document is a tutorial and reference guide for the RDKit PostgreSQL cartridge.
 
 If you find mistakes, or have suggestions for improvements, please either fix them yourselves in the source document (the .md file) or send them to the mailing list: [rdkit-discuss@lists.sourceforge.net](mailto:rdkit-discuss%40lists.sourceforge.net) (you will need to subscribe first)
 
-## Tutorial[¶](#tutorial "Link to this heading")
+## Tutorial
 
-### Introduction[¶](#introduction "Link to this heading")
+### Introduction
 
-### Creating databases[¶](#creating-databases "Link to this heading")
+### Creating databases
 
-#### Configuration[¶](#configuration "Link to this heading")
+#### Configuration
 
 The timing information below was collected on a commodity desktop PC (Dell Studio XPS with a 2.9GHz i7 CPU and 8GB of RAM) running Ubuntu 12.04 and using PostgreSQL v9.1.4. The database was installed with default parameters.
 
@@ -20,7 +20,7 @@ To improve performance while loading the database and building the index, I chan
 
 And to improve search performance, I allowed postgresql to use more memory than the extremely conservative default settings:
 
-#### Creating a database from a file[¶](#creating-a-database-from-a-file "Link to this heading")
+#### Creating a database from a file
 
 In this example I show how to load a database from the SMILES file of commercially available compounds that is downloadable from emolecules.com at URL [http://downloads.emolecules.com/free/](http://downloads.emolecules.com/free/)
 
@@ -34,7 +34,7 @@ Create the molecule table, but only for SMILES that the RDKit accepts:
 
 The last step is only required if you plan to do substructure searches.
 
-#### Loading ChEMBL[¶](#loading-chembl "Link to this heading")
+#### Loading ChEMBL
 
 Start by downloading and installing the postgresql dump from the ChEMBL website [ftp://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/latest](ftp://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/latest)
 
@@ -46,7 +46,7 @@ Create some fingerprints and build the similarity search index:
 
 Here is a group of the commands used here (and below) in one block so that you can just paste it in at the psql prompt:
 
-### Substructure searches[¶](#substructure-searches "Link to this heading")
+### Substructure searches
 
 Example query molecules taken from the [eMolecules home page](http://www.emolecules.com/):
 
@@ -56,19 +56,19 @@ Given we’re searching through 1.7 million compounds these search times aren’
 
 One easy way to speed things up, particularly for queries that return a large number of results, is to only retrieve a limited number of results:
 
-#### SMARTS-based queries[¶](#smarts-based-queries "Link to this heading")
+#### SMARTS-based queries
 
 Oxadiazole or thiadiazole:
 
 This is slower than the pure SMILES query, this is generally true of SMARTS-based queries.
 
-#### Using Stereochemistry[¶](#using-stereochemistry "Link to this heading")
+#### Using Stereochemistry
 
 Note that by default stereochemistry is not taken into account when doing substructure queries:
 
 This can be changed using the rdkit.do\_chiral\_sss configuration variable:
 
-#### Tuning queries[¶](#tuning-queries "Link to this heading")
+#### Tuning queries
 
 It is frequently useful to be able to exert a bit more control over substructure queries without having to construct complex SMARTS queries. The cartridge function `mol_adjust_query_properties()` can be used to do just this. Here is an example of the default behavior, using a  
 query for 2,6 di-substituted pyridines:
@@ -83,17 +83,17 @@ The options available are:
 
 The various `Flags` arguments mentioned above, which control where particular options are applied, are constructed by combining operations from the list below with the `|` character.
 
-### Similarity searches[¶](#similarity-searches "Link to this heading")
+### Similarity searches
 
 Basic similarity searching:
 
 Usually we’d like to find a sorted listed of neighbors along with the accompanying SMILES. This SQL function makes that pattern easy:
 
-#### Adjusting the similarity cutoff[¶](#adjusting-the-similarity-cutoff "Link to this heading")
+#### Adjusting the similarity cutoff
 
 By default, the minimum similarity returned with a similarity search is 0.5. This can be adjusted with the rdkit.tanimoto\_threshold (and rdkit.dice\_threshold) configuration variables:
 
-### Using the MCS code[¶](#using-the-mcs-code "Link to this heading")
+### Using the MCS code
 
 The most straightforward use of the MCS code is to find the maximum common substructure of a group of molecules:
 
@@ -128,19 +128,19 @@ Time: 304.332 ms
 
 Available parameters and their default values are:
 
-## Reference Guide[¶](#reference-guide "Link to this heading")
+## Reference Guide
 
-### New Types[¶](#new-types "Link to this heading")
+### New Types
 
-### Parameters[¶](#parameters "Link to this heading")
+### Parameters
 
-### Operators[¶](#operators "Link to this heading")
+### Operators
 
-#### Similarity search[¶](#similarity-search "Link to this heading")
+#### Similarity search
 
-#### Substructure and exact structure search[¶](#substructure-and-exact-structure-search "Link to this heading")
+#### Substructure and exact structure search
 
-#### Molecule comparison[¶](#molecule-comparison "Link to this heading")
+#### Molecule comparison
 
 *Note* Two molecules are compared by making the following comparisons in order. Later comparisons are only made if the preceding values are equal:
 
@@ -150,19 +150,19 @@ If all of the above are the same and the second molecule is a substructure of th
 
 There are additional operators defined in the cartridge, but these are used for internal purposes.
 
-### Functions[¶](#functions "Link to this heading")
+### Functions
 
-#### Fingerprint Related[¶](#fingerprint-related "Link to this heading")
+#### Fingerprint Related
 
-##### Generating fingerprints[¶](#generating-fingerprints "Link to this heading")
+##### Generating fingerprints
 
-##### Working with fingerprints[¶](#working-with-fingerprints "Link to this heading")
+##### Working with fingerprints
 
-##### Fingerprint I/O[¶](#fingerprint-i-o "Link to this heading")
+##### Fingerprint I/O
 
-#### Molecule Related[¶](#molecule-related "Link to this heading")
+#### Molecule Related
 
-##### Molecule I/O and Validation[¶](#molecule-i-o-and-validation "Link to this heading")
+##### Molecule I/O and Validation
 
 +   is\_valid\_smiles(smiles) : returns whether or not a SMILES string produces a valid RDKit molecule.
     
@@ -205,9 +205,9 @@ There are additional operators defined in the cartridge, but these are used for 
 +   mol\_from\_json(string) : returns a molecule for a commonchem JSON string, NULL if the molecule construction fails. (*available from the 2021\_09 release*)
     
 
-##### Substructure operations[¶](#substructure-operations "Link to this heading")
+##### Substructure operations
 
-##### Descriptors[¶](#descriptors "Link to this heading")
+##### Descriptors
 
 +   mol\_amw(mol) : returns the AMW for a molecule.
     
@@ -266,15 +266,15 @@ There are additional operators defined in the cartridge, but these are used for 
 +   mol\_nm\_hash(mol,string default ‘’) : returns a string with a hash for the molecule. The second argument controls the hash type. Legal values are ‘AnonymousGraph’, ‘ElementGraph’, ‘CanonicalSmiles’, ‘MurckoScaffold’, ‘ExtendedMurcko’, ‘MolFormula’, ‘AtomBondCounts’, ‘DegreeVector’, ‘Mesomer’, ‘HetAtomTautomer’, ‘HetAtomProtomer’, ‘RedoxPair’, ‘Regioisomer’, ‘NetCharge’, ‘SmallWorldIndexBR’, ‘SmallWorldIndexBRL’, ‘ArthorSubstructureOrder\`. The default is ‘AnonymousGraph’.
     
 
-##### Connectivity Descriptors[¶](#connectivity-descriptors "Link to this heading")
+##### Connectivity Descriptors
 
-##### MCS[¶](#mcs "Link to this heading")
+##### MCS
 
-#### Other[¶](#other "Link to this heading")
+#### Other
 
 There are additional functions defined in the cartridge, but these are used for internal purposes.
 
-## Using the Cartridge from Python[¶](#using-the-cartridge-from-python "Link to this heading")
+## Using the Cartridge from Python
 
 The recommended adapter for connecting to postgresql is pyscopg2 ([https://pypi.python.org/pypi/psycopg2](https://pypi.python.org/pypi/psycopg2)).
 
@@ -284,7 +284,7 @@ That returns a SMILES for each molecule. If you plan to do more work with the mo
 
 These pickles can then be converted into molecules:
 
-## License[¶](#license "Link to this heading")
+## License
 
 This document is copyright (C) 2013-2023 by Greg Landrum and other RDKit contributors.
 

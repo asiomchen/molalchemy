@@ -1,7 +1,17 @@
 """Bingo SQLAlchemy comparators for chemical structure searching."""
 
-from sqlalchemy import ColumnElement, text
+from typing import Any
+
+from sqlalchemy import ColumnElement, tuple_
 from sqlalchemy.types import UserDefinedType
+
+from molalchemy.bingo.search import _bingo_search as _build_bingo_search
+
+
+def _bingo_search(
+    column: ColumnElement[Any], query: Any, parameters: Any, search_type: str
+) -> ColumnElement[bool]:
+    return _build_bingo_search(column, tuple_(query, parameters), search_type)
 
 
 class BingoMolComparator(UserDefinedType.Comparator):
@@ -12,18 +22,18 @@ class BingoMolComparator(UserDefinedType.Comparator):
     substructure matching, SMARTS pattern matching, and exact structure matching.
     """
 
-    def __eq__(self, other: str) -> ColumnElement[bool]:
+    def __eq__(self, other: Any) -> ColumnElement[bool]:
         return self.equals(other)
 
-    def has_substructure(self, query: str, parameters: str = "") -> ColumnElement[bool]:
+    def has_substructure(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
         """
         Check if the molecular structure contains a given substructure.
 
         Parameters
         ----------
-        query : str
+        query : Any
             The substructure query as a SMILES or MOL string.
-        parameters : str, optional
+        parameters : Any, optional
             Additional parameters for the substructure search, by default "".
 
         Returns
@@ -35,21 +45,17 @@ class BingoMolComparator(UserDefinedType.Comparator):
         --------
         >>> mol_column.has_substructure('c1ccccc1')  # benzene ring
         """
-        return self.expr.op("@")(
-            text("(:query, :params)\\:\\:bingo.sub").bindparams(
-                query=query, params=parameters
-            )
-        )
+        return _bingo_search(self.expr, query, parameters, "bingo.sub")
 
-    def has_smarts(self, query: str, parameters: str = "") -> ColumnElement[bool]:
+    def has_smarts(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
         """
         Check if the molecular structure matches a SMARTS pattern.
 
         Parameters
         ----------
-        query : str
+        query : Any
             The SMARTS pattern string for pattern matching.
-        parameters : str, optional
+        parameters : Any, optional
             Additional parameters for the SMARTS search, by default "".
 
         Returns
@@ -61,21 +67,17 @@ class BingoMolComparator(UserDefinedType.Comparator):
         --------
         >>> mol_column.has_smarts('[#6]1:[#6]:[#6]:[#6]:[#6]:[#6]:1')  # aromatic ring
         """
-        return self.expr.op("@")(
-            text("(:query, :params)\\:\\:bingo.smarts").bindparams(
-                query=query, params=parameters
-            )
-        )
+        return _bingo_search(self.expr, query, parameters, "bingo.smarts")
 
-    def equals(self, query: str, parameters: str = "") -> ColumnElement[bool]:
+    def equals(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
         """
         Check if the molecular structure exactly matches the given structure.
 
         Parameters
         ----------
-        query : str
+        query : Any
             The molecular structure query as a SMILES or MOL string.
-        parameters : str, optional
+        parameters : Any, optional
             Additional parameters for the exact match search, by default "".
 
         Returns
@@ -87,11 +89,7 @@ class BingoMolComparator(UserDefinedType.Comparator):
         --------
         >>> mol_column.equals('CCO')  # ethanol exact match
         """
-        return self.expr.op("@")(
-            text("(:query, :params)\\:\\:bingo.exact").bindparams(
-                query=query, params=parameters
-            )
-        )
+        return _bingo_search(self.expr, query, parameters, "bingo.exact")
 
 
 class BingoRxnComparator(UserDefinedType.Comparator):
@@ -102,18 +100,18 @@ class BingoRxnComparator(UserDefinedType.Comparator):
     reaction substructure matching, SMARTS pattern matching, and exact reaction matching.
     """
 
-    def __eq__(self, other: str) -> ColumnElement[bool]:
+    def __eq__(self, other: Any) -> ColumnElement[bool]:
         return self.equals(other)
 
-    def has_substructure(self, query: str, parameters: str = "") -> ColumnElement[bool]:
+    def has_substructure(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
         """
         Check if the reaction contains a given substructure pattern.
 
         Parameters
         ----------
-        query : str
+        query : Any
             The reaction substructure query as a reaction SMILES or RXN string.
-        parameters : str, optional
+        parameters : Any, optional
             Additional parameters for the reaction substructure search, by default "".
 
         Returns
@@ -125,21 +123,17 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         --------
         >>> rxn_column.has_substructure('c1ccccc1>>c1ccc(O)cc1')  # phenol formation
         """
-        return self.expr.op("@")(
-            text("(:query, :params)\\:\\:bingo.rsub").bindparams(
-                query=query, params=parameters
-            )
-        )
+        return _bingo_search(self.expr, query, parameters, "bingo.rsub")
 
-    def has_smarts(self, query: str, parameters: str = "") -> ColumnElement[bool]:
+    def has_smarts(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
         """
         Check if the reaction matches a SMARTS pattern.
 
         Parameters
         ----------
-        query : str
+        query : Any
             The reaction SMARTS pattern string for pattern matching.
-        parameters : str, optional
+        parameters : Any, optional
             Additional parameters for the reaction SMARTS search, by default "".
 
         Returns
@@ -151,21 +145,17 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         --------
         >>> rxn_column.has_smarts('[C:1]>>[C:1][O]')  # C-O bond formation
         """
-        return self.expr.op("@")(
-            text("(:query, :params)\\:\\:bingo.rsmarts").bindparams(
-                query=query, params=parameters
-            )
-        )
+        return _bingo_search(self.expr, query, parameters, "bingo.rsmarts")
 
-    def equals(self, query: str, parameters: str = "") -> ColumnElement[bool]:
+    def equals(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
         """
         Check if the reaction exactly matches the given reaction.
 
         Parameters
         ----------
-        query : str
+        query : Any
             The reaction query as a reaction SMILES or RXN string.
-        parameters : str, optional
+        parameters : Any, optional
             Additional parameters for the exact reaction match search, by default "".
 
         Returns
@@ -177,8 +167,4 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         --------
         >>> rxn_column.has_equals('CCO>>CC=O')  # ethanol to acetaldehyde exact match
         """
-        return self.expr.op("@")(
-            text("(:query, :params)\\:\\:bingo.rexact").bindparams(
-                query=query, params=parameters
-            )
-        )
+        return _bingo_search(self.expr, query, parameters, "bingo.rexact")

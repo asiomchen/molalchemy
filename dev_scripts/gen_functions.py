@@ -13,6 +13,14 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
+UNDOCUMENTED_PARAM_DESCRIPTION = "Undocumented cartridge parameter."
+
+
+def format_doc_param(param: dict) -> str:
+    """Format a JSON argument definition as a NumPy-style docstring parameter."""
+    description = param["description"] or UNDOCUMENTED_PARAM_DESCRIPTION
+    return f"{param['name']} : {param['type']}\n            {description}"
+
 
 def json_to_function_code(func_name: str, data: dict, template) -> str:
     """Generate function code from JSON data using Jinja template.
@@ -51,11 +59,7 @@ def json_to_function_code(func_name: str, data: dict, template) -> str:
             param_str += f" = {param['default']}"
         params_list.append(param_str)
 
-        # Add parameter description for docstring
-        param_doc = f"{param['name']}"
-        if param["description"]:
-            param_doc += f"\n\t    {param['description']}"
-        doc_param_list.append(param_doc)
+        doc_param_list.append(format_doc_param(param))
         arg_names.append(param["name"])
 
     # Format parameters for template

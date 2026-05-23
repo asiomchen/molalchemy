@@ -9,6 +9,8 @@ from sqlalchemy import types as sqltypes
 from sqlalchemy.sql.elements import BinaryExpression, ColumnElement
 from sqlalchemy.sql.functions import GenericFunction
 
+from molalchemy.bingo.search import _bingo_search
+
 from ._types import (
     AnyBingoBinaryMolLike,
     AnyBingoBinaryReactionLike,
@@ -24,21 +26,9 @@ AnyBingoMol = AnyBingoMolLikeCombined
 AnyBingoReaction = AnyBingoReactionLikeCombined
 
 
-class _BingoSearchType(sqltypes.UserDefinedType):
-    """SQLAlchemy type wrapper for casting search tuples to Bingo composite types."""
-
-    cache_ok = True
-
-    def __init__(self, type_name: str) -> None:
-        self.type_name = type_name
-
-    def get_col_spec(self, **kw: Any) -> str:
-        return self.type_name
-
-
-def has_substructure(
+def mol_has_substructure(
     mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
-):
+) -> BinaryExpression:
     """
     Perform substructure search on a molecule column.
 
@@ -58,12 +48,12 @@ def has_substructure(
         SQLAlchemy expression for substructure matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(tuple_(query, parameters).cast(_BingoSearchType("bingo.sub")))
+    return _bingo_search(mol, tuple_(query, parameters), "bingo.sub")
 
 
-def matches_smarts(
+def mol_has_smarts(
     mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
-):
+) -> BinaryExpression:
     """
     Perform SMARTS pattern matching on a molecule column.
 
@@ -82,12 +72,12 @@ def matches_smarts(
         SQLAlchemy expression for SMARTS matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(tuple_(query, parameters).cast(_BingoSearchType("bingo.smarts")))
+    return _bingo_search(mol, tuple_(query, parameters), "bingo.smarts")
 
 
 def mol_equals(
     mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
-):
+) -> BinaryExpression:
     """
     Perform exact structure matching on a molecule column.
 
@@ -107,10 +97,10 @@ def mol_equals(
         SQLAlchemy expression for exact matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(tuple_(query, parameters).cast(_BingoSearchType("bingo.exact")))
+    return _bingo_search(mol, tuple_(query, parameters), "bingo.exact")
 
 
-def similarity(
+def mol_similarity(
     mol: ColumnElement[AnyBingoMol],
     query: TextLike,
     bottom: float = 0.0,
@@ -141,9 +131,79 @@ def similarity(
         SQLAlchemy expression for similarity matching that can be used in WHERE clauses.
 
     """
-    return mol.op("@")(
-        tuple_(bottom, top, query, metric).cast(_BingoSearchType("bingo.sim"))
-    )
+    return _bingo_search(mol, tuple_(bottom, top, query, metric), "bingo.sim")
+
+
+def rxn_has_substructure(
+    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+) -> BinaryExpression:
+    """
+    Perform substructure search on a reaction column.
+
+    Parameters
+    ----------
+    rxn : ColumnElement[AnyBingoReaction]
+        SQLAlchemy column containing reaction data (reaction SMILES, RXN, or binary).
+    query : TextLike
+        Query reaction as reaction SMILES, SMARTS, or RXN string.
+    parameters : TextLike, optional
+        Search parameters for customizing the matching behavior (default is "").
+
+    Returns
+    -------
+    BinaryExpression
+        SQLAlchemy expression for reaction substructure matching that can be used in WHERE clauses.
+
+    """
+    return _bingo_search(rxn, tuple_(query, parameters), "bingo.rsub")
+
+
+def rxn_has_smarts(
+    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+) -> BinaryExpression:
+    """
+    Perform SMARTS pattern matching on a reaction column.
+
+    Parameters
+    ----------
+    rxn : ColumnElement[AnyBingoReaction]
+        SQLAlchemy column containing reaction data (reaction SMILES, RXN, or binary).
+    query : TextLike
+        Reaction SMARTS pattern string for matching.
+    parameters : TextLike, optional
+        Search parameters for customizing the matching behavior (default is "").
+
+    Returns
+    -------
+    BinaryExpression
+        SQLAlchemy expression for reaction SMARTS matching that can be used in WHERE clauses.
+
+    """
+    return _bingo_search(rxn, tuple_(query, parameters), "bingo.rsmarts")
+
+
+def rxn_equals(
+    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+) -> BinaryExpression:
+    """
+    Perform exact matching on a reaction column.
+
+    Parameters
+    ----------
+    rxn : ColumnElement[AnyBingoReaction]
+        SQLAlchemy column containing reaction data (reaction SMILES, RXN, or binary).
+    query : TextLike
+        Query reaction as reaction SMILES or RXN string for exact matching.
+    parameters : TextLike, optional
+        Search parameters for customizing the matching behavior (default is "").
+
+    Returns
+    -------
+    BinaryExpression
+        SQLAlchemy expression for exact reaction matching that can be used in WHERE clauses.
+
+    """
+    return _bingo_search(rxn, tuple_(query, parameters), "bingo.rexact")
 
 
 class aam(GenericFunction):
@@ -160,9 +220,9 @@ class aam(GenericFunction):
 
         Parameters
         ----------
-        rxn
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
             Input reaction
-        strategy
+        strategy : sqltypes.Text | Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP']
             Strategy for handling existing atom mapping (default is 'KEEP').
                 - 'CLEAR': Remove all existing mappings and compute new ones
                 - 'DISCARD': Remove all mappings without computing new ones
@@ -191,7 +251,7 @@ class cansmiles(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Input molecule in any supported format
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -216,7 +276,7 @@ class checkmolecule(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Input molecule in any supported format
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -241,7 +301,7 @@ class checkreaction(GenericFunction):
 
         Parameters
         ----------
-        rxn
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
             Input reaction in any supported format
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -266,7 +326,7 @@ class cml(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Input molecule in any supported format
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -294,9 +354,9 @@ class compactmolecule(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Input molecule in any supported format
-        use_pos
+        use_pos : sqltypes.Boolean | bool
             If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -324,9 +384,9 @@ class compactreaction(GenericFunction):
 
         Parameters
         ----------
-        rxn
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
             Input reaction in any supported format
-        use_pos
+        use_pos : sqltypes.Boolean | bool
             If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -356,10 +416,14 @@ class exportrdf(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_4 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -388,13 +452,13 @@ class exportsdf(GenericFunction):
 
         Parameters
         ----------
-        table
+        table : str | sqltypes.Text
             Name of the table containing the molecules to export
-        column
+        column : str | sqltypes.Text
             Name of the column containing the molecules to export
-        other_columns
+        other_columns : str | sqltypes.Text
             Space-separated list of other columns to include in the SDF file as SD data fields
-        outfile
+        outfile : str | sqltypes.Text
             Path to the output SDF file
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -417,7 +481,8 @@ class filetoblob(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -439,7 +504,8 @@ class filetotext(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -466,8 +532,10 @@ class fingerprint(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
+        arg_1 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -489,7 +557,8 @@ class getblockcount(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -535,7 +604,8 @@ class getmass(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -557,7 +627,8 @@ class getname(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : AnyBingoMolLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -585,11 +656,11 @@ class getsimilarity(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Input molecule or molecular column in any supported format
-        query
+        query : TextLike
             Query molecule in any supported format
-        metric
+        metric : TextLike | Literal['tanimoto', 'euclid-sub']
             string specifying the metric to use: `tanimoto` , `tversky`, or `euclid-sub`. In case of Tversky metric, there are optional “alpha” and “beta” parameters: `tversky 0.9 0.1` denotes alpha = 0.9, beta = 0.1. The default is alpha = beta = 0.5 (Dice index).
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -612,7 +683,8 @@ class getstructurescount(GenericFunction):
 
         Parameters
         ----------
-        arg_1
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -661,8 +733,10 @@ class getweight(GenericFunction):
 
         Parameters
         ----------
-        mol
-        arg_2
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -686,7 +760,8 @@ class gross(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -715,10 +790,14 @@ class importrdf(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
+        arg_1 : TextLike
+            Undocumented cartridge parameter.
+        arg_2 : TextLike
+            Undocumented cartridge parameter.
+        arg_3 : TextLike
+            Undocumented cartridge parameter.
+        arg_4 : TextLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -747,10 +826,14 @@ class importsdf(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_4 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -779,10 +862,14 @@ class importsmiles(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
-        arg_3
-        arg_4
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_3 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_4 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -809,8 +896,10 @@ class inchi(GenericFunction):
 
         Parameters
         ----------
-        mol
-        arg_2
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -832,7 +921,8 @@ class inchikey(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1040,7 +1130,8 @@ class molfile(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1064,8 +1155,10 @@ class precachedatabase(GenericFunction):
 
         Parameters
         ----------
-        arg_1
-        arg_2
+        arg_1 : str | sqltypes.Text
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1089,7 +1182,8 @@ class rcml(GenericFunction):
 
         Parameters
         ----------
-        rxn
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1116,8 +1210,10 @@ class rfingerprint(GenericFunction):
 
         Parameters
         ----------
-        rxn
-        arg_2
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1141,7 +1237,8 @@ class rsmiles(GenericFunction):
 
         Parameters
         ----------
-        rxn
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1165,7 +1262,8 @@ class rxnfile(GenericFunction):
 
         Parameters
         ----------
-        rxn
+        rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1189,7 +1287,8 @@ class smiles(GenericFunction):
 
         Parameters
         ----------
-        mol
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
@@ -1216,8 +1315,10 @@ class standardize(GenericFunction):
 
         Parameters
         ----------
-        mol
-        arg_2
+        mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+            Undocumented cartridge parameter.
+        arg_2 : str | sqltypes.Text
+            Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
 
