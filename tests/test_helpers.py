@@ -7,7 +7,8 @@ from molalchemy.bingo.types import (
     BingoMol,
     BingoReaction,
 )
-from molalchemy.helpers import bingo_col, bingo_rxn_col
+from molalchemy.helpers import bingo_col, bingo_rxn_col, rdkit_col, rdkit_rxn_col
+from molalchemy.rdkit.types import RdkitMol, RdkitReaction
 
 
 @pytest.fixture(params=[BingoMol, BingoBinaryMol])
@@ -20,6 +21,16 @@ def good_bingo_mol_col(request: pytest.FixtureRequest):
 def good_bingo_rxn_col(request: pytest.FixtureRequest):
     column_type = request.param
     return Column("reaction", column_type)
+
+
+@pytest.fixture()
+def good_rdkit_mol_col():
+    return Column("structure", RdkitMol())
+
+
+@pytest.fixture()
+def good_rdkit_rxn_col():
+    return Column("reaction", RdkitReaction())
 
 
 @pytest.mark.parametrize("bad_type", [String, BINARY])
@@ -57,3 +68,46 @@ def test_bingo_rxn_col_invalid_input():
 def test_bingo_mol_col_success(good_bingo_mol_col):
     result = bingo_col(good_bingo_mol_col)
     assert result is good_bingo_mol_col
+
+
+def test_bingo_rxn_col_success(good_bingo_rxn_col):
+    result = bingo_rxn_col(good_bingo_rxn_col)
+    assert result is good_bingo_rxn_col
+
+
+@pytest.mark.parametrize("bad_type", [String, BINARY])
+def test_rdkit_mol_col_type_error(bad_type):
+    col = Column("bad_structure", bad_type)
+    with pytest.raises(TypeError, match="Column is not of type RdkitMol"):
+        rdkit_col(col)
+
+
+@pytest.mark.parametrize("bad_type", [String, BINARY])
+def test_rdkit_rxn_col_type_error(bad_type):
+    col = Column("bad_reaction", bad_type)
+    with pytest.raises(TypeError, match="Column is not of type RdkitReaction"):
+        rdkit_rxn_col(col)
+
+
+def test_rdkit_mol_col_invalid_input():
+    with pytest.raises(
+        TypeError, match="Input is not a SQLAlchemy Column or InstrumentedAttribute"
+    ):
+        rdkit_col("not_a_column")
+
+
+def test_rdkit_rxn_col_invalid_input():
+    with pytest.raises(
+        TypeError, match="Input is not a SQLAlchemy InstrumentedAttribute or Column"
+    ):
+        rdkit_rxn_col(123)
+
+
+def test_rdkit_mol_col_success(good_rdkit_mol_col):
+    result = rdkit_col(good_rdkit_mol_col)
+    assert result is good_rdkit_mol_col
+
+
+def test_rdkit_rxn_col_success(good_rdkit_rxn_col):
+    result = rdkit_rxn_col(good_rdkit_rxn_col)
+    assert result is good_rdkit_rxn_col

@@ -1,4 +1,4 @@
-"""Helper functions for working with Bingo molecule and reaction columns in modern IDEs. Work iprogress"""
+"""Helper functions for typed molecule and reaction column autocomplete."""
 
 from sqlalchemy import Column
 from sqlalchemy.orm.attributes import InstrumentedAttribute
@@ -10,6 +10,8 @@ from molalchemy.bingo import (
     BingoReaction,
 )
 from molalchemy.bingo.proxy import BingoMolProxy, BingoRxnProxy
+from molalchemy.rdkit import RdkitMol, RdkitReaction
+from molalchemy.rdkit.proxy import RdkitMolProxy, RdkitRxnProxy
 
 
 def bingo_col(column: Column | InstrumentedAttribute) -> BingoMolProxy:
@@ -84,6 +86,42 @@ def bingo_rxn_col(column: Column | InstrumentedAttribute) -> BingoRxnProxy:
             raise TypeError(
                 "Column is not of type BingoReaction or BingoBinaryReaction"
             )
+    else:
+        raise TypeError(
+            f"Input is not a SQLAlchemy InstrumentedAttribute or Column, got {type(column)}"
+        )
+
+
+def rdkit_col(column: Column | InstrumentedAttribute) -> RdkitMolProxy:
+    """
+    Create an RDKit molecule proxy from a SQLAlchemy column.
+
+    This validates that the input column uses `molalchemy.rdkit.types.RdkitMol`
+    and returns the original column typed for IDE autocomplete.
+    """
+    if isinstance(column, InstrumentedAttribute | Column):
+        if isinstance(column.type, RdkitMol):
+            return column  # type: ignore
+        else:
+            raise TypeError("Column is not of type RdkitMol")
+    else:
+        raise TypeError(
+            f"Input is not a SQLAlchemy Column or InstrumentedAttribute, got {type(column)}"
+        )
+
+
+def rdkit_rxn_col(column: Column | InstrumentedAttribute) -> RdkitRxnProxy:
+    """
+    Create an RDKit reaction proxy from a SQLAlchemy column.
+
+    This validates that the input column uses `molalchemy.rdkit.types.RdkitReaction`
+    and returns the original column typed for IDE autocomplete.
+    """
+    if isinstance(column, InstrumentedAttribute | Column):
+        if isinstance(column.type, RdkitReaction):
+            return column  # type: ignore
+        else:
+            raise TypeError("Column is not of type RdkitReaction")
     else:
         raise TypeError(
             f"Input is not a SQLAlchemy InstrumentedAttribute or Column, got {type(column)}"

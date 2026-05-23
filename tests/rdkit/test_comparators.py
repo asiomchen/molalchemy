@@ -75,6 +75,15 @@ class TestRdkitMolComparator:
         # The query value will be a bind parameter, not literal
         assert ":structure_" in compiled
 
+    def test_eq_operator_delegates_to_exact_match(self):
+        result = self.mol_column == "CCO"
+        compiled = result.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert "@=" in sql
+        assert "mol_from_pkl" in sql
+        assert "CCO" in compiled.params.values()
+
     def test_string_queries_compile_via_molecule_coercion(self):
         stmt = select(self.test_table).where(
             self.mol_column.has_substructure("x' OR 1=1 --")
@@ -278,6 +287,15 @@ class TestRdkitReactionComparator:
         assert "reaction_from_smarts" in sql
         assert "%(query_rxn)s" in sql
 
+    def test_eq_operator_delegates_to_exact_match(self):
+        result = self.rxn_column == "[C:1]>>[C:1]"
+        compiled = result.compile(dialect=postgresql.dialect())
+        sql = str(compiled)
+
+        assert "@=" in sql
+        assert "reaction_from_smarts" in sql
+        assert "[C:1]>>[C:1]" in compiled.params.values()
+
     def test_query_column_expressions_are_preserved(self):
         stmt = select(self.test_table).where(
             self.rxn_column.has_substructure(self.test_table.c.query_rxn)
@@ -383,6 +401,12 @@ class TestRdkitComparatorExports:
 
     def test_import_reaction_comparator_from_rdkit(self):
         assert RdkitReactionComparator is not None
+
+    def test_import_proxies_from_rdkit(self):
+        from molalchemy.rdkit import RdkitMolProxy, RdkitRxnProxy
+
+        assert RdkitMolProxy is not None
+        assert RdkitRxnProxy is not None
 
 
 class TestRdkitComparatorInQueries:

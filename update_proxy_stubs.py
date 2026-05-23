@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to create BingoMolProxy and BingoRxnProxy stubs in a separate proxy.py file.
+Script to create cartridge proxy stubs in a separate proxy.py file.
 
 This script reads the comparator classes and creates a new proxy.py file with
 stub methods that match the comparator method signatures and docstrings.
@@ -8,8 +8,30 @@ The proxy classes provide type hinting and autocomplete functionality.
 """
 
 import ast
+import textwrap
 from pathlib import Path
 from typing import Any
+
+TARGETS = {
+    "bingo": {
+        "comparators_path": Path("src/molalchemy/bingo/comparators.py"),
+        "proxy_path": Path("src/molalchemy/bingo/proxy.py"),
+        "mol_comparator": "BingoMolComparator",
+        "rxn_comparator": "BingoRxnComparator",
+        "mol_proxy": "BingoMolProxy",
+        "rxn_proxy": "BingoRxnProxy",
+        "label": "Bingo",
+    },
+    "rdkit": {
+        "comparators_path": Path("src/molalchemy/rdkit/comparators.py"),
+        "proxy_path": Path("src/molalchemy/rdkit/proxy.py"),
+        "mol_comparator": "RdkitMolComparator",
+        "rxn_comparator": "RdkitReactionComparator",
+        "mol_proxy": "RdkitMolProxy",
+        "rxn_proxy": "RdkitRxnProxy",
+        "label": "RDKit",
+    },
+}
 
 
 def extract_method_info(class_node: ast.ClassDef) -> list[dict[str, Any]]:
@@ -46,9 +68,9 @@ def extract_method_info(class_node: ast.ClassDef) -> list[dict[str, Any]]:
                         default = node.args.defaults[default_idx]
                         if isinstance(default, ast.Constant):
                             if isinstance(default.value, str):
-                                default_value = f'="{default.value}"'
+                                default_value = f' = "{default.value}"'
                             else:
-                                default_value = f"={default.value}"
+                                default_value = f" = {default.value}"
 
                 args.append(f"{arg_name}: {arg_type}{default_value}")
 
@@ -60,7 +82,7 @@ def extract_method_info(class_node: ast.ClassDef) -> list[dict[str, Any]]:
                 and isinstance(node.body[0].value, ast.Constant)
                 and isinstance(node.body[0].value.value, str)
             ):
-                docstring = node.body[0].value.value
+                docstring = textwrap.dedent(node.body[0].value.value)
 
             methods.append(
                 {"name": node.name, "args": args, "docstring": docstring.strip()}
@@ -111,7 +133,9 @@ def generate_proxy_method(method_info: dict[str, Any]) -> str:
 
 
 def create_proxy_file(
-    mol_methods: list[dict[str, Any]], rxn_methods: list[dict[str, Any]]
+    config: dict[str, Any],
+    mol_methods: list[dict[str, Any]],
+    rxn_methods: list[dict[str, Any]],
 ):
     """
     Create a separate proxy.py file with proxy stubs.
@@ -123,11 +147,14 @@ def create_proxy_file(
     rxn_methods : List[Dict[str, Any]]
         List of reaction comparator methods.
     """
-    proxy_path = Path("src/molalchemy/bingo/proxy.py")
+    proxy_path = config["proxy_path"]
+    label = config["label"]
+    mol_proxy = config["mol_proxy"]
+    rxn_proxy = config["rxn_proxy"]
 
     # Generate file header
-    header = '''"""
-Proxy classes for Bingo database operations.
+    header = f'''"""
+Proxy classes for {label} database operations.
 
 This module contains proxy classes that provide stub methods for type hinting
 and autocomplete functionality. The actual implementation is delegated to
@@ -139,40 +166,42 @@ Do not edit manually - use the update_proxy_stubs.py script instead.
 
 '''
 
-    # Generate BingoMolProxy class
+    # Generate molecule proxy class
     mol_proxy_methods = []
     for method_info in mol_methods:
         mol_proxy_methods.append(generate_proxy_method(method_info))
+    mol_proxy_methods_code = "\n\n".join(mol_proxy_methods)
 
-    mol_proxy_class = f"""class BingoMolProxy:
+    mol_proxy_class = f"""class {mol_proxy}:
     \"\"\"
-    Proxy class for molecular operations using Bingo database.
-    
+    Proxy class for molecular operations using {label} database.
+
     This class provides stub methods for type hinting and autocomplete functionality.
     The actual implementation is delegated to the corresponding function class.
     \"\"\"
 
-{chr(10).join(mol_proxy_methods)}
+{mol_proxy_methods_code}
     """
 
-    # Generate BingoRxnProxy class
+    # Generate reaction proxy class
     rxn_proxy_methods = []
     for method_info in rxn_methods:
         rxn_proxy_methods.append(generate_proxy_method(method_info))
+    rxn_proxy_methods_code = "\n\n".join(rxn_proxy_methods)
 
-    rxn_proxy_class = f"""class BingoRxnProxy:
+    rxn_proxy_class = f"""class {rxn_proxy}:
     \"\"\"
-    Proxy class for chemical reaction operations using Bingo database.
-    
+    Proxy class for chemical reaction operations using {label} database.
+
     This class provides stub methods for type hinting and autocomplete functionality.
     The actual implementation is delegated to the corresponding function class.
     \"\"\"
 
-{chr(10).join(rxn_proxy_methods)}
+{rxn_proxy_methods_code}
     """
 
     # Write the complete proxy file
-    with open(proxy_path, "w") as f:
+    with proxy_path.open("w") as f:
         f.write(header)
         f.write(mol_proxy_class)
         f.write("\n\n\n")
@@ -182,16 +211,18 @@ Do not edit manually - use the update_proxy_stubs.py script instead.
     print(f"Created {proxy_path} with proxy stubs!")
 
 
-def main():
+def generate_proxy(target: str) -> None:
     """Main function to create proxy stubs from comparators."""
+    config = TARGETS[target]
+
     # Read the comparators file
-    comparators_path = Path("src/molalchemy/bingo/comparators.py")
+    comparators_path = config["comparators_path"]
 
     if not comparators_path.exists():
         print(f"Error: {comparators_path} not found!")
         return
 
-    with open(comparators_path) as f:
+    with comparators_path.open() as f:
         source_code = f.read()
 
     # Parse the AST
@@ -203,17 +234,34 @@ def main():
 
     for node in tree.body:
         if isinstance(node, ast.ClassDef):
-            if node.name == "BingoMolComparator":
+            if node.name == config["mol_comparator"]:
                 mol_methods = extract_method_info(node)
-                print(f"Found {len(mol_methods)} methods in BingoMolComparator")
-            elif node.name == "BingoRxnComparator":
+                print(f"Found {len(mol_methods)} methods in {config['mol_comparator']}")
+            elif node.name == config["rxn_comparator"]:
                 rxn_methods = extract_method_info(node)
-                print(f"Found {len(rxn_methods)} methods in BingoRxnComparator")
+                print(f"Found {len(rxn_methods)} methods in {config['rxn_comparator']}")
 
     if mol_methods or rxn_methods:
-        create_proxy_file(mol_methods, rxn_methods)
+        create_proxy_file(config, mol_methods, rxn_methods)
     else:
         print("No methods found to generate stubs for!")
+
+
+def main():
+    import sys
+
+    if len(sys.argv) > 1:
+        targets = sys.argv[1:]
+    else:
+        targets = ["bingo"]
+
+    for target in targets:
+        if target not in TARGETS:
+            valid_targets = ", ".join(sorted(TARGETS))
+            raise SystemExit(
+                f"Unknown target {target!r}. Expected one of: {valid_targets}"
+            )
+        generate_proxy(target)
 
 
 if __name__ == "__main__":

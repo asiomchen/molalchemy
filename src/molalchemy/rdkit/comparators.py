@@ -8,6 +8,20 @@ from molalchemy.types import CString
 
 
 class RdkitMolComparator(UserDefinedType.Comparator):
+    def __eq__(self, other: Any) -> ColumnElement[bool]:
+        # Native RDKit mol "=" is already chemical equality; keep "==" mapped to
+        # equals() for explicit comparator parity with Bingo and reactions.
+        if isinstance(other, ColumnElement) and not getattr(
+            other, "is_clause_element", False
+        ):
+            return super().__eq__(other)
+        if (
+            isinstance(other, ColumnElement)
+            and getattr(other, "table", None) is not None
+        ):
+            return super().__eq__(other)
+        return self.equals(other)
+
     def has_substructure(self, query: Any) -> ColumnElement[bool]:
         """Check if this molecule contains `query` as a substructure (@>)."""
         return self.expr.op("@>")(query)
@@ -38,6 +52,18 @@ class RdkitMolComparator(UserDefinedType.Comparator):
 
 
 class RdkitReactionComparator(UserDefinedType.Comparator):
+    def __eq__(self, other: Any) -> ColumnElement[bool]:
+        if isinstance(other, ColumnElement) and not getattr(
+            other, "is_clause_element", False
+        ):
+            return super().__eq__(other)
+        if (
+            isinstance(other, ColumnElement)
+            and getattr(other, "table", None) is not None
+        ):
+            return super().__eq__(other)
+        return self.equals(other)
+
     def has_substructure(self, query: Any) -> ColumnElement[bool]:
         """Check if this reaction contains `query` as a substructure (@>)."""
         return self.expr.op("@>")(query)

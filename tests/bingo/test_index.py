@@ -66,6 +66,22 @@ class TestBingoMolIndex:
         assert index.table is self.test_table
         assert index in self.test_table.indexes
 
+    def test_bingo_index_membership_with_multiple_columns(self):
+        """Column membership checks should not invoke chemical exact matching."""
+        metadata = MetaData()
+        test_table = Table(
+            "test_compounds",
+            metadata,
+            Column("id", Integer, primary_key=True),
+            Column("mol", BingoMol()),
+            Column("name", String(100)),
+        )
+
+        index = Index("idx_compounds_mol_name", test_table.c.mol, test_table.c.name)
+
+        assert test_table.c.mol in index.expressions
+        assert test_table.c.name in index.expressions
+
 
 class TestBingoBinaryMolIndex:
     """Test BingoBinaryMolIndex class."""
