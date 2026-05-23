@@ -4,7 +4,13 @@
       "mol_equals",
       "mol_has_substructure",
       "mol_is_substructure_of",
-      "rxn_has_smarts"
+      "rxn_equals",
+      "rxn_has_substructure",
+      "rxn_has_substructure_fp",
+      "rxn_has_smarts",
+      "rxn_is_substructure_fp_of",
+      "rxn_is_substructure_of",
+      "rxn_not_equals"
     ]
   }
 }

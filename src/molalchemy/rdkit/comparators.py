@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Any, Literal
 
 from sqlalchemy import ColumnElement
 from sqlalchemy.types import UserDefinedType
@@ -16,6 +16,38 @@ class RdkitMolComparator(UserDefinedType.Comparator):
     def equals(self, query: str) -> ColumnElement[bool]:
         """Check if this molecule is equal to `query` (@=)."""
         return self.expr.op("@=")(query)
+
+
+class RdkitReactionComparator(UserDefinedType.Comparator):
+    def __eq__(self, other: Any) -> ColumnElement[bool]:
+        return self.equals(other)
+
+    def __ne__(self, other: Any) -> ColumnElement[bool]:
+        return self.not_equals(other)
+
+    def has_substructure(self, query: Any) -> ColumnElement[bool]:
+        """Check if this reaction contains `query` as a substructure (@>)."""
+        return self.expr.op("@>")(query)
+
+    def is_substructure_of(self, query: Any) -> ColumnElement[bool]:
+        """Check if this reaction is a substructure of `query` (<@)."""
+        return self.expr.op("<@")(query)
+
+    def equals(self, query: Any) -> ColumnElement[bool]:
+        """Check if this reaction is equal to `query` (@=)."""
+        return self.expr.op("@=")(query)
+
+    def not_equals(self, query: Any) -> ColumnElement[bool]:
+        """Check if this reaction is not equal to `query` (@<>)."""
+        return self.expr.op("@<>")(query)
+
+    def has_substructure_fp(self, query: Any) -> ColumnElement[bool]:
+        """Check if this reaction matches `query` via substructure fingerprints (?>)."""
+        return self.expr.op("?>")(query)
+
+    def is_substructure_fp_of(self, query: Any) -> ColumnElement[bool]:
+        """Check if this reaction is fingerprint-substructure of `query` (?<)."""
+        return self.expr.op("?<")(query)
 
 
 class RdkitFPComparator(UserDefinedType.Comparator):

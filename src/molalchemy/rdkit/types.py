@@ -13,7 +13,11 @@ from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
 from molalchemy.exceptions import InvalidMoleculeError, InvalidReactionError
-from molalchemy.rdkit.comparators import RdkitFPComparator, RdkitMolComparator
+from molalchemy.rdkit.comparators import (
+    RdkitFPComparator,
+    RdkitMolComparator,
+    RdkitReactionComparator,
+)
 
 
 class RdkitBaseType(UserDefinedType):
@@ -158,7 +162,7 @@ class RdkitReaction(RdkitBaseType):
     def get_col_spec(self, **kwargs: Any) -> str:
         return "reaction"
 
-    comparator_factory = RdkitMolComparator
+    comparator_factory = RdkitReactionComparator
 
     def __init__(self, return_type: Literal["smiles", "bytes", "mol"] = "smiles"):
         """Initialize the RdkitReaction type.

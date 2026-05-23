@@ -110,6 +110,78 @@ def mol_equals(mol_column: ColumnElement[RdkitMol], query: str) -> BinaryExpress
     return mol_column.op("@=")(query)
 
 
+def rxn_has_substructure(
+    rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
+) -> BinaryExpression:
+    """
+    Perform reaction substructure search.
+
+    Checks if the reaction in the column contains the query
+    reaction using the `@>` operator.
+    """
+    return rxn_column.op("@>")(query)
+
+
+def rxn_is_substructure_of(
+    rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
+) -> BinaryExpression:
+    """
+    Perform reverse reaction substructure search.
+
+    Checks if the reaction in the column is a substructure
+    of the query using the `<@` operator.
+    """
+    return rxn_column.op("<@")(query)
+
+
+def rxn_equals(
+    rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
+) -> BinaryExpression:
+    """
+    Perform exact reaction matching.
+
+    Checks if the reaction in the column exactly matches
+    the query using the `@=` operator.
+    """
+    return rxn_column.op("@=")(query)
+
+
+def rxn_not_equals(
+    rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
+) -> BinaryExpression:
+    """
+    Perform negative exact reaction matching.
+
+    Checks if the reaction in the column differs from
+    the query using the `@<>` operator.
+    """
+    return rxn_column.op("@<>")(query)
+
+
+def rxn_has_substructure_fp(
+    rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
+) -> BinaryExpression:
+    """
+    Perform fingerprint-backed reaction substructure search.
+
+    Checks if the reaction in the column contains the query
+    using the `?>` operator.
+    """
+    return rxn_column.op("?>")(query)
+
+
+def rxn_is_substructure_fp_of(
+    rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
+) -> BinaryExpression:
+    """
+    Perform reverse fingerprint-backed reaction substructure search.
+
+    Checks if the reaction in the column is a fingerprint substructure
+    of the query using the `?<` operator.
+    """
+    return rxn_column.op("?<")(query)
+
+
 def rxn_has_smarts(rxn_column: ColumnElement, pattern: str) -> Function[bool]:
     """
     Perform reaction substructure search.

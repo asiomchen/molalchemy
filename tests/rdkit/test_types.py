@@ -5,7 +5,11 @@ from rdkit import Chem
 from rdkit.Chem import AllChem, rdChemReactions
 from sqlalchemy import Column, Integer, MetaData, String, Table
 
-from molalchemy.rdkit.comparators import RdkitFPComparator, RdkitMolComparator
+from molalchemy.rdkit.comparators import (
+    RdkitFPComparator,
+    RdkitMolComparator,
+    RdkitReactionComparator,
+)
 from molalchemy.rdkit.types import (
     RdkitBitFingerprint,
     RdkitMol,
@@ -240,9 +244,9 @@ class TestRdkitReaction:
         assert rdkit_rxn.get_col_spec() == "reaction"
 
     def test_rdkit_reaction_comparator_factory(self):
-        """Test that RdkitReaction uses RdkitMolComparator."""
+        """Test that RdkitReaction uses RdkitReactionComparator."""
         rdkit_rxn = RdkitReaction()
-        assert rdkit_rxn.comparator_factory == RdkitMolComparator
+        assert rdkit_rxn.comparator_factory == RdkitReactionComparator
 
     def test_rdkit_reaction_default_return_type(self):
         """Test that RdkitReaction has default return_type='smiles'."""
@@ -354,13 +358,14 @@ class TestTypesIntegration:
         assert rdkit_bfp.comparator_factory == rdkit_sfp.comparator_factory
         assert rdkit_bfp.comparator_factory == RdkitFPComparator
 
-    def test_mol_and_reaction_have_same_comparator(self):
-        """Test that mol and reaction types use the same comparator."""
+    def test_mol_and_reaction_have_distinct_comparators(self):
+        """Test that mol and reaction types use distinct comparators."""
         rdkit_mol = RdkitMol()
         rdkit_rxn = RdkitReaction()
 
-        assert rdkit_mol.comparator_factory == rdkit_rxn.comparator_factory
         assert rdkit_mol.comparator_factory == RdkitMolComparator
+        assert rdkit_rxn.comparator_factory == RdkitReactionComparator
+        assert rdkit_mol.comparator_factory != rdkit_rxn.comparator_factory
 
     def test_all_types_are_cache_ok(self):
         """Test that all types have cache_ok=True."""
