@@ -54,9 +54,9 @@ class BingoMolComparator(UserDefinedType.Comparator):
 
         Parameters
         ----------
-        query : str
+        query : Any
             The substructure query as a SMILES or MOL string.
-        parameters : str, optional
+        parameters : Any, optional
             Additional parameters for the substructure search, by default "".
 
         Returns
@@ -76,9 +76,9 @@ class BingoMolComparator(UserDefinedType.Comparator):
 
         Parameters
         ----------
-        query : str
+        query : Any
             The SMARTS pattern string for pattern matching.
-        parameters : str, optional
+        parameters : Any, optional
             Additional parameters for the SMARTS search, by default "".
 
         Returns
@@ -98,9 +98,9 @@ class BingoMolComparator(UserDefinedType.Comparator):
 
         Parameters
         ----------
-        query : str
+        query : Any
             The molecular structure query as a SMILES or MOL string.
-        parameters : str, optional
+        parameters : Any, optional
             Additional parameters for the exact match search, by default "".
 
         Returns
@@ -132,9 +132,9 @@ class BingoRxnComparator(UserDefinedType.Comparator):
 
         Parameters
         ----------
-        query : str
+        query : Any
             The reaction substructure query as a reaction SMILES or RXN string.
-        parameters : str, optional
+        parameters : Any, optional
             Additional parameters for the reaction substructure search, by default "".
 
         Returns
@@ -154,9 +154,9 @@ class BingoRxnComparator(UserDefinedType.Comparator):
 
         Parameters
         ----------
-        query : str
+        query : Any
             The reaction SMARTS pattern string for pattern matching.
-        parameters : str, optional
+        parameters : Any, optional
             Additional parameters for the reaction SMARTS search, by default "".
 
         Returns
@@ -176,9 +176,9 @@ class BingoRxnComparator(UserDefinedType.Comparator):
 
         Parameters
         ----------
-        query : str
+        query : Any
             The reaction query as a reaction SMILES or RXN string.
-        parameters : str, optional
+        parameters : Any, optional
             Additional parameters for the exact reaction match search, by default "".
 
         Returns
