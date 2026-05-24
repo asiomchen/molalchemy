@@ -8,9 +8,19 @@ from sqlalchemy.sql.elements import BinaryExpression, ColumnElement
 
 
 class _BingoExactSearchExpression(BinaryExpression[bool]):
+    """Bingo exact-search expression with SQLAlchemy-style identity truth checks.
+
+    Bingo columns overload ``==`` to mean chemical exact search, but Python
+    container operations such as ``column in index.expressions`` also call
+    ``==`` and then require a real boolean result.  Returning the original
+    operand comparison here keeps those Python-side checks working while the
+    expression still compiles to the Bingo ``@`` exact-search SQL operator.
+    """
+
     inherit_cache = True
 
     def __bool__(self) -> bool:
+        # Match SQLAlchemy's equality-expression truthiness behavior.
         return self._orig[0] == self._orig[1]
 
 
