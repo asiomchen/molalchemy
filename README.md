@@ -33,7 +33,7 @@ molalchemy provides seamless integration between python and chemical databases, 
 - **Input Validation**: Molecules and reactions are validated before being sent to the database
 - **Similarity Threshold Management**: Get/set Tanimoto and Dice thresholds with a context manager
 - **Alembic Integration**: Automatic handling of extensions, types, and indexes in database migrations
-- **Typing**: As much type hints as possible - no need to remember yet another abstract function name
+- **Typing Helpers**: Proxy helpers for IDE autocomplete on SQLAlchemy molecule and reaction columns
 - **Easy Integration**: Drop-in replacement for standard SQLAlchemy types
 
 ## 📦 Installation
@@ -58,7 +58,7 @@ pip install .
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.10-3.14
 - SQLAlchemy 2.0+
 - rdkit 2024.3.1+
 - Running PostgreSQL with chemical cartridge (Bingo or RDKit) (see [`docker-compose.yaml`](https://github.com/asiomchen/molalchemy/blob/main/docker-compose.yaml) for a ready-to-use setup)
@@ -93,17 +93,20 @@ molalchemy/
 ├── src/molalchemy/
 │   ├── types.py              # Base type definitions
 │   ├── exceptions.py         # Custom exception hierarchy
-│   ├── helpers.py            # Common utilities
+│   ├── helpers.py            # Typed proxy helper functions
 │   ├── alembic_helpers.py    # Alembic integration utilities
 │   ├── bingo/               # Bingo PostgreSQL cartridge support
 │   │   ├── types.py         # Bingo-specific types
 │   │   ├── index.py         # Bingo indexing
 │   │   ├── comparators.py   # SQLAlchemy comparators
+│   │   ├── proxy.py         # IDE/type-checker proxy stubs
+│   │   ├── search.py        # Shared Bingo search expression helpers
 │   │   └── functions/       # Bingo database functions
 │   └── rdkit/               # RDKit PostgreSQL cartridge support
 │       ├── types.py         # RDKit-specific types
 │       ├── index.py         # RDKit indexing
 │       ├── comparators.py   # SQLAlchemy comparators
+│       ├── proxy.py         # IDE/type-checker proxy stubs
 │       ├── settings.py      # Similarity threshold management
 │       └── functions/       # RDKit database functions
 ├── tests/                   # Test suite
@@ -119,8 +122,12 @@ To learn how to use molalchemy, check out the tutorials in the [documentation](h
 - [Quick Start - RDKit ORM](https://molalchemy.readthedocs.io/en/latest/tutorials/01_Getting_Started_rdkit_ORM/) - Molecules, substructure search, fingerprints, similarity
 - [Quick Start - RDKit Core](https://molalchemy.readthedocs.io/en/latest/tutorials/02_Getting_Started_rdkit_Core/) - Same features using SQLAlchemy Core API
 - [Quick Start - Bingo ORM](https://molalchemy.readthedocs.io/en/latest/tutorials/01_Getting_Started_bingo_ORM/) - Bingo cartridge with ORM
+- [Migrations with Alembic](https://molalchemy.readthedocs.io/en/latest/tutorials/03_alembic_migrations/) - Autogenerate-friendly MolAlchemy migrations
 - [Similarity Thresholds](https://molalchemy.readthedocs.io/en/latest/tutorials/04_Similarity_Threshold_Settings/) - Managing RDKit similarity thresholds
-- [Chemical Reactions](https://molalchemy.readthedocs.io/en/latest/tutorials/05_Reactions_rdkit_ORM/) - Storing and querying reactions
+- [RDKit Reactions](https://molalchemy.readthedocs.io/en/latest/tutorials/05_Reactions_rdkit_ORM/) - Storing and querying RDKit reactions
+- [Bingo Reactions and Binary Storage](https://molalchemy.readthedocs.io/en/latest/tutorials/06_bingo_reactions_binary/) - Bingo reaction and binary column workflows
+- [RDKit Descriptors and Advanced Queries](https://molalchemy.readthedocs.io/en/latest/tutorials/07_rdkit_descriptors_advanced/) - Descriptor functions and richer query patterns
+- [Typed Proxy Helpers](https://molalchemy.readthedocs.io/en/latest/tutorials/08_proxy_helpers/) - IDE autocomplete helpers for chemical columns
 
 ## 🏗️ Supported Cartridges
 
@@ -142,6 +149,10 @@ from molalchemy.bingo.index import (
 from molalchemy.bingo.functions import (
     # Individual function imports available, see documentation
     # for complete list of chemical analysis functions
+)
+from molalchemy.helpers import (
+    bingo_col,              # Typed molecule-column helper for IDE autocomplete
+    bingo_rxn_col,          # Typed reaction-column helper for IDE autocomplete
 )
 ```
 
@@ -168,6 +179,10 @@ from molalchemy.rdkit.functions import (
     # Individual function imports available, see documentation
     # for complete list of 150+ RDKit functions
 )
+from molalchemy.helpers import (
+    rdkit_col,              # Typed molecule-column helper for IDE autocomplete
+    rdkit_rxn_col,          # Typed reaction-column helper for IDE autocomplete
+)
 ```
 
 ## 🎯 Advanced Features
@@ -182,7 +197,7 @@ class Molecule(Base):
     __tablename__ = 'molecules'
     
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    structure: Mapped[str] = mapped_column(BingoMol)
+    structure: Mapped[str] = mapped_column(BingoMol())
     name: Mapped[str] = mapped_column(String(100))
     
     # Add chemical index for faster searching
@@ -190,6 +205,31 @@ class Molecule(Base):
         BingoMolIndex('mol_idx', 'structure'),
     )
 ```
+
+### Typed Proxy Helpers
+
+The helper functions in `molalchemy.helpers` return the original SQLAlchemy
+column at runtime, but annotate it with a proxy type so IDEs and type checkers
+can see cartridge-specific comparator methods.
+
+```python
+from sqlalchemy import select
+
+from molalchemy.helpers import bingo_col, rdkit_col
+
+# Bingo exact/substructure search with autocomplete-friendly column typing
+bingo_stmt = select(Molecule).where(
+    bingo_col(Molecule.structure).has_substructure("c1ccccc1")
+)
+
+# RDKit exact search with autocomplete-friendly column typing
+rdkit_stmt = select(MoleculeWithFormats).where(
+    rdkit_col(MoleculeWithFormats.structure_smiles).equals("CCO")
+)
+```
+
+Use the matching helper for the cartridge and data kind:
+`bingo_col`, `bingo_rxn_col`, `rdkit_col`, or `rdkit_rxn_col`.
 
 ### Configurable Return Types
 
