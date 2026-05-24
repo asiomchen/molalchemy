@@ -49,7 +49,7 @@ def main() -> None:
         metadata,
         Column("id", Integer, primary_key=True),
         Column("name", String, nullable=False),
-        Column("structure", BingoMol(), nullable=False),
+        Column("structure", BingoMol()),
         Column("query_structure", String, nullable=False),
     )
     reactions = Table(
@@ -57,7 +57,8 @@ def main() -> None:
         metadata,
         Column("id", Integer, primary_key=True),
         Column("name", String, nullable=False),
-        Column("reaction_data", BingoBinaryReaction(), nullable=False),
+        Column("reaction_data", BingoBinaryReaction()),
+        Column("query_reaction", String, nullable=False),
     )
 
     with engine.begin() as conn:
@@ -79,6 +80,12 @@ def main() -> None:
                     "id": 2,
                     "name": "ethanol",
                     "structure": "CCO",
+                    "query_structure": "OCC",
+                },
+                {
+                    "id": 3,
+                    "name": "unknown",
+                    "structure": None,
                     "query_structure": "CCO",
                 },
             ],
@@ -90,6 +97,13 @@ def main() -> None:
                     "id": 1,
                     "name": "ethanol oxidation",
                     "reaction_data": "CCO>>CC=O",
+                    "query_reaction": "CCO>>CC=O",
+                },
+                {
+                    "id": 2,
+                    "name": "unknown reaction",
+                    "reaction_data": None,
+                    "query_reaction": "CCO>>CC=O",
                 },
             ],
         )
@@ -144,6 +158,24 @@ def main() -> None:
     reaction_exact_stmt = select(reactions.c.name).where(
         reactions.c.reaction_data.equals("CCO>>CC=O")
     )
+    exact_with_column_stmt = (
+        select(compounds.c.name)
+        .where(compounds.c.structure == compounds.c.query_structure)
+        .order_by(compounds.c.id)
+    )
+    reaction_exact_with_column_stmt = select(reactions.c.name).where(
+        reactions.c.reaction_data == reactions.c.query_reaction
+    )
+    molecule_not_null_stmt = (
+        select(compounds.c.name)
+        .where(compounds.c.structure.__ne__(None))
+        .order_by(compounds.c.id)
+    )
+    reaction_not_null_stmt = (
+        select(reactions.c.name)
+        .where(reactions.c.reaction_data.__ne__(None))
+        .order_by(reactions.c.id)
+    )
     reaction_function_stmt = (
         select(
             reactions.c.name,
@@ -170,6 +202,18 @@ def main() -> None:
     )
     print(function_stmt.compile(dialect=postgresql.dialect()))
     print(reaction_exact_stmt.compile(dialect=postgresql.dialect()))
+    print(
+        exact_with_column_stmt.compile(
+            dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
+        )
+    )
+    print(
+        reaction_exact_with_column_stmt.compile(
+            dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
+        )
+    )
+    print(molecule_not_null_stmt.compile(dialect=postgresql.dialect()))
+    print(reaction_not_null_stmt.compile(dialect=postgresql.dialect()))
     print(reaction_function_stmt.compile(dialect=postgresql.dialect()))
 
     with engine.connect() as conn:
@@ -181,6 +225,12 @@ def main() -> None:
         function_row = conn.execute(function_stmt).mappings().one()
         invalid_check = conn.execute(invalid_check_stmt).scalar_one()
         reaction_exact_rows = conn.execute(reaction_exact_stmt).scalars().all()
+        exact_with_column_rows = conn.execute(exact_with_column_stmt).scalars().all()
+        reaction_exact_with_column_rows = (
+            conn.execute(reaction_exact_with_column_stmt).scalars().all()
+        )
+        molecule_not_null_rows = conn.execute(molecule_not_null_stmt).scalars().all()
+        reaction_not_null_rows = conn.execute(reaction_not_null_stmt).scalars().all()
         reaction_function_row = conn.execute(reaction_function_stmt).mappings().one()
 
     print()
@@ -192,6 +242,12 @@ def main() -> None:
     print(f"function wrappers on ethanol: {dict(function_row)}")
     print(f"checkmolecule(not-a-mol): {invalid_check}")
     print(f"reaction exact(CCO>>CC=O): {reaction_exact_rows}")
+    print(f"exact(structure, query_structure): {exact_with_column_rows}")
+    print(
+        f"reaction exact(reaction_data, query_reaction): {reaction_exact_with_column_rows}"
+    )
+    print(f"structure IS NOT NULL via != None: {molecule_not_null_rows}")
+    print(f"reaction IS NOT NULL via != None: {reaction_not_null_rows}")
     print(f"reaction function wrappers: {dict(reaction_function_row)}")
 
     assert substructure_rows == ["benzene"]
@@ -211,6 +267,10 @@ def main() -> None:
     assert function_row["fingerprint_len"] > 0
     assert "invalid character" in invalid_check
     assert reaction_exact_rows == ["ethanol oxidation"]
+    assert exact_with_column_rows == ["benzene", "ethanol"]
+    assert reaction_exact_with_column_rows == ["ethanol oxidation"]
+    assert molecule_not_null_rows == ["benzene", "ethanol"]
+    assert reaction_not_null_rows == ["ethanol oxidation"]
     assert reaction_function_row["check_result"] is None
     assert reaction_function_row["reaction_smiles"]
     assert reaction_function_row["rxnfile_len"] > 100

@@ -99,6 +99,7 @@ nav:
     - RDKit - Reactions: tutorials/05_Reactions_rdkit_ORM.ipynb
     - Bingo - Reactions and Binary Storage: tutorials/06_bingo_reactions_binary.ipynb
     - RDKit - Descriptors and Advanced Queries: tutorials/07_rdkit_descriptors_advanced.ipynb
+    - Typed Proxy Helpers: tutorials/08_proxy_helpers.md
     - Contributing: tutorials/contribute.md
   - API:
     - molalchemy.exceptions: api/exceptions.md

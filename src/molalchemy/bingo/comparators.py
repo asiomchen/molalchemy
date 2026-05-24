@@ -23,7 +23,27 @@ class BingoMolComparator(UserDefinedType.Comparator):
     """
 
     def __eq__(self, other: Any) -> ColumnElement[bool]:
+        if other is None:
+            return super().__eq__(other)
+        if isinstance(other, ColumnElement) and not getattr(
+            other, "is_clause_element", False
+        ):
+            return super().__eq__(other)
         return self.equals(other)
+
+    def __ne__(self, other: Any) -> ColumnElement[bool]:
+        if other is None:
+            return super().__ne__(other)
+        if isinstance(other, ColumnElement) and not getattr(
+            other, "is_clause_element", False
+        ):
+            return super().__ne__(other)
+        if (
+            isinstance(other, ColumnElement)
+            and getattr(other, "table", None) is not None
+        ):
+            return super().__ne__(other)
+        return self.not_equals(other)
 
     def has_substructure(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
         """
@@ -91,6 +111,24 @@ class BingoMolComparator(UserDefinedType.Comparator):
         """
         return _bingo_search(self.expr, query, parameters, "bingo.exact")
 
+    def not_equals(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
+        """
+        Check if the molecular structure does not exactly match the given structure.
+
+        Parameters
+        ----------
+        query : Any
+            The molecular structure query as a SMILES or MOL string.
+        parameters : Any, optional
+            Additional parameters for the exact match search, by default "".
+
+        Returns
+        -------
+        ColumnElement[bool]
+            A SQLAlchemy expression for the negated exact structure match operation.
+        """
+        return ~self.equals(query, parameters)
+
 
 class BingoRxnComparator(UserDefinedType.Comparator):
     """
@@ -101,7 +139,27 @@ class BingoRxnComparator(UserDefinedType.Comparator):
     """
 
     def __eq__(self, other: Any) -> ColumnElement[bool]:
+        if other is None:
+            return super().__eq__(other)
+        if isinstance(other, ColumnElement) and not getattr(
+            other, "is_clause_element", False
+        ):
+            return super().__eq__(other)
         return self.equals(other)
+
+    def __ne__(self, other: Any) -> ColumnElement[bool]:
+        if other is None:
+            return super().__ne__(other)
+        if isinstance(other, ColumnElement) and not getattr(
+            other, "is_clause_element", False
+        ):
+            return super().__ne__(other)
+        if (
+            isinstance(other, ColumnElement)
+            and getattr(other, "table", None) is not None
+        ):
+            return super().__ne__(other)
+        return self.not_equals(other)
 
     def has_substructure(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
         """
@@ -168,3 +226,21 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         >>> rxn_column.has_equals('CCO>>CC=O')  # ethanol to acetaldehyde exact match
         """
         return _bingo_search(self.expr, query, parameters, "bingo.rexact")
+
+    def not_equals(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
+        """
+        Check if the reaction does not exactly match the given reaction.
+
+        Parameters
+        ----------
+        query : Any
+            The reaction query as a reaction SMILES or RXN string.
+        parameters : Any, optional
+            Additional parameters for the exact reaction match search, by default "".
+
+        Returns
+        -------
+        ColumnElement[bool]
+            A SQLAlchemy expression for the negated exact reaction match operation.
+        """
+        return ~self.equals(query, parameters)
