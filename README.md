@@ -228,10 +228,13 @@ rdkit_stmt = select(MoleculeWithFormats).where(
 )
 ```
 
-RDKit molecule `==` and `!=` comparisons are chemically aware: PostgreSQL
-dispatches them to RDKit's `mol_eq` and `mol_ne` functions. The explicit
-`.equals()` and `.not_equals()` methods use the equivalent `@=` and `@<>`
-operator spellings.
+Equality differs between the cartridges. Bingo `==` and `!=` use PostgreSQL
+storage equality (text or binary), so chemically equivalent representations
+such as `CCO` and `OCC` compare different; use `.equals()` or `.not_equals()`
+for Bingo chemical matching. RDKit molecule `==` and `!=` are chemically aware
+because PostgreSQL dispatches them to `mol_eq` and `mol_ne`; RDKit's explicit
+methods use the equivalent `@=` and `@<>` spellings. For RDKit reactions, use
+the explicit methods because native `=` is not implemented by the cartridge.
 
 Use the matching helper for the cartridge and data kind:
 `bingo_col`, `bingo_rxn_col`, `rdkit_col`, `rdkit_rxn_col`, or `rdkit_fp_col`.

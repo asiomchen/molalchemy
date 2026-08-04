@@ -1,68 +1,26 @@
-from __future__ import annotations
+"""Operand aliases for Bingo cartridge function wrappers."""
 
-from typing import (
-    TypeAlias,  # pragma: no cover
-    TypeVar,
-)
+from typing import Any, TypeAlias, TypeVar
 
-from sqlalchemy import Column, Function
-from sqlalchemy.orm import InstrumentedAttribute, Mapped
-
-from molalchemy.bingo.types import (
-    BingoBinaryMol,
-    BingoBinaryReaction,
-    BingoMol,
-    BingoReaction,
-)
-
-"""
-Type aliases for Bingo-SQLAlchemy integration.
-These aliases make it easier to annotate columns, mapped attributes,
-and SQL functions that return Bingo objects (Mol, BinaryMol, Reaction, BinaryReaction)
-while still supporting literal values (e.g. SMILES strings) and raw bytes.
-"""
-
+from sqlalchemy.orm import InstrumentedAttribute
+from sqlalchemy.sql.elements import ColumnElement
 
 T = TypeVar("T")
-SQLAlchemyCoercible: TypeAlias = (
-    InstrumentedAttribute[T] | Column[T] | Mapped[T] | Function[T]
-)
-
+SQLAlchemyCoercible: TypeAlias = ColumnElement[T] | InstrumentedAttribute[T]
+SqlExpression: TypeAlias = ColumnElement[Any] | InstrumentedAttribute[Any]
 LiteralStrBytes: TypeAlias = str | bytes
+TextLike: TypeAlias = str | bytes | SqlExpression
 
-# Text-like types for string/bytes inputs
-TextLike: TypeAlias = (
-    str | bytes | Column[str] | Mapped[str] | InstrumentedAttribute[str]
-)
-
-# ----------------------------------------------------------------------
-# Bingo specific type aliases
-# ----------------------------------------------------------------------
-BingoMolCoercible: TypeAlias = BingoMol | str
-AnyBingoMolLike: TypeAlias = SQLAlchemyCoercible[BingoMolCoercible] | BingoMolCoercible
-
-BingoBinaryMolCoercible: TypeAlias = BingoBinaryMol | bytes
-AnyBingoBinaryMolLike: TypeAlias = (
-    SQLAlchemyCoercible[BingoBinaryMolCoercible] | BingoBinaryMolCoercible
-)
-
-BingoReactionCoercible: TypeAlias = BingoReaction | LiteralStrBytes
-AnyBingoReactionLike: TypeAlias = (
-    SQLAlchemyCoercible[BingoReactionCoercible] | BingoReactionCoercible
-)
-
-BingoBinaryReactionCoercible: TypeAlias = BingoBinaryReaction | LiteralStrBytes
-AnyBingoBinaryReactionLike: TypeAlias = (
-    SQLAlchemyCoercible[BingoBinaryReactionCoercible] | BingoBinaryReactionCoercible
-)
-
-# ----------------------------------------------------------------------
-# Combined aliases - convenience for functions accepting text or binary
-# ----------------------------------------------------------------------
-AnyBingoMolLikeCombined: TypeAlias = AnyBingoMolLike | AnyBingoBinaryMolLike
-AnyBingoReactionLikeCombined: TypeAlias = (
-    AnyBingoReactionLike | AnyBingoBinaryReactionLike
-)
+BingoMolCoercible: TypeAlias = str
+AnyBingoMolLike: TypeAlias = str | SqlExpression
+BingoBinaryMolCoercible: TypeAlias = str | bytes
+AnyBingoBinaryMolLike: TypeAlias = str | bytes | SqlExpression
+BingoReactionCoercible: TypeAlias = str
+AnyBingoReactionLike: TypeAlias = str | SqlExpression
+BingoBinaryReactionCoercible: TypeAlias = str | bytes
+AnyBingoBinaryReactionLike: TypeAlias = str | bytes | SqlExpression
+AnyBingoMolLikeCombined: TypeAlias = str | bytes | SqlExpression
+AnyBingoReactionLikeCombined: TypeAlias = str | bytes | SqlExpression
 
 __all__ = [
     "AnyBingoBinaryMolLike",

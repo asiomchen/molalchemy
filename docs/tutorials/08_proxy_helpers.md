@@ -1,11 +1,11 @@
-# Typed Proxy Helpers
+# Typed Comparator Helpers
 
 MolAlchemy columns already expose chemical comparator methods at runtime. For
 example, a `BingoMol` column can call `.has_substructure(...)` and an `RdkitMol`
 column can call `.equals(...)`.
 
 IDEs and type checkers cannot infer those custom SQLAlchemy comparator
-methods from the mapped column type. The proxy helpers in `molalchemy.helpers`
+methods from the mapped column type. The helpers in `molalchemy.helpers`
 are a small typing bridge for that case.
 
 ```python
@@ -18,8 +18,8 @@ stmt = select(Compound).where(
 
 At runtime, `bingo_col(Compound.structure)` returns `Compound.structure` itself.
 It is not a wrapper and it does not change SQL generation. Its return annotation
-points the editor at a proxy class with the chemical methods, so autocomplete and
-static analysis can see the API of comparator.
+points the editor at a typed protocol with the chemical methods, so autocomplete
+and static analysis can see the comparator API and its precise result types.
 
 ## Bingo ORM
 
@@ -73,8 +73,8 @@ directly on the mapped attributes.
 from sqlalchemy import Integer, String, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from molalchemy.helpers import rdkit_col, rdkit_rxn_col
-from molalchemy.rdkit.types import RdkitMol, RdkitReaction
+from molalchemy.helpers import rdkit_col, rdkit_fp_col, rdkit_rxn_col
+from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitReaction
 
 
 class Base(DeclarativeBase):
@@ -87,6 +87,7 @@ class Compound(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
     structure: Mapped[str] = mapped_column(RdkitMol())
+    fingerprint: Mapped[bytes] = mapped_column(RdkitBitFingerprint())
 
 
 class Reaction(Base):
@@ -104,7 +105,17 @@ exact_match = select(Compound).where(
 reaction_smarts = select(Reaction).where(
     rdkit_rxn_col(Reaction.reaction).has_smarts("[C:1]>>[C:1][O]")
 )
+
+nearest = select(Compound).order_by(
+    rdkit_fp_col(Compound.fingerprint).tanimoto_distance(b"query fingerprint")
+)
 ```
+
+For RDKit molecule columns, `.equals()` is an explicit spelling of chemical
+equality. RDKit maps its `@=` operator and the normal SQL `=` operator used by
+`column == query` to the same `mol_eq` function. Similarly, `.not_equals()` and
+`!=` both use RDKit's `mol_ne`. The helper form is useful for static typing; it
+does not change the equality semantics.
 
 ## SQLAlchemy Core
 
@@ -157,10 +168,14 @@ Use the matching helper for the cartridge and data kind:
 | `bingo_rxn_col` | `BingoReaction`, `BingoBinaryReaction` |
 | `rdkit_col` | `RdkitMol` |
 | `rdkit_rxn_col` | `RdkitReaction` |
+| `rdkit_fp_col` | `RdkitBitFingerprint`, `RdkitSparseFingerprint` |
 
 ## When To Use Them
 
-Use proxy helpers when your like ypur autocomplete or want to use static code analysis.
+Direct comparator calls remain the runtime API. Use these helpers when you want
+`ty` and editor autocomplete to know the cartridge-specific methods and their
+`ColumnElement[bool]` or `ColumnElement[float]` results. SQLAlchemy currently
+types direct dynamic comparator lookup as `Any`.
 
 For a more explicit functional style, use the cartridge function modules:
 

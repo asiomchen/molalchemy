@@ -148,6 +148,11 @@ Available parameters and their default values are:
 
 If all of the above are the same and the second molecule is a substructure of the first, the molecules are declared equal, Otherwise (should not happen) the first molecule is arbitrarily defined to be less than the second.
 
+In the PostgreSQL operator catalog, `=` and `@=` both call `mol_eq`, while
+`<>` and `@<>` both call `mol_ne`. The alternate spellings therefore have the
+same chemical equality semantics; they are not text or binary comparisons.
+Chirality handling follows the `rdkit.do_chiral_sss` setting.
+
 There are additional operators defined in the cartridge, but these are used for internal purposes.
 
 ### Functions

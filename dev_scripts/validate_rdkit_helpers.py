@@ -119,11 +119,39 @@ def main() -> None:
         .order_by(molecules.c.id)
     )
     exact_stmt = select(molecules.c.name).where(molecules.c.mol.equals("CCO"))
+    native_equivalent_stmt = (
+        select(molecules.c.name)
+        .where(molecules.c.mol == "OCC")
+        .order_by(molecules.c.id)
+    )
+    explicit_equivalent_stmt = (
+        select(molecules.c.name)
+        .where(molecules.c.mol.equals("OCC"))
+        .order_by(molecules.c.id)
+    )
+    native_not_equivalent_stmt = (
+        select(molecules.c.name)
+        .where(molecules.c.mol != "OCC")
+        .order_by(molecules.c.id)
+    )
+    explicit_not_equivalent_stmt = (
+        select(molecules.c.name)
+        .where(molecules.c.mol.not_equals("OCC"))
+        .order_by(molecules.c.id)
+    )
     query_fp = rdkit_func.morganbv_fp(rdkit_func.mol_from_smiles("CCO"))
     tanimoto_stmt = select(molecules.c.name).where(
-        molecules.c.morgan_fp.tanimoto(query_fp)
+        molecules.c.morgan_fp.tanimoto_matches(query_fp)
     )
-    dice_stmt = select(molecules.c.name).where(molecules.c.morgan_fp.dice(query_fp))
+    dice_stmt = select(molecules.c.name).where(
+        molecules.c.morgan_fp.dice_matches(query_fp)
+    )
+    tanimoto_knn_stmt = select(molecules.c.name).order_by(
+        molecules.c.morgan_fp.tanimoto_distance(query_fp), molecules.c.id
+    )
+    dice_knn_stmt = select(molecules.c.name).order_by(
+        molecules.c.morgan_fp.dice_distance(query_fp), molecules.c.id
+    )
     function_stmt = (
         select(
             molecules.c.name,
@@ -157,6 +185,12 @@ def main() -> None:
     reaction_null_stmt = select(nullable_reactions.c.name).where(
         nullable_reactions.c.rxn.__eq__(None)
     )
+    reaction_explicit_equals_stmt = select(nullable_reactions.c.name).where(
+        nullable_reactions.c.rxn.equals("OCC>>O=CC")
+    )
+    reaction_explicit_not_equals_stmt = select(nullable_reactions.c.name).where(
+        nullable_reactions.c.rxn.not_equals("CCN>>CC=N")
+    )
 
     print(str(CreateTable(molecules).compile(dialect=postgresql.dialect())))
     print(str(CreateTable(nullable_molecules).compile(dialect=postgresql.dialect())))
@@ -165,11 +199,19 @@ def main() -> None:
     print(substructure_stmt.compile(dialect=postgresql.dialect()))
     print(functional_substructure_stmt.compile(dialect=postgresql.dialect()))
     print(exact_stmt.compile(dialect=postgresql.dialect()))
+    print(native_equivalent_stmt.compile(dialect=postgresql.dialect()))
+    print(explicit_equivalent_stmt.compile(dialect=postgresql.dialect()))
+    print(native_not_equivalent_stmt.compile(dialect=postgresql.dialect()))
+    print(explicit_not_equivalent_stmt.compile(dialect=postgresql.dialect()))
     print(tanimoto_stmt.compile(dialect=postgresql.dialect()))
     print(dice_stmt.compile(dialect=postgresql.dialect()))
+    print(tanimoto_knn_stmt.compile(dialect=postgresql.dialect()))
+    print(dice_knn_stmt.compile(dialect=postgresql.dialect()))
     print(function_stmt.compile(dialect=postgresql.dialect()))
     print(molecule_null_stmt.compile(dialect=postgresql.dialect()))
     print(reaction_null_stmt.compile(dialect=postgresql.dialect()))
+    print(reaction_explicit_equals_stmt.compile(dialect=postgresql.dialect()))
+    print(reaction_explicit_not_equals_stmt.compile(dialect=postgresql.dialect()))
 
     with engine.connect() as conn:
         version = conn.exec_driver_sql("SELECT rdkit_version()").scalar_one()
@@ -178,28 +220,64 @@ def main() -> None:
             conn.execute(functional_substructure_stmt).scalars().all()
         )
         exact_rows = conn.execute(exact_stmt).scalars().all()
+        native_equivalent_rows = conn.execute(native_equivalent_stmt).scalars().all()
+        explicit_equivalent_rows = (
+            conn.execute(explicit_equivalent_stmt).scalars().all()
+        )
+        native_not_equivalent_rows = (
+            conn.execute(native_not_equivalent_stmt).scalars().all()
+        )
+        explicit_not_equivalent_rows = (
+            conn.execute(explicit_not_equivalent_stmt).scalars().all()
+        )
         tanimoto_rows = conn.execute(tanimoto_stmt).scalars().all()
         dice_rows = conn.execute(dice_stmt).scalars().all()
+        tanimoto_knn_rows = conn.execute(tanimoto_knn_stmt).scalars().all()
+        dice_knn_rows = conn.execute(dice_knn_stmt).scalars().all()
         function_row = conn.execute(function_stmt).mappings().one()
         molecule_null_rows = conn.execute(molecule_null_stmt).scalars().all()
         reaction_null_rows = conn.execute(reaction_null_stmt).scalars().all()
+        reaction_explicit_equals_rows = (
+            conn.execute(reaction_explicit_equals_stmt).scalars().all()
+        )
+        reaction_explicit_not_equals_rows = (
+            conn.execute(reaction_explicit_not_equals_stmt).scalars().all()
+        )
 
     print()
     print(f"RDKit version: {version}")
     print(f"substructure(c1ccccc1): {substructure_rows}")
     print(f"mol_has_substructure(c1ccccc1): {functional_substructure_rows}")
     print(f"exact(CCO): {exact_rows}")
+    print(f"native molecule equality(CCO, OCC): {native_equivalent_rows}")
+    print(f"explicit molecule equality(CCO, OCC): {explicit_equivalent_rows}")
+    print(f"native molecule inequality(CCO, OCC): {native_not_equivalent_rows}")
+    print(f"explicit molecule inequality(CCO, OCC): {explicit_not_equivalent_rows}")
     print(f"tanimoto fingerprint threshold(CCO): {tanimoto_rows}")
     print(f"dice fingerprint threshold(CCO): {dice_rows}")
+    print(f"tanimoto KNN(CCO): {tanimoto_knn_rows}")
+    print(f"dice KNN(CCO): {dice_knn_rows}")
     print(f"function wrappers on ethanol: {dict(function_row)}")
     print(f"mol IS NULL via == None: {molecule_null_rows}")
     print(f"reaction IS NULL via == None: {reaction_null_rows}")
+    print(
+        "explicit reaction equality(CCO>>CC=O, OCC>>O=CC): "
+        f"{reaction_explicit_equals_rows}"
+    )
+    print(f"explicit reaction inequality: {reaction_explicit_not_equals_rows}")
 
     assert substructure_rows == ["benzene", "aspirin"]
     assert functional_substructure_rows == ["benzene", "aspirin"]
     assert exact_rows == ["ethanol"]
+    # Unlike Bingo storage equality, both RDKit molecule spellings call mol_eq.
+    assert native_equivalent_rows == ["ethanol"]
+    assert explicit_equivalent_rows == native_equivalent_rows
+    assert native_not_equivalent_rows == ["benzene", "aspirin"]
+    assert explicit_not_equivalent_rows == native_not_equivalent_rows
     assert tanimoto_rows == ["ethanol"]
     assert dice_rows == ["ethanol"]
+    assert tanimoto_knn_rows[0] == "ethanol"
+    assert dice_knn_rows[0] == "ethanol"
     assert function_row["smiles"] == "CCO"
     assert function_row["formula"] == "C2H6O"
     assert 46.0 < function_row["amw"] < 47.0
@@ -216,6 +294,10 @@ def main() -> None:
     assert function_row["pkl_len"] > 0
     assert molecule_null_rows == ["unknown"]
     assert reaction_null_rows == ["unknown reaction"]
+    # RDKit reaction equality must use the explicit operators: native `=` is an
+    # unimplemented operator shell in the cartridge versions covered here.
+    assert reaction_explicit_equals_rows == ["ethanol oxidation"]
+    assert reaction_explicit_not_equals_rows == ["ethanol oxidation"]
 
 
 if __name__ == "__main__":

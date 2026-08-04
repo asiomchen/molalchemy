@@ -13,11 +13,25 @@ from sqlalchemy import (
     select,
 )
 from sqlalchemy.dialects import postgresql
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from molalchemy.bingo import functions as bingo_func
 from molalchemy.bingo.types import BingoMol, BingoReaction
 
 all_funcs = bingo_func.__all__
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+class Compound(Base):
+    __tablename__ = "bingo_function_compounds"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    structure: Mapped[str] = mapped_column(BingoMol())
+    query_structure: Mapped[str] = mapped_column(BingoMol())
+    query_parameters: Mapped[str] = mapped_column(String())
 
 
 @pytest.mark.parametrize("func", all_funcs)
@@ -107,6 +121,23 @@ def test_bingo_similarity_preserves_column_expression_inputs():
     assert "'compounds.query_structure'" not in sql
     assert " @ " in sql
     assert "bingo.sim" in sql
+
+
+def test_bingo_search_helpers_preserve_orm_attribute_inputs():
+    """Mapped attributes should use their SQL expression, not become literals."""
+    stmt = select(Compound).where(
+        bingo_func.mol_equals(
+            Compound.structure,
+            Compound.query_structure,
+            Compound.query_parameters,
+        )
+    )
+
+    compiled = str(stmt.compile(dialect=postgresql.dialect()))
+
+    assert "bingo.exact" in compiled
+    assert "bingo_function_compounds.query_structure" in compiled
+    assert "bingo_function_compounds.query_parameters" in compiled
 
 
 @pytest.mark.parametrize(

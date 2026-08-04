@@ -117,12 +117,11 @@ def main() -> None:
     similarity_with_column_stmt = (
         select(compounds.c.name)
         .where(
-            bingo_func.mol_similarity(
-                compounds.c.structure,
+            compounds.c.structure.similar_to(
                 compounds.c.query_structure,
-                0.95,
-                1.0,
-                "Tanimoto",
+                minimum=0.95,
+                maximum=1.0,
+                metric="Tanimoto",
             )
         )
         .order_by(compounds.c.id)
@@ -158,13 +157,10 @@ def main() -> None:
     reaction_exact_stmt = select(reactions.c.name).where(
         reactions.c.reaction_data.equals("CCO>>CC=O")
     )
-    exact_with_column_stmt = (
+    native_equality_stmt = (
         select(compounds.c.name)
         .where(compounds.c.structure == compounds.c.query_structure)
         .order_by(compounds.c.id)
-    )
-    reaction_exact_with_column_stmt = select(reactions.c.name).where(
-        reactions.c.reaction_data == reactions.c.query_reaction
     )
     molecule_not_null_stmt = (
         select(compounds.c.name)
@@ -203,12 +199,7 @@ def main() -> None:
     print(function_stmt.compile(dialect=postgresql.dialect()))
     print(reaction_exact_stmt.compile(dialect=postgresql.dialect()))
     print(
-        exact_with_column_stmt.compile(
-            dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
-        )
-    )
-    print(
-        reaction_exact_with_column_stmt.compile(
+        native_equality_stmt.compile(
             dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
         )
     )
@@ -225,10 +216,7 @@ def main() -> None:
         function_row = conn.execute(function_stmt).mappings().one()
         invalid_check = conn.execute(invalid_check_stmt).scalar_one()
         reaction_exact_rows = conn.execute(reaction_exact_stmt).scalars().all()
-        exact_with_column_rows = conn.execute(exact_with_column_stmt).scalars().all()
-        reaction_exact_with_column_rows = (
-            conn.execute(reaction_exact_with_column_stmt).scalars().all()
-        )
+        native_equality_rows = conn.execute(native_equality_stmt).scalars().all()
         molecule_not_null_rows = conn.execute(molecule_not_null_stmt).scalars().all()
         reaction_not_null_rows = conn.execute(reaction_not_null_stmt).scalars().all()
         reaction_function_row = conn.execute(reaction_function_stmt).mappings().one()
@@ -242,10 +230,7 @@ def main() -> None:
     print(f"function wrappers on ethanol: {dict(function_row)}")
     print(f"checkmolecule(not-a-mol): {invalid_check}")
     print(f"reaction exact(CCO>>CC=O): {reaction_exact_rows}")
-    print(f"exact(structure, query_structure): {exact_with_column_rows}")
-    print(
-        f"reaction exact(reaction_data, query_reaction): {reaction_exact_with_column_rows}"
-    )
+    print(f"native equality(structure, query_structure): {native_equality_rows}")
     print(f"structure IS NOT NULL via != None: {molecule_not_null_rows}")
     print(f"reaction IS NOT NULL via != None: {reaction_not_null_rows}")
     print(f"reaction function wrappers: {dict(reaction_function_row)}")
@@ -267,8 +252,8 @@ def main() -> None:
     assert function_row["fingerprint_len"] > 0
     assert "invalid character" in invalid_check
     assert reaction_exact_rows == ["ethanol oxidation"]
-    assert exact_with_column_rows == ["benzene", "ethanol"]
-    assert reaction_exact_with_column_rows == ["ethanol oxidation"]
+    # Native SQL equality is textual: "CCO" and chemically equivalent "OCC" differ.
+    assert native_equality_rows == ["benzene"]
     assert molecule_not_null_rows == ["benzene", "ethanol"]
     assert reaction_not_null_rows == ["ethanol oxidation"]
     assert reaction_function_row["check_result"] is None

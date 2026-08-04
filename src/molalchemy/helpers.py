@@ -1,4 +1,6 @@
-"""Helper functions for typed molecule and reaction column autocomplete."""
+"""Runtime-validated helpers for statically typed cartridge columns."""
+
+from typing import Any, cast
 
 from sqlalchemy import Column
 from sqlalchemy.orm.attributes import InstrumentedAttribute
@@ -9,18 +11,26 @@ from molalchemy.bingo import (
     BingoMol,
     BingoReaction,
 )
-from molalchemy.bingo.proxy import BingoMolProxy, BingoRxnProxy
 from molalchemy.rdkit import RdkitMol, RdkitReaction
-from molalchemy.rdkit.proxy import RdkitMolProxy, RdkitRxnProxy
+from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitSparseFingerprint
+
+from .protocols import (
+    BingoMolColumn,
+    BingoReactionColumn,
+    RdkitFingerprintColumn,
+    RdkitMolColumn,
+    RdkitReactionColumn,
+)
+
+ChemicalColumn = Column[Any] | InstrumentedAttribute[Any]
 
 
-def bingo_col(column: Column | InstrumentedAttribute) -> BingoMolProxy:
+def bingo_col(column: ChemicalColumn) -> BingoMolColumn:
     """
-    Create a Bingo molecule proxy from a SQLAlchemy column. It is a way to trick IDE into showing
-    syntax highlighting and autocompletion for the molecular column operations provided by custom Comparator.
+    Validate a Bingo molecule column and expose its typed comparator protocol.
 
     This function validates that the input column has a compatible Bingo molecule type
-    and returns a proxy object that can be used for molecule-specific operations.
+    and returns the same object with molecule-specific static typing.
 
     Parameters
     ----------
@@ -30,8 +40,8 @@ def bingo_col(column: Column | InstrumentedAttribute) -> BingoMolProxy:
 
     Returns
     -------
-    molalchemy.bingo.proxy.BingoMolProxy
-        A proxy object for performing Bingo molecule operations on the column.
+    molalchemy.protocols.BingoMolColumn
+        The original column typed with Bingo molecule operations.
 
     Raises
     ------
@@ -42,7 +52,7 @@ def bingo_col(column: Column | InstrumentedAttribute) -> BingoMolProxy:
     """
     if isinstance(column, InstrumentedAttribute | Column):
         if isinstance(column.type, BingoMol) or isinstance(column.type, BingoBinaryMol):
-            return column  # type: ignore
+            return cast(BingoMolColumn, column)
         else:
             raise TypeError("Column is not of type BingoMol or BingoBinaryMol")
     else:
@@ -51,13 +61,12 @@ def bingo_col(column: Column | InstrumentedAttribute) -> BingoMolProxy:
         )
 
 
-def bingo_rxn_col(column: Column | InstrumentedAttribute) -> BingoRxnProxy:
+def bingo_rxn_col(column: ChemicalColumn) -> BingoReactionColumn:
     """
-    Create a Bingo reaction proxy from a SQLAlchemy column. It is a way to trick IDE into showing
-    syntax highlighting and autocompletion for the reaction column operations provided by custom Comparator.
+    Validate a Bingo reaction column and expose its typed comparator protocol.
 
     This function validates that the input column has a compatible Bingo reaction type
-    and returns a proxy object that can be used for reaction-specific operations.
+    and returns the same object with reaction-specific static typing.
 
     Parameters
     ----------
@@ -67,8 +76,8 @@ def bingo_rxn_col(column: Column | InstrumentedAttribute) -> BingoRxnProxy:
 
     Returns
     -------
-    molalchemy.bingo.proxy.BingoRxnProxy
-        A proxy object for performing Bingo reaction operations on the column.
+    molalchemy.protocols.BingoReactionColumn
+        The original column typed with Bingo reaction operations.
 
     Raises
     ------
@@ -81,7 +90,7 @@ def bingo_rxn_col(column: Column | InstrumentedAttribute) -> BingoRxnProxy:
         if isinstance(column.type, BingoReaction) or isinstance(
             column.type, BingoBinaryReaction
         ):
-            return column  # type: ignore
+            return cast(BingoReactionColumn, column)
         else:
             raise TypeError(
                 "Column is not of type BingoReaction or BingoBinaryReaction"
@@ -92,16 +101,16 @@ def bingo_rxn_col(column: Column | InstrumentedAttribute) -> BingoRxnProxy:
         )
 
 
-def rdkit_col(column: Column | InstrumentedAttribute) -> RdkitMolProxy:
+def rdkit_col(column: ChemicalColumn) -> RdkitMolColumn:
     """
-    Create an RDKit molecule proxy from a SQLAlchemy column.
+    Validate an RDKit molecule column and expose its typed comparator protocol.
 
     This validates that the input column uses `molalchemy.rdkit.types.RdkitMol`
     and returns the original column typed for IDE autocomplete.
     """
     if isinstance(column, InstrumentedAttribute | Column):
         if isinstance(column.type, RdkitMol):
-            return column  # type: ignore
+            return cast(RdkitMolColumn, column)
         else:
             raise TypeError("Column is not of type RdkitMol")
     else:
@@ -110,19 +119,32 @@ def rdkit_col(column: Column | InstrumentedAttribute) -> RdkitMolProxy:
         )
 
 
-def rdkit_rxn_col(column: Column | InstrumentedAttribute) -> RdkitRxnProxy:
+def rdkit_rxn_col(column: ChemicalColumn) -> RdkitReactionColumn:
     """
-    Create an RDKit reaction proxy from a SQLAlchemy column.
+    Validate an RDKit reaction column and expose its typed comparator protocol.
 
     This validates that the input column uses `molalchemy.rdkit.types.RdkitReaction`
     and returns the original column typed for IDE autocomplete.
     """
     if isinstance(column, InstrumentedAttribute | Column):
         if isinstance(column.type, RdkitReaction):
-            return column  # type: ignore
+            return cast(RdkitReactionColumn, column)
         else:
             raise TypeError("Column is not of type RdkitReaction")
     else:
         raise TypeError(
             f"Input is not a SQLAlchemy InstrumentedAttribute or Column, got {type(column)}"
         )
+
+
+def rdkit_fp_col(column: ChemicalColumn) -> RdkitFingerprintColumn:
+    """Validate and statically expose an RDKit fingerprint column."""
+    if isinstance(column, InstrumentedAttribute | Column):
+        if isinstance(column.type, RdkitBitFingerprint | RdkitSparseFingerprint):
+            return cast(RdkitFingerprintColumn, column)
+        raise TypeError(
+            "Column is not of type RdkitBitFingerprint or RdkitSparseFingerprint"
+        )
+    raise TypeError(
+        f"Input is not a SQLAlchemy Column or InstrumentedAttribute, got {type(column)}"
+    )
