@@ -56,7 +56,7 @@ def mol_has_substructure(
 
     Returns
     -------
-    BinaryExpression
+    ColumnElement[bool]
         SQLAlchemy binary expression for the substructure search.
 
     Examples
@@ -87,8 +87,8 @@ def mol_has_smarts(mol_column: ColumnElement, pattern: str) -> ColumnElement[boo
 
     Returns
     -------
-    Function[bool]
-        SQLAlchemy function that returns `True` if the pattern
+    ColumnElement[bool]
+        SQLAlchemy expression that returns `True` if the pattern
         is found in the molecule, `False` otherwise.
 
     Examples
@@ -119,7 +119,7 @@ def mol_is_substructure_of(
 
     Returns
     -------
-    BinaryExpression
+    ColumnElement[bool]
         SQLAlchemy binary expression for the reverse substructure search.
     """
     return _rdkit_predicate(mol_column, "<@", query)
@@ -146,7 +146,7 @@ def mol_equals(
 
     Returns
     -------
-    BinaryExpression
+    ColumnElement[bool]
         SQLAlchemy binary expression for the exact match search.
     """
     return _rdkit_predicate(mol_column, "@=", query)
@@ -283,8 +283,8 @@ def rxn_has_smarts(rxn_column: ColumnElement, pattern: str) -> ColumnElement[boo
 
     Returns
     -------
-    Function[bool]
-        SQLAlchemy function, that returns `True` if the pattern
+    ColumnElement[bool]
+        SQLAlchemy expression that returns `True` if the pattern
         is found in the reaction, `False` otherwise.
 
     Examples

@@ -5,13 +5,17 @@ This file defines public RDKit PostgreSQL function wrappers for use with SQLAlch
 
 from typing import Any
 
-from sqlalchemy import BinaryExpression, Function, String, type_coerce
 from sqlalchemy import types as sqltypes
-from sqlalchemy.sql import cast, func
+from sqlalchemy.sql import cast
 from sqlalchemy.sql.elements import ColumnElement
 from sqlalchemy.sql.expression import Cast
 from sqlalchemy.sql.functions import GenericFunction
 
+from molalchemy.rdkit.search import (
+    _rdkit_mol_smarts,
+    _rdkit_predicate,
+    _rdkit_rxn_smarts,
+)
 from molalchemy.rdkit.types import (
     RdkitBitFingerprint,
     RdkitMol,
@@ -29,4 +33,5 @@ from ._types import (
     AnyRdkitQMolLike,
     AnyRdkitReactionLike,
     AnyRdkitSparseFingerprintLike,
-    AnyRdkitXQMolLike)
+    AnyRdkitXQMolLike,
+)
