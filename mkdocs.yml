@@ -102,6 +102,7 @@ nav:
     - Typed Comparator Helpers: tutorials/08_proxy_helpers.md
     - Contributing: tutorials/contribute.md
   - Migration guides:
+    - Bingo comparator API: migrations/bingo-comparator-api.md
     - RDKit comparator API: migrations/rdkit-comparator-api.md
   - API:
     - molalchemy.exceptions: api/exceptions.md

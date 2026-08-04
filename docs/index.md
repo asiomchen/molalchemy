@@ -128,6 +128,7 @@ To learn how to use molalchemy, check out the tutorials in the [documentation](h
 - [Bingo Reactions and Binary Storage](https://molalchemy.readthedocs.io/en/latest/tutorials/06_bingo_reactions_binary/) - Bingo reaction and binary column workflows
 - [RDKit Descriptors and Advanced Queries](https://molalchemy.readthedocs.io/en/latest/tutorials/07_rdkit_descriptors_advanced/) - Descriptor functions and richer query patterns
 - [Typed Comparator Helpers](https://molalchemy.readthedocs.io/en/latest/tutorials/08_proxy_helpers/) - statically typed cartridge methods
+- [Bingo Comparator Migration](https://molalchemy.readthedocs.io/en/latest/migrations/bingo-comparator-api/) - migrate equality and typed comparator calls
 - [RDKit Comparator Migration](https://molalchemy.readthedocs.io/en/latest/migrations/rdkit-comparator-api/) - migrate legacy fingerprint and comparator calls
 
 ## 🏗️ Supported Cartridges
