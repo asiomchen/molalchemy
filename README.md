@@ -33,7 +33,7 @@ molalchemy provides seamless integration between python and chemical databases, 
 - **Input Validation**: Molecules and reactions are validated before being sent to the database
 - **Similarity Threshold Management**: Get/set Tanimoto and Dice thresholds with a context manager
 - **Alembic Integration**: Automatic handling of extensions, types, and indexes in database migrations
-- **Typing Helpers**: Proxy helpers for IDE autocomplete on SQLAlchemy molecule and reaction columns
+- **Typing Helpers**: Protocol helpers for precise comparator autocomplete and result types
 - **Easy Integration**: Drop-in replacement for standard SQLAlchemy types
 
 ## 📦 Installation
@@ -93,20 +93,19 @@ molalchemy/
 ├── src/molalchemy/
 │   ├── types.py              # Base type definitions
 │   ├── exceptions.py         # Custom exception hierarchy
-│   ├── helpers.py            # Typed proxy helper functions
+│   ├── helpers.py            # Typed comparator helper functions
+│   ├── protocols.py          # Static comparator protocols
 │   ├── alembic_helpers.py    # Alembic integration utilities
 │   ├── bingo/               # Bingo PostgreSQL cartridge support
 │   │   ├── types.py         # Bingo-specific types
 │   │   ├── index.py         # Bingo indexing
 │   │   ├── comparators.py   # SQLAlchemy comparators
-│   │   ├── proxy.py         # IDE/type-checker proxy stubs
 │   │   ├── search.py        # Shared Bingo search expression helpers
 │   │   └── functions/       # Bingo database functions
 │   └── rdkit/               # RDKit PostgreSQL cartridge support
 │       ├── types.py         # RDKit-specific types
 │       ├── index.py         # RDKit indexing
 │       ├── comparators.py   # SQLAlchemy comparators
-│       ├── proxy.py         # IDE/type-checker proxy stubs
 │       ├── settings.py      # Similarity threshold management
 │       └── functions/       # RDKit database functions
 ├── tests/                   # Test suite
@@ -127,7 +126,8 @@ To learn how to use molalchemy, check out the tutorials in the [documentation](h
 - [RDKit Reactions](https://molalchemy.readthedocs.io/en/latest/tutorials/05_Reactions_rdkit_ORM/) - Storing and querying RDKit reactions
 - [Bingo Reactions and Binary Storage](https://molalchemy.readthedocs.io/en/latest/tutorials/06_bingo_reactions_binary/) - Bingo reaction and binary column workflows
 - [RDKit Descriptors and Advanced Queries](https://molalchemy.readthedocs.io/en/latest/tutorials/07_rdkit_descriptors_advanced/) - Descriptor functions and richer query patterns
-- [Typed Proxy Helpers](https://molalchemy.readthedocs.io/en/latest/tutorials/08_proxy_helpers/) - IDE autocomplete helpers for chemical columns
+- [Typed Comparator Helpers](https://molalchemy.readthedocs.io/en/latest/tutorials/08_proxy_helpers/) - statically typed cartridge methods
+- [RDKit Comparator Migration](https://molalchemy.readthedocs.io/en/latest/migrations/rdkit-comparator-api/) - migrate legacy fingerprint and comparator calls
 
 ## 🏗️ Supported Cartridges
 
@@ -206,16 +206,16 @@ class Molecule(Base):
     )
 ```
 
-### Typed Proxy Helpers
+### Typed Comparator Helpers
 
 The helper functions in `molalchemy.helpers` return the original SQLAlchemy
-column at runtime, but annotate it with a proxy type so IDEs and type checkers
+column at runtime, but annotate it with a protocol so IDEs and type checkers
 can see cartridge-specific comparator methods.
 
 ```python
 from sqlalchemy import select
 
-from molalchemy.helpers import bingo_col, rdkit_col
+from molalchemy.helpers import bingo_col, rdkit_col, rdkit_fp_col
 
 # Bingo exact/substructure search with autocomplete-friendly column typing
 bingo_stmt = select(Molecule).where(
@@ -228,8 +228,13 @@ rdkit_stmt = select(MoleculeWithFormats).where(
 )
 ```
 
+RDKit molecule `==` and `!=` comparisons are chemically aware: PostgreSQL
+dispatches them to RDKit's `mol_eq` and `mol_ne` functions. The explicit
+`.equals()` and `.not_equals()` methods use the equivalent `@=` and `@<>`
+operator spellings.
+
 Use the matching helper for the cartridge and data kind:
-`bingo_col`, `bingo_rxn_col`, `rdkit_col`, or `rdkit_rxn_col`.
+`bingo_col`, `bingo_rxn_col`, `rdkit_col`, `rdkit_rxn_col`, or `rdkit_fp_col`.
 
 ### Configurable Return Types
 

@@ -1,6 +1,5 @@
 from .comparators import RdkitFPComparator, RdkitMolComparator, RdkitReactionComparator
 from .index import RdkitIndex
-from .proxy import RdkitMolProxy, RdkitRxnProxy
 from .settings import (
     get_dice_threshold,
     get_tanimoto_threshold,
@@ -23,11 +22,9 @@ __all__ = [
     "RdkitIndex",
     "RdkitMol",
     "RdkitMolComparator",
-    "RdkitMolProxy",
     "RdkitQMol",
     "RdkitReaction",
     "RdkitReactionComparator",
-    "RdkitRxnProxy",
     "RdkitSparseFingerprint",
     "RdkitXQMol",
     "get_dice_threshold",

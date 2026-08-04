@@ -236,7 +236,7 @@ git commit -m "test: add edge cases for similarity functions"
 - [ ] Tests pass: `uv run pytest`
 - [ ] Code is formatted: `uv run ruff format .`
 - [ ] Linting passes: `uv run ruff check .`
-- [ ] Type checking passes: `uv run mypy src/`
+- [ ] Focused type checking passes with `uv run ty check`
 - [ ] Documentation builds: `uv run mkdocs serve`
 - [ ] Changelog updated (if applicable)
 

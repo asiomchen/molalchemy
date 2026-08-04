@@ -66,7 +66,7 @@ class TestRdkitQueryIntegration:
         query_fp = "morganbv_fp('CCO'::mol)"
 
         stmt = select(self.molecules).where(
-            self.molecules.c.morgan_fp.tanimoto(query_fp)
+            self.molecules.c.morgan_fp.tanimoto_matches(query_fp)
         )
 
         compiled = str(stmt.compile())
@@ -76,21 +76,34 @@ class TestRdkitQueryIntegration:
         """Test dice similarity compiles with # operator."""
         query_fp = "morganbv_fp('CCO'::mol)"
 
-        stmt = select(self.molecules).where(self.molecules.c.morgan_fp.dice(query_fp))
+        stmt = select(self.molecules).where(
+            self.molecules.c.morgan_fp.dice_matches(query_fp)
+        )
 
         compiled = str(stmt.compile())
         assert "#" in compiled
 
-    def test_nearest_neighbors_query(self):
+    def test_tanimoto_distance_query(self):
         """Test nearest neighbors compiles with <%> operator."""
         query_fp = "morganbv_fp('CCO'::mol)"
 
-        stmt = select(self.molecules).where(
-            self.molecules.c.morgan_fp.nearest_neighbors(query_fp)
+        stmt = select(self.molecules).order_by(
+            self.molecules.c.morgan_fp.tanimoto_distance(query_fp)
         )
 
         compiled = str(stmt.compile())
         assert "<%>" in compiled
+
+    def test_dice_distance_query(self):
+        """Test Dice KNN distance compiles with <#> in ORDER BY."""
+        query_fp = "morganbv_fp('CCO'::mol)"
+        stmt = select(self.molecules).order_by(
+            self.molecules.c.morgan_fp.dice_distance(query_fp)
+        )
+
+        compiled = str(stmt.compile())
+        assert "ORDER BY" in compiled
+        assert "<#>" in compiled
 
     def test_complex_query_with_multiple_conditions(self):
         """Test complex query with or_/and_ combinations."""
@@ -152,7 +165,9 @@ class TestRdkitORMIntegration:
         """Test similarity query with ORM."""
         query_fp = "morganbv_fp('CCO'::mol)"
 
-        stmt = select(self.Molecule).where(self.Molecule.morgan_fp.tanimoto(query_fp))
+        stmt = select(self.Molecule).where(
+            self.Molecule.morgan_fp.tanimoto_matches(query_fp)
+        )
 
         compiled = str(stmt.compile())
         assert "%" in compiled

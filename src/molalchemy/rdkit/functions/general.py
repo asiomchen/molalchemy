@@ -4,13 +4,17 @@ This file defines public RDKit PostgreSQL function wrappers for use with SQLAlch
 
 from typing import Any
 
-from sqlalchemy import BinaryExpression, Function
 from sqlalchemy import types as sqltypes
-from sqlalchemy.sql import cast, func
+from sqlalchemy.sql import cast
 from sqlalchemy.sql.elements import ColumnElement
 from sqlalchemy.sql.expression import Cast
 from sqlalchemy.sql.functions import GenericFunction
 
+from molalchemy.rdkit.search import (
+    _rdkit_mol_smarts,
+    _rdkit_predicate,
+    _rdkit_rxn_smarts,
+)
 from molalchemy.rdkit.types import (
     RdkitBitFingerprint,
     RdkitMol,
@@ -34,7 +38,7 @@ from ._types import (
 
 def mol_has_substructure(
     mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
-) -> BinaryExpression:
+) -> ColumnElement[bool]:
     """
     Perform substructure search.
 
@@ -63,10 +67,10 @@ def mol_has_substructure(
     >>> # Search for molecules containing a aromatic carbon as SMARTS
     >>> query = select(Molecule).where(has_substructure(Molecule.structure, cast("[cH]", RdkitQMol)))
     """
-    return mol_column.op("@>")(query)
+    return _rdkit_predicate(mol_column, "@>", query)
 
 
-def mol_has_smarts(mol_column: ColumnElement, pattern: str) -> Function[bool]:
+def mol_has_smarts(mol_column: ColumnElement, pattern: str) -> ColumnElement[bool]:
     """
     Perform molecule SMARTS search.
 
@@ -92,12 +96,12 @@ def mol_has_smarts(mol_column: ColumnElement, pattern: str) -> Function[bool]:
     >>> from sqlalchemy import select
     >>> query = select(Molecule).where(mol_has_smarts(Molecule.structure, "[#6]"))
     """
-    return mol_has_substructure(mol_column, qmol_from_smarts(cast(pattern, CString)))
+    return _rdkit_mol_smarts(mol_column, pattern)
 
 
 def mol_is_substructure_of(
     mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
-) -> BinaryExpression:
+) -> ColumnElement[bool]:
     """
     Perform reverse substructure search.
 
@@ -118,17 +122,19 @@ def mol_is_substructure_of(
     BinaryExpression
         SQLAlchemy binary expression for the reverse substructure search.
     """
-    return mol_column.op("<@")(query)
+    return _rdkit_predicate(mol_column, "<@", query)
 
 
 def mol_equals(
     mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
-) -> BinaryExpression:
+) -> ColumnElement[bool]:
     """
     Perform exact structure matching.
 
-    Checks if the molecular structure in the column exactly matches
-    the query using the `@=` operator.
+    Checks if the molecular structure in the column chemically matches
+    the query using `@=`. RDKit maps both `@=` and ordinary `=` to
+    the `mol_eq` function, so this is an explicit spelling of the same
+    cartridge equality used by `column == query`.
 
     Parameters
     ----------
@@ -143,25 +149,26 @@ def mol_equals(
     BinaryExpression
         SQLAlchemy binary expression for the exact match search.
     """
-    return mol_column.op("@=")(query)
+    return _rdkit_predicate(mol_column, "@=", query)
 
 
 def mol_not_equals(
     mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
-) -> BinaryExpression:
+) -> ColumnElement[bool]:
     """
     Perform negative exact structure matching.
 
-    Checks if the molecular structure in the column differs from
-    the query using the `@<>` operator.
+    Checks if the molecular structure in the column differs chemically from
+    the query using `@<>`. RDKit maps both `@<>` and ordinary `<>` to
+    the `mol_ne` function.
     """
-    return mol_column.op("@<>")(query)
+    return _rdkit_predicate(mol_column, "@<>", query)
 
 
 def mol_has_query_substructure(
     mol_column: ColumnElement[RdkitMol],
     query: AnyRdkitMolLike | AnyRdkitQMolLike | AnyRdkitXQMolLike,
-) -> BinaryExpression:
+) -> ColumnElement[bool]:
     """
     Perform query-substructure search.
 
@@ -169,13 +176,13 @@ def mol_has_query_substructure(
     using the `@>>` operator. Use `RdkitQMol` or `RdkitXQMol` expressions
     for SMARTS/query semantics.
     """
-    return mol_column.op("@>>")(query)
+    return _rdkit_predicate(mol_column, "@>>", query)
 
 
 def mol_is_query_substructure_of(
     mol_column: ColumnElement[RdkitMol],
     query: AnyRdkitMolLike | AnyRdkitQMolLike | AnyRdkitXQMolLike,
-) -> BinaryExpression:
+) -> ColumnElement[bool]:
     """
     Perform reverse query-substructure search.
 
@@ -183,82 +190,82 @@ def mol_is_query_substructure_of(
     using the `<<@` operator. Use `RdkitQMol` or `RdkitXQMol` expressions
     for SMARTS/query semantics.
     """
-    return mol_column.op("<<@")(query)
+    return _rdkit_predicate(mol_column, "<<@", query)
 
 
 def rxn_has_substructure(
     rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
-) -> BinaryExpression:
+) -> ColumnElement[bool]:
     """
     Perform reaction substructure search.
 
     Checks if the reaction in the column contains the query
     reaction using the `@>` operator.
     """
-    return rxn_column.op("@>")(query)
+    return _rdkit_predicate(rxn_column, "@>", query)
 
 
 def rxn_is_substructure_of(
     rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
-) -> BinaryExpression:
+) -> ColumnElement[bool]:
     """
     Perform reverse reaction substructure search.
 
     Checks if the reaction in the column is a substructure
     of the query using the `<@` operator.
     """
-    return rxn_column.op("<@")(query)
+    return _rdkit_predicate(rxn_column, "<@", query)
 
 
 def rxn_equals(
     rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
-) -> BinaryExpression:
+) -> ColumnElement[bool]:
     """
     Perform exact reaction matching.
 
     Checks if the reaction in the column exactly matches
     the query using the `@=` operator.
     """
-    return rxn_column.op("@=")(query)
+    return _rdkit_predicate(rxn_column, "@=", query)
 
 
 def rxn_not_equals(
     rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
-) -> BinaryExpression:
+) -> ColumnElement[bool]:
     """
     Perform negative exact reaction matching.
 
     Checks if the reaction in the column differs from
     the query using the `@<>` operator.
     """
-    return rxn_column.op("@<>")(query)
+    return _rdkit_predicate(rxn_column, "@<>", query)
 
 
 def rxn_has_substructure_fp(
     rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
-) -> BinaryExpression:
+) -> ColumnElement[bool]:
     """
     Perform fingerprint-backed reaction substructure search.
 
     Checks if the reaction in the column contains the query
     using the `?>` operator.
     """
-    return rxn_column.op("?>")(query)
+    return _rdkit_predicate(rxn_column, "?>", query)
 
 
 def rxn_is_substructure_fp_of(
     rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
-) -> BinaryExpression:
+) -> ColumnElement[bool]:
     """
     Perform reverse fingerprint-backed reaction substructure search.
 
     Checks if the reaction in the column is a fingerprint substructure
     of the query using the `?<` operator.
     """
-    return rxn_column.op("?<")(query)
+    return _rdkit_predicate(rxn_column, "?<", query)
 
 
-def rxn_has_smarts(rxn_column: ColumnElement, pattern: str) -> Function[bool]:
+def rxn_has_smarts(rxn_column: ColumnElement, pattern: str) -> ColumnElement[bool]:
     """
     Perform reaction substructure search.
 
@@ -286,7 +293,7 @@ def rxn_has_smarts(rxn_column: ColumnElement, pattern: str) -> Function[bool]:
     >>> # Search for reactions containing a carbonyl formation
     >>> query = select(Reaction).where(has_smarts(Reaction.rxn, ">>C=O"))
     """
-    return func.substruct(rxn_column, reaction_from_smarts(cast(pattern, CString)))
+    return _rdkit_rxn_smarts(rxn_column, pattern)
 
 
 class add(GenericFunction):
