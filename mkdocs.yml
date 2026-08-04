@@ -114,6 +114,7 @@ nav:
         - rdkit.types: api/rdkit/types.md
         - rdkit.functions: api/rdkit/functions.md
         - rdkit.index: api/rdkit/db_index.md
+        - rdkit.settings: api/rdkit/settings.md
   - Cartridge Manuals:
     - Bingo PostgreSQL: bingo-postgres-manual.md
     - RDKit PostgreSQL: rdkit-postgres-manual.md

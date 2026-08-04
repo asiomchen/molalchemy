@@ -257,15 +257,29 @@ class MoleculeWithFormats(Base):
     structure_bytes: Mapped[bytes] = mapped_column(RdkitMol(return_type="bytes"))
 ```
 
-### Similarity Threshold Management
+### RDKit Cartridge Settings
 
-RDKit PostgreSQL uses GUC variables to control similarity search behavior. MolAlchemy provides helpers to manage these thresholds:
+RDKit PostgreSQL uses GUC variables to control similarity, substructure matching, and fingerprint sizes. Use an immutable settings object to establish a baseline whenever a pooled connection is checked out:
 
 ```python
+from sqlalchemy import create_engine
+
 from molalchemy.rdkit.settings import (
+    RdkitSettings,
+    configure_engine,
     get_tanimoto_threshold,
     set_tanimoto_threshold,
     similarity_threshold,
+)
+
+engine = configure_engine(
+    create_engine("postgresql+psycopg://localhost/chemistry"),
+    RdkitSettings(
+        tanimoto_threshold=0.5,
+        dice_threshold=0.5,
+        do_chiral_sss=True,
+        morgan_fp_size=2048,
+    ),
 )
 
 # Get/set thresholds directly
@@ -278,6 +292,8 @@ with similarity_threshold(session, tanimoto=0.1, dice=0.2):
     results = session.execute(query).all()
 # Original thresholds are restored automatically
 ```
+
+`None` fields leave the server value unchanged. Calling `configure_engine` again replaces the previous MolAlchemy baseline, and `RdkitSettings()` removes it. See the [RDKit cartridge configuration reference](https://rdkit.org/new_docs/Cartridge.html#configuration) for the underlying settings.
 
 ### Chemical Reactions
 

@@ -19,6 +19,7 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.schema import CreateTable
 
+from molalchemy.rdkit import RdkitSettings, configure_engine
 from molalchemy.rdkit import functions as rdkit_func
 from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitReaction
 from molalchemy.types import CString
@@ -43,8 +44,74 @@ def wait_for_db(engine) -> None:
 
 
 def main() -> None:
-    engine = create_engine(DATABASE_URL, echo=False)
+    configured_gucs = {
+        "rdkit.tanimoto_threshold": "0.55",
+        "rdkit.dice_threshold": "0.45",
+        "rdkit.do_chiral_sss": "on",
+        "rdkit.do_enhanced_stereo_sss": "off",
+        "rdkit.sss_fp_size": "2048",
+        "rdkit.morgan_fp_size": "2048",
+        "rdkit.featmorgan_fp_size": "2048",
+        "rdkit.layered_fp_size": "2048",
+        "rdkit.rdkit_fp_size": "2048",
+        "rdkit.torsion_fp_size": "2048",
+        "rdkit.atompair_fp_size": "2048",
+        "rdkit.avalon_fp_size": "2048",
+    }
+    baseline_settings = RdkitSettings(
+        tanimoto_threshold=0.55,
+        dice_threshold=0.45,
+        do_chiral_sss=True,
+        do_enhanced_stereo_sss=False,
+        sss_fp_size=2048,
+        morgan_fp_size=2048,
+        featmorgan_fp_size=2048,
+        layered_fp_size=2048,
+        rdkit_fp_size=2048,
+        torsion_fp_size=2048,
+        atompair_fp_size=2048,
+        avalon_fp_size=2048,
+    )
+    engine = configure_engine(
+        create_engine(DATABASE_URL, echo=False, pool_size=1, max_overflow=0),
+        baseline_settings,
+    )
     wait_for_db(engine)
+
+    with engine.connect() as conn:
+        actual_gucs = {
+            name: conn.exec_driver_sql(f"SHOW {name}").scalar_one()
+            for name in configured_gucs
+        }
+    assert actual_gucs == configured_gucs
+
+    # Prove that checkout reapplies the baseline to a reused physical connection.
+    with engine.begin() as conn:
+        conn.exec_driver_sql("SET rdkit.tanimoto_threshold = 0.13")
+    with engine.connect() as conn:
+        reapplied_tanimoto = conn.exec_driver_sql(
+            "SHOW rdkit.tanimoto_threshold"
+        ).scalar_one()
+    assert reapplied_tanimoto == configured_gucs["rdkit.tanimoto_threshold"]
+
+    # Engine.dispose() replaces the pool. The baseline must follow the engine
+    # so that connections created by the replacement pool are configured too.
+    engine.dispose()
+    with engine.connect() as conn:
+        reapplied_after_dispose = conn.exec_driver_sql(
+            "SHOW rdkit.tanimoto_threshold"
+        ).scalar_one()
+    assert reapplied_after_dispose == configured_gucs["rdkit.tanimoto_threshold"]
+
+    # Reconfiguration must also remove the saved listener cleanly after the
+    # engine has replaced its pool.
+    configure_engine(engine, RdkitSettings(tanimoto_threshold=0.65))
+    with engine.connect() as conn:
+        reconfigured_after_dispose = conn.exec_driver_sql(
+            "SHOW rdkit.tanimoto_threshold"
+        ).scalar_one()
+    assert reconfigured_after_dispose == "0.65"
+    configure_engine(engine, baseline_settings)
 
     metadata = MetaData()
     molecules = Table(
@@ -246,6 +313,10 @@ def main() -> None:
 
     print()
     print(f"RDKit version: {version}")
+    print(f"configured RDKit GUCs: {actual_gucs}")
+    print(f"reapplied tanimoto threshold: {reapplied_tanimoto}")
+    print(f"reapplied after engine disposal: {reapplied_after_dispose}")
+    print(f"reconfigured after engine disposal: {reconfigured_after_dispose}")
     print(f"substructure(c1ccccc1): {substructure_rows}")
     print(f"mol_has_substructure(c1ccccc1): {functional_substructure_rows}")
     print(f"exact(CCO): {exact_rows}")
