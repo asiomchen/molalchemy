@@ -55,4 +55,8 @@ def _bingo_search_values(
     ``tuple_`` binds scalar values while honoring ``__clause_element__`` on ORM
     attributes and other SQL expression objects.
     """
-    return _bingo_search(column, tuple_(*values), search_type)
+    return _bingo_search(
+        column,
+        tuple_(*values),  # ty: ignore[invalid-argument-type]
+        search_type,
+    )

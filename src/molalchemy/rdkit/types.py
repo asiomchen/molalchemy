@@ -77,7 +77,7 @@ class RdkitMol(RdkitBaseType):
                 raise InvalidMoleculeError(
                     "Value must be a SMILES string or an RDKit Mol object"
                 )
-            return value.ToBinary()
+            return value.ToBinary()  # ty: ignore[no-matching-overload]
 
         return process
 

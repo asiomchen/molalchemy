@@ -48,6 +48,7 @@ dev = [
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
     "pyyaml>=6.0.2",
+    "rdkit-stubs>=0.8",
     "ruff==0.14.5",
     "ty>=0.0.66",
 ]

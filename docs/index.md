@@ -106,7 +106,6 @@ molalchemy/
 │       ├── types.py         # RDKit-specific types
 │       ├── index.py         # RDKit indexing
 │       ├── comparators.py   # SQLAlchemy comparators
-│       ├── search.py        # Shared expression builders
 │       ├── settings.py      # Similarity threshold management
 │       └── functions/       # RDKit database functions
 ├── tests/                   # Test suite
@@ -183,7 +182,6 @@ from molalchemy.rdkit.functions import (
 )
 from molalchemy.helpers import (
     rdkit_col,              # Typed molecule-column helper for IDE autocomplete
-    rdkit_fp_col,           # Typed fingerprint-column helper
     rdkit_rxn_col,          # Typed reaction-column helper for IDE autocomplete
 )
 ```
