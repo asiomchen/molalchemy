@@ -87,6 +87,13 @@ def test_molecule_smarts_is_boolean(columns):
     assert "@>" in sql(expression)
 
 
+def test_reverse_query_substructure_puts_query_on_the_left(columns):
+    query = cast("[cH]", RdkitQMol)
+    expression = columns.mol.is_query_substructure_of(query)
+
+    assert sql(expression).startswith("CAST(:param_1 AS qmol) <<@ rdkit_values.mol")
+
+
 @pytest.mark.parametrize(
     ("method", "operator"),
     [

@@ -19,7 +19,13 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.schema import CreateTable
 
-from molalchemy.rdkit import RdkitSettings, configure_engine
+from molalchemy.rdkit import (
+    RdkitFPComparator,
+    RdkitMolComparator,
+    RdkitReactionComparator,
+    RdkitSettings,
+    configure_engine,
+)
 from molalchemy.rdkit import functions as rdkit_func
 from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitReaction
 from molalchemy.types import CString
@@ -28,6 +34,15 @@ DATABASE_URL = os.environ.get(
     "RDKIT_DATABASE_URL",
     "postgresql+psycopg://postgres:postgres@127.0.0.1:5432/postgres",
 )
+
+
+def declared_comparator_methods(comparator: type) -> set[str]:
+    """Return methods declared directly on a comparator, excluding internals."""
+    return {
+        name
+        for name, value in vars(comparator).items()
+        if not name.startswith("_") and callable(value)
+    }
 
 
 def wait_for_db(engine) -> None:
@@ -180,6 +195,16 @@ def main() -> None:
         .where(molecules.c.mol.has_substructure("c1ccccc1"))
         .order_by(molecules.c.id)
     )
+    smarts_stmt = (
+        select(molecules.c.name)
+        .where(molecules.c.mol.has_smarts("[CH3][CH2][OH]"))
+        .order_by(molecules.c.id)
+    )
+    reverse_substructure_stmt = (
+        select(molecules.c.name)
+        .where(molecules.c.mol.is_substructure_of("CCO"))
+        .order_by(molecules.c.id)
+    )
     functional_substructure_stmt = (
         select(molecules.c.name)
         .where(rdkit_func.mol_has_substructure(molecules.c.mol, "c1ccccc1"))
@@ -204,6 +229,17 @@ def main() -> None:
     explicit_not_equivalent_stmt = (
         select(molecules.c.name)
         .where(molecules.c.mol.not_equals("OCC"))
+        .order_by(molecules.c.id)
+    )
+    query_mol = rdkit_func.qmol_from_smiles(cast("CCO", CString))
+    query_substructure_stmt = (
+        select(molecules.c.name)
+        .where(molecules.c.mol.has_query_substructure(query_mol))
+        .order_by(molecules.c.id)
+    )
+    reverse_query_substructure_stmt = (
+        select(molecules.c.name)
+        .where(molecules.c.mol.is_query_substructure_of(query_mol))
         .order_by(molecules.c.id)
     )
     query_fp = rdkit_func.morganbv_fp(rdkit_func.mol_from_smiles("CCO"))
@@ -258,12 +294,80 @@ def main() -> None:
     reaction_explicit_not_equals_stmt = select(nullable_reactions.c.name).where(
         nullable_reactions.c.rxn.not_equals("CCN>>CC=N")
     )
+    reaction_substructure_stmt = select(nullable_reactions.c.name).where(
+        nullable_reactions.c.rxn.has_substructure("CCO>>CC=O")
+    )
+    reaction_reverse_substructure_stmt = select(nullable_reactions.c.name).where(
+        nullable_reactions.c.rxn.is_substructure_of("CCO>>CC=O")
+    )
+    reaction_smarts_stmt = select(nullable_reactions.c.name).where(
+        nullable_reactions.c.rxn.has_smarts("CCO>>CC=O")
+    )
+    reaction_substructure_fp_stmt = select(nullable_reactions.c.name).where(
+        nullable_reactions.c.rxn.has_substructure_fp("CCO>>CC=O")
+    )
+    reaction_reverse_substructure_fp_stmt = select(nullable_reactions.c.name).where(
+        nullable_reactions.c.rxn.is_substructure_fp_of("CCO>>CC=O")
+    )
+
+    comparator_statements = {
+        ("RdkitMolComparator", "has_substructure"): substructure_stmt,
+        ("RdkitMolComparator", "has_smarts"): smarts_stmt,
+        ("RdkitMolComparator", "is_substructure_of"): reverse_substructure_stmt,
+        ("RdkitMolComparator", "equals"): explicit_equivalent_stmt,
+        ("RdkitMolComparator", "not_equals"): explicit_not_equivalent_stmt,
+        ("RdkitMolComparator", "has_query_substructure"): query_substructure_stmt,
+        (
+            "RdkitMolComparator",
+            "is_query_substructure_of",
+        ): reverse_query_substructure_stmt,
+        ("RdkitReactionComparator", "has_substructure"): reaction_substructure_stmt,
+        (
+            "RdkitReactionComparator",
+            "is_substructure_of",
+        ): reaction_reverse_substructure_stmt,
+        ("RdkitReactionComparator", "equals"): reaction_explicit_equals_stmt,
+        (
+            "RdkitReactionComparator",
+            "not_equals",
+        ): reaction_explicit_not_equals_stmt,
+        ("RdkitReactionComparator", "has_smarts"): reaction_smarts_stmt,
+        (
+            "RdkitReactionComparator",
+            "has_substructure_fp",
+        ): reaction_substructure_fp_stmt,
+        (
+            "RdkitReactionComparator",
+            "is_substructure_fp_of",
+        ): reaction_reverse_substructure_fp_stmt,
+        ("RdkitFPComparator", "tanimoto_matches"): tanimoto_stmt,
+        ("RdkitFPComparator", "dice_matches"): dice_stmt,
+        ("RdkitFPComparator", "tanimoto_distance"): tanimoto_knn_stmt,
+        ("RdkitFPComparator", "dice_distance"): dice_knn_stmt,
+    }
+    comparator_classes = (
+        RdkitMolComparator,
+        RdkitReactionComparator,
+        RdkitFPComparator,
+    )
+    declared_methods = {
+        (comparator.__name__, method)
+        for comparator in comparator_classes
+        for method in declared_comparator_methods(comparator)
+    }
+    assert comparator_statements.keys() == declared_methods, (
+        "live comparator coverage mismatch: "
+        f"missing={sorted(declared_methods - comparator_statements.keys())}, "
+        f"unexpected={sorted(comparator_statements.keys() - declared_methods)}"
+    )
 
     print(str(CreateTable(molecules).compile(dialect=postgresql.dialect())))
     print(str(CreateTable(nullable_molecules).compile(dialect=postgresql.dialect())))
     print(str(CreateTable(nullable_reactions).compile(dialect=postgresql.dialect())))
     print()
     print(substructure_stmt.compile(dialect=postgresql.dialect()))
+    print(smarts_stmt.compile(dialect=postgresql.dialect()))
+    print(reverse_substructure_stmt.compile(dialect=postgresql.dialect()))
     print(functional_substructure_stmt.compile(dialect=postgresql.dialect()))
     print(exact_stmt.compile(dialect=postgresql.dialect()))
     print(native_equivalent_stmt.compile(dialect=postgresql.dialect()))
@@ -279,37 +383,50 @@ def main() -> None:
     print(reaction_null_stmt.compile(dialect=postgresql.dialect()))
     print(reaction_explicit_equals_stmt.compile(dialect=postgresql.dialect()))
     print(reaction_explicit_not_equals_stmt.compile(dialect=postgresql.dialect()))
+    print(query_substructure_stmt.compile(dialect=postgresql.dialect()))
+    print(reverse_query_substructure_stmt.compile(dialect=postgresql.dialect()))
+    print(reaction_substructure_stmt.compile(dialect=postgresql.dialect()))
+    print(reaction_reverse_substructure_stmt.compile(dialect=postgresql.dialect()))
+    print(reaction_smarts_stmt.compile(dialect=postgresql.dialect()))
+    print(reaction_substructure_fp_stmt.compile(dialect=postgresql.dialect()))
+    print(reaction_reverse_substructure_fp_stmt.compile(dialect=postgresql.dialect()))
 
     with engine.connect() as conn:
         version = conn.exec_driver_sql("SELECT rdkit_version()").scalar_one()
-        substructure_rows = conn.execute(substructure_stmt).scalars().all()
+        comparator_results = {
+            name: conn.execute(statement).scalars().all()
+            for name, statement in comparator_statements.items()
+        }
+        substructure_rows = comparator_results[
+            ("RdkitMolComparator", "has_substructure")
+        ]
         functional_substructure_rows = (
             conn.execute(functional_substructure_stmt).scalars().all()
         )
         exact_rows = conn.execute(exact_stmt).scalars().all()
         native_equivalent_rows = conn.execute(native_equivalent_stmt).scalars().all()
-        explicit_equivalent_rows = (
-            conn.execute(explicit_equivalent_stmt).scalars().all()
-        )
+        explicit_equivalent_rows = comparator_results[("RdkitMolComparator", "equals")]
         native_not_equivalent_rows = (
             conn.execute(native_not_equivalent_stmt).scalars().all()
         )
-        explicit_not_equivalent_rows = (
-            conn.execute(explicit_not_equivalent_stmt).scalars().all()
-        )
-        tanimoto_rows = conn.execute(tanimoto_stmt).scalars().all()
-        dice_rows = conn.execute(dice_stmt).scalars().all()
-        tanimoto_knn_rows = conn.execute(tanimoto_knn_stmt).scalars().all()
-        dice_knn_rows = conn.execute(dice_knn_stmt).scalars().all()
+        explicit_not_equivalent_rows = comparator_results[
+            ("RdkitMolComparator", "not_equals")
+        ]
+        tanimoto_rows = comparator_results[("RdkitFPComparator", "tanimoto_matches")]
+        dice_rows = comparator_results[("RdkitFPComparator", "dice_matches")]
+        tanimoto_knn_rows = comparator_results[
+            ("RdkitFPComparator", "tanimoto_distance")
+        ]
+        dice_knn_rows = comparator_results[("RdkitFPComparator", "dice_distance")]
         function_row = conn.execute(function_stmt).mappings().one()
         molecule_null_rows = conn.execute(molecule_null_stmt).scalars().all()
         reaction_null_rows = conn.execute(reaction_null_stmt).scalars().all()
-        reaction_explicit_equals_rows = (
-            conn.execute(reaction_explicit_equals_stmt).scalars().all()
-        )
-        reaction_explicit_not_equals_rows = (
-            conn.execute(reaction_explicit_not_equals_stmt).scalars().all()
-        )
+        reaction_explicit_equals_rows = comparator_results[
+            ("RdkitReactionComparator", "equals")
+        ]
+        reaction_explicit_not_equals_rows = comparator_results[
+            ("RdkitReactionComparator", "not_equals")
+        ]
 
     print()
     print(f"RDKit version: {version}")
@@ -336,6 +453,8 @@ def main() -> None:
         f"{reaction_explicit_equals_rows}"
     )
     print(f"explicit reaction inequality: {reaction_explicit_not_equals_rows}")
+    for comparator_method, rows in comparator_results.items():
+        print(f"live comparator {'.'.join(comparator_method)}: {rows}")
 
     assert substructure_rows == ["benzene", "aspirin"]
     assert functional_substructure_rows == ["benzene", "aspirin"]
@@ -369,6 +488,42 @@ def main() -> None:
     # unimplemented operator shell in the cartridge versions covered here.
     assert reaction_explicit_equals_rows == ["ethanol oxidation"]
     assert reaction_explicit_not_equals_rows == ["ethanol oxidation"]
+    expected_comparator_results = {
+        ("RdkitMolComparator", "has_substructure"): ["benzene", "aspirin"],
+        ("RdkitMolComparator", "has_smarts"): ["ethanol"],
+        ("RdkitMolComparator", "is_substructure_of"): ["ethanol"],
+        ("RdkitMolComparator", "equals"): ["ethanol"],
+        ("RdkitMolComparator", "not_equals"): ["benzene", "aspirin"],
+        ("RdkitMolComparator", "has_query_substructure"): ["ethanol", "aspirin"],
+        ("RdkitMolComparator", "is_query_substructure_of"): [
+            "ethanol",
+            "aspirin",
+        ],
+        ("RdkitReactionComparator", "has_substructure"): ["ethanol oxidation"],
+        ("RdkitReactionComparator", "is_substructure_of"): ["ethanol oxidation"],
+        ("RdkitReactionComparator", "equals"): ["ethanol oxidation"],
+        ("RdkitReactionComparator", "not_equals"): ["ethanol oxidation"],
+        ("RdkitReactionComparator", "has_smarts"): ["ethanol oxidation"],
+        ("RdkitReactionComparator", "has_substructure_fp"): ["ethanol oxidation"],
+        (
+            "RdkitReactionComparator",
+            "is_substructure_fp_of",
+        ): ["ethanol oxidation"],
+        ("RdkitFPComparator", "tanimoto_matches"): ["ethanol"],
+        ("RdkitFPComparator", "dice_matches"): ["ethanol"],
+        ("RdkitFPComparator", "tanimoto_distance"): [
+            "ethanol",
+            "aspirin",
+            "benzene",
+        ],
+        ("RdkitFPComparator", "dice_distance"): [
+            "ethanol",
+            "aspirin",
+            "benzene",
+        ],
+    }
+    assert comparator_results == expected_comparator_results
+    print(f"validated all {len(declared_methods)} declared RDKit comparator methods")
 
 
 if __name__ == "__main__":

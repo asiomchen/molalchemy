@@ -1,3 +1,5 @@
+from typing import Any, cast
+
 from sqlalchemy import ColumnElement
 from sqlalchemy.types import UserDefinedType
 
@@ -41,8 +43,10 @@ class RdkitMolComparator(UserDefinedType.Comparator):
         return _rdkit_predicate(self.expr, "@>>", query)
 
     def is_query_substructure_of(self, query: SqlOperand) -> ColumnElement[bool]:
-        """Check if query structure `query` contains this molecule (<<@)."""
-        return _rdkit_predicate(self.expr, "<<@", query)
+        """Apply the reverse query-substructure spelling (`query <<@ molecule`)."""
+        # RDKit declares this reverse operator as qmol/xqmol <<@ mol, unlike
+        # the forward mol @>> qmol spelling.
+        return _rdkit_predicate(cast(ColumnElement[Any], query), "<<@", self.expr)
 
 
 class RdkitReactionComparator(UserDefinedType.Comparator):
