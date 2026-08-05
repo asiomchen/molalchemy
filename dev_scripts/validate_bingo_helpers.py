@@ -17,6 +17,7 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.schema import CreateTable
 
+from molalchemy.bingo import BingoMolComparator, BingoRxnComparator
 from molalchemy.bingo import functions as bingo_func
 from molalchemy.bingo.types import BingoBinaryReaction, BingoMol
 
@@ -24,6 +25,15 @@ DATABASE_URL = os.environ.get(
     "BINGO_DATABASE_URL",
     "postgresql+psycopg://postgres:postgres@127.0.0.1:5432/postgres",
 )
+
+
+def declared_comparator_methods(comparator: type) -> set[str]:
+    """Return methods declared directly on a comparator, excluding internals."""
+    return {
+        name
+        for name, value in vars(comparator).items()
+        if not name.startswith("_") and callable(value)
+    }
 
 
 def wait_for_db(engine) -> None:
@@ -111,6 +121,17 @@ def main() -> None:
     substructure_stmt = select(compounds.c.name).where(
         compounds.c.structure.has_substructure("c1ccccc1")
     )
+    comparator_smarts_stmt = select(compounds.c.name).where(
+        compounds.c.structure.has_smarts("[#6]-[#8]")
+    )
+    comparator_equals_stmt = select(compounds.c.name).where(
+        compounds.c.structure.equals("OCC")
+    )
+    comparator_not_equals_stmt = (
+        select(compounds.c.name)
+        .where(compounds.c.structure.not_equals("CCO"))
+        .order_by(compounds.c.id)
+    )
     exact_stmt = select(compounds.c.name).where(
         bingo_func.mol_equals(compounds.c.structure, "CCO")
     )
@@ -157,6 +178,15 @@ def main() -> None:
     reaction_exact_stmt = select(reactions.c.name).where(
         reactions.c.reaction_data.equals("CCO>>CC=O")
     )
+    reaction_substructure_stmt = select(reactions.c.name).where(
+        reactions.c.reaction_data.has_substructure("CCO>>CC=O")
+    )
+    reaction_smarts_stmt = select(reactions.c.name).where(
+        reactions.c.reaction_data.has_smarts("CCO>>CC=O")
+    )
+    reaction_not_equals_stmt = select(reactions.c.name).where(
+        reactions.c.reaction_data.not_equals("CCN>>CC=N")
+    )
     native_equality_stmt = (
         select(compounds.c.name)
         .where(compounds.c.structure == compounds.c.query_structure)
@@ -185,10 +215,36 @@ def main() -> None:
         .limit(1)
     )
 
+    comparator_statements = {
+        ("BingoMolComparator", "has_substructure"): substructure_stmt,
+        ("BingoMolComparator", "has_smarts"): comparator_smarts_stmt,
+        ("BingoMolComparator", "equals"): comparator_equals_stmt,
+        ("BingoMolComparator", "not_equals"): comparator_not_equals_stmt,
+        ("BingoMolComparator", "similar_to"): similarity_with_column_stmt,
+        ("BingoRxnComparator", "has_substructure"): reaction_substructure_stmt,
+        ("BingoRxnComparator", "has_smarts"): reaction_smarts_stmt,
+        ("BingoRxnComparator", "equals"): reaction_exact_stmt,
+        ("BingoRxnComparator", "not_equals"): reaction_not_equals_stmt,
+    }
+    comparator_classes = (BingoMolComparator, BingoRxnComparator)
+    declared_methods = {
+        (comparator.__name__, method)
+        for comparator in comparator_classes
+        for method in declared_comparator_methods(comparator)
+    }
+    assert comparator_statements.keys() == declared_methods, (
+        "live comparator coverage mismatch: "
+        f"missing={sorted(declared_methods - comparator_statements.keys())}, "
+        f"unexpected={sorted(comparator_statements.keys() - declared_methods)}"
+    )
+
     print(str(CreateTable(compounds).compile(dialect=postgresql.dialect())))
     print(str(CreateTable(reactions).compile(dialect=postgresql.dialect())))
     print()
     print(substructure_stmt.compile(dialect=postgresql.dialect()))
+    print(comparator_smarts_stmt.compile(dialect=postgresql.dialect()))
+    print(comparator_equals_stmt.compile(dialect=postgresql.dialect()))
+    print(comparator_not_equals_stmt.compile(dialect=postgresql.dialect()))
     print(exact_stmt.compile(dialect=postgresql.dialect()))
     print(smarts_stmt.compile(dialect=postgresql.dialect()))
     print(
@@ -198,6 +254,9 @@ def main() -> None:
     )
     print(function_stmt.compile(dialect=postgresql.dialect()))
     print(reaction_exact_stmt.compile(dialect=postgresql.dialect()))
+    print(reaction_substructure_stmt.compile(dialect=postgresql.dialect()))
+    print(reaction_smarts_stmt.compile(dialect=postgresql.dialect()))
+    print(reaction_not_equals_stmt.compile(dialect=postgresql.dialect()))
     print(
         native_equality_stmt.compile(
             dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
@@ -209,13 +268,19 @@ def main() -> None:
 
     with engine.connect() as conn:
         version = conn.exec_driver_sql("SELECT bingo.getversion()").scalar_one()
-        substructure_rows = conn.execute(substructure_stmt).scalars().all()
+        comparator_results = {
+            name: conn.execute(statement).scalars().all()
+            for name, statement in comparator_statements.items()
+        }
+        substructure_rows = comparator_results[
+            ("BingoMolComparator", "has_substructure")
+        ]
         exact_rows = conn.execute(exact_stmt).scalars().all()
         smarts_rows = conn.execute(smarts_stmt).scalars().all()
-        similarity_rows = conn.execute(similarity_with_column_stmt).scalars().all()
+        similarity_rows = comparator_results[("BingoMolComparator", "similar_to")]
         function_row = conn.execute(function_stmt).mappings().one()
         invalid_check = conn.execute(invalid_check_stmt).scalar_one()
-        reaction_exact_rows = conn.execute(reaction_exact_stmt).scalars().all()
+        reaction_exact_rows = comparator_results[("BingoRxnComparator", "equals")]
         native_equality_rows = conn.execute(native_equality_stmt).scalars().all()
         molecule_not_null_rows = conn.execute(molecule_not_null_stmt).scalars().all()
         reaction_not_null_rows = conn.execute(reaction_not_null_stmt).scalars().all()
@@ -234,6 +299,8 @@ def main() -> None:
     print(f"structure IS NOT NULL via != None: {molecule_not_null_rows}")
     print(f"reaction IS NOT NULL via != None: {reaction_not_null_rows}")
     print(f"reaction function wrappers: {dict(reaction_function_row)}")
+    for comparator_method, rows in comparator_results.items():
+        print(f"live comparator {'.'.join(comparator_method)}: {rows}")
 
     assert substructure_rows == ["benzene"]
     assert exact_rows == ["ethanol"]
@@ -259,6 +326,19 @@ def main() -> None:
     assert reaction_function_row["check_result"] is None
     assert reaction_function_row["reaction_smiles"]
     assert reaction_function_row["rxnfile_len"] > 100
+    expected_comparator_results = {
+        ("BingoMolComparator", "has_substructure"): ["benzene"],
+        ("BingoMolComparator", "has_smarts"): ["ethanol"],
+        ("BingoMolComparator", "equals"): ["ethanol"],
+        ("BingoMolComparator", "not_equals"): ["benzene"],
+        ("BingoMolComparator", "similar_to"): ["benzene", "ethanol"],
+        ("BingoRxnComparator", "has_substructure"): ["ethanol oxidation"],
+        ("BingoRxnComparator", "has_smarts"): ["ethanol oxidation"],
+        ("BingoRxnComparator", "equals"): ["ethanol oxidation"],
+        ("BingoRxnComparator", "not_equals"): ["ethanol oxidation"],
+    }
+    assert comparator_results == expected_comparator_results
+    print(f"validated all {len(declared_methods)} declared Bingo comparator methods")
 
 
 if __name__ == "__main__":
