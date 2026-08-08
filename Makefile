@@ -4,6 +4,16 @@ SMOKE_PROJECT ?= molalchemy-smoke
 BINGO_SMOKE_PORT ?= 55432
 RDKIT_SMOKE_PORT ?= 55433
 
+# CairoSVG, used by MkDocs Material's social plugin, loads the native Cairo
+# library through cffi. On macOS, dyld does not search Homebrew's opt prefix by
+# default, so discover it rather than hard-coding an Intel or Apple Silicon path.
+ifeq ($(shell uname -s),Darwin)
+HOMEBREW_CAIRO_PREFIX := $(shell brew --prefix cairo 2>/dev/null)
+ifneq ($(strip $(HOMEBREW_CAIRO_PREFIX)),)
+DOCS_CAIRO_ENV := DYLD_FALLBACK_LIBRARY_PATH="$(HOMEBREW_CAIRO_PREFIX)/lib$${DYLD_FALLBACK_LIBRARY_PATH:+:$${DYLD_FALLBACK_LIBRARY_PATH}}"
+endif
+endif
+
 
 test:
 	@uv run pytest tests/ --cov=src/molalchemy --cov-report=term-missing --cov-report=xml
@@ -24,7 +34,10 @@ smoke:
 
 
 docs-test:
-	@JUPYTER_PLATFORM_DIRS=1 uv run mkdocs build --strict --site-dir /tmp/molalchemy-site
+	@$(DOCS_CAIRO_ENV) JUPYTER_PLATFORM_DIRS=1 uv run mkdocs build --strict --site-dir /tmp/molalchemy-site
+
+docs-serve:
+	@$(DOCS_CAIRO_ENV) JUPYTER_PLATFORM_DIRS=1 uv run mkdocs serve
 
 sync-docs:
 	@cp README.md docs/index.md

@@ -4,10 +4,14 @@
       "mol_has_substructure",
       "mol_has_smarts",
       "mol_equals",
+      "mol_not_equals",
+      "mol_similar_to",
       "mol_similarity",
+      "mol_similarity_score",
       "rxn_has_substructure",
       "rxn_has_smarts",
       "rxn_equals",
+      "rxn_not_equals",
       "AnyBingoMol",
       "AnyBingoReaction"
     ]

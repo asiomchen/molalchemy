@@ -9,8 +9,19 @@ from molalchemy.bingo.types import (
     BingoMol,
     BingoReaction,
 )
-from molalchemy.helpers import bingo_col, bingo_rxn_col, rdkit_col, rdkit_rxn_col
-from molalchemy.rdkit.types import RdkitMol, RdkitReaction
+from molalchemy.helpers import (
+    bingo_col,
+    bingo_rxn_col,
+    rdkit_col,
+    rdkit_fp_col,
+    rdkit_rxn_col,
+)
+from molalchemy.rdkit.types import (
+    RdkitBitFingerprint,
+    RdkitMol,
+    RdkitReaction,
+    RdkitSparseFingerprint,
+)
 
 
 class Base(DeclarativeBase):
@@ -31,7 +42,11 @@ class RdkitCompound(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     structure: Mapped[str] = mapped_column(RdkitMol())
+    other_structure: Mapped[str] = mapped_column(RdkitMol())
     reaction: Mapped[str] = mapped_column(RdkitReaction())
+    other_reaction: Mapped[str] = mapped_column(RdkitReaction())
+    fingerprint: Mapped[bytes] = mapped_column(RdkitBitFingerprint())
+    other_fingerprint: Mapped[bytes] = mapped_column(RdkitBitFingerprint())
 
 
 @pytest.fixture(params=[BingoMol, BingoBinaryMol])
@@ -136,6 +151,31 @@ def test_rdkit_rxn_col_success(good_rdkit_rxn_col):
     assert result is good_rdkit_rxn_col
 
 
+@pytest.mark.parametrize(
+    "fingerprint_type", [RdkitBitFingerprint, RdkitSparseFingerprint]
+)
+def test_rdkit_fp_col_success(fingerprint_type):
+    column = Column("fingerprint", fingerprint_type())
+    assert rdkit_fp_col(column) is column
+
+
+@pytest.mark.parametrize("bad_type", [String, BINARY, RdkitMol])
+def test_rdkit_fp_col_type_error(bad_type):
+    column = Column("fingerprint", bad_type())
+    with pytest.raises(
+        TypeError,
+        match="Column is not of type RdkitBitFingerprint or RdkitSparseFingerprint",
+    ):
+        rdkit_fp_col(column)
+
+
+def test_rdkit_fp_col_invalid_input():
+    with pytest.raises(
+        TypeError, match="Input is not a SQLAlchemy Column or InstrumentedAttribute"
+    ):
+        rdkit_fp_col(123)
+
+
 def test_bingo_mol_proxy_helper_core_column_compiles_substructure():
     table = Table(
         "compounds",
@@ -233,10 +273,17 @@ def test_bingo_proxy_helpers_accept_orm_instrumented_attributes():
     assert "bingo.exact" in compiled
     assert "CCO" in compiled
 
+    score = bingo_col(BingoCompound.structure).similarity_score("CCO")
+    assert score.type.python_type is float
+    assert "bingo.getsimilarity" in str(
+        select(score).compile(dialect=postgresql.dialect())
+    )
+
 
 def test_rdkit_proxy_helpers_accept_orm_instrumented_attributes():
     assert rdkit_col(RdkitCompound.structure) is RdkitCompound.structure
     assert rdkit_rxn_col(RdkitCompound.reaction) is RdkitCompound.reaction
+    assert rdkit_fp_col(RdkitCompound.fingerprint) is RdkitCompound.fingerprint
 
     stmt = select(RdkitCompound).where(
         rdkit_rxn_col(RdkitCompound.reaction).has_smarts("[C:1]>>[C:1][O]")
@@ -245,3 +292,37 @@ def test_rdkit_proxy_helpers_accept_orm_instrumented_attributes():
 
     assert "substruct" in compiled
     assert "reaction_from_smarts" in compiled
+
+
+def test_rdkit_fingerprint_helper_compiles_distance_ordering():
+    distance = rdkit_fp_col(RdkitCompound.fingerprint).tanimoto_distance(b"fingerprint")
+    compiled = str(
+        select(RdkitCompound)
+        .order_by(distance)
+        .compile(dialect=postgresql.dialect(paramstyle="named"))
+    )
+
+    assert "ORDER BY" in compiled
+    assert "<%>" in compiled
+
+
+def test_rdkit_helpers_accept_orm_column_operands():
+    molecule_match = rdkit_col(RdkitCompound.structure).equals(
+        RdkitCompound.other_structure
+    )
+    reaction_match = rdkit_rxn_col(RdkitCompound.reaction).equals(
+        RdkitCompound.other_reaction
+    )
+    fingerprint_match = rdkit_fp_col(RdkitCompound.fingerprint).dice_matches(
+        RdkitCompound.other_fingerprint
+    )
+
+    compiled = str(
+        select(RdkitCompound)
+        .where(molecule_match, reaction_match, fingerprint_match)
+        .compile(dialect=postgresql.dialect(paramstyle="named"))
+    )
+
+    assert "structure @= helper_rdkit_compounds.other_structure" in compiled
+    assert "reaction @= helper_rdkit_compounds.other_reaction" in compiled
+    assert "fingerprint # helper_rdkit_compounds.other_fingerprint" in compiled

@@ -2,9 +2,7 @@
 
 import pytest
 from sqlalchemy import (
-    BinaryExpression,
     Column,
-    Function,
     Integer,
     MetaData,
     String,
@@ -13,25 +11,23 @@ from sqlalchemy import (
     select,
 )
 from sqlalchemy.dialects import postgresql
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from molalchemy.bingo import functions as bingo_func
 from molalchemy.bingo.types import BingoMol, BingoReaction
 
-all_funcs = bingo_func.__all__
+
+class Base(DeclarativeBase):
+    pass
 
 
-@pytest.mark.parametrize("func", all_funcs)
-def test_any_function_returns_function_object(func):
-    """Test that any function returns a SQLAlchemy function object."""
-    random_args = ["CCO"] * 10
-    random_columns = [Column("dummy", BingoMol())] * 10
-    if callable(func):
-        try:
-            result = func(*random_args[: func.__code__.co_argcount])
-            assert isinstance(result, Function)
-        except AttributeError:
-            result = func(*random_columns[: func.__code__.co_argcount])
-            assert isinstance(result, BinaryExpression)
+class Compound(Base):
+    __tablename__ = "bingo_function_compounds"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    structure: Mapped[str] = mapped_column(BingoMol())
+    query_structure: Mapped[str] = mapped_column(BingoMol())
+    query_parameters: Mapped[str] = mapped_column(String())
 
 
 def test_bingo_search_helpers_bind_literal_inputs():
@@ -89,12 +85,12 @@ def test_bingo_similarity_preserves_column_expression_inputs():
     )
 
     stmt = select(compounds).where(
-        bingo_func.mol_similarity(
+        bingo_func.mol_similar_to(
             compounds.c.structure,
             compounds.c.query_structure,
-            0.2,
-            0.9,
-            "Dice",
+            minimum=0.2,
+            maximum=0.9,
+            metric="Dice",
         )
     )
 
@@ -107,6 +103,65 @@ def test_bingo_similarity_preserves_column_expression_inputs():
     assert "'compounds.query_structure'" not in sql
     assert " @ " in sql
     assert "bingo.sim" in sql
+
+
+def test_similarity_score_is_typed_as_float():
+    compounds = Table(
+        "compounds",
+        MetaData(),
+        Column("id", Integer),
+        Column("structure", BingoMol()),
+    )
+
+    score = bingo_func.mol_similarity_score(compounds.c.structure, "CCO")
+
+    assert score.type.python_type is float
+    assert "bingo.getsimilarity" in str(score.compile(dialect=postgresql.dialect()))
+
+
+def test_bingo_search_helpers_preserve_orm_attribute_inputs():
+    """Mapped attributes should use their SQL expression, not become literals."""
+    stmt = select(Compound).where(
+        bingo_func.mol_equals(
+            Compound.structure,
+            Compound.query_structure,
+            Compound.query_parameters,
+        )
+    )
+
+    compiled = str(stmt.compile(dialect=postgresql.dialect()))
+
+    assert "bingo.exact" in compiled
+    assert "bingo_function_compounds.query_structure" in compiled
+    assert "bingo_function_compounds.query_parameters" in compiled
+
+
+@pytest.mark.parametrize(
+    ("helper_name", "column_type", "query", "search_type"),
+    [
+        ("mol_not_equals", BingoMol(), "CCO", "bingo.exact"),
+        ("rxn_not_equals", BingoReaction(), "CCO>>CC=O", "bingo.rexact"),
+    ],
+)
+def test_not_equals_helpers_negate_exact_search(
+    helper_name, column_type, query, search_type
+):
+    """Negated helpers should preserve the matching exact-search operation."""
+    structures = Table(
+        "structures",
+        MetaData(),
+        Column("id", Integer),
+        Column("structure", column_type),
+    )
+
+    helper = getattr(bingo_func, helper_name)
+    stmt = select(structures).where(helper(structures.c.structure, query))
+
+    compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
+
+    assert "NOT" in compiled
+    assert search_type in compiled
+    assert query in compiled
 
 
 @pytest.mark.parametrize(

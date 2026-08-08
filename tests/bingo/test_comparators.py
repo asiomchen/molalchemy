@@ -1,9 +1,22 @@
-"""Tests for bingo comparators."""
+"""Semantic tests for Bingo comparators."""
 
-from sqlalchemy import Column, ColumnElement, Integer, MetaData, String, Table
+import pytest
+from sqlalchemy import (
+    Boolean,
+    Column,
+    Float,
+    Integer,
+    MetaData,
+    String,
+    Table,
+    bindparam,
+    select,
+)
 from sqlalchemy.dialects import postgresql
-from sqlalchemy.sql import select
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
+from molalchemy.bingo import BingoMolComparator, BingoRxnComparator
+from molalchemy.bingo import functions as bingo_func
 from molalchemy.bingo.types import (
     BingoBinaryMol,
     BingoBinaryReaction,
@@ -12,607 +25,203 @@ from molalchemy.bingo.types import (
 )
 
 
-class TestBingoMolComparator:
-    """Test BingoMolComparator methods."""
-
-    def setup_method(self):
-        """Set up test table with BingoMol column."""
-        self.metadata = MetaData()
-        self.test_table = Table(
-            "test_molecules",
-            self.metadata,
-            Column("id", Integer, primary_key=True),
-            Column("name", String(100)),
-            Column("mol", BingoMol()),
-            Column("query_mol", String),
-        )
-        self.mol_column = self.test_table.c.mol
-
-    def test_has_substructure_query_generation(self):
-        """Test has_substructure query generation."""
-        query = "c1ccccc1"  # benzene
-        parameters = ""
-
-        result = self.mol_column.has_substructure(query, parameters)
-
-        # Check that the result is a proper SQLAlchemy expression
-        assert hasattr(result, "left")
-        assert hasattr(result, "right")
-        assert hasattr(result, "operator")
-
-        # Check that we can compile it to SQL (basic check)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-        assert "@" in compiled
-        assert "bingo.sub" in compiled
-        assert query in compiled
-
-    def test_has_substructure_with_parameters(self):
-        """Test has_substructure query with parameters."""
-        query = "c1ccccc1"
-        parameters = "max=5"
-
-        result = self.mol_column.has_substructure(query, parameters)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert query in compiled
-        assert parameters in compiled
-        assert "bingo.sub" in compiled
-
-    def test_has_smarts_query_generation(self):
-        """Test SMARTS query generation."""
-        query = (
-            "[#6]1-[#6]-[#6]-[#6]-[#6]-[#6]-1"  # benzene SMARTS (using - instead of :)
-        )
-        parameters = ""
-
-        result = self.mol_column.has_smarts(query, parameters)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "@" in compiled
-        assert "bingo.smarts" in compiled
-        # Check that the query appears in some form (may be escaped)
-        assert "[#6]1" in compiled or query in compiled
-
-    def test_has_smarts_with_parameters(self):
-        """Test SMARTS query with parameters."""
-        query = "[#6]1-[#6]-[#6]-[#6]-[#6]-[#6]-1"
-        parameters = "max=10"
-
-        result = self.mol_column.has_smarts(query, parameters)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        # Check that the query appears in some form and parameters are present
-        assert "[#6]1" in compiled or query in compiled
-        assert parameters in compiled
-        assert "bingo.smarts" in compiled
-
-    def test_equals_query_generation(self):
-        """Test exact match query generation."""
-        query = "CCO"  # ethanol
-        parameters = ""
-
-        result = self.mol_column.equals(query, parameters)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "@" in compiled
-        assert "bingo.exact" in compiled
-        assert query in compiled
-
-    def test_eq_operator_delegates_to_exact_match(self):
-        query = "CCO"
-
-        result = self.mol_column == query
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "@" in compiled
-        assert "bingo.exact" in compiled
-        assert query in compiled
-
-    def test_eq_operator_with_column_delegates_to_exact_match(self):
-        result = self.mol_column == self.test_table.c.query_mol
-        compiled = str(
-            result.compile(
-                dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
-            )
-        )
+def sql(expression) -> str:
+    return str(expression.compile(dialect=postgresql.dialect()))
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+class Compound(Base):
+    __tablename__ = "bingo_comparator_compounds"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    mol: Mapped[str] = mapped_column(BingoMol())
+    other_mol: Mapped[str] = mapped_column(BingoMol())
+    query_parameters: Mapped[str] = mapped_column(String())
+
+
+@pytest.fixture(params=[BingoMol(), BingoBinaryMol()])
+def mol_columns(request):
+    table = Table(
+        f"bingo_mols_{type(request.param).__name__.lower()}",
+        MetaData(),
+        Column("id", Integer),
+        Column("mol", request.param),
+        Column("other", request.param),
+        Column("query", String()),
+    )
+    return table.c
+
+
+@pytest.fixture(params=[BingoReaction(), BingoBinaryReaction()])
+def rxn_columns(request):
+    table = Table(
+        f"bingo_rxns_{type(request.param).__name__.lower()}",
+        MetaData(),
+        Column("id", Integer),
+        Column("rxn", request.param),
+        Column("other", request.param),
+        Column("query", String()),
+    )
+    return table.c
+
+
+@pytest.mark.parametrize(
+    ("method", "search_type"),
+    [
+        ("has_substructure", "bingo.sub"),
+        ("has_smarts", "bingo.smarts"),
+        ("equals", "bingo.exact"),
+        ("not_equals", "bingo.exact"),
+    ],
+)
+def test_molecule_predicates_are_boolean(mol_columns, method, search_type):
+    expression = getattr(mol_columns.mol, method)("CCO", "TAU")
+    compiled = expression.compile(dialect=postgresql.dialect())
+
+    assert isinstance(expression.type, Boolean)
+    assert search_type in str(compiled)
+    assert "CCO" in compiled.params.values()
+    assert "TAU" in compiled.params.values()
+
+
+@pytest.mark.parametrize(
+    ("method", "search_type"),
+    [
+        ("has_substructure", "bingo.rsub"),
+        ("has_smarts", "bingo.rsmarts"),
+        ("equals", "bingo.rexact"),
+        ("not_equals", "bingo.rexact"),
+    ],
+)
+def test_reaction_predicates_are_boolean(rxn_columns, method, search_type):
+    expression = getattr(rxn_columns.rxn, method)("CCO>>CC=O", "STE")
+    compiled = expression.compile(dialect=postgresql.dialect())
+
+    assert isinstance(expression.type, Boolean)
+    assert search_type in str(compiled)
+    assert "CCO>>CC=O" in compiled.params.values()
+    assert "STE" in compiled.params.values()
+
+
+def test_similarity_defaults_and_function_parity(mol_columns):
+    method = mol_columns.mol.similar_to("CCO")
+    function = bingo_func.mol_similar_to(mol_columns.mol, "CCO")
+
+    assert isinstance(method.type, Boolean)
+    assert sql(method) == sql(function)
+    assert set(method.compile().params.values()) == {0.0, 1.0, "CCO", "Tanimoto"}
+
+
+def test_legacy_similarity_function_preserves_old_keywords(mol_columns):
+    canonical = bingo_func.mol_similar_to(
+        mol_columns.mol, "CCO", minimum=0.2, maximum=0.8, metric="Dice"
+    )
+    legacy = bingo_func.mol_similarity(
+        mol_columns.mol, "CCO", bottom=0.2, top=0.8, metric="Dice"
+    )
+
+    assert sql(canonical) == sql(legacy)
+    assert set(canonical.compile().params.values()) == {0.2, 0.8, "CCO", "Dice"}
+
 
-        assert "@" in compiled
-        assert "bingo.exact" in compiled
-        assert "test_molecules.query_mol" in compiled
-        assert "'test_molecules.query_mol'" not in compiled
+def test_similarity_score_comparator_and_function_parity(mol_columns):
+    method = mol_columns.mol.similarity_score("CCO")
+    function = bingo_func.mol_similarity_score(mol_columns.mol, "CCO")
 
-    def test_eq_operator_with_none_uses_sql_null_check(self):
-        result = self.mol_column.__eq__(None)
-        compiled = str(result.compile(dialect=postgresql.dialect()))
+    assert isinstance(method.type, Float)
+    assert sql(method) == sql(function)
+    assert "bingo.getsimilarity" in sql(method)
+    assert set(method.compile().params.values()) == {"CCO", "Tanimoto"}
 
-        assert "IS NULL" in compiled
-        assert "bingo.exact" not in compiled
-
-    def test_equals_with_parameters(self):
-        """Test exact match query with parameters."""
-        query = "CCO"
-        parameters = "stereo=1"
-
-        result = self.mol_column.equals(query, parameters)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert query in compiled
-        assert parameters in compiled
-        assert "bingo.exact" in compiled
-
-    def test_not_equals_query_generation(self):
-        """Test negative exact match query generation."""
-        query = "CCO"
-
-        result = self.mol_column.not_equals(query)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "NOT" in compiled
-        assert "bingo.exact" in compiled
-        assert query in compiled
-
-    def test_ne_operator_delegates_to_negative_exact_match(self):
-        query = "CCO"
-
-        result = self.mol_column != query
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "NOT" in compiled
-        assert "bingo.exact" in compiled
-        assert query in compiled
 
-    def test_ne_operator_with_none_uses_sql_not_null_check(self):
-        result = self.mol_column.__ne__(None)
-        compiled = str(result.compile(dialect=postgresql.dialect()))
+def test_similarity_predicate_accepts_open_bounds(mol_columns):
+    expression = bingo_func.mol_similar_to(
+        mol_columns.mol, "CCO", minimum=None, maximum=None
+    )
+    compiled = expression.compile(dialect=postgresql.dialect())
 
-        assert "IS NOT NULL" in compiled
-        assert "bingo.exact" not in compiled
-
-    def test_ne_operator_with_column_uses_sqlalchemy_inequality(self):
-        result = self.mol_column != self.test_table.c.name
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "!=" in compiled or "<>" in compiled
-        assert "bingo.exact" not in compiled
-
-    def test_not_equals_with_parameters(self):
-        """Test negative exact match query with parameters."""
-        query = "CCO"
-        parameters = "TAU"
-
-        result = self.mol_column.not_equals(query, parameters)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "NOT" in compiled
-        assert "bingo.exact" in compiled
-        assert query in compiled
-        assert parameters in compiled
-
-    def test_empty_parameters_handling(self):
-        """Test that empty parameters are handled correctly."""
-        query = "CCO"
-
-        # Test with empty string
-        result1 = self.mol_column.has_substructure(query, "")
-        compiled1 = str(result1.compile(compile_kwargs={"literal_binds": True}))
+    assert isinstance(expression.type, Boolean)
+    assert "bingo.sim" in str(compiled)
+    assert "NULL, NULL" in str(compiled)
 
-        # Test with default (should be empty string)
-        result2 = self.mol_column.has_substructure(query)
-        compiled2 = str(result2.compile(compile_kwargs={"literal_binds": True}))
 
-        # Both should be equivalent
-        assert compiled1 == compiled2
-
-    def test_query_with_special_characters(self):
-        """Test queries with special characters are handled properly."""
-        query = (
-            "CC(=O)N[C@@H](CC1=CC=CC=C1)C(=O)O"  # phenylalanine with stereochemistry
-        )
-
-        result = self.mol_column.has_substructure(query)
-        # Should not raise any exceptions when compiling
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-        assert query in compiled
-
-
-class TestBingoMolComparatorWithBinaryType:
-    """Test that BingoMolComparator works with BingoBinaryMol too."""
-
-    def setup_method(self):
-        """Set up test table with BingoBinaryMol column."""
-        self.metadata = MetaData()
-        self.test_table = Table(
-            "test_binary_molecules",
-            self.metadata,
-            Column("id", Integer, primary_key=True),
-            Column("name", String(100)),
-            Column("mol", BingoBinaryMol()),
-            Column("query_mol", String),
-        )
-        self.mol_column = self.test_table.c.mol
-
-    def test_binary_mol_has_substructure(self):
-        """Test has_substructure works with binary mol type."""
-        query = "c1ccccc1"
-
-        result = self.mol_column.has_substructure(query)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "@" in compiled
-        assert "bingo.sub" in compiled
-        assert query in compiled
-
-    def test_binary_mol_has_smarts(self):
-        """Test SMARTS works with binary mol type."""
-        query = "[#6]1-[#6]-[#6]-[#6]-[#6]-[#6]-1"
-
-        result = self.mol_column.has_smarts(query)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "@" in compiled
-        assert "bingo.smarts" in compiled
-        assert "[#6]1" in compiled or query in compiled
-
-    def test_binary_mol_equals(self):
-        """Test equals works with binary mol type."""
-        query = "CCO"
-
-        result = self.mol_column.equals(query)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "@" in compiled
-        assert "bingo.exact" in compiled
-        assert query in compiled
-
-    def test_binary_mol_eq_operator_with_column_delegates_to_exact_match(self):
-        result = self.mol_column == self.test_table.c.query_mol
-        compiled = str(
-            result.compile(
-                dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
-            )
-        )
-
-        assert "@" in compiled
-        assert "bingo.exact" in compiled
-        assert "test_binary_molecules.query_mol" in compiled
-        assert "'test_binary_molecules.query_mol'" not in compiled
-
-    def test_binary_mol_ne_operator_delegates_to_negative_exact_match(self):
-        query = "CCO"
-
-        result = self.mol_column != query
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "NOT" in compiled
-        assert "bingo.exact" in compiled
-        assert query in compiled
-
-    def test_binary_mol_ne_operator_with_none_uses_sql_not_null_check(self):
-        result = self.mol_column.__ne__(None)
-        compiled = str(result.compile(dialect=postgresql.dialect()))
-
-        assert "IS NOT NULL" in compiled
-        assert "bingo.exact" not in compiled
-
-
-class TestBingoRxnComparator:
-    """Test BingoRxnComparator methods."""
-
-    def setup_method(self):
-        """Set up test tables with Bingo reaction columns."""
-        self.metadata = MetaData()
-        self.test_table = Table(
-            "test_reactions",
-            self.metadata,
-            Column("id", Integer, primary_key=True),
-            Column("rxn", BingoReaction()),
-            Column("query_rxn", String),
-        )
-        self.binary_table = Table(
-            "test_binary_reactions",
-            self.metadata,
-            Column("id", Integer, primary_key=True),
-            Column("rxn", BingoBinaryReaction()),
-        )
-        self.rxn_column = self.test_table.c.rxn
-
-    def test_reaction_has_substructure_query_generation(self):
-        """Test reaction substructure query generation."""
-        query = "CCO>>CC=O"
-
-        result = self.rxn_column.has_substructure(query)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "@" in compiled
-        assert "bingo.rsub" in compiled
-        assert query in compiled
-
-    def test_reaction_has_smarts_query_generation(self):
-        """Test reaction SMARTS query generation."""
-        query = "[C:1]>>[C:1][O]"
-
-        result = self.rxn_column.has_smarts(query)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "@" in compiled
-        assert "bingo.rsmarts" in compiled
-        assert query in compiled
-
-    def test_reaction_equals_query_generation(self):
-        """Test exact reaction query generation."""
-        query = "CCO>>CC=O"
-
-        result = self.rxn_column.equals(query)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "@" in compiled
-        assert "bingo.rexact" in compiled
-        assert query in compiled
-
-    def test_reaction_eq_operator_delegates_to_exact_match(self):
-        query = "CCO>>CC=O"
-
-        result = self.rxn_column == query
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "@" in compiled
-        assert "bingo.rexact" in compiled
-        assert query in compiled
-
-    def test_reaction_eq_operator_with_column_delegates_to_exact_match(self):
-        result = self.rxn_column == self.test_table.c.query_rxn
-        compiled = str(
-            result.compile(
-                dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
-            )
-        )
-
-        assert "@" in compiled
-        assert "bingo.rexact" in compiled
-        assert "test_reactions.query_rxn" in compiled
-        assert "'test_reactions.query_rxn'" not in compiled
-
-    def test_reaction_eq_operator_with_none_uses_sql_null_check(self):
-        result = self.rxn_column.__eq__(None)
-        compiled = str(result.compile(dialect=postgresql.dialect()))
-
-        assert "IS NULL" in compiled
-        assert "bingo.rexact" not in compiled
-
-    def test_reaction_not_equals_query_generation(self):
-        """Test negative exact reaction query generation."""
-        query = "CCO>>CC=O"
-
-        result = self.rxn_column.not_equals(query)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "NOT" in compiled
-        assert "bingo.rexact" in compiled
-        assert query in compiled
-
-    def test_reaction_ne_operator_delegates_to_negative_exact_match(self):
-        query = "CCO>>CC=O"
-
-        result = self.rxn_column != query
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "NOT" in compiled
-        assert "bingo.rexact" in compiled
-        assert query in compiled
-
-    def test_reaction_ne_operator_with_none_uses_sql_not_null_check(self):
-        result = self.rxn_column.__ne__(None)
-        compiled = str(result.compile(dialect=postgresql.dialect()))
-
-        assert "IS NOT NULL" in compiled
-        assert "bingo.rexact" not in compiled
-
-    def test_reaction_ne_operator_with_column_uses_sqlalchemy_inequality(self):
-        result = self.rxn_column != self.test_table.c.query_rxn
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "!=" in compiled or "<>" in compiled
-        assert "bingo.rexact" not in compiled
-
-    def test_reaction_not_equals_with_parameters(self):
-        """Test negative exact reaction query with parameters."""
-        query = "CCO>>CC=O"
-        parameters = "STE"
-
-        result = self.rxn_column.not_equals(query, parameters)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "NOT" in compiled
-        assert "bingo.rexact" in compiled
-        assert query in compiled
-        assert parameters in compiled
-
-    def test_binary_reaction_has_substructure(self):
-        """Test reaction comparator works with binary reaction type."""
-        query = "C=C>>CC"
-
-        result = self.binary_table.c.rxn.has_substructure(query)
-        compiled = str(result.compile(compile_kwargs={"literal_binds": True}))
-
-        assert "@" in compiled
-        assert "bingo.rsub" in compiled
-        assert query in compiled
+def test_similarity_custom_options_and_distinct_binds(mol_columns):
+    statement = select(mol_columns.id).where(
+        mol_columns.mol.similar_to("CCO", 0.2, 0.8, "Dice"),
+        mol_columns.mol.similar_to("CCN", 0.4, 0.9, "Cosine"),
+    )
+    compiled = statement.compile(dialect=postgresql.dialect())
 
-    def test_multiple_reaction_comparators_keep_distinct_bound_values(self):
-        """Multiple reaction predicates must not reuse the same bind names."""
-        substructure = "C=C>>CC"
-        exact = "CCO>>CC=O"
-
-        stmt = select(self.test_table).where(
-            self.rxn_column.has_substructure(substructure)
-            | self.rxn_column.equals(exact)
-        )
-
-        compiled = stmt.compile(dialect=postgresql.dialect())
-
-        assert "bingo.rsub" in str(compiled)
-        assert "bingo.rexact" in str(compiled)
-        assert substructure in compiled.params.values()
-        assert exact in compiled.params.values()
-
-    def test_reaction_comparator_accepts_query_column_expression(self):
-        """Reaction comparator query inputs can be SQLAlchemy expressions."""
-        stmt = select(self.test_table).where(
-            self.rxn_column.has_substructure(self.test_table.c.query_rxn)
-        )
-
-        compiled = str(
-            stmt.compile(
-                dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
-            )
-        )
-
-        assert "test_reactions.query_rxn" in compiled
-        assert "'test_reactions.query_rxn'" not in compiled
-        assert "bingo.rsub" in compiled
-
-
-class TestBingoComparatorReturnTypes:
-    """Test that Bingo comparator methods return properly typed expressions."""
-
-    def setup_method(self):
-        self.metadata = MetaData()
-        self.test_table = Table(
-            "test_compounds",
-            self.metadata,
-            Column("id", Integer, primary_key=True),
-            Column("mol", BingoMol()),
-            Column("rxn", BingoReaction()),
-        )
-
-    def test_has_substructure_returns_column_element(self):
-        result = self.test_table.c.mol.has_substructure("CCO")
-        assert isinstance(result, ColumnElement)
-
-    def test_has_smarts_returns_column_element(self):
-        result = self.test_table.c.mol.has_smarts("[#6]")
-        assert isinstance(result, ColumnElement)
-
-    def test_equals_returns_column_element(self):
-        result = self.test_table.c.mol.equals("CCO")
-        assert isinstance(result, ColumnElement)
-
-    def test_not_equals_returns_column_element(self):
-        result = self.test_table.c.mol.not_equals("CCO")
-        assert isinstance(result, ColumnElement)
-
-    def test_ne_operator_returns_column_element(self):
-        result = self.test_table.c.mol != "CCO"
-        assert isinstance(result, ColumnElement)
-
-    def test_reaction_not_equals_returns_column_element(self):
-        result = self.test_table.c.rxn.not_equals("CCO>>CC=O")
-        assert isinstance(result, ColumnElement)
-
-    def test_reaction_ne_operator_returns_column_element(self):
-        result = self.test_table.c.rxn != "CCO>>CC=O"
-        assert isinstance(result, ColumnElement)
-
-
-class TestBingoComparatorExports:
-    """Test comparators are exported from bingo subpackage."""
-
-    def test_import_mol_comparator_from_bingo(self):
-        from molalchemy.bingo import BingoMolComparator
-
-        assert BingoMolComparator is not None
-
-    def test_import_rxn_comparator_from_bingo(self):
-        from molalchemy.bingo import BingoRxnComparator
-
-        assert BingoRxnComparator is not None
-
-    def test_bingo_proxies_include_not_equals(self):
-        from molalchemy.bingo import BingoMolProxy, BingoRxnProxy
-
-        assert hasattr(BingoMolProxy, "not_equals")
-        assert hasattr(BingoRxnProxy, "not_equals")
-
-
-class TestBingoComparatorInQueries:
-    """Test bingo comparator in actual SQL queries."""
-
-    def setup_method(self):
-        """Set up test table."""
-        self.metadata = MetaData()
-        self.test_table = Table(
-            "compounds",
-            self.metadata,
-            Column("id", Integer, primary_key=True),
-            Column("name", String(100)),
-            Column("structure", BingoMol()),
-            Column("query_structure", String),
-        )
-
-    def test_has_substructure_in_select_query(self):
-        """Test has_substructure comparator in SELECT query."""
-        query = "c1ccccc1"
-
-        stmt = select(self.test_table).where(
-            self.test_table.c.structure.has_substructure(query)
-        )
-
-        # Should compile without errors
-        compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
-        assert "SELECT" in compiled
-        assert "FROM compounds" in compiled
-        assert "WHERE" in compiled
-        assert "@" in compiled
-        assert "bingo.sub" in compiled
-
-    def test_multiple_comparators_in_query(self):
-        """Test using multiple bingo comparators in one query."""
-        benzene = "c1ccccc1"
-        ethanol = "CCO"
-
-        stmt = select(self.test_table).where(
-            self.test_table.c.structure.has_substructure(benzene)
-            | self.test_table.c.structure.equals(ethanol)
-        )
-
-        compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
-        assert "bingo.sub" in compiled
-        assert "bingo.exact" in compiled
-        assert benzene in compiled
-        assert ethanol in compiled
-
-    def test_multiple_comparators_keep_distinct_bound_values(self):
-        """Multiple comparator predicates must not reuse the same bind names."""
-        benzene = "c1ccccc1"
-        ethanol = "CCO"
-
-        stmt = select(self.test_table).where(
-            self.test_table.c.structure.has_substructure(benzene)
-            | self.test_table.c.structure.equals(ethanol)
-        )
-
-        compiled = stmt.compile(dialect=postgresql.dialect())
-
-        assert "bingo.sub" in str(compiled)
-        assert "bingo.exact" in str(compiled)
-        assert benzene in compiled.params.values()
-        assert ethanol in compiled.params.values()
-
-    def test_comparator_accepts_query_column_expression(self):
-        """Comparator query inputs can be SQLAlchemy expressions, not only strings."""
-        stmt = select(self.test_table).where(
-            self.test_table.c.structure.has_substructure(
-                self.test_table.c.query_structure
-            )
-        )
-
-        compiled = str(
-            stmt.compile(
-                dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
-            )
-        )
-
-        assert "test_molecules.query_structure" not in compiled
-        assert "compounds.query_structure" in compiled
-        assert "'compounds.query_structure'" not in compiled
-        assert "bingo.sub" in compiled
+    assert "bingo.sim" in str(compiled)
+    assert {"CCO", "CCN", 0.2, 0.8, 0.4, 0.9, "Dice", "Cosine"}.issubset(
+        set(compiled.params.values())
+    )
+
+
+def test_sql_expression_tuple_members_are_preserved(mol_columns):
+    minimum = bindparam("minimum", 0.3)
+    expression = mol_columns.mol.similar_to(
+        mol_columns.query, minimum, 1.0, bindparam("metric", "Tanimoto")
+    )
+    compiled = sql(expression)
+
+    assert "query" in compiled
+    assert "minimum" in compiled
+    assert "metric" in compiled
+
+
+def test_predicates_compose_negate_and_label(mol_columns):
+    substructure = mol_columns.mol.has_substructure("CO")
+    exact = mol_columns.mol.equals("CCO")
+    statement = select((~substructure).label("not_sub")).where(substructure | exact)
+
+    assert isinstance(substructure.type, Boolean)
+    assert "NOT" in sql(statement)
+    assert " OR " in sql(statement)
+
+
+def test_native_molecule_equality_and_explicit_chemical_matching(mol_columns):
+    assert " = " in sql(mol_columns.mol == mol_columns.other)
+    assert " != " in sql(mol_columns.mol != mol_columns.other)
+    assert " = " in sql(mol_columns.mol == "CCO")
+    assert " != " in sql(mol_columns.mol != "CCO")
+    assert "bingo.exact" not in sql(mol_columns.mol == mol_columns.other)
+    assert "IS NULL" in sql(mol_columns.mol.__eq__(None))
+    assert "IS NOT NULL" in sql(mol_columns.mol.__ne__(None))
+    assert "bingo.exact" in sql(mol_columns.mol.equals(mol_columns.query))
+    assert "NOT" in sql(mol_columns.mol.not_equals(mol_columns.query))
+
+
+def test_native_reaction_equality_and_explicit_chemical_matching(rxn_columns):
+    assert " = " in sql(rxn_columns.rxn == rxn_columns.other)
+    assert " != " in sql(rxn_columns.rxn != rxn_columns.other)
+    assert "bingo.rexact" not in sql(rxn_columns.rxn == rxn_columns.other)
+    assert "IS NULL" in sql(rxn_columns.rxn.__eq__(None))
+    assert "bingo.rexact" in sql(rxn_columns.rxn.equals(rxn_columns.query))
+
+
+def test_orm_comparator_remains_available_at_runtime():
+    expression = Compound.mol.similar_to("CCO", minimum=0.7)
+    assert isinstance(expression.type, Boolean)
+    assert "bingo.sim" in sql(select(Compound).where(expression))
+
+    score = Compound.mol.similarity_score("CCO")
+    assert isinstance(score.type, Float)
+    assert "bingo.getsimilarity" in sql(select(score))
+
+
+def test_orm_attributes_are_preserved_as_comparator_operands():
+    expression = Compound.mol.equals(Compound.other_mol, Compound.query_parameters)
+    compiled = sql(select(Compound).where(expression))
+
+    assert "bingo.exact" in compiled
+    assert "bingo_comparator_compounds.other_mol" in compiled
+    assert "bingo_comparator_compounds.query_parameters" in compiled
+
+
+def test_comparators_are_public():
+    assert BingoMolComparator.__name__ == "BingoMolComparator"
+    assert BingoRxnComparator.__name__ == "BingoRxnComparator"

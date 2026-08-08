@@ -1,4 +1,4 @@
-extend-exclude = ["update_proxy_stubs.py"]
+extend-exclude = []
 include = ["pyproject.toml", "src/**/*.py", "scripts/**/*.py"]
 
 # Same as Black.

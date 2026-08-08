@@ -1,17 +1,24 @@
 """Bingo SQLAlchemy comparators for chemical structure searching."""
 
-from typing import Any
-
-from sqlalchemy import ColumnElement, tuple_
+from sqlalchemy import ColumnElement
 from sqlalchemy.types import UserDefinedType
 
-from molalchemy.bingo.search import _bingo_search as _build_bingo_search
+from molalchemy.bingo.functions.general import mol_similarity_score
+from molalchemy.bingo.search import _bingo_search_values
+from molalchemy.protocols import (
+    BingoOperand,
+    BingoParameters,
+    BingoSimilarityBound,
+)
 
 
 def _bingo_search(
-    column: ColumnElement[Any], query: Any, parameters: Any, search_type: str
+    column: ColumnElement[object],
+    query: BingoOperand,
+    parameters: BingoParameters,
+    search_type: str,
 ) -> ColumnElement[bool]:
-    return _build_bingo_search(column, tuple_(query, parameters), search_type)
+    return _bingo_search_values(column, (query, parameters), search_type)
 
 
 class BingoMolComparator(UserDefinedType.Comparator):
@@ -22,30 +29,9 @@ class BingoMolComparator(UserDefinedType.Comparator):
     substructure matching, SMARTS pattern matching, and exact structure matching.
     """
 
-    def __eq__(self, other: Any) -> ColumnElement[bool]:
-        if other is None:
-            return super().__eq__(other)
-        if isinstance(other, ColumnElement) and not getattr(
-            other, "is_clause_element", False
-        ):
-            return super().__eq__(other)
-        return self.equals(other)
-
-    def __ne__(self, other: Any) -> ColumnElement[bool]:
-        if other is None:
-            return super().__ne__(other)
-        if isinstance(other, ColumnElement) and not getattr(
-            other, "is_clause_element", False
-        ):
-            return super().__ne__(other)
-        if (
-            isinstance(other, ColumnElement)
-            and getattr(other, "table", None) is not None
-        ):
-            return super().__ne__(other)
-        return self.not_equals(other)
-
-    def has_substructure(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
+    def has_substructure(
+        self, query: BingoOperand, parameters: BingoParameters = ""
+    ) -> ColumnElement[bool]:
         """
         Check if the molecular structure contains a given substructure.
 
@@ -67,7 +53,9 @@ class BingoMolComparator(UserDefinedType.Comparator):
         """
         return _bingo_search(self.expr, query, parameters, "bingo.sub")
 
-    def has_smarts(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
+    def has_smarts(
+        self, query: BingoOperand, parameters: BingoParameters = ""
+    ) -> ColumnElement[bool]:
         """
         Check if the molecular structure matches a SMARTS pattern.
 
@@ -89,7 +77,9 @@ class BingoMolComparator(UserDefinedType.Comparator):
         """
         return _bingo_search(self.expr, query, parameters, "bingo.smarts")
 
-    def equals(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
+    def equals(
+        self, query: BingoOperand, parameters: BingoParameters = ""
+    ) -> ColumnElement[bool]:
         """
         Check if the molecular structure exactly matches the given structure.
 
@@ -111,7 +101,9 @@ class BingoMolComparator(UserDefinedType.Comparator):
         """
         return _bingo_search(self.expr, query, parameters, "bingo.exact")
 
-    def not_equals(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
+    def not_equals(
+        self, query: BingoOperand, parameters: BingoParameters = ""
+    ) -> ColumnElement[bool]:
         """
         Check if the molecular structure does not exactly match the given structure.
 
@@ -129,6 +121,26 @@ class BingoMolComparator(UserDefinedType.Comparator):
         """
         return ~self.equals(query, parameters)
 
+    def similar_to(
+        self,
+        query: BingoOperand,
+        minimum: BingoSimilarityBound = 0.0,
+        maximum: BingoSimilarityBound = 1.0,
+        metric: BingoParameters = "Tanimoto",
+    ) -> ColumnElement[bool]:
+        """Check whether similarity to `query` is within the requested range."""
+        return _bingo_search_values(
+            self.expr, (minimum, maximum, query, metric), "bingo.sim"
+        )
+
+    def similarity_score(
+        self,
+        query: BingoOperand,
+        metric: BingoParameters = "Tanimoto",
+    ) -> ColumnElement[float]:
+        """Return the numeric similarity score for `query`."""
+        return mol_similarity_score(self.expr, query, metric)
+
 
 class BingoRxnComparator(UserDefinedType.Comparator):
     """
@@ -138,30 +150,9 @@ class BingoRxnComparator(UserDefinedType.Comparator):
     reaction substructure matching, SMARTS pattern matching, and exact reaction matching.
     """
 
-    def __eq__(self, other: Any) -> ColumnElement[bool]:
-        if other is None:
-            return super().__eq__(other)
-        if isinstance(other, ColumnElement) and not getattr(
-            other, "is_clause_element", False
-        ):
-            return super().__eq__(other)
-        return self.equals(other)
-
-    def __ne__(self, other: Any) -> ColumnElement[bool]:
-        if other is None:
-            return super().__ne__(other)
-        if isinstance(other, ColumnElement) and not getattr(
-            other, "is_clause_element", False
-        ):
-            return super().__ne__(other)
-        if (
-            isinstance(other, ColumnElement)
-            and getattr(other, "table", None) is not None
-        ):
-            return super().__ne__(other)
-        return self.not_equals(other)
-
-    def has_substructure(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
+    def has_substructure(
+        self, query: BingoOperand, parameters: BingoParameters = ""
+    ) -> ColumnElement[bool]:
         """
         Check if the reaction contains a given substructure pattern.
 
@@ -183,7 +174,9 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         """
         return _bingo_search(self.expr, query, parameters, "bingo.rsub")
 
-    def has_smarts(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
+    def has_smarts(
+        self, query: BingoOperand, parameters: BingoParameters = ""
+    ) -> ColumnElement[bool]:
         """
         Check if the reaction matches a SMARTS pattern.
 
@@ -205,7 +198,9 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         """
         return _bingo_search(self.expr, query, parameters, "bingo.rsmarts")
 
-    def equals(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
+    def equals(
+        self, query: BingoOperand, parameters: BingoParameters = ""
+    ) -> ColumnElement[bool]:
         """
         Check if the reaction exactly matches the given reaction.
 
@@ -227,7 +222,9 @@ class BingoRxnComparator(UserDefinedType.Comparator):
         """
         return _bingo_search(self.expr, query, parameters, "bingo.rexact")
 
-    def not_equals(self, query: Any, parameters: Any = "") -> ColumnElement[bool]:
+    def not_equals(
+        self, query: BingoOperand, parameters: BingoParameters = ""
+    ) -> ColumnElement[bool]:
         """
         Check if the reaction does not exactly match the given reaction.
 

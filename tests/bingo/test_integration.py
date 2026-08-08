@@ -338,7 +338,7 @@ class TestBingoQueryVariations:
         smarts_expr = bingo_func.mol_has_smarts(
             self.compounds.c.structure, benzene_smarts
         )
-        equals_expr = self.compounds.c.structure == ethanol
+        equals_expr = self.compounds.c.structure.equals(ethanol)
         similarity_expr = bingo_func.mol_similarity(
             self.compounds.c.structure, ethanol, 0.7
         )

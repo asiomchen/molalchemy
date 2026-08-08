@@ -2,26 +2,12 @@
 
 from typing import Any
 
+from sqlalchemy import tuple_
 from sqlalchemy import types as sqltypes
 from sqlalchemy.sql import operators
-from sqlalchemy.sql.elements import BinaryExpression, ColumnElement
+from sqlalchemy.sql.elements import ColumnElement
 
-
-class _BingoExactSearchExpression(BinaryExpression[bool]):
-    """Bingo exact-search expression with SQLAlchemy-style identity truth checks.
-
-    Bingo columns overload ``==`` to mean chemical exact search, but Python
-    container operations such as ``column in index.expressions`` also call
-    ``==`` and then require a real boolean result.  Returning the original
-    operand comparison here keeps those Python-side checks working while the
-    expression still compiles to the Bingo ``@`` exact-search SQL operator.
-    """
-
-    inherit_cache = True
-
-    def __bool__(self) -> bool:
-        # Match SQLAlchemy's equality-expression truthiness behavior.
-        return self._orig[0] == self._orig[1]
+from molalchemy.protocols import SqlOperand
 
 
 class _BingoSearchType(sqltypes.UserDefinedType):
@@ -50,16 +36,29 @@ class _BingoSearchType(sqltypes.UserDefinedType):
 
 
 def _bingo_search(
-    column: ColumnElement[Any],
+    column: SqlOperand,
     query_tuple: Any,
     search_type: str,
 ) -> ColumnElement[bool]:
     query = query_tuple.cast(_BingoSearchType(search_type))
-    if search_type in ("bingo.exact", "bingo.rexact"):
-        return _BingoExactSearchExpression(
-            column,
-            query,
-            operators.custom_op("@", is_comparison=True),
-            type_=sqltypes.Boolean(),
-        )
-    return column.op("@")(query)
+    return column.operate(
+        operators.custom_op(
+            "@", precedence=5, is_comparison=True, return_type=sqltypes.Boolean()
+        ),
+        query,
+    )
+
+
+def _bingo_search_values(
+    column: SqlOperand, values: tuple[object, ...], search_type: str
+) -> ColumnElement[bool]:
+    """Build a Bingo predicate using SQLAlchemy's expression coercion.
+
+    ``tuple_`` binds scalar values while honoring ``__clause_element__`` on ORM
+    attributes and other SQL expression objects.
+    """
+    return _bingo_search(
+        column,
+        tuple_(*values),  # ty: ignore[invalid-argument-type]
+        search_type,
+    )

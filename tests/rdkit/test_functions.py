@@ -2,9 +2,7 @@
 
 import pytest
 from sqlalchemy import (
-    BinaryExpression,
     Column,
-    Function,
     Integer,
     MetaData,
     Table,
@@ -13,25 +11,30 @@ from sqlalchemy import (
     select,
 )
 from sqlalchemy.dialects import postgresql
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from molalchemy.rdkit import functions as rdkit_func
 from molalchemy.rdkit.types import RdkitMol, RdkitQMol, RdkitReaction
 
-all_funcs = rdkit_func.__all__
+
+class Base(DeclarativeBase):
+    pass
 
 
-@pytest.mark.parametrize("func", all_funcs)
-def test_any_function_returns_function_object(func):
-    """Test that any function returns a SQLAlchemy function object."""
-    random_args = ["CCO"] * 10
-    random_columns = [Column("dummy", RdkitMol())] * 10
-    if callable(func):
-        try:
-            result = func(*random_args[: func.__code__.co_argcount])
-            assert isinstance(result, Function)
-        except AttributeError:
-            result = func(*random_columns[: func.__code__.co_argcount])
-            assert isinstance(result, BinaryExpression)
+class Molecule(Base):
+    __tablename__ = "rdkit_function_molecules"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    structure: Mapped[str] = mapped_column(RdkitMol())
+    query_structure: Mapped[str] = mapped_column(RdkitMol())
+
+
+class Reaction(Base):
+    __tablename__ = "rdkit_function_reactions"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    reaction: Mapped[str] = mapped_column(RdkitReaction())
+    query_reaction: Mapped[str] = mapped_column(RdkitReaction())
 
 
 @pytest.mark.parametrize(
@@ -166,6 +169,19 @@ def test_molecule_query_helpers_preserve_column_expression_inputs():
     assert "mol_from_pkl" not in compiled
 
 
+def test_molecule_search_helpers_preserve_orm_attribute_inputs():
+    """Mapped molecule attributes should remain SQL expressions."""
+    stmt = select(Molecule).where(
+        rdkit_func.mol_equals(Molecule.structure, Molecule.query_structure)
+    )
+
+    compiled = str(stmt.compile(dialect=postgresql.dialect()))
+
+    assert "rdkit_function_molecules.query_structure" in compiled
+    assert "mol_from_pkl" not in compiled
+    assert "@=" in compiled
+
+
 @pytest.mark.parametrize(
     ("helper_name", "query", "operator"),
     [
@@ -265,3 +281,16 @@ def test_reaction_search_helpers_preserve_column_expression_inputs():
     assert "reactions.query_reaction" in compiled
     assert "'reactions.query_reaction'" not in compiled
     assert "reaction_from_smarts" not in compiled
+
+
+def test_reaction_search_helpers_preserve_orm_attribute_inputs():
+    """Mapped reaction attributes should remain SQL expressions."""
+    stmt = select(Reaction).where(
+        rdkit_func.rxn_equals(Reaction.reaction, Reaction.query_reaction)
+    )
+
+    compiled = str(stmt.compile(dialect=postgresql.dialect()))
+
+    assert "rdkit_function_reactions.query_reaction" in compiled
+    assert "reaction_from_smarts" not in compiled
+    assert "@=" in compiled

@@ -2,14 +2,19 @@
 This file defines public Bingo PostgreSQL function wrappers for use with SQLAlchemy.
 """
 
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
-from sqlalchemy import tuple_
 from sqlalchemy import types as sqltypes
-from sqlalchemy.sql.elements import BinaryExpression, ColumnElement
+from sqlalchemy.sql.elements import ColumnElement
 from sqlalchemy.sql.functions import GenericFunction
 
-from molalchemy.bingo.search import _bingo_search
+from molalchemy.bingo.search import _bingo_search_values
+from molalchemy.protocols import (
+    BingoOperand,
+    BingoParameters,
+    BingoSimilarityBound,
+    SqlOperand,
+)
 
 from ._types import (
     AnyBingoBinaryMolLike,
