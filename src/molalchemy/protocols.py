@@ -5,7 +5,7 @@ protocols provide a precise static view for the validation helpers in
 ``molalchemy.helpers``.
 """
 
-from typing import Any, Protocol, TypeAlias
+from typing import Any, Literal, Protocol, TypeAlias
 
 from rdkit import Chem
 from rdkit.Chem.rdChemReactions import ChemicalReaction
@@ -16,6 +16,8 @@ SqlOperand: TypeAlias = ColumnElement[Any] | InstrumentedAttribute[Any]
 RdkitMolOperand: TypeAlias = str | Chem.Mol | SqlOperand
 RdkitReactionOperand: TypeAlias = str | ChemicalReaction | SqlOperand
 RdkitFingerprintOperand: TypeAlias = bytes | SqlOperand
+RdkitSimilarityMetric: TypeAlias = Literal["Tanimoto", "Dice"]
+RdkitSimilarityBound: TypeAlias = float | None | SqlOperand
 BingoOperand: TypeAlias = str | bytes | SqlOperand
 BingoParameters: TypeAlias = str | SqlOperand
 BingoSimilarityBound: TypeAlias = float | None | SqlOperand
@@ -101,6 +103,20 @@ class RdkitReactionColumn(Protocol):
 
 
 class RdkitFingerprintColumn(Protocol):
+    def similar_to(
+        self,
+        query: RdkitFingerprintOperand,
+        minimum: RdkitSimilarityBound = 0.0,
+        maximum: RdkitSimilarityBound = 1.0,
+        metric: RdkitSimilarityMetric = "Tanimoto",
+    ) -> ColumnElement[bool]: ...
+
+    def similarity_score(
+        self,
+        query: RdkitFingerprintOperand,
+        metric: RdkitSimilarityMetric = "Tanimoto",
+    ) -> ColumnElement[float]: ...
+
     def tanimoto_matches(
         self, query: RdkitFingerprintOperand
     ) -> ColumnElement[bool]: ...
@@ -125,5 +141,7 @@ __all__ = [
     "RdkitMolOperand",
     "RdkitReactionColumn",
     "RdkitReactionOperand",
+    "RdkitSimilarityBound",
+    "RdkitSimilarityMetric",
     "SqlOperand",
 ]

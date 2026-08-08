@@ -101,7 +101,8 @@ Molecule.structure != None  # IS NOT NULL
 ## Expression result types
 
 Molecule and reaction search methods now produce `ColumnElement[bool]` backed
-by SQLAlchemy `Boolean`. Fingerprint KNN methods produce
+by SQLAlchemy `Boolean`. Fingerprint `similar_to()` also produces a Boolean
+expression. Fingerprint KNN methods and `similarity_score()` produce
 `ColumnElement[float]` backed by SQLAlchemy `Float`.
 
 This makes Boolean composition and distance ordering accurately reflect the
@@ -114,6 +115,34 @@ stmt = select(Molecule).where(predicate & Molecule.structure.not_equals("c1ccccc
 distance = Molecule.fingerprint.dice_distance(query_fp)
 stmt = select(Molecule).order_by(distance)
 ```
+
+## Bingo-compatible similarity API
+
+Fingerprint columns also expose the same explicit predicate/score split as
+Bingo molecule columns:
+
+```python
+predicate = Molecule.fingerprint.similar_to(
+    query_fp,
+    minimum=0.7,
+    maximum=1.0,
+    metric="Tanimoto",
+)
+score = Molecule.fingerprint.similarity_score(query_fp, metric="Dice")
+```
+
+The standalone equivalents are `fp_similar_to()` and
+`fp_similarity_score()`. The accepted metric names are exactly `"Tanimoto"`
+and `"Dice"`; unsupported names raise `ValueError` while constructing the SQL
+expression. Either bound may be `None` to leave that side open.
+Bounds accept numeric SQL expressions as well as Python numbers, so they may
+come from another column, a bind parameter, or a computed expression.
+
+This convenience predicate exists to match Bingo's `similar_to()` API. It compares
+`tanimoto_sml()` or `dice_sml()` directly with the requested bounds, so it may
+be slower than RDKit's native `%`/`#` threshold operators or `<%>`/`<#>` KNN
+operators. Keep using the metric-specific native methods when indexed search
+performance matters.
 
 ## Typed column helpers
 
@@ -128,6 +157,10 @@ mol_predicate = rdkit_col(Molecule.structure).equals(other_molecule)
 rxn_predicate = rdkit_rxn_col(Reaction.reaction).has_substructure(query_reaction)
 fp_predicate = rdkit_fp_col(Molecule.fingerprint).dice_matches(other_fingerprint)
 fp_distance = rdkit_fp_col(Molecule.fingerprint).tanimoto_distance(query_fp)
+bingo_compatible_predicate = rdkit_fp_col(Molecule.fingerprint).similar_to(
+    query_fp, minimum=0.7
+)
+bingo_compatible_score = rdkit_fp_col(Molecule.fingerprint).similarity_score(query_fp)
 ```
 
 `rdkit_fp_col()` is new. All three helpers return the original SQLAlchemy
@@ -147,6 +180,7 @@ The typed comparator interface reflects the corresponding bind processors:
 - Reactions accept reaction strings,
   `rdkit.Chem.rdChemReactions.ChemicalReaction`, and SQL expressions.
 - Fingerprints accept bytes and SQL expressions.
+- Similarity bounds accept numbers, `None`, and numeric SQL expressions.
 - Core columns and ORM `InstrumentedAttribute` objects are valid SQL operands.
 
 ## Unchanged APIs
@@ -154,3 +188,6 @@ The typed comparator interface reflects the corresponding bind processors:
 Constructors, conversions, descriptors, fingerprint generators, score
 functions, aggregates, settings, indexes, and database/file workflows remain
 standalone functions. Existing calls to those functions do not require changes.
+The existing molecule and reaction comparator methods, including
+`has_substructure()`, `has_smarts()`, `equals()`, and `not_equals()`, also keep
+their established names and behavior.

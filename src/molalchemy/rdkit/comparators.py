@@ -7,6 +7,8 @@ from molalchemy.protocols import (
     RdkitFingerprintOperand,
     RdkitMolOperand,
     RdkitReactionOperand,
+    RdkitSimilarityBound,
+    RdkitSimilarityMetric,
     SqlOperand,
 )
 from molalchemy.rdkit.search import (
@@ -14,6 +16,8 @@ from molalchemy.rdkit.search import (
     _rdkit_mol_smarts,
     _rdkit_predicate,
     _rdkit_rxn_smarts,
+    _rdkit_similar_to,
+    _rdkit_similarity_score,
 )
 
 
@@ -80,6 +84,30 @@ class RdkitReactionComparator(UserDefinedType.Comparator):
 
 
 class RdkitFPComparator(UserDefinedType.Comparator):
+    def similar_to(
+        self,
+        query: RdkitFingerprintOperand,
+        minimum: RdkitSimilarityBound = 0.0,
+        maximum: RdkitSimilarityBound = 1.0,
+        metric: RdkitSimilarityMetric = "Tanimoto",
+    ) -> ColumnElement[bool]:
+        """Check whether fingerprint similarity is within explicit bounds.
+
+        This Bingo-compatible convenience API compares a computed score and may
+        be slower than RDKit's native threshold or KNN operators. Prefer
+        ``tanimoto_matches()``, ``dice_matches()``, or the distance methods when
+        native indexed performance is required.
+        """
+        return _rdkit_similar_to(self.expr, query, minimum, maximum, metric)
+
+    def similarity_score(
+        self,
+        query: RdkitFingerprintOperand,
+        metric: RdkitSimilarityMetric = "Tanimoto",
+    ) -> ColumnElement[float]:
+        """Return the numeric fingerprint similarity score."""
+        return _rdkit_similarity_score(self.expr, query, metric)
+
     def tanimoto_matches(self, query: RdkitFingerprintOperand) -> ColumnElement[bool]:
         """Tanimoto similarity threshold operator (%).
 

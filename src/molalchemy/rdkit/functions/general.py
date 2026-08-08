@@ -10,10 +10,18 @@ from sqlalchemy.sql.elements import ColumnElement
 from sqlalchemy.sql.expression import Cast
 from sqlalchemy.sql.functions import GenericFunction
 
+from molalchemy.protocols import (
+    RdkitFingerprintOperand,
+    RdkitSimilarityBound,
+    RdkitSimilarityMetric,
+    SqlOperand,
+)
 from molalchemy.rdkit.search import (
     _rdkit_mol_smarts,
     _rdkit_predicate,
     _rdkit_rxn_smarts,
+    _rdkit_similar_to,
+    _rdkit_similarity_score,
 )
 from molalchemy.rdkit.types import (
     RdkitBitFingerprint,
@@ -34,6 +42,31 @@ from ._types import (
     AnyRdkitSparseFingerprintLike,
     AnyRdkitXQMolLike,
 )
+
+
+def fp_similar_to(
+    fp_column: SqlOperand,
+    query: RdkitFingerprintOperand,
+    minimum: RdkitSimilarityBound = 0.0,
+    maximum: RdkitSimilarityBound = 1.0,
+    metric: RdkitSimilarityMetric = "Tanimoto",
+) -> ColumnElement[bool]:
+    """Check whether fingerprint similarity is within explicit bounds.
+
+    This helper provides a Bingo-compatible similarity API. Because it compares a
+    computed score, it may be slower than RDKit's native threshold and KNN
+    operators.
+    """
+    return _rdkit_similar_to(fp_column, query, minimum, maximum, metric)
+
+
+def fp_similarity_score(
+    fp_column: SqlOperand,
+    query: RdkitFingerprintOperand,
+    metric: RdkitSimilarityMetric = "Tanimoto",
+) -> ColumnElement[float]:
+    """Return the numeric fingerprint similarity score."""
+    return _rdkit_similarity_score(fp_column, query, metric)
 
 
 def mol_has_substructure(

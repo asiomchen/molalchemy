@@ -15,6 +15,14 @@ from molalchemy.rdkit.search import (
     _rdkit_mol_smarts,
     _rdkit_predicate,
     _rdkit_rxn_smarts,
+    _rdkit_similar_to,
+    _rdkit_similarity_score,
+)
+from molalchemy.protocols import (
+    RdkitFingerprintOperand,
+    RdkitSimilarityBound,
+    RdkitSimilarityMetric,
+    SqlOperand,
 )
 from molalchemy.rdkit.types import (
     RdkitBitFingerprint,

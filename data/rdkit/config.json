@@ -1,6 +1,8 @@
 {
   "general": {
     "extra_members": [
+      "fp_similar_to",
+      "fp_similarity_score",
       "mol_equals",
       "mol_has_smarts",
       "mol_has_substructure",

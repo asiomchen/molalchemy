@@ -115,6 +115,16 @@ reaction_smarts = select(Reaction).where(
 nearest = select(Compound).order_by(
     rdkit_fp_col(Compound.fingerprint).tanimoto_distance(b"query fingerprint")
 )
+
+bingo_compatible_match = select(Compound).where(
+    rdkit_fp_col(Compound.fingerprint).similar_to(
+        b"query fingerprint", minimum=0.7, metric="Tanimoto"
+    )
+)
+
+bingo_compatible_score = rdkit_fp_col(Compound.fingerprint).similarity_score(
+    b"query fingerprint", metric="Dice"
+)
 ```
 
 For RDKit molecule columns, `.equals()` is an explicit spelling of chemical

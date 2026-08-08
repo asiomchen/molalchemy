@@ -56,7 +56,9 @@ The standalone helpers remain available:
 from molalchemy.bingo import functions as bingo_func
 
 mol_predicate = bingo_func.mol_equals(Compound.structure, query, "STE")
+mol_not_equal = bingo_func.mol_not_equals(Compound.structure, query, "STE")
 rxn_predicate = bingo_func.rxn_equals(Reaction.reaction, query_reaction)
+rxn_not_equal = bingo_func.rxn_not_equals(Reaction.reaction, query_reaction)
 ```
 
 ## Storage equality is not chemical equality
@@ -128,6 +130,9 @@ retains its `bottom` and `top` keyword names; new code should use
 Molecule and reaction search methods now return `ColumnElement[bool]` backed by
 SQLAlchemy `Boolean`. This applies to substructure, SMARTS, exact, negated
 exact, and similarity predicates.
+
+Molecule similarity score methods return `ColumnElement[float]` backed by
+SQLAlchemy `Float`.
 
 They can be composed and labeled like ordinary SQLAlchemy predicates:
 

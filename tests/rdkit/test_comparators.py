@@ -19,6 +19,7 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from molalchemy.rdkit import RdkitFPComparator, RdkitMolComparator
+from molalchemy.rdkit import functions as rdkit_func
 from molalchemy.rdkit.types import (
     RdkitBitFingerprint,
     RdkitMol,
@@ -139,6 +140,50 @@ def test_fingerprint_operators_have_exact_types(
     assert operator in sql(expression)
 
 
+@pytest.mark.parametrize("fingerprint", ["bfp", "sfp"])
+@pytest.mark.parametrize(
+    ("metric", "score_function"),
+    [("Tanimoto", "tanimoto_sml"), ("Dice", "dice_sml")],
+)
+def test_bingo_compatible_similarity_comparator_and_function_parity(
+    columns, fingerprint, metric, score_function
+):
+    column = columns[fingerprint]
+    query = bindparam("query_fp", b"fingerprint")
+    score = column.similarity_score(query, metric)
+    functional_score = rdkit_func.fp_similarity_score(column, query, metric)
+    predicate = column.similar_to(query, 0.2, 0.8, metric)
+    functional_predicate = rdkit_func.fp_similar_to(column, query, 0.2, 0.8, metric)
+
+    assert isinstance(score.type, Float)
+    assert isinstance(predicate.type, Boolean)
+    assert sql(score) == sql(functional_score)
+    assert sql(predicate) == sql(functional_predicate)
+    assert score_function in sql(score)
+    assert " BETWEEN " in sql(predicate)
+
+
+@pytest.mark.parametrize(
+    ("minimum", "maximum", "operator"),
+    [
+        (0.2, 0.8, " BETWEEN "),
+        (0.2, None, " >= "),
+        (None, 0.8, " <= "),
+        (None, None, " IS NOT NULL"),
+    ],
+)
+def test_bingo_compatible_similarity_bound_shapes(columns, minimum, maximum, operator):
+    expression = columns.bfp.similar_to(b"fingerprint", minimum, maximum, "Tanimoto")
+
+    assert isinstance(expression.type, Boolean)
+    assert operator in sql(expression)
+
+
+def test_bingo_compatible_similarity_rejects_unsupported_metrics(columns):
+    with pytest.raises(ValueError, match="Unsupported RDKit similarity metric: Cosine"):
+        columns.bfp.similarity_score(b"fingerprint", "Cosine")
+
+
 def test_removed_fingerprint_methods_have_no_compatibility_aliases(columns):
     for name in ("tanimoto", "dice", "nearest_neighbors"):
         with pytest.raises(AttributeError):
@@ -198,9 +243,13 @@ def test_native_equality_and_null_semantics(columns, name):
 def test_orm_comparators_remain_available_at_runtime():
     predicate = Compound.mol.equals("CCO")
     distance = Compound.fp.tanimoto_distance(b"fingerprint")
+    similarity = Compound.fp.similar_to(b"fingerprint", minimum=0.7)
+    score = Compound.fp.similarity_score(b"fingerprint")
 
     assert isinstance(predicate.type, Boolean)
+    assert isinstance(similarity.type, Boolean)
     assert isinstance(distance.type, Float)
+    assert isinstance(score.type, Float)
     assert "ORDER BY" in sql(select(Compound).order_by(distance))
 
 

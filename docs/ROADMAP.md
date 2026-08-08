@@ -48,7 +48,6 @@ molalchemy aims to be the **definitive Python library** for chemical database op
 
 ### Future Plans
 - ⬜ ChemAxon cartridge integration (closed source, requires license)
-- ⬜ NextMove Author integration (closed source, requires license)
 - ⬜ Multi-dialect support for Bingo (e.g MySQL, Oracle)
 - ⬜ SQLite RDKit support (via [chemicalite](https://github.com/rvianello/chemicalite), including custom builds or custom event listeners)
 - ⬜ Performance benchmarking

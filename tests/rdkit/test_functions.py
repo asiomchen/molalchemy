@@ -2,9 +2,7 @@
 
 import pytest
 from sqlalchemy import (
-    BinaryExpression,
     Column,
-    Function,
     Integer,
     MetaData,
     Table,
@@ -17,8 +15,6 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from molalchemy.rdkit import functions as rdkit_func
 from molalchemy.rdkit.types import RdkitMol, RdkitQMol, RdkitReaction
-
-all_funcs = rdkit_func.__all__
 
 
 class Base(DeclarativeBase):
@@ -39,20 +35,6 @@ class Reaction(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     reaction: Mapped[str] = mapped_column(RdkitReaction())
     query_reaction: Mapped[str] = mapped_column(RdkitReaction())
-
-
-@pytest.mark.parametrize("func", all_funcs)
-def test_any_function_returns_function_object(func):
-    """Test that any function returns a SQLAlchemy function object."""
-    random_args = ["CCO"] * 10
-    random_columns = [Column("dummy", RdkitMol())] * 10
-    if callable(func):
-        try:
-            result = func(*random_args[: func.__code__.co_argcount])
-            assert isinstance(result, Function)
-        except AttributeError:
-            result = func(*random_columns[: func.__code__.co_argcount])
-            assert isinstance(result, BinaryExpression)
 
 
 @pytest.mark.parametrize(

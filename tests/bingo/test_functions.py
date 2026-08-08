@@ -2,9 +2,7 @@
 
 import pytest
 from sqlalchemy import (
-    BinaryExpression,
     Column,
-    Function,
     Integer,
     MetaData,
     String,
@@ -18,8 +16,6 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from molalchemy.bingo import functions as bingo_func
 from molalchemy.bingo.types import BingoMol, BingoReaction
 
-all_funcs = bingo_func.__all__
-
 
 class Base(DeclarativeBase):
     pass
@@ -32,20 +28,6 @@ class Compound(Base):
     structure: Mapped[str] = mapped_column(BingoMol())
     query_structure: Mapped[str] = mapped_column(BingoMol())
     query_parameters: Mapped[str] = mapped_column(String())
-
-
-@pytest.mark.parametrize("func", all_funcs)
-def test_any_function_returns_function_object(func):
-    """Test that any function returns a SQLAlchemy function object."""
-    random_args = ["CCO"] * 10
-    random_columns = [Column("dummy", BingoMol())] * 10
-    if callable(func):
-        try:
-            result = func(*random_args[: func.__code__.co_argcount])
-            assert isinstance(result, Function)
-        except AttributeError:
-            result = func(*random_columns[: func.__code__.co_argcount])
-            assert isinstance(result, BinaryExpression)
 
 
 def test_bingo_search_helpers_bind_literal_inputs():

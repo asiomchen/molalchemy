@@ -249,6 +249,14 @@ def main() -> None:
     dice_stmt = select(molecules.c.name).where(
         molecules.c.morgan_fp.dice_matches(query_fp)
     )
+    bingo_compatible_similarity_stmt = select(molecules.c.name).where(
+        molecules.c.morgan_fp.similar_to(
+            query_fp, minimum=0.9, maximum=1.0, metric="Tanimoto"
+        )
+    )
+    bingo_compatible_similarity_score_stmt = select(
+        molecules.c.morgan_fp.similarity_score(query_fp, metric="Tanimoto")
+    ).where(molecules.c.name == "ethanol")
     tanimoto_knn_stmt = select(molecules.c.name).order_by(
         molecules.c.morgan_fp.tanimoto_distance(query_fp), molecules.c.id
     )
@@ -342,6 +350,11 @@ def main() -> None:
         ): reaction_reverse_substructure_fp_stmt,
         ("RdkitFPComparator", "tanimoto_matches"): tanimoto_stmt,
         ("RdkitFPComparator", "dice_matches"): dice_stmt,
+        ("RdkitFPComparator", "similar_to"): bingo_compatible_similarity_stmt,
+        (
+            "RdkitFPComparator",
+            "similarity_score",
+        ): bingo_compatible_similarity_score_stmt,
         ("RdkitFPComparator", "tanimoto_distance"): tanimoto_knn_stmt,
         ("RdkitFPComparator", "dice_distance"): dice_knn_stmt,
     }
@@ -376,6 +389,8 @@ def main() -> None:
     print(explicit_not_equivalent_stmt.compile(dialect=postgresql.dialect()))
     print(tanimoto_stmt.compile(dialect=postgresql.dialect()))
     print(dice_stmt.compile(dialect=postgresql.dialect()))
+    print(bingo_compatible_similarity_stmt.compile(dialect=postgresql.dialect()))
+    print(bingo_compatible_similarity_score_stmt.compile(dialect=postgresql.dialect()))
     print(tanimoto_knn_stmt.compile(dialect=postgresql.dialect()))
     print(dice_knn_stmt.compile(dialect=postgresql.dialect()))
     print(function_stmt.compile(dialect=postgresql.dialect()))
@@ -511,6 +526,8 @@ def main() -> None:
         ): ["ethanol oxidation"],
         ("RdkitFPComparator", "tanimoto_matches"): ["ethanol"],
         ("RdkitFPComparator", "dice_matches"): ["ethanol"],
+        ("RdkitFPComparator", "similar_to"): ["ethanol"],
+        ("RdkitFPComparator", "similarity_score"): [1.0],
         ("RdkitFPComparator", "tanimoto_distance"): [
             "ethanol",
             "aspirin",
