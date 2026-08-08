@@ -273,6 +273,12 @@ def test_bingo_proxy_helpers_accept_orm_instrumented_attributes():
     assert "bingo.exact" in compiled
     assert "CCO" in compiled
 
+    score = bingo_col(BingoCompound.structure).similarity_score("CCO")
+    assert score.type.python_type is float
+    assert "bingo.getsimilarity" in str(
+        select(score).compile(dialect=postgresql.dialect())
+    )
+
 
 def test_rdkit_proxy_helpers_accept_orm_instrumented_attributes():
     assert rdkit_col(RdkitCompound.structure) is RdkitCompound.structure

@@ -36,6 +36,9 @@ smoke:
 docs-test:
 	@$(DOCS_CAIRO_ENV) JUPYTER_PLATFORM_DIRS=1 uv run mkdocs build --strict --site-dir /tmp/molalchemy-site
 
+docs-serve:
+	@$(DOCS_CAIRO_ENV) JUPYTER_PLATFORM_DIRS=1 uv run mkdocs serve
+
 sync-docs:
 	@cp README.md docs/index.md
 	@cp CHANGELOG.md docs/

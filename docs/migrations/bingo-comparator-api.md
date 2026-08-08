@@ -93,8 +93,9 @@ Use `is_(None)` and `is_not(None)` if explicit SQL-style spelling is preferred.
 
 ## Similarity comparator
 
-Molecule columns now expose `similar_to()` as the comparator equivalent of
-`bingo_func.mol_similarity()`:
+Molecule columns expose separate APIs for Boolean similarity searches and
+numeric similarity scores. `similar_to()` is the comparator equivalent of
+`bingo_func.mol_similar_to()`:
 
 ```python
 predicate = Compound.structure.similar_to(
@@ -107,8 +108,20 @@ stmt = select(Compound).where(predicate)
 ```
 
 `similar_to()` returns a Boolean range predicate. It does not return a numeric
-similarity score; use `bingo_func.getsimilarity()` when the score itself is
-needed.
+similarity score. Use `similarity_score()` or
+`bingo_func.mol_similarity_score()` when the score itself is needed:
+
+```python
+score = Compound.structure.similarity_score(query, metric="Tanimoto")
+functional_score = bingo_func.mol_similarity_score(
+    Compound.structure, query, metric="Tanimoto"
+)
+```
+
+The cartridge-level `getsimilarity()` wrapper remains available. The older
+`mol_similarity()` predicate also remains as a compatibility spelling and
+retains its `bottom` and `top` keyword names; new code should use
+`mol_similar_to()` with `minimum` and `maximum`.
 
 ## Boolean expression results
 
@@ -184,6 +197,6 @@ The following APIs do not require migration:
 2. Replace chemical `column != query` with `column.not_equals(query)`.
 3. Keep `== None`/`!= None`, or use `is_(None)`/`is_not(None)`.
 4. Treat native equality as text or binary storage equality only.
-5. Optionally replace `bingo_func.mol_similarity()` with `similar_to()` when a
-   comparator method is clearer.
+5. Use `similar_to()`/`mol_similar_to()` for predicates and
+   `similarity_score()`/`mol_similarity_score()` for numeric scores.
 6. Replace removed proxy imports with `bingo_col()` or `bingo_rxn_col()`.

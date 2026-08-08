@@ -3,6 +3,7 @@
 from sqlalchemy import ColumnElement
 from sqlalchemy.types import UserDefinedType
 
+from molalchemy.bingo.functions.general import mol_similarity_score
 from molalchemy.bingo.search import _bingo_search_values
 from molalchemy.protocols import (
     BingoOperand,
@@ -131,6 +132,14 @@ class BingoMolComparator(UserDefinedType.Comparator):
         return _bingo_search_values(
             self.expr, (minimum, maximum, query, metric), "bingo.sim"
         )
+
+    def similarity_score(
+        self,
+        query: BingoOperand,
+        metric: BingoParameters = "Tanimoto",
+    ) -> ColumnElement[float]:
+        """Return the numeric similarity score for `query`."""
+        return mol_similarity_score(self.expr, query, metric)
 
 
 class BingoRxnComparator(UserDefinedType.Comparator):

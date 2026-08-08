@@ -4,6 +4,7 @@ import pytest
 from sqlalchemy import (
     Boolean,
     Column,
+    Float,
     Integer,
     MetaData,
     String,
@@ -107,11 +108,44 @@ def test_reaction_predicates_are_boolean(rxn_columns, method, search_type):
 
 def test_similarity_defaults_and_function_parity(mol_columns):
     method = mol_columns.mol.similar_to("CCO")
-    function = bingo_func.mol_similarity(mol_columns.mol, "CCO")
+    function = bingo_func.mol_similar_to(mol_columns.mol, "CCO")
 
     assert isinstance(method.type, Boolean)
     assert sql(method) == sql(function)
     assert set(method.compile().params.values()) == {0.0, 1.0, "CCO", "Tanimoto"}
+
+
+def test_legacy_similarity_function_preserves_old_keywords(mol_columns):
+    canonical = bingo_func.mol_similar_to(
+        mol_columns.mol, "CCO", minimum=0.2, maximum=0.8, metric="Dice"
+    )
+    legacy = bingo_func.mol_similarity(
+        mol_columns.mol, "CCO", bottom=0.2, top=0.8, metric="Dice"
+    )
+
+    assert sql(canonical) == sql(legacy)
+    assert set(canonical.compile().params.values()) == {0.2, 0.8, "CCO", "Dice"}
+
+
+def test_similarity_score_comparator_and_function_parity(mol_columns):
+    method = mol_columns.mol.similarity_score("CCO")
+    function = bingo_func.mol_similarity_score(mol_columns.mol, "CCO")
+
+    assert isinstance(method.type, Float)
+    assert sql(method) == sql(function)
+    assert "bingo.getsimilarity" in sql(method)
+    assert set(method.compile().params.values()) == {"CCO", "Tanimoto"}
+
+
+def test_similarity_predicate_accepts_open_bounds(mol_columns):
+    expression = bingo_func.mol_similar_to(
+        mol_columns.mol, "CCO", minimum=None, maximum=None
+    )
+    compiled = expression.compile(dialect=postgresql.dialect())
+
+    assert isinstance(expression.type, Boolean)
+    assert "bingo.sim" in str(compiled)
+    assert "NULL, NULL" in str(compiled)
 
 
 def test_similarity_custom_options_and_distinct_binds(mol_columns):
@@ -173,6 +207,10 @@ def test_orm_comparator_remains_available_at_runtime():
     expression = Compound.mol.similar_to("CCO", minimum=0.7)
     assert isinstance(expression.type, Boolean)
     assert "bingo.sim" in sql(select(Compound).where(expression))
+
+    score = Compound.mol.similarity_score("CCO")
+    assert isinstance(score.type, Float)
+    assert "bingo.getsimilarity" in sql(select(score))
 
 
 def test_orm_attributes_are_preserved_as_comparator_operands():

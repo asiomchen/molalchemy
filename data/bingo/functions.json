@@ -743,7 +743,7 @@
     "name": "getsimilarity",
     "return_type": {
       "description": "SQLAlchemy function",
-      "type": "float | sqltypes.Float"
+      "type": "sqltypes.Float"
     }
   },
   "getstructurescount": {

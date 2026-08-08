@@ -147,6 +147,9 @@ def main() -> None:
         )
         .order_by(compounds.c.id)
     )
+    similarity_score_stmt = select(
+        compounds.c.structure.similarity_score(compounds.c.query_structure)
+    ).where(compounds.c.name == "ethanol")
     smarts_stmt = select(compounds.c.name).where(
         bingo_func.mol_has_smarts(compounds.c.structure, "[#6]-[#8]")
     )
@@ -221,6 +224,7 @@ def main() -> None:
         ("BingoMolComparator", "equals"): comparator_equals_stmt,
         ("BingoMolComparator", "not_equals"): comparator_not_equals_stmt,
         ("BingoMolComparator", "similar_to"): similarity_with_column_stmt,
+        ("BingoMolComparator", "similarity_score"): similarity_score_stmt,
         ("BingoRxnComparator", "has_substructure"): reaction_substructure_stmt,
         ("BingoRxnComparator", "has_smarts"): reaction_smarts_stmt,
         ("BingoRxnComparator", "equals"): reaction_exact_stmt,
@@ -252,6 +256,7 @@ def main() -> None:
             dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
         )
     )
+    print(similarity_score_stmt.compile(dialect=postgresql.dialect()))
     print(function_stmt.compile(dialect=postgresql.dialect()))
     print(reaction_exact_stmt.compile(dialect=postgresql.dialect()))
     print(reaction_substructure_stmt.compile(dialect=postgresql.dialect()))
@@ -332,6 +337,7 @@ def main() -> None:
         ("BingoMolComparator", "equals"): ["ethanol"],
         ("BingoMolComparator", "not_equals"): ["benzene"],
         ("BingoMolComparator", "similar_to"): ["benzene", "ethanol"],
+        ("BingoMolComparator", "similarity_score"): [1.0],
         ("BingoRxnComparator", "has_substructure"): ["ethanol oxidation"],
         ("BingoRxnComparator", "has_smarts"): ["ethanol oxidation"],
         ("BingoRxnComparator", "equals"): ["ethanol oxidation"],

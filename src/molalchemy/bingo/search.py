@@ -7,6 +7,8 @@ from sqlalchemy import types as sqltypes
 from sqlalchemy.sql import operators
 from sqlalchemy.sql.elements import ColumnElement
 
+from molalchemy.protocols import SqlOperand
+
 
 class _BingoSearchType(sqltypes.UserDefinedType):
     """SQLAlchemy type wrapper for casting search tuples to Bingo search types."""
@@ -34,7 +36,7 @@ class _BingoSearchType(sqltypes.UserDefinedType):
 
 
 def _bingo_search(
-    column: ColumnElement[Any],
+    column: SqlOperand,
     query_tuple: Any,
     search_type: str,
 ) -> ColumnElement[bool]:
@@ -48,7 +50,7 @@ def _bingo_search(
 
 
 def _bingo_search_values(
-    column: ColumnElement[Any], values: tuple[object, ...], search_type: str
+    column: SqlOperand, values: tuple[object, ...], search_type: str
 ) -> ColumnElement[bool]:
     """Build a Bingo predicate using SQLAlchemy's expression coercion.
 

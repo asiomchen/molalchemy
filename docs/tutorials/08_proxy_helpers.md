@@ -59,6 +59,12 @@ ethanol_query = select(Compound).where(
     bingo_col(Compound.structure).equals("CCO")
 )
 
+similarity_query = select(Compound).where(
+    bingo_col(Compound.structure).similar_to("CCO", minimum=0.7)
+)
+
+similarity_score = bingo_col(Compound.structure).similarity_score("CCO")
+
 reaction_query = select(Reaction).where(
     bingo_rxn_col(Reaction.reaction).equals("CCO>>CC=O")
 )
@@ -186,5 +192,13 @@ from molalchemy.bingo import functions as bingo_func
 # use
 stmt = select(Compound).where(
     bingo_func.mol_has_substructure(Compound.structure, "c1ccccc1")
+)
+
+similar = select(Compound).where(
+    bingo_func.mol_similar_to(Compound.structure, "CCO", minimum=0.7)
+)
+
+scores = select(
+    bingo_func.mol_similarity_score(Compound.structure, "CCO")
 )
 ```

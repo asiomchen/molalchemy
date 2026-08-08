@@ -18,7 +18,7 @@ RdkitReactionOperand: TypeAlias = str | ChemicalReaction | SqlOperand
 RdkitFingerprintOperand: TypeAlias = bytes | SqlOperand
 BingoOperand: TypeAlias = str | bytes | SqlOperand
 BingoParameters: TypeAlias = str | SqlOperand
-BingoSimilarityBound: TypeAlias = float | SqlOperand
+BingoSimilarityBound: TypeAlias = float | None | SqlOperand
 
 
 class BingoMolColumn(Protocol):
@@ -45,6 +45,12 @@ class BingoMolColumn(Protocol):
         maximum: BingoSimilarityBound = 1.0,
         metric: BingoParameters = "Tanimoto",
     ) -> ColumnElement[bool]: ...
+
+    def similarity_score(
+        self,
+        query: BingoOperand,
+        metric: BingoParameters = "Tanimoto",
+    ) -> ColumnElement[float]: ...
 
 
 class BingoReactionColumn(Protocol):

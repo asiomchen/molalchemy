@@ -72,28 +72,34 @@ def mol_equals(
     return _bingo_search_values(mol, (query, parameters), "bingo.exact")
 
 
-def mol_similarity(
-    mol: ColumnElement[AnyBingoMol],
-    query: TextLike,
-    bottom: float = 0.0,
-    top: float = 1.0,
-    metric: TextLike = "Tanimoto",
+def mol_not_equals(
+    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
+) -> ColumnElement[bool]:
+    """Perform negated exact structure matching on a molecule column."""
+    return ~mol_equals(mol, query, parameters)
+
+
+def mol_similar_to(
+    mol: SqlOperand,
+    query: BingoOperand,
+    minimum: BingoSimilarityBound = 0.0,
+    maximum: BingoSimilarityBound = 1.0,
+    metric: BingoParameters = "Tanimoto",
 ) -> ColumnElement[bool]:
     """
-    Perform similarity search on a molecule column. This should be used in WHERE clauses, as it
-    returns a boolean expression indicating whether the similarity criteria are met.
+    Check whether molecular similarity is within the requested range.
 
     Parameters
     ----------
-    mol : AnyBingoMolLike | AnyBingoBinaryMolLike
+    mol : SqlOperand
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
-    query : TextLike
+    query : BingoOperand
         Query molecule as SMILES or Molfile string for similarity comparison.
-    bottom : float, optional
+    minimum : BingoSimilarityBound, optional
         Minimum similarity threshold (default is 0.0).
-    top : float, optional
+    maximum : BingoSimilarityBound, optional
         Maximum similarity threshold (default is 1.0).
-    metric : TextLike, optional
+    metric : BingoParameters, optional
         Similarity metric to use (default is "Tanimoto").
         Other options include "Dice", "Cosine", etc.
 
@@ -103,7 +109,31 @@ def mol_similarity(
         SQLAlchemy expression for similarity matching that can be used in WHERE clauses.
 
     """
-    return _bingo_search_values(mol, (bottom, top, query, metric), "bingo.sim")
+    return _bingo_search_values(mol, (minimum, maximum, query, metric), "bingo.sim")
+
+
+def mol_similarity(
+    mol: SqlOperand,
+    query: BingoOperand,
+    bottom: BingoSimilarityBound = 0.0,
+    top: BingoSimilarityBound = 1.0,
+    metric: BingoParameters = "Tanimoto",
+) -> ColumnElement[bool]:
+    """Compatibility spelling for :func:`mol_similar_to`.
+
+    ``bottom`` and ``top`` retain the historical keyword names. New code should
+    use :func:`mol_similar_to` with ``minimum`` and ``maximum``.
+    """
+    return mol_similar_to(mol, query, bottom, top, metric)
+
+
+def mol_similarity_score(
+    mol: SqlOperand,
+    query: BingoOperand,
+    metric: BingoParameters = "Tanimoto",
+) -> ColumnElement[float]:
+    """Return the numeric molecular similarity score for ``query``."""
+    return cast(ColumnElement[float], getsimilarity(mol, query, metric))
 
 
 def rxn_has_substructure(
@@ -176,3 +206,10 @@ def rxn_equals(
 
     """
     return _bingo_search_values(rxn, (query, parameters), "bingo.rexact")
+
+
+def rxn_not_equals(
+    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+) -> ColumnElement[bool]:
+    """Perform negated exact matching on a reaction column."""
+    return ~rxn_equals(rxn, query, parameters)

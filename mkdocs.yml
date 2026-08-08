@@ -101,7 +101,7 @@ nav:
     - RDKit - Descriptors and Advanced Queries: tutorials/07_rdkit_descriptors_advanced.ipynb
     - Typed Comparator Helpers: tutorials/08_proxy_helpers.md
     - Contributing: tutorials/contribute.md
-  - Migration guides:
+  - Migration to 0.1.x:
     - Bingo comparator API: migrations/bingo-comparator-api.md
     - RDKit comparator API: migrations/rdkit-comparator-api.md
   - API:

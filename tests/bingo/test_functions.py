@@ -103,12 +103,12 @@ def test_bingo_similarity_preserves_column_expression_inputs():
     )
 
     stmt = select(compounds).where(
-        bingo_func.mol_similarity(
+        bingo_func.mol_similar_to(
             compounds.c.structure,
             compounds.c.query_structure,
-            0.2,
-            0.9,
-            "Dice",
+            minimum=0.2,
+            maximum=0.9,
+            metric="Dice",
         )
     )
 
@@ -121,6 +121,20 @@ def test_bingo_similarity_preserves_column_expression_inputs():
     assert "'compounds.query_structure'" not in sql
     assert " @ " in sql
     assert "bingo.sim" in sql
+
+
+def test_similarity_score_is_typed_as_float():
+    compounds = Table(
+        "compounds",
+        MetaData(),
+        Column("id", Integer),
+        Column("structure", BingoMol()),
+    )
+
+    score = bingo_func.mol_similarity_score(compounds.c.structure, "CCO")
+
+    assert score.type.python_type is float
+    assert "bingo.getsimilarity" in str(score.compile(dialect=postgresql.dialect()))
 
 
 def test_bingo_search_helpers_preserve_orm_attribute_inputs():
@@ -138,6 +152,34 @@ def test_bingo_search_helpers_preserve_orm_attribute_inputs():
     assert "bingo.exact" in compiled
     assert "bingo_function_compounds.query_structure" in compiled
     assert "bingo_function_compounds.query_parameters" in compiled
+
+
+@pytest.mark.parametrize(
+    ("helper_name", "column_type", "query", "search_type"),
+    [
+        ("mol_not_equals", BingoMol(), "CCO", "bingo.exact"),
+        ("rxn_not_equals", BingoReaction(), "CCO>>CC=O", "bingo.rexact"),
+    ],
+)
+def test_not_equals_helpers_negate_exact_search(
+    helper_name, column_type, query, search_type
+):
+    """Negated helpers should preserve the matching exact-search operation."""
+    structures = Table(
+        "structures",
+        MetaData(),
+        Column("id", Integer),
+        Column("structure", column_type),
+    )
+
+    helper = getattr(bingo_func, helper_name)
+    stmt = select(structures).where(helper(structures.c.structure, query))
+
+    compiled = str(stmt.compile(compile_kwargs={"literal_binds": True}))
+
+    assert "NOT" in compiled
+    assert search_type in compiled
+    assert query in compiled
 
 
 @pytest.mark.parametrize(
