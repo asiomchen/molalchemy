@@ -87,11 +87,17 @@ def main() -> None:
         atompair_fp_size=2048,
         avalon_fp_size=2048,
     )
-    engine = configure_engine(
-        create_engine(DATABASE_URL, echo=False, pool_size=1, max_overflow=0),
-        baseline_settings,
-    )
+    engine = create_engine(DATABASE_URL, echo=False, pool_size=1, max_overflow=0)
     wait_for_db(engine)
+    with engine.connect() as conn:
+        server_default_thresholds = {
+            name: conn.exec_driver_sql(f"SHOW {name}").scalar_one()
+            for name in (
+                "rdkit.tanimoto_threshold",
+                "rdkit.dice_threshold",
+            )
+        }
+    configure_engine(engine, baseline_settings)
 
     with engine.connect() as conn:
         actual_gucs = {
@@ -126,6 +132,30 @@ def main() -> None:
             "SHOW rdkit.tanimoto_threshold"
         ).scalar_one()
     assert reconfigured_after_dispose == "0.65"
+
+    # Reconfiguration replaces the pool so settings omitted from the new
+    # baseline cannot survive on reused physical connections.
+    configure_engine(engine, RdkitSettings(dice_threshold=0.6))
+    with engine.connect() as conn:
+        thresholds_after_partial_replacement = {
+            name: conn.exec_driver_sql(f"SHOW {name}").scalar_one()
+            for name in server_default_thresholds
+        }
+    assert thresholds_after_partial_replacement == {
+        "rdkit.tanimoto_threshold": server_default_thresholds[
+            "rdkit.tanimoto_threshold"
+        ],
+        "rdkit.dice_threshold": "0.6",
+    }
+
+    configure_engine(engine, RdkitSettings())
+    with engine.connect() as conn:
+        thresholds_after_removal = {
+            name: conn.exec_driver_sql(f"SHOW {name}").scalar_one()
+            for name in server_default_thresholds
+        }
+    assert thresholds_after_removal == server_default_thresholds
+
     configure_engine(engine, baseline_settings)
 
     metadata = MetaData()
@@ -449,6 +479,11 @@ def main() -> None:
     print(f"reapplied tanimoto threshold: {reapplied_tanimoto}")
     print(f"reapplied after engine disposal: {reapplied_after_dispose}")
     print(f"reconfigured after engine disposal: {reconfigured_after_dispose}")
+    print(
+        "thresholds after partial baseline replacement: "
+        f"{thresholds_after_partial_replacement}"
+    )
+    print(f"thresholds after baseline removal: {thresholds_after_removal}")
     print(f"substructure(c1ccccc1): {substructure_rows}")
     print(f"mol_has_substructure(c1ccccc1): {functional_substructure_rows}")
     print(f"exact(CCO): {exact_rows}")

@@ -168,11 +168,16 @@ class TestConfigureEngine:
             lambda target, name, listener: removed.append(listener),
         )
 
+        original_pool = postgres_engine.pool
         configure_engine(postgres_engine, RdkitSettings(tanimoto_threshold=0.4))
+
+        assert postgres_engine.pool is original_pool
+
         configure_engine(postgres_engine, RdkitSettings(dice_threshold=0.6))
 
         assert len(registered) == 2
         assert removed == [registered[0]]
+        assert postgres_engine.pool is not original_pool
 
     def test_empty_settings_remove_listener_without_registering_another(
         self, postgres_engine, monkeypatch
@@ -190,11 +195,20 @@ class TestConfigureEngine:
             lambda target, name, listener: removed.append(listener),
         )
 
+        configured_pool = postgres_engine.pool
         configure_engine(postgres_engine, RdkitSettings(dice_threshold=0.6))
         configure_engine(postgres_engine, RdkitSettings())
 
         assert len(registered) == 1
         assert removed == registered
+        assert postgres_engine.pool is not configured_pool
+
+    def test_initial_empty_settings_do_not_replace_pool(self, postgres_engine):
+        original_pool = postgres_engine.pool
+
+        configure_engine(postgres_engine, RdkitSettings())
+
+        assert postgres_engine.pool is original_pool
 
     def test_reconfiguration_survives_engine_dispose(self, postgres_engine):
         configure_engine(

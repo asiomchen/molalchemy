@@ -23,9 +23,11 @@ engine = configure_engine(
 
 Only non-`None` fields are changed. Reconfiguring the same engine replaces its
 previous MolAlchemy listener; passing an empty `RdkitSettings()` removes that
-listener. Because the baseline is applied on every checkout, a request that
-changes an RDKit GUC does not permanently change the next request's pooled
-connection.
+listener. Reconfiguration disposes the existing pool so idle connections
+cannot retain values from the previous baseline. Connections already checked
+out continue normally and retain their current session values until returned.
+Because the baseline is applied on every checkout, a request that changes an
+RDKit GUC does not permanently change the next request's pooled connection.
 
 The `set_*`, `get_*`, and `similarity_threshold` helpers remain useful for
 intentional, session-local threshold changes. `configure_engine` is for a pool

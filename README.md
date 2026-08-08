@@ -293,7 +293,7 @@ with similarity_threshold(session, tanimoto=0.1, dice=0.2):
 # Original thresholds are restored automatically
 ```
 
-`None` fields leave the server value unchanged. Calling `configure_engine` again replaces the previous MolAlchemy baseline, and `RdkitSettings()` removes it. See the [RDKit cartridge configuration reference](https://rdkit.org/new_docs/Cartridge.html#configuration) for the underlying settings.
+`None` fields leave the server value unchanged. Calling `configure_engine` again replaces the previous MolAlchemy baseline, and `RdkitSettings()` removes it. Reconfiguration disposes idle pooled connections so they cannot retain settings from the previous baseline; connections already checked out continue normally until returned. See the [RDKit cartridge configuration reference](https://rdkit.org/new_docs/Cartridge.html#configuration) for the underlying settings.
 
 ### Chemical Reactions
 

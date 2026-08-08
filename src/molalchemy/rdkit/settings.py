@@ -145,7 +145,9 @@ def configure_engine(engine: Engine, settings: RdkitSettings | None = None) -> E
 
     Calling this function again for the same engine replaces its previous
     molalchemy listener. Passing an empty :class:`RdkitSettings` removes any
-    previous listener. The engine itself is returned for convenient assignment.
+    previous listener. Reconfiguration disposes the existing pool so that idle
+    connections cannot retain settings from the previous baseline. The engine
+    itself is returned for convenient assignment.
 
     Parameters
     ----------
@@ -175,6 +177,8 @@ def configure_engine(engine: Engine, settings: RdkitSettings | None = None) -> E
         if listener is not None:
             event.listen(engine, "checkout", listener)
             _engine_listeners[engine] = listener
+        if previous_listener is not None:
+            engine.dispose()
 
     return engine
 
