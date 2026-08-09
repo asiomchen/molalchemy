@@ -8,7 +8,7 @@ import functools
 from typing import Any, Generic, Literal, TypeVar, overload
 
 from rdkit import Chem
-from rdkit.Chem import AllChem, rdChemReactions
+from rdkit.Chem import rdChemReactions
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
@@ -122,7 +122,7 @@ class RdkitMol(RdkitBaseType[_T], Generic[_T]):
                 raise InvalidMoleculeError(
                     "Value must be a SMILES string or an RDKit Mol object"
                 )
-            return value.ToBinary()  # ty: ignore[no-matching-overload]
+            return value.ToBinary()
 
         return process
 
@@ -138,7 +138,9 @@ class RdkitMol(RdkitBaseType[_T], Generic[_T]):
             if return_type == "mol":
                 # If we have bytes from mol_send, create molecule from binary
                 if isinstance(value, bytes | memoryview):
-                    return Chem.Mol(bytes(value))
+                    # RDKit accepts binary pickles here, although its generated
+                    # stub currently annotates the argument as str.
+                    return Chem.Mol(bytes(value))  # ty: ignore[no-matching-overload]
                 # If we have a string (shouldn't happen with mol_send but just in case)
                 else:
                     return Chem.MolFromSmiles(str(value))
@@ -198,7 +200,7 @@ class RdkitReaction(RdkitBaseType[_T], Generic[_T]):
         The format in which to return reaction data from the database:
         - `"smiles"`: Return as reaction SMILES string
         - `"bytes"`: Return as raw bytes
-        - `"mol"`: Return as `AllChem.ChemicalReaction` object
+        - `"mol"`: Return as `rdChemReactions.ChemicalReaction` object
 
     Raises
     ------
@@ -264,7 +266,7 @@ class RdkitReaction(RdkitBaseType[_T], Generic[_T]):
                 return rdChemReactions.ReactionToSmarts(value)
             if isinstance(value, str):
                 try:
-                    rxn = AllChem.ReactionFromSmarts(value)
+                    rxn = rdChemReactions.ReactionFromSmarts(value)
                 except ValueError:
                     rxn = None
                 if rxn is None:
@@ -296,9 +298,13 @@ class RdkitReaction(RdkitBaseType[_T], Generic[_T]):
                 return None
             if return_type == "mol":
                 if isinstance(value, bytes | memoryview):
-                    return AllChem.ChemicalReaction(bytes(value))
+                    # RDKit accepts binary pickles here, although its generated
+                    # stub currently annotates the argument as str.
+                    return rdChemReactions.ChemicalReaction(  # ty: ignore[no-matching-overload]
+                        bytes(value)
+                    )
                 else:
-                    return AllChem.ReactionFromSmarts(str(value))
+                    return rdChemReactions.ReactionFromSmarts(str(value))
             elif return_type == "bytes":
                 return bytes(value) if isinstance(value, memoryview) else value
             else:  # smiles
