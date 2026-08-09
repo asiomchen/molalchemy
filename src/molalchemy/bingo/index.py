@@ -5,6 +5,8 @@ This module provides specialized SQLAlchemy Index classes for creating
 Bingo cartridge indices on chemical data columns in PostgreSQL databases.
 """
 
+from typing import Any
+
 from sqlalchemy.schema import Index
 
 
@@ -22,7 +24,7 @@ class _BingoIndexBase(Index):
 
     _bingo_op_class: str
 
-    def __init__(self, name, mol_column):
+    def __init__(self, name, mol_column, **kw: Any):
         operator_class_key = (
             mol_column
             if isinstance(mol_column, str)
@@ -36,12 +38,9 @@ class _BingoIndexBase(Index):
 
         self._bingo_name = name
         self._bingo_column = mol_column
-        super().__init__(
-            name,
-            mol_column,
-            postgresql_using="bingo_idx",
-            postgresql_ops={operator_class_key: self._bingo_op_class},
-        )
+        kw["postgresql_using"] = "bingo_idx"
+        kw["postgresql_ops"] = {operator_class_key: self._bingo_op_class}
+        super().__init__(name, mol_column, **kw)
 
     def __repr__(self):
         return (
@@ -63,6 +62,8 @@ class BingoMolIndex(_BingoIndexBase):
         Name of the index to be created.
     mol_column : sqlalchemy.schema.Column
         The column containing molecular data to be indexed.
+    **kw
+        Additional keyword arguments accepted by :class:`sqlalchemy.schema.Index`.
 
     Examples
     --------
@@ -110,6 +111,8 @@ class BingoBinaryMolIndex(_BingoIndexBase):
         Name of the index to be created.
     mol_column : sqlalchemy.schema.Column
         The column containing binary molecular data to be indexed.
+    **kw
+        Additional keyword arguments accepted by :class:`sqlalchemy.schema.Index`.
 
     Examples
     --------
@@ -158,6 +161,8 @@ class BingoRxnIndex(_BingoIndexBase):
         Name of the index to be created.
     mol_column : sqlalchemy.schema.Column
         The column containing reaction data to be indexed.
+    **kw
+        Additional keyword arguments accepted by :class:`sqlalchemy.schema.Index`.
 
     Examples
     --------
@@ -206,6 +211,8 @@ class BingoBinaryRxnIndex(_BingoIndexBase):
         Name of the index to be created.
     mol_column : sqlalchemy.schema.Column
         The column containing binary reaction data to be indexed.
+    **kw
+        Additional keyword arguments accepted by :class:`sqlalchemy.schema.Index`.
 
     Examples
     --------

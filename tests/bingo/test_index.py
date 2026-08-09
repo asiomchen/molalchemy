@@ -1,7 +1,7 @@
 """Tests for bingo indexes."""
 
 import pytest
-from sqlalchemy import Column, Index, Integer, MetaData, String, Table
+from sqlalchemy import Column, Index, Integer, MetaData, String, Table, text
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.schema import CreateIndex
 
@@ -330,3 +330,57 @@ def test_bingo_index_rejects_expression_without_key():
     """Invalid expressions fail early instead of producing malformed DDL."""
     with pytest.raises(TypeError, match="non-empty string key"):
         BingoMolIndex("ix_invalid", object())
+
+
+@pytest.mark.parametrize(
+    ("index_type", "column_type", "operator_class"), INDEX_VARIANTS
+)
+def test_bingo_index_accepts_standard_sqlalchemy_options(
+    index_type, column_type, operator_class
+):
+    """Standard SQLAlchemy and PostgreSQL index options are forwarded."""
+    metadata = MetaData()
+    table = Table("items", metadata, Column("structure", column_type()))
+    info = {"purpose": "chemical search"}
+    index = index_type(
+        "ix_items_structure",
+        table.c.structure,
+        unique=True,
+        info=info,
+        postgresql_where=text("structure IS NOT NULL"),
+        postgresql_with={"fillfactor": 70},
+        postgresql_tablespace="fastspace",
+        postgresql_concurrently=True,
+    )
+
+    compiled = str(CreateIndex(index).compile(dialect=postgresql.dialect()))
+
+    assert compiled == (
+        "CREATE UNIQUE INDEX CONCURRENTLY ix_items_structure ON items "
+        f"USING bingo_idx (structure {operator_class}) WITH (fillfactor = 70) "
+        "TABLESPACE fastspace WHERE structure IS NOT NULL"
+    )
+    assert index.unique is True
+    assert index.info == info
+
+
+@pytest.mark.parametrize(
+    ("index_type", "column_type", "operator_class"), INDEX_VARIANTS
+)
+def test_bingo_index_settings_override_conflicting_options(
+    index_type, column_type, operator_class
+):
+    """The Bingo access method and operator class cannot be overridden."""
+    metadata = MetaData()
+    table = Table("items", metadata, Column("structure", column_type()))
+
+    index = index_type(
+        "ix_items_structure",
+        table.c.structure,
+        postgresql_using="gist",
+        postgresql_ops={"structure": "custom_operator_class"},
+    )
+
+    options = index.dialect_options["postgresql"]
+    assert options["using"] == "bingo_idx"
+    assert options["ops"] == {"structure": operator_class}
