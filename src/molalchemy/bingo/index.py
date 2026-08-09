@@ -20,7 +20,7 @@ from sqlalchemy.schema import Index
 #         compiler.process(expr, include_table=False)
 #     )
 class _BingoIndexBase(Index):
-    """Base class for Bingo index types with common __repr__ logic."""
+    """Base class for Bingo index types."""
 
     _bingo_op_class: str
 
@@ -36,16 +36,9 @@ class _BingoIndexBase(Index):
                 "with a non-empty string key"
             )
 
-        self._bingo_name = name
-        self._bingo_column = mol_column
         kw["postgresql_using"] = "bingo_idx"
         kw["postgresql_ops"] = {operator_class_key: self._bingo_op_class}
         super().__init__(name, mol_column, **kw)
-
-    def __repr__(self):
-        return (
-            f"{self.__class__.__name__}({self._bingo_name!r}, {self._bingo_column!r})"
-        )
 
 
 class BingoMolIndex(_BingoIndexBase):

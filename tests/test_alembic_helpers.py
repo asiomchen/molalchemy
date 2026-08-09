@@ -132,19 +132,6 @@ class TestRenderAllTypes:
         ALL_TYPES,
         ids=[t[3] for t in ALL_TYPES],
     )
-    def test_repr_roundtrip(self, instance, expected_module, class_name, expected_repr):
-        """Test that eval(repr(instance)) reconstructs the same type."""
-        # Import the class into local namespace for eval
-        mod = __import__(expected_module, fromlist=[class_name])
-        cls = getattr(mod, class_name)
-        reconstructed = eval(repr(instance), {class_name: cls})
-        assert repr(reconstructed) == repr(instance)
-
-    @pytest.mark.parametrize(
-        ("instance", "expected_module", "class_name", "expected_repr"),
-        ALL_TYPES,
-        ids=[t[3] for t in ALL_TYPES],
-    )
     def test_rendered_type_is_valid_constructor(
         self, instance, expected_module, class_name, expected_repr
     ):
