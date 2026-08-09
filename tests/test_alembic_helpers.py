@@ -3,6 +3,11 @@
 from unittest.mock import Mock, patch
 
 import pytest
+from alembic.autogenerate.api import AutogenContext
+from alembic.autogenerate.render import render_op_text
+from alembic.migration import MigrationContext
+from alembic.operations.ops import CreateIndexOp
+from sqlalchemy import Column, MetaData, Table
 
 from molalchemy.alembic_helpers import (
     add_rdkit_extension,
@@ -282,3 +287,24 @@ class TestRenderAllIndexes:
         """Test RdkitIndex repr with multiple expressions."""
         idx = RdkitIndex("idx_multi", "col1", "col2")
         assert repr(idx) == "RdkitIndex('idx_multi', 'col1', 'col2')"
+
+    def test_bingo_column_index_renders_valid_alembic_operation(self):
+        """Column-object operator mappings remain valid in generated migrations."""
+        metadata = MetaData()
+        table = Table("items", metadata, Column("structure", BingoMol()))
+        index = BingoMolIndex("ix_items_structure", table.c.structure)
+        migration_context = MigrationContext.configure(
+            dialect_name="postgresql",
+            opts={
+                "alembic_module_prefix": "op.",
+                "sqlalchemy_module_prefix": "sa.",
+                "user_module_prefix": None,
+            },
+        )
+
+        rendered = render_op_text(
+            AutogenContext(migration_context), CreateIndexOp.from_index(index)
+        )
+
+        assert "postgresql_ops={'structure': 'bingo.molecule'}" in rendered
+        compile(rendered, "<generated migration>", "exec")

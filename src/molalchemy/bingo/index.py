@@ -23,13 +23,24 @@ class _BingoIndexBase(Index):
     _bingo_op_class: str
 
     def __init__(self, name, mol_column):
+        operator_class_key = (
+            mol_column
+            if isinstance(mol_column, str)
+            else getattr(mol_column, "key", None)
+        )
+        if not isinstance(operator_class_key, str) or not operator_class_key:
+            raise TypeError(
+                "mol_column must be a column name or a SQLAlchemy expression "
+                "with a non-empty string key"
+            )
+
         self._bingo_name = name
         self._bingo_column = mol_column
         super().__init__(
             name,
             mol_column,
             postgresql_using="bingo_idx",
-            postgresql_ops={mol_column: self._bingo_op_class},
+            postgresql_ops={operator_class_key: self._bingo_op_class},
         )
 
     def __repr__(self):

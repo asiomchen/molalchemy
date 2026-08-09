@@ -1,9 +1,22 @@
 """Tests for bingo indexes."""
 
+import pytest
 from sqlalchemy import Column, Index, Integer, MetaData, String, Table
+from sqlalchemy.dialects import postgresql
+from sqlalchemy.schema import CreateIndex
 
-from molalchemy.bingo.index import BingoBinaryMolIndex, BingoMolIndex
-from molalchemy.bingo.types import BingoBinaryMol, BingoMol
+from molalchemy.bingo.index import (
+    BingoBinaryMolIndex,
+    BingoBinaryRxnIndex,
+    BingoMolIndex,
+    BingoRxnIndex,
+)
+from molalchemy.bingo.types import (
+    BingoBinaryMol,
+    BingoBinaryReaction,
+    BingoMol,
+    BingoReaction,
+)
 
 
 class TestBingoMolIndex:
@@ -44,7 +57,7 @@ class TestBingoMolIndex:
 
         postgresql_options = index.dialect_options.get("postgresql", {})
         ops = postgresql_options.get("ops", {})
-        assert ops.get(self.mol_column) == "bingo.molecule"
+        assert ops.get(self.mol_column.key) == "bingo.molecule"
 
     def test_bingo_mol_index_inheritance(self):
         """Test BingoMolIndex inherits from SQLAlchemy Index."""
@@ -119,7 +132,7 @@ class TestBingoBinaryMolIndex:
 
         postgresql_options = index.dialect_options.get("postgresql", {})
         ops = postgresql_options.get("ops", {})
-        assert ops.get(self.mol_column) == "bingo.bmolecule"
+        assert ops.get(self.mol_column.key) == "bingo.bmolecule"
 
     def test_bingo_binary_mol_index_inheritance(self):
         """Test BingoBinaryMolIndex inherits from SQLAlchemy Index."""
@@ -173,8 +186,8 @@ class TestBingoIndexes:
         mol_ops = mol_index.dialect_options["postgresql"]["ops"]
         binary_ops = binary_index.dialect_options["postgresql"]["ops"]
 
-        mol_op_class = mol_ops[self.mol_table.c.structure]
-        binary_op_class = binary_ops[self.binary_mol_table.c.structure]
+        mol_op_class = mol_ops[self.mol_table.c.structure.key]
+        binary_op_class = binary_ops[self.binary_mol_table.c.structure.key]
 
         assert mol_op_class == "bingo.molecule"
         assert binary_op_class == "bingo.bmolecule"
@@ -260,3 +273,60 @@ class TestBingoIndexCreation:
         assert index1.name == "my_custom_index"
         assert index2.name == "another_index_name"
         assert index1.name != index2.name
+
+
+INDEX_VARIANTS = [
+    (BingoMolIndex, BingoMol, "bingo.molecule"),
+    (BingoBinaryMolIndex, BingoBinaryMol, "bingo.bmolecule"),
+    (BingoRxnIndex, BingoReaction, "bingo.reaction"),
+    (BingoBinaryRxnIndex, BingoBinaryReaction, "bingo.breaction"),
+]
+
+
+@pytest.mark.parametrize(
+    ("index_type", "column_type", "operator_class"), INDEX_VARIANTS
+)
+@pytest.mark.parametrize("use_column_object", [False, True], ids=["string", "column"])
+def test_bingo_index_compiles_with_operator_class(
+    index_type, column_type, operator_class, use_column_object
+):
+    """Every supported input form must compile the required operator class."""
+    metadata = MetaData()
+    table = Table("items", metadata, Column("structure", column_type()))
+    expression = table.c.structure if use_column_object else "structure"
+    index = index_type("ix_items_structure", expression)
+    if not use_column_object:
+        table.append_constraint(index)
+
+    compiled = str(CreateIndex(index).compile(dialect=postgresql.dialect()))
+
+    assert compiled == (
+        "CREATE INDEX ix_items_structure ON items "
+        f"USING bingo_idx (structure {operator_class})"
+    )
+    assert index.dialect_options["postgresql"]["ops"] == {"structure": operator_class}
+
+
+def test_bingo_index_uses_column_key_for_operator_class_lookup():
+    """Operator lookup uses the SQLAlchemy key while DDL uses the database name."""
+    metadata = MetaData()
+    table = Table(
+        "items",
+        metadata,
+        Column("structure value", BingoMol(), key="structure"),
+    )
+
+    index = BingoMolIndex("ix_items_structure", table.c.structure)
+
+    compiled = str(CreateIndex(index).compile(dialect=postgresql.dialect()))
+    assert compiled == (
+        "CREATE INDEX ix_items_structure ON items USING bingo_idx "
+        '("structure value" bingo.molecule)'
+    )
+    assert index.dialect_options["postgresql"]["ops"] == {"structure": "bingo.molecule"}
+
+
+def test_bingo_index_rejects_expression_without_key():
+    """Invalid expressions fail early instead of producing malformed DDL."""
+    with pytest.raises(TypeError, match="non-empty string key"):
+        BingoMolIndex("ix_invalid", object())
