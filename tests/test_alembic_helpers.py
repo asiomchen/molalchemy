@@ -3,11 +3,10 @@
 from unittest.mock import Mock, patch
 
 import pytest
-from alembic.autogenerate.api import AutogenContext
-from alembic.autogenerate.render import render_op_text
+from alembic.autogenerate.api import render_python_code
 from alembic.migration import MigrationContext
-from alembic.operations.ops import CreateIndexOp
-from sqlalchemy import Column, MetaData, Table
+from alembic.operations.ops import CreateIndexOp, UpgradeOps
+from sqlalchemy import Column, MetaData, Table, text
 
 from molalchemy.alembic_helpers import (
     add_rdkit_extension,
@@ -166,6 +165,7 @@ class TestRenderNonTypes:
         autogen_context.imports = set()
 
         assert render_item("column", Mock(), autogen_context) is False
+        assert render_item("index", Mock(), autogen_context) is False
         assert render_item("table", Mock(), autogen_context) is False
         assert len(autogen_context.imports) == 0
 
@@ -206,105 +206,116 @@ class TestExtensionFunctions:
         mock_op.execute.assert_called_once_with("DROP EXTENSION IF EXISTS rdkit;")
 
 
-# All index variants with expected module, class name, and constructor repr
+# Index variants with the PostgreSQL options Alembic must preserve.
 ALL_INDEXES = [
     (
-        RdkitIndex("idx_mol", "structure"),
-        "molalchemy.rdkit.index",
-        "RdkitIndex",
-        "RdkitIndex('idx_mol', 'structure')",
+        RdkitIndex,
+        RdkitMol,
+        ("postgresql_using='gist'",),
     ),
     (
-        BingoMolIndex("idx_mol", "structure"),
-        "molalchemy.bingo.index",
-        "BingoMolIndex",
-        "BingoMolIndex('idx_mol', 'structure')",
+        BingoMolIndex,
+        BingoMol,
+        (
+            "postgresql_using='bingo_idx'",
+            "postgresql_ops={'structure': 'bingo.molecule'}",
+        ),
     ),
     (
-        BingoBinaryMolIndex("idx_bmol", "structure_bin"),
-        "molalchemy.bingo.index",
-        "BingoBinaryMolIndex",
-        "BingoBinaryMolIndex('idx_bmol', 'structure_bin')",
+        BingoBinaryMolIndex,
+        BingoBinaryMol,
+        (
+            "postgresql_using='bingo_idx'",
+            "postgresql_ops={'structure': 'bingo.bmolecule'}",
+        ),
     ),
     (
-        BingoRxnIndex("idx_rxn", "reaction"),
-        "molalchemy.bingo.index",
-        "BingoRxnIndex",
-        "BingoRxnIndex('idx_rxn', 'reaction')",
+        BingoRxnIndex,
+        BingoReaction,
+        (
+            "postgresql_using='bingo_idx'",
+            "postgresql_ops={'structure': 'bingo.reaction'}",
+        ),
     ),
     (
-        BingoBinaryRxnIndex("idx_brxn", "reaction_bin"),
-        "molalchemy.bingo.index",
-        "BingoBinaryRxnIndex",
-        "BingoBinaryRxnIndex('idx_brxn', 'reaction_bin')",
+        BingoBinaryRxnIndex,
+        BingoBinaryReaction,
+        (
+            "postgresql_using='bingo_idx'",
+            "postgresql_ops={'structure': 'bingo.breaction'}",
+        ),
     ),
 ]
 
 
+def render_index_operation(index, render_item_callback=render_item):
+    """Render an Alembic index operation with the offline PostgreSQL dialect."""
+    migration_context = MigrationContext.configure(dialect_name="postgresql")
+    upgrade_ops = UpgradeOps(ops=[CreateIndexOp.from_index(index)])
+    return render_python_code(
+        upgrade_ops,
+        render_item=render_item_callback,
+        migration_context=migration_context,
+    )
+
+
 class TestRenderAllIndexes:
-    """Test render_item for all index variants."""
+    """Test Alembic's actual index operation renderer."""
 
     @pytest.mark.parametrize(
-        ("instance", "expected_module", "class_name", "expected_repr"),
+        ("index_type", "column_type", "expected_options"),
         ALL_INDEXES,
-        ids=[t[3] for t in ALL_INDEXES],
+        ids=[index_type.__name__ for index_type, _, _ in ALL_INDEXES],
     )
-    def test_render_all_indexes(
-        self, instance, expected_module, class_name, expected_repr
+    def test_alembic_renders_generic_index_operation(
+        self, index_type, column_type, expected_options
     ):
-        """Test that render_item produces correct import and repr for every index."""
-        autogen_context = Mock()
-        autogen_context.imports = set()
+        """Alembic preserves cartridge options in generic index operations."""
+        metadata = MetaData()
+        table = Table("items", metadata, Column("structure", column_type()))
+        index = index_type("ix_items_structure", table.c.structure)
 
-        result = render_item("index", instance, autogen_context)
+        rendered = render_index_operation(index)
 
-        expected_import = f"from {expected_module} import {class_name}"
-        assert expected_import in autogen_context.imports
-        assert result == expected_repr
+        assert (
+            "op.create_index('ix_items_structure', 'items', ['structure'], "
+            "unique=False"
+        ) in rendered
+        for expected_option in expected_options:
+            assert expected_option in rendered
+        assert "molalchemy.bingo.index" not in rendered
+        assert "molalchemy.rdkit.index" not in rendered
+        compile(f"def upgrade():\n{rendered}", "<generated migration>", "exec")
 
-    @pytest.mark.parametrize(
-        ("instance", "expected_module", "class_name", "expected_repr"),
-        ALL_INDEXES,
-        ids=[t[3] for t in ALL_INDEXES],
-    )
-    def test_repr_roundtrip(self, instance, expected_module, class_name, expected_repr):
-        """Test that repr produces a valid constructor call string."""
-        assert repr(instance) == expected_repr
-
-    def test_render_unknown_index_returns_false(self):
-        """Test that an unknown index type returns False."""
-        from sqlalchemy import Index
-
-        autogen_context = Mock()
-        autogen_context.imports = set()
-
-        result = render_item("index", Index("idx_plain", "col"), autogen_context)
-
-        assert result is False
-        assert len(autogen_context.imports) == 0
-
-    def test_rdkit_index_multiple_expressions(self):
-        """Test RdkitIndex repr with multiple expressions."""
-        idx = RdkitIndex("idx_multi", "col1", "col2")
-        assert repr(idx) == "RdkitIndex('idx_multi', 'col1', 'col2')"
-
-    def test_bingo_column_index_renders_valid_alembic_operation(self):
-        """Column-object operator mappings remain valid in generated migrations."""
+    def test_alembic_does_not_call_custom_renderer_for_indexes(self):
+        """Alembic index operations bypass the custom render_item hook."""
         metadata = MetaData()
         table = Table("items", metadata, Column("structure", BingoMol()))
         index = BingoMolIndex("ix_items_structure", table.c.structure)
-        migration_context = MigrationContext.configure(
-            dialect_name="postgresql",
-            opts={
-                "alembic_module_prefix": "op.",
-                "sqlalchemy_module_prefix": "sa.",
-                "user_module_prefix": None,
-            },
+        render_item_callback = Mock(return_value=False)
+
+        render_index_operation(index, render_item_callback)
+
+        render_item_callback.assert_not_called()
+
+    def test_alembic_preserves_standard_index_options(self):
+        """Index options survive conversion to an Alembic operation."""
+        metadata = MetaData()
+        table = Table("items", metadata, Column("structure", BingoMol()))
+        index = BingoMolIndex(
+            "ix_items_structure",
+            table.c.structure,
+            unique=True,
+            postgresql_where=text("structure IS NOT NULL"),
+            postgresql_with={"fillfactor": 70},
+            postgresql_tablespace="fastspace",
+            postgresql_concurrently=True,
         )
 
-        rendered = render_op_text(
-            AutogenContext(migration_context), CreateIndexOp.from_index(index)
-        )
+        rendered = render_index_operation(index)
 
-        assert "postgresql_ops={'structure': 'bingo.molecule'}" in rendered
-        compile(rendered, "<generated migration>", "exec")
+        assert "unique=True" in rendered
+        assert "postgresql_where=sa.text('structure IS NOT NULL')" in rendered
+        assert "postgresql_with={'fillfactor': 70}" in rendered
+        assert "postgresql_tablespace='fastspace'" in rendered
+        assert "postgresql_concurrently=True" in rendered
