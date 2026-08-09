@@ -48,7 +48,7 @@ jobs:
         run: |
           uv build --wheel --out-dir dist-typing
           uv venv /tmp/molalchemy-typing-venv --python 3.10
-          uv pip install --python /tmp/molalchemy-typing-venv dist-typing/*.whl ty
+          uv pip install --python /tmp/molalchemy-typing-venv dist-typing/*.whl ty rdkit-stubs
           mkdir -p /tmp/molalchemy-typing-consumer
           cp tests/typing/consumer.py /tmp/molalchemy-typing-consumer/consumer.py
 
