@@ -1,5 +1,7 @@
 """Tests for RDKit functions."""
 
+from typing import get_type_hints
+
 import pytest
 from sqlalchemy import (
     Column,
@@ -13,6 +15,11 @@ from sqlalchemy import (
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
+from molalchemy.protocols import (
+    RdkitFingerprintSqlOperand,
+    RdkitMolSqlOperand,
+    RdkitReactionSqlOperand,
+)
 from molalchemy.rdkit import functions as rdkit_func
 from molalchemy.rdkit.types import RdkitMol, RdkitQMol, RdkitReaction
 
@@ -35,6 +42,19 @@ class Reaction(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     reaction: Mapped[str] = mapped_column(RdkitReaction())
     query_reaction: Mapped[str] = mapped_column(RdkitReaction())
+
+
+def test_manual_helpers_expose_domain_specific_column_operands():
+    """Hand-written helpers must not regress to untyped SQL operands."""
+    assert get_type_hints(rdkit_func.mol_has_substructure)["mol_column"] == (
+        RdkitMolSqlOperand
+    )
+    assert get_type_hints(rdkit_func.rxn_has_substructure)["rxn_column"] == (
+        RdkitReactionSqlOperand
+    )
+    assert get_type_hints(rdkit_func.fp_similarity_score)["fp_column"] == (
+        RdkitFingerprintSqlOperand
+    )
 
 
 @pytest.mark.parametrize(

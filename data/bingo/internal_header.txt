@@ -3,6 +3,7 @@ This file defines internal Bingo PostgreSQL function wrappers for use with SQLAl
 """
 
 from molalchemy.types import CString
+from molalchemy.protocols import BinaryOperand, BooleanOperand, FloatOperand, IntegerOperand, SqlOperand, TextOperand, TextOrBinaryOperand
 from molalchemy.bingo.types import BingoBinaryMol, BingoBinaryReaction, BingoMol, BingoReaction
 from sqlalchemy import types as sqltypes
 from sqlalchemy.sql import cast, text

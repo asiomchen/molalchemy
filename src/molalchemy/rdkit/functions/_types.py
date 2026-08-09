@@ -4,28 +4,33 @@ from typing import Any, TypeAlias, TypeVar
 
 from rdkit import Chem
 from rdkit.Chem.rdChemReactions import ChemicalReaction
-from sqlalchemy.orm import InstrumentedAttribute
-from sqlalchemy.sql.elements import ColumnElement
+
+from molalchemy.protocols import (
+    RdkitFingerprintSqlOperand,
+    RdkitMolSqlOperand,
+    RdkitReactionSqlOperand,
+    SqlOperand,
+)
 
 T = TypeVar("T")
-SQLAlchemyCoercible: TypeAlias = ColumnElement[T] | InstrumentedAttribute[T]
-SqlExpression: TypeAlias = ColumnElement[Any] | InstrumentedAttribute[Any]
+SQLAlchemyCoercible: TypeAlias = SqlOperand[T]
+SqlExpression: TypeAlias = SqlOperand[Any]
 LiteralStrBytes: TypeAlias = str | bytes
 TextLike: TypeAlias = str | bytes | SqlExpression
 
 RdkitMolCoercible: TypeAlias = str | Chem.Mol
-AnyRdkitMolLike: TypeAlias = RdkitMolCoercible | SqlExpression
+AnyRdkitMolLike: TypeAlias = RdkitMolCoercible | RdkitMolSqlOperand
 RdkitQMolCoercible: TypeAlias = str
-AnyRdkitQMolLike: TypeAlias = str | SqlExpression
+AnyRdkitQMolLike: TypeAlias = str | SqlOperand[str]
 RdkitXQMolCoercible: TypeAlias = str
-AnyRdkitXQMolLike: TypeAlias = str | SqlExpression
+AnyRdkitXQMolLike: TypeAlias = str | SqlOperand[str]
 RdkitBitFingerprintCoercible: TypeAlias = bytes
-AnyRdkitBitFingerprintLike: TypeAlias = bytes | SqlExpression
+AnyRdkitBitFingerprintLike: TypeAlias = bytes | RdkitFingerprintSqlOperand
 RdkitSparseFingerprintCoercible: TypeAlias = bytes
-AnyRdkitSparseFingerprintLike: TypeAlias = bytes | SqlExpression
+AnyRdkitSparseFingerprintLike: TypeAlias = bytes | RdkitFingerprintSqlOperand
 RdkitReactionCoercible: TypeAlias = str | ChemicalReaction
-AnyRdkitReactionLike: TypeAlias = RdkitReactionCoercible | SqlExpression
-AnyRdkitFingerprintLike: TypeAlias = bytes | SqlExpression
+AnyRdkitReactionLike: TypeAlias = RdkitReactionCoercible | RdkitReactionSqlOperand
+AnyRdkitFingerprintLike: TypeAlias = bytes | RdkitFingerprintSqlOperand
 
 __all__ = [
     "AnyRdkitBitFingerprintLike",

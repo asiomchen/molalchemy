@@ -4,7 +4,7 @@ This module provides SQLAlchemy UserDefinedType classes for working with
 chemical molecules and reactions in PostgreSQL using the Bingo cartridge.
 """
 
-from typing import Any, Literal
+from typing import Any, Generic, Literal, TypeVar, overload
 
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
@@ -12,6 +12,7 @@ from sqlalchemy.types import UserDefinedType
 from molalchemy.bingo.comparators import BingoMolComparator, BingoRxnComparator
 
 _BINGO_BINARY_MOL_RETURN_TYPES = ("smiles", "molfile", "cml", "bytes")
+_T = TypeVar("_T")
 
 
 def _validate_return_type(value: object) -> None:
@@ -27,7 +28,7 @@ def _validate_preserve_pos(value: object) -> None:
         raise TypeError(f"preserve_pos must be a bool, got {type(value).__name__}")
 
 
-class BingoBaseType(UserDefinedType):
+class BingoBaseType(UserDefinedType[_T], Generic[_T]):
     """Base class for Bingo types."""
 
     _immutable_options: frozenset[str] = frozenset()
@@ -40,7 +41,7 @@ class BingoBaseType(UserDefinedType):
         super().__setattr__(name, value)
 
 
-class BingoMol(BingoBaseType):
+class BingoMol(BingoBaseType[str]):
     """SQLAlchemy type for molecule data stored as text (varchar).
 
     This type represents molecules stored as text in PostgreSQL, typically
@@ -96,7 +97,7 @@ class BingoMol(BingoBaseType):
         return "varchar"
 
 
-class BingoBinaryMol(BingoBaseType):
+class BingoBinaryMol(BingoBaseType[_T], Generic[_T]):
     """SQLAlchemy type for binary molecule data with format conversion.
 
     This type represents molecules stored in Bingo's internal binary format
@@ -148,7 +149,7 @@ class BingoBinaryMol(BingoBaseType):
     ...     __tablename__ = 'molecules'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     structure: Mapped[bytes] = mapped_column(
+    ...     structure: Mapped[str] = mapped_column(
     ...         BingoBinaryMol(preserve_pos=True, return_type="smiles")
     ...     )
     ...     name: Mapped[str] = mapped_column(String(100))
@@ -158,7 +159,7 @@ class BingoBinaryMol(BingoBaseType):
     ...     __tablename__ = 'molecules_molfile'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     structure: Mapped[bytes] = mapped_column(
+    ...     structure: Mapped[str] = mapped_column(
     ...         BingoBinaryMol(preserve_pos=True, return_type="molfile")
     ...     )
     >>>
@@ -173,11 +174,25 @@ class BingoBinaryMol(BingoBaseType):
     comparator_factory = BingoMolComparator
     _immutable_options = frozenset(("preserve_pos", "return_type"))
 
+    @overload
+    def __init__(
+        self: "BingoBinaryMol[str]",
+        preserve_pos: bool = False,
+        return_type: Literal["smiles", "molfile", "cml"] = "smiles",
+    ) -> None: ...
+
+    @overload
+    def __init__(
+        self: "BingoBinaryMol[bytes]",
+        preserve_pos: bool = False,
+        return_type: Literal["bytes"] = "bytes",
+    ) -> None: ...
+
     def __init__(
         self,
         preserve_pos: bool = False,
         return_type: Literal["smiles", "molfile", "cml", "bytes"] = "smiles",
-    ):
+    ) -> None:
         _validate_preserve_pos(preserve_pos)
         _validate_return_type(return_type)
         self.preserve_pos = preserve_pos
@@ -205,7 +220,7 @@ class BingoBinaryMol(BingoBaseType):
         raise AssertionError("validated return_type was not handled")
 
 
-class BingoReaction(BingoBaseType):
+class BingoReaction(BingoBaseType[str]):
     """SQLAlchemy type for chemical reaction data stored as text (varchar).
 
     This type represents chemical reactions stored as text in PostgreSQL,
@@ -259,7 +274,7 @@ class BingoReaction(BingoBaseType):
         return "varchar"
 
 
-class BingoBinaryReaction(BingoBaseType):
+class BingoBinaryReaction(BingoBaseType[bytes]):
     """SQLAlchemy type for binary chemical reaction data.
 
     This type represents chemical reactions stored in Bingo's internal binary

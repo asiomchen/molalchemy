@@ -5,7 +5,7 @@ chemical data stored in PostgreSQL using the RDKit cartridge.
 """
 
 import functools
-from typing import Any, Literal
+from typing import Any, Generic, Literal, TypeVar, overload
 
 from rdkit import Chem
 from rdkit.Chem import AllChem, rdChemReactions
@@ -20,6 +20,7 @@ from molalchemy.rdkit.comparators import (
 )
 
 _RDKIT_RETURN_TYPES = ("smiles", "bytes", "mol")
+_T = TypeVar("_T")
 
 
 def _validate_return_type(value: object) -> None:
@@ -30,7 +31,7 @@ def _validate_return_type(value: object) -> None:
         raise ValueError(f"return_type must be one of {choices}, got {value!r}")
 
 
-class RdkitBaseType(UserDefinedType):
+class RdkitBaseType(UserDefinedType[_T], Generic[_T]):
     """Base class for RDKit types."""
 
     _immutable_options: frozenset[str] = frozenset()
@@ -43,7 +44,7 @@ class RdkitBaseType(UserDefinedType):
         super().__setattr__(name, value)
 
 
-class RdkitMol(RdkitBaseType):
+class RdkitMol(RdkitBaseType[_T], Generic[_T]):
     """SQLAlchemy type for RDKit molecule data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `mol` type provided by the RDKit cartridge.
@@ -78,7 +79,20 @@ class RdkitMol(RdkitBaseType):
 
     comparator_factory = RdkitMolComparator
 
-    def __init__(self, return_type: Literal["smiles", "bytes", "mol"] = "smiles"):
+    @overload
+    def __init__(
+        self: "RdkitMol[str]", return_type: Literal["smiles"] = "smiles"
+    ) -> None: ...
+
+    @overload
+    def __init__(self: "RdkitMol[bytes]", return_type: Literal["bytes"]) -> None: ...
+
+    @overload
+    def __init__(self: "RdkitMol[Chem.Mol]", return_type: Literal["mol"]) -> None: ...
+
+    def __init__(
+        self, return_type: Literal["smiles", "bytes", "mol"] = "smiles"
+    ) -> None:
         _validate_return_type(return_type)
         super().__init__()
         self.return_type = return_type
@@ -136,7 +150,7 @@ class RdkitMol(RdkitBaseType):
         return functools.partial(process, return_type=self.return_type)
 
 
-class RdkitBitFingerprint(RdkitBaseType):
+class RdkitBitFingerprint(RdkitBaseType[bytes]):
     """SQLAlchemy type for RDKit bit fingerprint data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `bfp` type provided by the RDKit cartridge,
@@ -154,7 +168,7 @@ class RdkitBitFingerprint(RdkitBaseType):
         return "bfp"
 
 
-class RdkitSparseFingerprint(RdkitBaseType):
+class RdkitSparseFingerprint(RdkitBaseType[bytes]):
     """SQLAlchemy type for RDKit sparse fingerprint data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `sfp` type provided by the RDKit cartridge,
@@ -172,7 +186,7 @@ class RdkitSparseFingerprint(RdkitBaseType):
         return "sfp"
 
 
-class RdkitReaction(RdkitBaseType):
+class RdkitReaction(RdkitBaseType[_T], Generic[_T]):
     """SQLAlchemy type for RDKit chemical reaction data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `reaction` type provided by the RDKit cartridge.
@@ -207,7 +221,25 @@ class RdkitReaction(RdkitBaseType):
 
     comparator_factory = RdkitReactionComparator
 
-    def __init__(self, return_type: Literal["smiles", "bytes", "mol"] = "smiles"):
+    @overload
+    def __init__(
+        self: "RdkitReaction[str]", return_type: Literal["smiles"] = "smiles"
+    ) -> None: ...
+
+    @overload
+    def __init__(
+        self: "RdkitReaction[bytes]", return_type: Literal["bytes"]
+    ) -> None: ...
+
+    @overload
+    def __init__(
+        self: "RdkitReaction[rdChemReactions.ChemicalReaction]",
+        return_type: Literal["mol"],
+    ) -> None: ...
+
+    def __init__(
+        self, return_type: Literal["smiles", "bytes", "mol"] = "smiles"
+    ) -> None:
         """Initialize the RdkitReaction type.
 
         Parameters
@@ -275,7 +307,7 @@ class RdkitReaction(RdkitBaseType):
         return functools.partial(process, return_type=self.return_type)
 
 
-class RdkitQMol(RdkitBaseType):
+class RdkitQMol(RdkitBaseType[str]):
     cache_ok = True
 
     def __repr__(self):
@@ -285,7 +317,7 @@ class RdkitQMol(RdkitBaseType):
         return "qmol"
 
 
-class RdkitXQMol(RdkitBaseType):
+class RdkitXQMol(RdkitBaseType[str]):
     cache_ok = True
 
     def __repr__(self):

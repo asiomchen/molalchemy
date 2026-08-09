@@ -243,6 +243,8 @@ Use the matching helper for the cartridge and data kind:
 ### Configurable Return Types
 
 ```python
+from rdkit import Chem
+
 from molalchemy.rdkit.types import RdkitMol
 
 class MoleculeWithFormats(Base):
@@ -252,10 +254,27 @@ class MoleculeWithFormats(Base):
     # Return as SMILES string (default)
     structure_smiles: Mapped[str] = mapped_column(RdkitMol())
     # Return as RDKit Mol object
-    structure_mol: Mapped[bytes] = mapped_column(RdkitMol(return_type="mol"))
+    structure_mol: Mapped[Chem.Mol] = mapped_column(RdkitMol(return_type="mol"))
     # Return as raw bytes
     structure_bytes: Mapped[bytes] = mapped_column(RdkitMol(return_type="bytes"))
 ```
+
+The SQL type describes how PostgreSQL stores the value; `Mapped[...]` describes
+the Python value returned to the model. SQLAlchemy 2.0 does not infer
+`mapped_column()` attributes from the supplied type, so ORM models should always
+spell out `Mapped[T]`. Core `Column(...)` and generated SQL expressions infer
+the result directly from MolAlchemy's types.
+
+| Type configuration | Python result |
+| --- | --- |
+| `RdkitMol()` / `return_type="smiles"` | `str` |
+| `RdkitMol(return_type="bytes")` | `bytes` |
+| `RdkitMol(return_type="mol")` | `Chem.Mol` |
+| `RdkitReaction()` / `return_type="smiles"` | `str` |
+| `RdkitReaction(return_type="bytes")` | `bytes` |
+| `RdkitReaction(return_type="mol")` | `ChemicalReaction` |
+| `BingoBinaryMol(return_type="smiles" | "molfile" | "cml")` | `str` |
+| `BingoBinaryMol(return_type="bytes")` | `bytes` |
 
 ### RDKit Cartridge Settings
 

@@ -1,5 +1,5 @@
 def mol_has_substructure(
-    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
+    mol: BingoMolSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """
     Perform substructure search on a molecule column.
@@ -24,14 +24,14 @@ def mol_has_substructure(
 
 
 def mol_has_smarts(
-    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
+    mol: BingoMolSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """
     Perform SMARTS pattern matching on a molecule column.
 
     Parameters
     ----------
-    mol : ColumnElement[AnyBingoMol]
+    mol : BingoMolSqlOperand
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
     query : TextLike
         SMARTS pattern string for matching.
@@ -48,14 +48,14 @@ def mol_has_smarts(
 
 
 def mol_equals(
-    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
+    mol: BingoMolSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """
     Perform exact structure matching on a molecule column.
 
     Parameters
     ----------
-    mol : ColumnElement[AnyBingoMol]
+    mol : BingoMolSqlOperand
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
     query : TextLike
         Query molecule as SMILES or Molfile string for exact matching.
@@ -73,14 +73,14 @@ def mol_equals(
 
 
 def mol_not_equals(
-    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
+    mol: BingoMolSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """Perform negated exact structure matching on a molecule column."""
     return ~mol_equals(mol, query, parameters)
 
 
 def mol_similar_to(
-    mol: SqlOperand,
+    mol: BingoMolSqlOperand,
     query: BingoOperand,
     minimum: BingoSimilarityBound = 0.0,
     maximum: BingoSimilarityBound = 1.0,
@@ -113,7 +113,7 @@ def mol_similar_to(
 
 
 def mol_similarity(
-    mol: SqlOperand,
+    mol: BingoMolSqlOperand,
     query: BingoOperand,
     bottom: BingoSimilarityBound = 0.0,
     top: BingoSimilarityBound = 1.0,
@@ -128,7 +128,7 @@ def mol_similarity(
 
 
 def mol_similarity_score(
-    mol: SqlOperand,
+    mol: BingoMolSqlOperand,
     query: BingoOperand,
     metric: BingoParameters = "Tanimoto",
 ) -> ColumnElement[float]:
@@ -137,14 +137,14 @@ def mol_similarity_score(
 
 
 def rxn_has_substructure(
-    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+    rxn: BingoReactionSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """
     Perform substructure search on a reaction column.
 
     Parameters
     ----------
-    rxn : ColumnElement[AnyBingoReaction]
+    rxn : BingoReactionSqlOperand
         SQLAlchemy column containing reaction data (reaction SMILES, RXN, or binary).
     query : TextLike
         Query reaction as reaction SMILES, SMARTS, or RXN string.
@@ -161,14 +161,14 @@ def rxn_has_substructure(
 
 
 def rxn_has_smarts(
-    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+    rxn: BingoReactionSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """
     Perform SMARTS pattern matching on a reaction column.
 
     Parameters
     ----------
-    rxn : ColumnElement[AnyBingoReaction]
+    rxn : BingoReactionSqlOperand
         SQLAlchemy column containing reaction data (reaction SMILES, RXN, or binary).
     query : TextLike
         Reaction SMARTS pattern string for matching.
@@ -185,14 +185,14 @@ def rxn_has_smarts(
 
 
 def rxn_equals(
-    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+    rxn: BingoReactionSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """
     Perform exact matching on a reaction column.
 
     Parameters
     ----------
-    rxn : ColumnElement[AnyBingoReaction]
+    rxn : BingoReactionSqlOperand
         SQLAlchemy column containing reaction data (reaction SMILES, RXN, or binary).
     query : TextLike
         Query reaction as reaction SMILES or RXN string for exact matching.
@@ -209,7 +209,7 @@ def rxn_equals(
 
 
 def rxn_not_equals(
-    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+    rxn: BingoReactionSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """Perform negated exact matching on a reaction column."""
     return ~rxn_equals(rxn, query, parameters)

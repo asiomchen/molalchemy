@@ -172,7 +172,7 @@ class TestBingoORMIntegration:
 
             id: Mapped[int] = mapped_column(Integer, primary_key=True)
             name: Mapped[str] = mapped_column(String(100))
-            structure: Mapped[bytes] = mapped_column(BingoBinaryMol())
+            structure: Mapped[str] = mapped_column(BingoBinaryMol())
 
             __table_args__ = (
                 BingoBinaryMolIndex("idx_binary_compounds_structure", "structure"),

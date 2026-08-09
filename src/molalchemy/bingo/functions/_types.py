@@ -2,12 +2,11 @@
 
 from typing import Any, TypeAlias, TypeVar
 
-from sqlalchemy.orm import InstrumentedAttribute
-from sqlalchemy.sql.elements import ColumnElement
+from molalchemy.protocols import SqlOperand
 
 T = TypeVar("T")
-SQLAlchemyCoercible: TypeAlias = ColumnElement[T] | InstrumentedAttribute[T]
-SqlExpression: TypeAlias = ColumnElement[Any] | InstrumentedAttribute[Any]
+SQLAlchemyCoercible: TypeAlias = SqlOperand[T]
+SqlExpression: TypeAlias = SqlOperand[Any]
 LiteralStrBytes: TypeAlias = str | bytes
 TextLike: TypeAlias = str | bytes | SqlExpression
 

@@ -1,15 +1,5 @@
-class {{ func_name }}(GenericFunction):
-    {% if '|' not in return_type %}
-    type = {{ return_type }}()
-    {% elif 'BingoMol' in return_type %}
-    type = BingoMol()
-    {% elif 'BingoBinaryMol' in return_type %}
-    type = BingoBinaryMol()
-    {% elif 'BingoReaction' in return_type %}
-    type = BingoReaction()
-    {% elif 'BingoBinaryReaction' in return_type %}
-    type = BingoBinaryReaction()
-    {% endif %}
+class {{ func_name }}(GenericFunction[{{ python_return_type }}]):
+    type = {{ sqlalchemy_return_type }}
     inherit_cache = True
     name = "{{ func_name.lower() }}"
     

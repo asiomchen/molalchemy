@@ -33,7 +33,7 @@ class BingoCompound(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     structure: Mapped[str] = mapped_column(BingoMol())
-    binary_structure: Mapped[bytes] = mapped_column(BingoBinaryMol())
+    binary_structure: Mapped[str] = mapped_column(BingoBinaryMol())
     reaction: Mapped[str] = mapped_column(BingoReaction())
 
 

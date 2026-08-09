@@ -1,13 +1,5 @@
-class {{ func_name }}(GenericFunction):
-    {% if '|' not in return_type %}
-    type = {{ return_type }}()
-    {% elif 'RdkitMol' in return_type %}
-    type = RdkitMol()
-    {% elif 'RdkitReaction' in return_type %}
-    type = RdkitReaction()
-    {% elif 'RdkitBitFingerprint' in return_type %}
-    type = RdkitBitFingerprint()
-    {% endif %}
+class {{ func_name }}(GenericFunction[{{ python_return_type }}]):
+    type = {{ sqlalchemy_return_type }}
     inherit_cache = True
 
     def __init__(self, {{ arg_inits }}**kwargs: Any) -> None:

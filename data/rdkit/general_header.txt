@@ -19,10 +19,19 @@ from molalchemy.rdkit.search import (
     _rdkit_similarity_score,
 )
 from molalchemy.protocols import (
+    BinaryOperand,
+    BooleanOperand,
+    FloatOperand,
+    IntegerOperand,
     RdkitFingerprintOperand,
+    RdkitFingerprintSqlOperand,
+    RdkitMolSqlOperand,
+    RdkitReactionSqlOperand,
     RdkitSimilarityBound,
     RdkitSimilarityMetric,
     SqlOperand,
+    TextOperand,
+    TextOrBinaryOperand,
 )
 from molalchemy.rdkit.types import (
     RdkitBitFingerprint,

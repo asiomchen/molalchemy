@@ -107,11 +107,12 @@ class TestBingoBinaryMol:
 
         assert bingo_binary_mol.return_type == "smiles"
         assert bingo_binary_mol.preserve_pos is False
-        assert bingo_binary_mol._static_cache_key == (
-            BingoBinaryMol,
+        cache_key = bingo_binary_mol._static_cache_key
+        assert cache_key[0] is BingoBinaryMol
+        assert frozenset(cache_key[1:]) == {
             ("preserve_pos", False),
             ("return_type", "smiles"),
-        )
+        }
 
     @pytest.mark.parametrize(
         "return_type, expected_sql",
