@@ -5,7 +5,7 @@ The [Alembic](https://alembic.sqlalchemy.org/en/latest/) library is a lightweigh
 Having model defined like this:
 
 ```python
-from molalchemy.rdkit import index, types
+from molalchemy.rdkit import RdkitIndex, RdkitMol
 import sqlalchemy as sa
 from sqlalchemy.orm import (
     DeclarativeBase,
@@ -19,10 +19,10 @@ class Base(MappedAsDataclass, DeclarativeBase):
 class Molecule(Base):
     __tablename__ = "molecules"
     __table_args__ = (
-        index.RdkitIndex("idx_molecules_mol", "mol"),
+        RdkitIndex("idx_molecules_mol", "mol"),
     )
     id: Mapped[int] = mapped_column(sa.Integer, primary_key=True)
-    mol: Mapped[bytes] = mapped_column(types.RdkitMol(return_type="bytes"))
+    mol: Mapped[bytes] = mapped_column(RdkitMol(return_type="bytes"))
 
 ```
 

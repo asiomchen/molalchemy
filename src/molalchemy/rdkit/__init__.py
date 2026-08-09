@@ -1,3 +1,4 @@
+from . import functions
 from .comparators import RdkitFPComparator, RdkitMolComparator, RdkitReactionComparator
 from .index import RdkitIndex
 from .settings import (
@@ -31,6 +32,7 @@ __all__ = [
     "RdkitSparseFingerprint",
     "RdkitXQMol",
     "configure_engine",
+    "functions",
     "get_dice_threshold",
     "get_tanimoto_threshold",
     "set_dice_threshold",

@@ -1,3 +1,4 @@
+from . import functions
 from .comparators import BingoMolComparator, BingoRxnComparator
 from .index import (
     BingoBinaryMolIndex,
@@ -18,4 +19,5 @@ __all__ = [
     "BingoReaction",
     "BingoRxnComparator",
     "BingoRxnIndex",
+    "functions",
 ]
