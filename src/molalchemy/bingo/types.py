@@ -11,9 +11,33 @@ from sqlalchemy.types import UserDefinedType
 
 from molalchemy.bingo.comparators import BingoMolComparator, BingoRxnComparator
 
+_BINGO_BINARY_MOL_RETURN_TYPES = ("smiles", "molfile", "cml", "bytes")
+
+
+def _validate_return_type(value: object) -> None:
+    if not isinstance(value, str):
+        raise TypeError(f"return_type must be a str, got {type(value).__name__}")
+    if value not in _BINGO_BINARY_MOL_RETURN_TYPES:
+        choices = ", ".join(repr(choice) for choice in _BINGO_BINARY_MOL_RETURN_TYPES)
+        raise ValueError(f"return_type must be one of {choices}, got {value!r}")
+
+
+def _validate_preserve_pos(value: object) -> None:
+    if type(value) is not bool:
+        raise TypeError(f"preserve_pos must be a bool, got {type(value).__name__}")
+
 
 class BingoBaseType(UserDefinedType):
     """Base class for Bingo types."""
+
+    _immutable_options: frozenset[str] = frozenset()
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        # SQLAlchemy builds _static_cache_key from constructor-named attributes
+        # in __dict__; read-only properties backed by private names hide them.
+        if name in self._immutable_options and name in self.__dict__:
+            raise AttributeError(f"{name} is immutable")
+        super().__setattr__(name, value)
 
 
 class BingoMol(BingoBaseType):
@@ -100,6 +124,17 @@ class BingoBinaryMol(BingoBaseType):
     --------
     When `preserve_pos=True`, only inputs with present atomic coordinates should be used, otherwise an error will occur during conversion.
 
+    Raises
+    ------
+    TypeError
+        If `preserve_pos` is not a boolean or `return_type` is not a string.
+    ValueError
+        If `return_type` is not one of the supported values.
+
+    Notes
+    -----
+    `preserve_pos` and `return_type` are immutable after construction.
+
     Examples
     --------
     >>> from sqlalchemy import Integer, String
@@ -136,12 +171,15 @@ class BingoBinaryMol(BingoBaseType):
 
     cache_ok = True
     comparator_factory = BingoMolComparator
+    _immutable_options = frozenset(("preserve_pos", "return_type"))
 
     def __init__(
         self,
         preserve_pos: bool = False,
         return_type: Literal["smiles", "molfile", "cml", "bytes"] = "smiles",
     ):
+        _validate_preserve_pos(preserve_pos)
+        _validate_return_type(return_type)
         self.preserve_pos = preserve_pos
         self.return_type = return_type
         super().__init__()
@@ -164,10 +202,7 @@ class BingoBinaryMol(BingoBaseType):
             return func.Bingo.cml(colexpr)
         elif self.return_type == "bytes":
             return colexpr
-        else:
-            raise ValueError(
-                f"Invalid return_type: {self.return_type}. Available options are 'smiles', 'molfile', 'cml', 'bytes'."
-            )
+        raise AssertionError("validated return_type was not handled")
 
 
 class BingoReaction(BingoBaseType):
@@ -241,6 +276,15 @@ class BingoBinaryReaction(BingoBaseType):
     --------
     When `preserve_pos=True`, only inputs with present atomic coordinates should be used, otherwise conversion can return `NULL`.
 
+    Raises
+    ------
+    TypeError
+        If `preserve_pos` is not a boolean.
+
+    Notes
+    -----
+    `preserve_pos` is immutable after construction.
+
     Examples
     --------
     >>> from sqlalchemy import Integer, String
@@ -277,8 +321,10 @@ class BingoBinaryReaction(BingoBaseType):
 
     cache_ok = True
     comparator_factory = BingoRxnComparator
+    _immutable_options = frozenset(("preserve_pos",))
 
     def __init__(self, preserve_pos: bool = False):
+        _validate_preserve_pos(preserve_pos)
         self.preserve_pos = preserve_pos
         super().__init__()
 

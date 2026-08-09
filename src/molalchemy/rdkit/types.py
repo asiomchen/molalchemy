@@ -19,9 +19,28 @@ from molalchemy.rdkit.comparators import (
     RdkitReactionComparator,
 )
 
+_RDKIT_RETURN_TYPES = ("smiles", "bytes", "mol")
+
+
+def _validate_return_type(value: object) -> None:
+    if not isinstance(value, str):
+        raise TypeError(f"return_type must be a str, got {type(value).__name__}")
+    if value not in _RDKIT_RETURN_TYPES:
+        choices = ", ".join(repr(choice) for choice in _RDKIT_RETURN_TYPES)
+        raise ValueError(f"return_type must be one of {choices}, got {value!r}")
+
 
 class RdkitBaseType(UserDefinedType):
     """Base class for RDKit types."""
+
+    _immutable_options: frozenset[str] = frozenset()
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        # SQLAlchemy builds _static_cache_key from constructor-named attributes
+        # in __dict__; read-only properties backed by private names hide them.
+        if name in self._immutable_options and name in self.__dict__:
+            raise AttributeError(f"{name} is immutable")
+        super().__setattr__(name, value)
 
 
 class RdkitMol(RdkitBaseType):
@@ -38,9 +57,21 @@ class RdkitMol(RdkitBaseType):
         - `"smiles"`: Return as SMILES string
         - `"bytes"`: Return as raw bytes
         - `"mol"`: Return as `rdkit.Chem.Mol` object
+
+    Raises
+    ------
+    TypeError
+        If `return_type` is not a string.
+    ValueError
+        If `return_type` is not one of the supported values.
+
+    Notes
+    -----
+    `return_type` is immutable after construction.
     """
 
     cache_ok = True
+    _immutable_options = frozenset(("return_type",))
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "mol"
@@ -48,6 +79,7 @@ class RdkitMol(RdkitBaseType):
     comparator_factory = RdkitMolComparator
 
     def __init__(self, return_type: Literal["smiles", "bytes", "mol"] = "smiles"):
+        _validate_return_type(return_type)
         super().__init__()
         self.return_type = return_type
 
@@ -59,8 +91,7 @@ class RdkitMol(RdkitBaseType):
 
         if self.return_type in ("mol", "bytes"):
             return rdkit_func.mol_send(colexpr, type_=self)
-        else:  # smiles
-            return colexpr
+        return colexpr
 
     def bind_processor(self, dialect):
         del dialect
@@ -154,10 +185,22 @@ class RdkitReaction(RdkitBaseType):
         - `"smiles"`: Return as reaction SMILES string
         - `"bytes"`: Return as raw bytes
         - `"mol"`: Return as `AllChem.ChemicalReaction` object
+
+    Raises
+    ------
+    TypeError
+        If `return_type` is not a string.
+    ValueError
+        If `return_type` is not one of the supported values.
+
+    Notes
+    -----
+    `return_type` is immutable after construction.
     """
 
     impl = bytes
     cache_ok = True
+    _immutable_options = frozenset(("return_type",))
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "reaction"
@@ -172,6 +215,7 @@ class RdkitReaction(RdkitBaseType):
         return_type : Literal["smiles", "bytes", "mol"], default "smiles"
             The format in which to return reaction data from the database.
         """
+        _validate_return_type(return_type)
         super().__init__()
         self.return_type = return_type
 
@@ -210,8 +254,7 @@ class RdkitReaction(RdkitBaseType):
 
         if self.return_type in ("mol", "bytes"):
             return rdkit_func.reaction_send(colexpr, type_=self)
-        else:  # smiles
-            return colexpr
+        return colexpr
 
     def result_processor(self, dialect, coltype):
         del dialect, coltype

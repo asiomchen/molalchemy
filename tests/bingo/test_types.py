@@ -80,6 +80,39 @@ class TestBingoBinaryMol:
         assert test_table.c.mol.type.__class__ == BingoBinaryMol
         assert isinstance(test_table.c.mol.type, BingoBinaryMol)
 
+    def test_rejects_unsupported_return_type_at_construction(self):
+        with pytest.raises(
+            ValueError,
+            match=r"return_type must be one of .* got 'invalid'",
+        ):
+            BingoBinaryMol(return_type="invalid")  # type: ignore[arg-type]
+
+    @pytest.mark.parametrize("return_type", [None, 1, b"smiles"])
+    def test_rejects_non_string_return_type(self, return_type):
+        with pytest.raises(TypeError, match="return_type must be a str"):
+            BingoBinaryMol(return_type=return_type)
+
+    @pytest.mark.parametrize("preserve_pos", [None, 0, 1, "true"])
+    def test_rejects_non_boolean_preserve_pos(self, preserve_pos):
+        with pytest.raises(TypeError, match="preserve_pos must be a bool"):
+            BingoBinaryMol(preserve_pos=preserve_pos)
+
+    def test_configuration_is_immutable_and_cacheable(self):
+        bingo_binary_mol = BingoBinaryMol()
+
+        with pytest.raises(AttributeError, match="return_type is immutable"):
+            bingo_binary_mol.return_type = "bytes"  # type: ignore[misc]
+        with pytest.raises(AttributeError, match="preserve_pos is immutable"):
+            bingo_binary_mol.preserve_pos = True  # type: ignore[misc]
+
+        assert bingo_binary_mol.return_type == "smiles"
+        assert bingo_binary_mol.preserve_pos is False
+        assert bingo_binary_mol._static_cache_key == (
+            BingoBinaryMol,
+            ("preserve_pos", False),
+            ("return_type", "smiles"),
+        )
+
     @pytest.mark.parametrize(
         "return_type, expected_sql",
         [
@@ -161,6 +194,23 @@ class TestBingoBinaryReaction:
 
         assert test_table.c.rxn.type.__class__ == BingoBinaryReaction
         assert isinstance(test_table.c.rxn.type, BingoBinaryReaction)
+
+    def test_preserve_pos_is_immutable_and_cacheable(self):
+        bingo_binary_reaction = BingoBinaryReaction()
+
+        with pytest.raises(AttributeError, match="preserve_pos is immutable"):
+            bingo_binary_reaction.preserve_pos = True  # type: ignore[misc]
+
+        assert bingo_binary_reaction.preserve_pos is False
+        assert bingo_binary_reaction._static_cache_key == (
+            BingoBinaryReaction,
+            ("preserve_pos", False),
+        )
+
+    @pytest.mark.parametrize("preserve_pos", [None, 0, 1, "true"])
+    def test_rejects_non_boolean_preserve_pos(self, preserve_pos):
+        with pytest.raises(TypeError, match="preserve_pos must be a bool"):
+            BingoBinaryReaction(preserve_pos=preserve_pos)
 
     @pytest.mark.parametrize(
         "preserve_pos",
