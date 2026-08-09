@@ -5,6 +5,8 @@ This module provides specialized SQLAlchemy Index classes for creating
 Bingo cartridge indices on chemical data columns in PostgreSQL databases.
 """
 
+from typing import Any
+
 from sqlalchemy.schema import Index
 
 
@@ -18,24 +20,25 @@ from sqlalchemy.schema import Index
 #         compiler.process(expr, include_table=False)
 #     )
 class _BingoIndexBase(Index):
-    """Base class for Bingo index types with common __repr__ logic."""
+    """Base class for Bingo index types."""
 
     _bingo_op_class: str
 
-    def __init__(self, name, mol_column):
-        self._bingo_name = name
-        self._bingo_column = mol_column
-        super().__init__(
-            name,
-            mol_column,
-            postgresql_using="bingo_idx",
-            postgresql_ops={mol_column: self._bingo_op_class},
+    def __init__(self, name, mol_column, **kw: Any):
+        operator_class_key = (
+            mol_column
+            if isinstance(mol_column, str)
+            else getattr(mol_column, "key", None)
         )
+        if not isinstance(operator_class_key, str) or not operator_class_key:
+            raise TypeError(
+                "mol_column must be a column name or a SQLAlchemy expression "
+                "with a non-empty string key"
+            )
 
-    def __repr__(self):
-        return (
-            f"{self.__class__.__name__}({self._bingo_name!r}, {self._bingo_column!r})"
-        )
+        kw["postgresql_using"] = "bingo_idx"
+        kw["postgresql_ops"] = {operator_class_key: self._bingo_op_class}
+        super().__init__(name, mol_column, **kw)
 
 
 class BingoMolIndex(_BingoIndexBase):
@@ -52,6 +55,8 @@ class BingoMolIndex(_BingoIndexBase):
         Name of the index to be created.
     mol_column : sqlalchemy.schema.Column
         The column containing molecular data to be indexed.
+    **kw
+        Additional keyword arguments accepted by :class:`sqlalchemy.schema.Index`.
 
     Examples
     --------
@@ -99,6 +104,8 @@ class BingoBinaryMolIndex(_BingoIndexBase):
         Name of the index to be created.
     mol_column : sqlalchemy.schema.Column
         The column containing binary molecular data to be indexed.
+    **kw
+        Additional keyword arguments accepted by :class:`sqlalchemy.schema.Index`.
 
     Examples
     --------
@@ -147,13 +154,15 @@ class BingoRxnIndex(_BingoIndexBase):
         Name of the index to be created.
     mol_column : sqlalchemy.schema.Column
         The column containing reaction data to be indexed.
+    **kw
+        Additional keyword arguments accepted by :class:`sqlalchemy.schema.Index`.
 
     Examples
     --------
     >>> from sqlalchemy import Integer
     >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
     >>> from molalchemy.bingo.index import BingoRxnIndex
-    >>> from molalchemy.bingo.types import BingoRxn
+    >>> from molalchemy.bingo.types import BingoReaction
     >>>
     >>> class Base(DeclarativeBase):
     ...     pass
@@ -162,7 +171,7 @@ class BingoRxnIndex(_BingoIndexBase):
     ...     __tablename__ = 'reactions'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     reaction: Mapped[BingoRxn] = mapped_column(BingoRxn)
+    ...     reaction: Mapped[BingoReaction] = mapped_column(BingoReaction)
     ...
     ...     __table_args__ = (
     ...         BingoRxnIndex('idx_reaction_structure', 'reaction'),
@@ -195,13 +204,15 @@ class BingoBinaryRxnIndex(_BingoIndexBase):
         Name of the index to be created.
     mol_column : sqlalchemy.schema.Column
         The column containing binary reaction data to be indexed.
+    **kw
+        Additional keyword arguments accepted by :class:`sqlalchemy.schema.Index`.
 
     Examples
     --------
     >>> from sqlalchemy import Integer
     >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
     >>> from molalchemy.bingo.index import BingoBinaryRxnIndex
-    >>> from molalchemy.bingo.types import BingoBinaryRxn
+    >>> from molalchemy.bingo.types import BingoBinaryReaction
     >>>
     >>> class Base(DeclarativeBase):
     ...     pass
@@ -210,7 +221,9 @@ class BingoBinaryRxnIndex(_BingoIndexBase):
     ...     __tablename__ = 'reactions'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     reaction_bin: Mapped[BingoBinaryRxn] = mapped_column(BingoBinaryRxn)
+    ...     reaction_bin: Mapped[BingoBinaryReaction] = mapped_column(
+    ...         BingoBinaryReaction
+    ...     )
     ...
     ...     __table_args__ = (
     ...         BingoBinaryRxnIndex('idx_reaction_structure_bin', 'reaction_bin'),

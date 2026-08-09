@@ -1,6 +1,6 @@
 """Tests for RDKit indexes."""
 
-from sqlalchemy import Column, Integer, MetaData, String, Table
+from sqlalchemy import Column, Integer, MetaData, String, Table, text
 
 from molalchemy.rdkit.index import RdkitIndex
 from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitSparseFingerprint
@@ -146,6 +146,39 @@ class TestRdkitIndex:
 
         assert index.kwargs.get("postgresql_using") == "gist"
         assert index.kwargs.get("postgresql_with") == {"fastupdate": "off"}
+
+    def test_standard_options_remain_on_index(self):
+        """Standard options remain available on the SQLAlchemy index."""
+        index = RdkitIndex(
+            "idx_molecules_mol",
+            "mol",
+            unique=True,
+            quote=True,
+            info={"purpose": "chemical search"},
+            postgresql_where=text("mol IS NOT NULL"),
+            postgresql_with={"fillfactor": 70},
+            postgresql_tablespace="fastspace",
+            postgresql_concurrently=True,
+        )
+
+        assert index.unique is True
+        assert index.name.quote is True
+        assert index.info == {"purpose": "chemical search"}
+        assert index.kwargs["postgresql_using"] == "gist"
+        assert index.kwargs["postgresql_with"] == {"fillfactor": 70}
+        assert str(index.kwargs["postgresql_where"]) == "mol IS NOT NULL"
+        assert index.kwargs["postgresql_tablespace"] == "fastspace"
+        assert index.kwargs["postgresql_concurrently"] is True
+
+    def test_postgresql_using_cannot_override_gist(self):
+        """The GiST access method cannot be overridden."""
+        index = RdkitIndex(
+            "idx_molecules_mol",
+            "mol",
+            postgresql_using="gin",
+        )
+
+        assert index.kwargs["postgresql_using"] == "gist"
 
 
 class TestRdkitIndexCreation:

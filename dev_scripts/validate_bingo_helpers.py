@@ -12,6 +12,7 @@ from sqlalchemy import (
     create_engine,
     func,
     select,
+    text,
 )
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import OperationalError
@@ -19,7 +20,18 @@ from sqlalchemy.schema import CreateTable
 
 from molalchemy.bingo import BingoMolComparator, BingoRxnComparator
 from molalchemy.bingo import functions as bingo_func
-from molalchemy.bingo.types import BingoBinaryReaction, BingoMol
+from molalchemy.bingo.index import (
+    BingoBinaryMolIndex,
+    BingoBinaryRxnIndex,
+    BingoMolIndex,
+    BingoRxnIndex,
+)
+from molalchemy.bingo.types import (
+    BingoBinaryMol,
+    BingoBinaryReaction,
+    BingoMol,
+    BingoReaction,
+)
 
 DATABASE_URL = os.environ.get(
     "BINGO_DATABASE_URL",
@@ -70,8 +82,40 @@ def main() -> None:
         Column("reaction_data", BingoBinaryReaction()),
         Column("query_reaction", String, nullable=False),
     )
+    index_validation = Table(
+        "molalchemy_bingo_index_validation",
+        metadata,
+        Column("id", Integer, primary_key=True),
+        Column("mol", BingoMol()),
+        Column("binary_mol", BingoBinaryMol()),
+        Column("reaction", BingoReaction()),
+        Column("binary_reaction", BingoBinaryReaction()),
+    )
+    expected_index_operator_classes = {
+        "ix_molalchemy_bingo_index_mol": "bingo.molecule",
+        "ix_molalchemy_bingo_index_binary_mol": "bingo.bmolecule",
+        "ix_molalchemy_bingo_index_reaction": "bingo.reaction",
+        "ix_molalchemy_bingo_index_binary_reaction": "bingo.breaction",
+    }
+    BingoMolIndex(
+        "ix_molalchemy_bingo_index_mol",
+        index_validation.c.mol,
+    )
+    BingoBinaryMolIndex(
+        "ix_molalchemy_bingo_index_binary_mol",
+        index_validation.c.binary_mol,
+    )
+    BingoRxnIndex(
+        "ix_molalchemy_bingo_index_reaction",
+        index_validation.c.reaction,
+    )
+    BingoBinaryRxnIndex(
+        "ix_molalchemy_bingo_index_binary_reaction",
+        index_validation.c.binary_reaction,
+    )
 
     with engine.begin() as conn:
+        conn.exec_driver_sql("DROP TABLE IF EXISTS molalchemy_bingo_index_validation")
         conn.exec_driver_sql(
             "DROP TABLE IF EXISTS molalchemy_bingo_reaction_helper_validation"
         )
@@ -290,6 +334,19 @@ def main() -> None:
         molecule_not_null_rows = conn.execute(molecule_not_null_stmt).scalars().all()
         reaction_not_null_rows = conn.execute(reaction_not_null_stmt).scalars().all()
         reaction_function_row = conn.execute(reaction_function_stmt).mappings().one()
+        index_definitions = dict(
+            conn.execute(
+                text(
+                    """
+                SELECT indexname, indexdef
+                FROM pg_indexes
+                WHERE schemaname = current_schema()
+                  AND tablename = 'molalchemy_bingo_index_validation'
+                  AND indexname LIKE 'ix_molalchemy_bingo_index_%'
+                """
+                )
+            ).all()
+        )
 
     print()
     print(f"Bingo version: {version}")
@@ -306,6 +363,7 @@ def main() -> None:
     print(f"reaction function wrappers: {dict(reaction_function_row)}")
     for comparator_method, rows in comparator_results.items():
         print(f"live comparator {'.'.join(comparator_method)}: {rows}")
+    print(f"Bingo index definitions: {index_definitions}")
 
     assert substructure_rows == ["benzene"]
     assert exact_rows == ["ethanol"]
@@ -345,6 +403,11 @@ def main() -> None:
     }
     assert comparator_results == expected_comparator_results
     print(f"validated all {len(declared_methods)} declared Bingo comparator methods")
+    assert index_definitions.keys() == expected_index_operator_classes.keys()
+    for index_name, operator_class in expected_index_operator_classes.items():
+        definition = index_definitions[index_name]
+        assert "USING bingo_idx" in definition
+        assert operator_class in definition
 
 
 if __name__ == "__main__":
