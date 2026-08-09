@@ -5,10 +5,10 @@ chemical data stored in PostgreSQL using the RDKit cartridge.
 """
 
 import functools
-from typing import Any, Literal
+from typing import Any, Generic, Literal, TypeVar, overload
 
 from rdkit import Chem
-from rdkit.Chem import AllChem, rdChemReactions
+from rdkit.Chem import rdChemReactions
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
@@ -19,12 +19,32 @@ from molalchemy.rdkit.comparators import (
     RdkitReactionComparator,
 )
 
+_RDKIT_RETURN_TYPES = ("smiles", "bytes", "mol")
+_T = TypeVar("_T")
 
-class RdkitBaseType(UserDefinedType):
+
+def _validate_return_type(value: object) -> None:
+    if not isinstance(value, str):
+        raise TypeError(f"return_type must be a str, got {type(value).__name__}")
+    if value not in _RDKIT_RETURN_TYPES:
+        choices = ", ".join(repr(choice) for choice in _RDKIT_RETURN_TYPES)
+        raise ValueError(f"return_type must be one of {choices}, got {value!r}")
+
+
+class RdkitBaseType(UserDefinedType[_T], Generic[_T]):
     """Base class for RDKit types."""
 
+    _immutable_options: frozenset[str] = frozenset()
 
-class RdkitMol(RdkitBaseType):
+    def __setattr__(self, name: str, value: Any) -> None:
+        # SQLAlchemy builds _static_cache_key from constructor-named attributes
+        # in __dict__; read-only properties backed by private names hide them.
+        if name in self._immutable_options and name in self.__dict__:
+            raise AttributeError(f"{name} is immutable")
+        super().__setattr__(name, value)
+
+
+class RdkitMol(RdkitBaseType[_T], Generic[_T]):
     """SQLAlchemy type for RDKit molecule data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `mol` type provided by the RDKit cartridge.
@@ -38,20 +58,46 @@ class RdkitMol(RdkitBaseType):
         - `"smiles"`: Return as SMILES string
         - `"bytes"`: Return as raw bytes
         - `"mol"`: Return as `rdkit.Chem.Mol` object
+
+    Raises
+    ------
+    TypeError
+        If `return_type` is not a string.
+    ValueError
+        If `return_type` is not one of the supported values.
+
+    Notes
+    -----
+    `return_type` is immutable after construction.
     """
 
     cache_ok = True
+    _immutable_options = frozenset(("return_type",))
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "mol"
 
     comparator_factory = RdkitMolComparator
 
-    def __init__(self, return_type: Literal["smiles", "bytes", "mol"] = "smiles"):
+    @overload
+    def __init__(
+        self: "RdkitMol[str]", return_type: Literal["smiles"] = "smiles"
+    ) -> None: ...
+
+    @overload
+    def __init__(self: "RdkitMol[bytes]", return_type: Literal["bytes"]) -> None: ...
+
+    @overload
+    def __init__(self: "RdkitMol[Chem.Mol]", return_type: Literal["mol"]) -> None: ...
+
+    def __init__(
+        self, return_type: Literal["smiles", "bytes", "mol"] = "smiles"
+    ) -> None:
+        _validate_return_type(return_type)
         super().__init__()
         self.return_type = return_type
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"RdkitMol(return_type={self.return_type!r})"
 
     def column_expression(self, colexpr):
@@ -59,8 +105,7 @@ class RdkitMol(RdkitBaseType):
 
         if self.return_type in ("mol", "bytes"):
             return rdkit_func.mol_send(colexpr, type_=self)
-        else:  # smiles
-            return colexpr
+        return colexpr
 
     def bind_processor(self, dialect):
         del dialect
@@ -77,7 +122,7 @@ class RdkitMol(RdkitBaseType):
                 raise InvalidMoleculeError(
                     "Value must be a SMILES string or an RDKit Mol object"
                 )
-            return value.ToBinary()  # ty: ignore[no-matching-overload]
+            return value.ToBinary()
 
         return process
 
@@ -93,7 +138,9 @@ class RdkitMol(RdkitBaseType):
             if return_type == "mol":
                 # If we have bytes from mol_send, create molecule from binary
                 if isinstance(value, bytes | memoryview):
-                    return Chem.Mol(bytes(value))
+                    # RDKit accepts binary pickles here, although its generated
+                    # stub currently annotates the argument as str.
+                    return Chem.Mol(bytes(value))  # ty: ignore[no-matching-overload]
                 # If we have a string (shouldn't happen with mol_send but just in case)
                 else:
                     return Chem.MolFromSmiles(str(value))
@@ -105,7 +152,7 @@ class RdkitMol(RdkitBaseType):
         return functools.partial(process, return_type=self.return_type)
 
 
-class RdkitBitFingerprint(RdkitBaseType):
+class RdkitBitFingerprint(RdkitBaseType[bytes]):
     """SQLAlchemy type for RDKit bit fingerprint data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `bfp` type provided by the RDKit cartridge,
@@ -116,14 +163,14 @@ class RdkitBitFingerprint(RdkitBaseType):
     cache_ok = True
     comparator_factory = RdkitFPComparator
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "RdkitBitFingerprint()"
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "bfp"
 
 
-class RdkitSparseFingerprint(RdkitBaseType):
+class RdkitSparseFingerprint(RdkitBaseType[bytes]):
     """SQLAlchemy type for RDKit sparse fingerprint data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `sfp` type provided by the RDKit cartridge,
@@ -134,14 +181,14 @@ class RdkitSparseFingerprint(RdkitBaseType):
     cache_ok = True
     comparator_factory = RdkitFPComparator
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "RdkitSparseFingerprint()"
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "sfp"
 
 
-class RdkitReaction(RdkitBaseType):
+class RdkitReaction(RdkitBaseType[_T], Generic[_T]):
     """SQLAlchemy type for RDKit chemical reaction data stored in PostgreSQL.
 
     This type maps to the PostgreSQL `reaction` type provided by the RDKit cartridge.
@@ -153,18 +200,48 @@ class RdkitReaction(RdkitBaseType):
         The format in which to return reaction data from the database:
         - `"smiles"`: Return as reaction SMILES string
         - `"bytes"`: Return as raw bytes
-        - `"mol"`: Return as `AllChem.ChemicalReaction` object
+        - `"mol"`: Return as `rdChemReactions.ChemicalReaction` object
+
+    Raises
+    ------
+    TypeError
+        If `return_type` is not a string.
+    ValueError
+        If `return_type` is not one of the supported values.
+
+    Notes
+    -----
+    `return_type` is immutable after construction.
     """
 
     impl = bytes
     cache_ok = True
+    _immutable_options = frozenset(("return_type",))
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "reaction"
 
     comparator_factory = RdkitReactionComparator
 
-    def __init__(self, return_type: Literal["smiles", "bytes", "mol"] = "smiles"):
+    @overload
+    def __init__(
+        self: "RdkitReaction[str]", return_type: Literal["smiles"] = "smiles"
+    ) -> None: ...
+
+    @overload
+    def __init__(
+        self: "RdkitReaction[bytes]", return_type: Literal["bytes"]
+    ) -> None: ...
+
+    @overload
+    def __init__(
+        self: "RdkitReaction[rdChemReactions.ChemicalReaction]",
+        return_type: Literal["mol"],
+    ) -> None: ...
+
+    def __init__(
+        self, return_type: Literal["smiles", "bytes", "mol"] = "smiles"
+    ) -> None:
         """Initialize the RdkitReaction type.
 
         Parameters
@@ -172,10 +249,11 @@ class RdkitReaction(RdkitBaseType):
         return_type : Literal["smiles", "bytes", "mol"], default "smiles"
             The format in which to return reaction data from the database.
         """
+        _validate_return_type(return_type)
         super().__init__()
         self.return_type = return_type
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"RdkitReaction(return_type={self.return_type!r})"
 
     def bind_processor(self, dialect):
@@ -188,7 +266,7 @@ class RdkitReaction(RdkitBaseType):
                 return rdChemReactions.ReactionToSmarts(value)
             if isinstance(value, str):
                 try:
-                    rxn = AllChem.ReactionFromSmarts(value)
+                    rxn = rdChemReactions.ReactionFromSmarts(value)
                 except ValueError:
                     rxn = None
                 if rxn is None:
@@ -210,8 +288,7 @@ class RdkitReaction(RdkitBaseType):
 
         if self.return_type in ("mol", "bytes"):
             return rdkit_func.reaction_send(colexpr, type_=self)
-        else:  # smiles
-            return colexpr
+        return colexpr
 
     def result_processor(self, dialect, coltype):
         del dialect, coltype
@@ -221,9 +298,13 @@ class RdkitReaction(RdkitBaseType):
                 return None
             if return_type == "mol":
                 if isinstance(value, bytes | memoryview):
-                    return AllChem.ChemicalReaction(bytes(value))
+                    # RDKit accepts binary pickles here, although its generated
+                    # stub currently annotates the argument as str.
+                    return rdChemReactions.ChemicalReaction(  # ty: ignore[no-matching-overload]
+                        bytes(value)
+                    )
                 else:
-                    return AllChem.ReactionFromSmarts(str(value))
+                    return rdChemReactions.ReactionFromSmarts(str(value))
             elif return_type == "bytes":
                 return bytes(value) if isinstance(value, memoryview) else value
             else:  # smiles
@@ -232,20 +313,20 @@ class RdkitReaction(RdkitBaseType):
         return functools.partial(process, return_type=self.return_type)
 
 
-class RdkitQMol(RdkitBaseType):
+class RdkitQMol(RdkitBaseType[str]):
     cache_ok = True
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "RdkitQMol()"
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "qmol"
 
 
-class RdkitXQMol(RdkitBaseType):
+class RdkitXQMol(RdkitBaseType[str]):
     cache_ok = True
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "RdkitXQMol()"
 
     def get_col_spec(self, **kwargs: Any) -> str:

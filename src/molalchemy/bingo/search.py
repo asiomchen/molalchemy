@@ -36,7 +36,7 @@ class _BingoSearchType(sqltypes.UserDefinedType):
 
 
 def _bingo_search(
-    column: SqlOperand,
+    column: SqlOperand[Any],
     query_tuple: Any,
     search_type: str,
 ) -> ColumnElement[bool]:
@@ -50,7 +50,7 @@ def _bingo_search(
 
 
 def _bingo_search_values(
-    column: SqlOperand, values: tuple[object, ...], search_type: str
+    column: SqlOperand[Any], values: tuple[object, ...], search_type: str
 ) -> ColumnElement[bool]:
     """Build a Bingo predicate using SQLAlchemy's expression coercion.
 

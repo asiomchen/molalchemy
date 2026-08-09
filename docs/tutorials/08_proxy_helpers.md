@@ -27,7 +27,7 @@ and static analysis can see the comparator API and its precise result types.
 from sqlalchemy import Integer, String, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from molalchemy.bingo.types import BingoMol, BingoReaction
+from molalchemy.bingo import BingoMol, BingoReaction
 from molalchemy.helpers import bingo_col, bingo_rxn_col
 
 
@@ -80,7 +80,7 @@ from sqlalchemy import Integer, String, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from molalchemy.helpers import rdkit_col, rdkit_fp_col, rdkit_rxn_col
-from molalchemy.rdkit.types import RdkitBitFingerprint, RdkitMol, RdkitReaction
+from molalchemy.rdkit import RdkitBitFingerprint, RdkitMol, RdkitReaction
 
 
 class Base(DeclarativeBase):
@@ -140,7 +140,7 @@ The helpers also accept Core table columns.
 ```python
 from sqlalchemy import Column, Integer, MetaData, String, Table, select
 
-from molalchemy.bingo.types import BingoMol
+from molalchemy.bingo import BingoMol
 from molalchemy.helpers import bingo_col
 
 

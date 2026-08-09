@@ -132,24 +132,26 @@ To learn how to use molalchemy, check out the tutorials in the [documentation](h
 
 ## 🏗️ Supported Cartridges
 
+Application code should import public cartridge APIs from `molalchemy.rdkit`
+or `molalchemy.bingo`. These package facades are the canonical import paths and
+keep cartridge ownership explicit without coupling applications to the
+internal module layout. Existing root-package and leaf-module imports remain
+supported for compatibility; Alembic-generated migrations intentionally use
+leaf-module imports.
+
 ### Bingo Cartridge
 
 ```python
-from molalchemy.bingo.types import (
+from molalchemy.bingo import (
     BingoMol,              # Text-based molecule storage (SMILES/Molfile)
     BingoBinaryMol,        # Binary molecule storage with format conversion
     BingoReaction,         # Reaction storage (reaction SMILES/Rxnfile)
-    BingoBinaryReaction    # Binary reaction storage
-)
-from molalchemy.bingo.index import (
+    BingoBinaryReaction,   # Binary reaction storage
     BingoMolIndex,         # Molecule indexing
     BingoBinaryMolIndex,   # Binary molecule indexing
     BingoRxnIndex,         # Reaction indexing
-    BingoBinaryRxnIndex    # Binary reaction indexing
-)
-from molalchemy.bingo.functions import (
-    # Individual function imports available, see documentation
-    # for complete list of chemical analysis functions
+    BingoBinaryRxnIndex,   # Binary reaction indexing
+    functions as bingo_func,
 )
 from molalchemy.helpers import (
     bingo_col,              # Typed molecule-column helper for IDE autocomplete
@@ -160,25 +162,18 @@ from molalchemy.helpers import (
 ### RDKit Cartridge
 
 ```python
-from molalchemy.rdkit.types import (
+from molalchemy.rdkit import (
     RdkitMol,              # RDKit molecule type with configurable return formats
     RdkitBitFingerprint,   # Binary fingerprints (bfp)
     RdkitSparseFingerprint,# Sparse fingerprints (sfp)
     RdkitReaction,         # Chemical reactions with input validation
     RdkitQMol,             # Query molecules
     RdkitXQMol,            # Extended query molecules
-)
-from molalchemy.rdkit.index import (
     RdkitIndex,            # RDKit molecule indexing (GIST index)
-)
-from molalchemy.rdkit.settings import (
     get_tanimoto_threshold, set_tanimoto_threshold,  # Tanimoto threshold management
     get_dice_threshold, set_dice_threshold,          # Dice threshold management
     similarity_threshold,                            # Context manager for temporary thresholds
-)
-from molalchemy.rdkit.functions import (
-    # Individual function imports available, see documentation
-    # for complete list of 150+ RDKit functions
+    functions as rdkit_func,
 )
 from molalchemy.helpers import (
     rdkit_col,              # Typed molecule-column helper for IDE autocomplete
@@ -191,8 +186,7 @@ from molalchemy.helpers import (
 ### Chemical Indexing
 
 ```python
-from molalchemy.bingo.index import BingoMolIndex
-from molalchemy.bingo.types import BingoMol
+from molalchemy.bingo import BingoMol, BingoMolIndex
 
 class Molecule(Base):
     __tablename__ = 'molecules'
@@ -243,7 +237,9 @@ Use the matching helper for the cartridge and data kind:
 ### Configurable Return Types
 
 ```python
-from molalchemy.rdkit.types import RdkitMol
+from rdkit import Chem
+
+from molalchemy.rdkit import RdkitMol
 
 class MoleculeWithFormats(Base):
     __tablename__ = 'molecules_formatted'
@@ -252,10 +248,27 @@ class MoleculeWithFormats(Base):
     # Return as SMILES string (default)
     structure_smiles: Mapped[str] = mapped_column(RdkitMol())
     # Return as RDKit Mol object
-    structure_mol: Mapped[bytes] = mapped_column(RdkitMol(return_type="mol"))
+    structure_mol: Mapped[Chem.Mol] = mapped_column(RdkitMol(return_type="mol"))
     # Return as raw bytes
     structure_bytes: Mapped[bytes] = mapped_column(RdkitMol(return_type="bytes"))
 ```
+
+The SQL type describes how PostgreSQL stores the value; `Mapped[...]` describes
+the Python value returned to the model. SQLAlchemy 2.0 does not infer
+`mapped_column()` attributes from the supplied type, so ORM models should always
+spell out `Mapped[T]`. Core `Column(...)` and generated SQL expressions infer
+the result directly from MolAlchemy's types.
+
+| Type configuration | Python result |
+| --- | --- |
+| `RdkitMol()` / `return_type="smiles"` | `str` |
+| `RdkitMol(return_type="bytes")` | `bytes` |
+| `RdkitMol(return_type="mol")` | `Chem.Mol` |
+| `RdkitReaction()` / `return_type="smiles"` | `str` |
+| `RdkitReaction(return_type="bytes")` | `bytes` |
+| `RdkitReaction(return_type="mol")` | `ChemicalReaction` |
+| `BingoBinaryMol(return_type="smiles" | "molfile" | "cml")` | `str` |
+| `BingoBinaryMol(return_type="bytes")` | `bytes` |
 
 ### RDKit Cartridge Settings
 
@@ -264,7 +277,7 @@ RDKit PostgreSQL uses GUC variables to control similarity, substructure matching
 ```python
 from sqlalchemy import create_engine
 
-from molalchemy.rdkit.settings import (
+from molalchemy.rdkit import (
     RdkitSettings,
     configure_engine,
     get_tanimoto_threshold,
@@ -300,8 +313,7 @@ with similarity_threshold(session, tanimoto=0.1, dice=0.2):
 Store and query chemical reactions using `RdkitReaction`:
 
 ```python
-from molalchemy.rdkit.types import RdkitReaction
-from molalchemy.rdkit.functions import rxn_has_smarts, reaction_numreactants
+from molalchemy.rdkit import RdkitReaction, functions as rdkit_func
 
 class Reaction(Base):
     __tablename__ = 'reactions'
@@ -314,56 +326,62 @@ session.add(Reaction(name="Amide formation", rxn="[C:1](=O)[OH].[N:2]>>[C:1](=O)
 
 # Reaction substructure search
 results = session.execute(
-    select(Reaction).where(rxn_has_smarts(Reaction.rxn, ">>[C:1][N:2]"))
+    select(Reaction).where(
+        rdkit_func.rxn_has_smarts(Reaction.rxn, ">>[C:1][N:2]")
+    )
 ).all()
 ```
 
 ### Using Chemical Functions
 
-The chemical functions are available as individual imports from the functions modules. Under the hood they use SQLAlchemy's `func` to call the corresponding database functions, and provide type hints and syntax highlighting in IDEs.
+Chemical functions are available through each cartridge's `functions`
+namespace. Under the hood they use SQLAlchemy's `func` to call the corresponding
+database functions and provide type hints and syntax highlighting in IDEs.
 
 ```python
-from molalchemy.bingo.functions import smiles, getweight, gross, inchikey
+from molalchemy.bingo import functions as bingo_func
 
 # Calculate molecular properties using Bingo functions
 results = session.query(
     Molecule.name,
-    getweight(Molecule.structure).label('molecular_weight'),
-    gross(Molecule.structure).label('formula'),
-    smiles(Molecule.structure).label('canonical_smiles')
+    bingo_func.getweight(Molecule.structure).label('molecular_weight'),
+    bingo_func.gross(Molecule.structure).label('formula'),
+    bingo_func.smiles(Molecule.structure).label('canonical_smiles')
 ).all()
 
 # Validate molecular structures
-from molalchemy.bingo.functions import checkmolecule
-
 invalid_molecules = session.query(Molecule).filter(
-    checkmolecule(Molecule.structure).isnot(None)
+    bingo_func.checkmolecule(Molecule.structure).isnot(None)
 ).all()
 
 # Format conversions
 inchi_keys = session.query(
     Molecule.id,
-    inchikey(Molecule.structure).label('inchikey')
+    bingo_func.inchikey(Molecule.structure).label('inchikey')
 ).all()
 ```
 
 For RDKit functions:
 
 ```python
-from molalchemy.rdkit.functions import mol_amw, mol_formula, mol_inchikey
+from molalchemy.rdkit import functions as rdkit_func
 
 # Calculate molecular properties using RDKit functions
 results = session.query(
     Molecule.name,
-    mol_amw(Molecule.structure).label('molecular_weight'),
-    mol_formula(Molecule.structure).label('formula'),
-    mol_inchikey(Molecule.structure).label('inchikey')
+    rdkit_func.mol_amw(Molecule.structure).label('molecular_weight'),
+    rdkit_func.mol_formula(Molecule.structure).label('formula'),
+    rdkit_func.mol_inchikey(Molecule.structure).label('inchikey')
 ).all()
 ```
 
 ### Alembic Database Migrations
 
-Molalchemy provides utilities for Alembic integration.For automatic import handling in migrations, the library provides type rendering utilities that ensure proper import statements are generated for molalchemy types.
+MolAlchemy provides utilities for Alembic integration. For automatic import
+handling in migrations, the library provides type rendering utilities that
+ensure proper import statements are generated for MolAlchemy types. Generated
+type constructors explicitly include configurable defaults so migrations do
+not inherit different behavior if a future release changes those defaults.
 
 ```python
 # ...

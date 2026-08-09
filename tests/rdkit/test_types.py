@@ -51,6 +51,30 @@ class TestRdkitMol:
         assert mol_bytes.return_type == "bytes"
         assert mol_mol.return_type == "mol"
 
+    def test_rdkit_mol_rejects_unsupported_return_type(self):
+        with pytest.raises(
+            ValueError,
+            match=r"return_type must be one of .* got 'invalid'",
+        ):
+            RdkitMol(return_type="invalid")  # type: ignore[arg-type]
+
+    @pytest.mark.parametrize("return_type", [None, 1, b"smiles"])
+    def test_rdkit_mol_rejects_non_string_return_type(self, return_type):
+        with pytest.raises(TypeError, match="return_type must be a str"):
+            RdkitMol(return_type=return_type)
+
+    def test_rdkit_mol_return_type_is_immutable(self):
+        rdkit_mol = RdkitMol()
+
+        with pytest.raises(AttributeError, match="return_type is immutable"):
+            rdkit_mol.return_type = "bytes"  # type: ignore[misc]
+
+        assert rdkit_mol.return_type == "smiles"
+        assert rdkit_mol._static_cache_key == (
+            RdkitMol,
+            ("return_type", "smiles"),
+        )
+
     def test_rdkit_mol_in_table_definition(self):
         """Test RdkitMol can be used in table definition."""
         metadata = MetaData()
@@ -262,6 +286,30 @@ class TestRdkitReaction:
         assert rxn_smiles.return_type == "smiles"
         assert rxn_bytes.return_type == "bytes"
         assert rxn_mol.return_type == "mol"
+
+    def test_rdkit_reaction_rejects_unsupported_return_type(self):
+        with pytest.raises(
+            ValueError,
+            match=r"return_type must be one of .* got 'invalid'",
+        ):
+            RdkitReaction(return_type="invalid")  # type: ignore[arg-type]
+
+    @pytest.mark.parametrize("return_type", [None, 1, b"smiles"])
+    def test_rdkit_reaction_rejects_non_string_return_type(self, return_type):
+        with pytest.raises(TypeError, match="return_type must be a str"):
+            RdkitReaction(return_type=return_type)
+
+    def test_rdkit_reaction_return_type_is_immutable(self):
+        rdkit_reaction = RdkitReaction()
+
+        with pytest.raises(AttributeError, match="return_type is immutable"):
+            rdkit_reaction.return_type = "bytes"  # type: ignore[misc]
+
+        assert rdkit_reaction.return_type == "smiles"
+        assert rdkit_reaction._static_cache_key == (
+            RdkitReaction,
+            ("return_type", "smiles"),
+        )
 
     def test_rdkit_reaction_in_table_definition(self):
         """Test RdkitReaction can be used in table definition."""

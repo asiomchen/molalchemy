@@ -12,6 +12,58 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  typing:
+    name: Typing checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.9.9"
+          python-version: "3.10"
+
+      - name: Check source and consumer types
+        run: uv run --frozen ty check src tests/typing/consumer.py
+
+  generated-functions:
+    name: Generated functions are current
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.9.9"
+          python-version: "3.10"
+
+      - name: Regenerate and compare functions
+        run: |
+          uv run --frozen python dev_scripts/gen_functions.py rdkit
+          uv run --frozen python dev_scripts/gen_functions.py bingo
+          uv run --frozen ruff format src/molalchemy/rdkit/functions src/molalchemy/bingo/functions
+          uv run --frozen ruff check --fix src/molalchemy/rdkit/functions src/molalchemy/bingo/functions
+          uv run --frozen ruff format src/molalchemy/rdkit/functions src/molalchemy/bingo/functions
+          git diff --exit-code -- src/molalchemy/rdkit/functions src/molalchemy/bingo/functions
+
   test:
     name: Test on Python ${{ matrix.python-version }} - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}

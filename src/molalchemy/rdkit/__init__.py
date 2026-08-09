@@ -1,3 +1,7 @@
+from importlib import import_module
+from types import ModuleType
+from typing import TYPE_CHECKING
+
 from .comparators import RdkitFPComparator, RdkitMolComparator, RdkitReactionComparator
 from .index import RdkitIndex
 from .settings import (
@@ -18,6 +22,16 @@ from .types import (
     RdkitXQMol,
 )
 
+if TYPE_CHECKING:
+    from . import functions
+
+
+def __getattr__(name: str) -> ModuleType:
+    if name == "functions":
+        return import_module(f"{__name__}.functions")
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
 __all__ = [
     "RdkitBitFingerprint",
     "RdkitFPComparator",
@@ -31,6 +45,7 @@ __all__ = [
     "RdkitSparseFingerprint",
     "RdkitXQMol",
     "configure_engine",
+    "functions",
     "get_dice_threshold",
     "get_tanimoto_threshold",
     "set_dice_threshold",

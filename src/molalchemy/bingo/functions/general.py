@@ -10,10 +10,15 @@ from sqlalchemy.sql.functions import GenericFunction
 
 from molalchemy.bingo.search import _bingo_search_values
 from molalchemy.protocols import (
+    BingoMolSqlOperand,
     BingoOperand,
     BingoParameters,
+    BingoReactionSqlOperand,
     BingoSimilarityBound,
+    BooleanOperand,
     SqlOperand,
+    TextOperand,
+    TextOrBinaryOperand,
 )
 
 from ._types import (
@@ -32,7 +37,7 @@ AnyBingoReaction = AnyBingoReactionLikeCombined
 
 
 def mol_has_substructure(
-    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
+    mol: BingoMolSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """
     Perform substructure search on a molecule column.
@@ -57,14 +62,14 @@ def mol_has_substructure(
 
 
 def mol_has_smarts(
-    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
+    mol: BingoMolSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """
     Perform SMARTS pattern matching on a molecule column.
 
     Parameters
     ----------
-    mol : ColumnElement[AnyBingoMol]
+    mol : BingoMolSqlOperand
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
     query : TextLike
         SMARTS pattern string for matching.
@@ -81,14 +86,14 @@ def mol_has_smarts(
 
 
 def mol_equals(
-    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
+    mol: BingoMolSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """
     Perform exact structure matching on a molecule column.
 
     Parameters
     ----------
-    mol : ColumnElement[AnyBingoMol]
+    mol : BingoMolSqlOperand
         SQLAlchemy column containing molecule data (SMILES, Molfile, or binary).
     query : TextLike
         Query molecule as SMILES or Molfile string for exact matching.
@@ -106,14 +111,14 @@ def mol_equals(
 
 
 def mol_not_equals(
-    mol: ColumnElement[AnyBingoMol], query: TextLike, parameters: TextLike = ""
+    mol: BingoMolSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """Perform negated exact structure matching on a molecule column."""
     return ~mol_equals(mol, query, parameters)
 
 
 def mol_similar_to(
-    mol: SqlOperand,
+    mol: BingoMolSqlOperand,
     query: BingoOperand,
     minimum: BingoSimilarityBound = 0.0,
     maximum: BingoSimilarityBound = 1.0,
@@ -146,7 +151,7 @@ def mol_similar_to(
 
 
 def mol_similarity(
-    mol: SqlOperand,
+    mol: BingoMolSqlOperand,
     query: BingoOperand,
     bottom: BingoSimilarityBound = 0.0,
     top: BingoSimilarityBound = 1.0,
@@ -161,7 +166,7 @@ def mol_similarity(
 
 
 def mol_similarity_score(
-    mol: SqlOperand,
+    mol: BingoMolSqlOperand,
     query: BingoOperand,
     metric: BingoParameters = "Tanimoto",
 ) -> ColumnElement[float]:
@@ -170,14 +175,14 @@ def mol_similarity_score(
 
 
 def rxn_has_substructure(
-    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+    rxn: BingoReactionSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """
     Perform substructure search on a reaction column.
 
     Parameters
     ----------
-    rxn : ColumnElement[AnyBingoReaction]
+    rxn : BingoReactionSqlOperand
         SQLAlchemy column containing reaction data (reaction SMILES, RXN, or binary).
     query : TextLike
         Query reaction as reaction SMILES, SMARTS, or RXN string.
@@ -194,14 +199,14 @@ def rxn_has_substructure(
 
 
 def rxn_has_smarts(
-    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+    rxn: BingoReactionSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """
     Perform SMARTS pattern matching on a reaction column.
 
     Parameters
     ----------
-    rxn : ColumnElement[AnyBingoReaction]
+    rxn : BingoReactionSqlOperand
         SQLAlchemy column containing reaction data (reaction SMILES, RXN, or binary).
     query : TextLike
         Reaction SMARTS pattern string for matching.
@@ -218,14 +223,14 @@ def rxn_has_smarts(
 
 
 def rxn_equals(
-    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+    rxn: BingoReactionSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """
     Perform exact matching on a reaction column.
 
     Parameters
     ----------
-    rxn : ColumnElement[AnyBingoReaction]
+    rxn : BingoReactionSqlOperand
         SQLAlchemy column containing reaction data (reaction SMILES, RXN, or binary).
     query : TextLike
         Query reaction as reaction SMILES or RXN string for exact matching.
@@ -242,20 +247,22 @@ def rxn_equals(
 
 
 def rxn_not_equals(
-    rxn: ColumnElement[AnyBingoReaction], query: TextLike, parameters: TextLike = ""
+    rxn: BingoReactionSqlOperand, query: TextLike, parameters: TextLike = ""
 ) -> ColumnElement[bool]:
     """Perform negated exact matching on a reaction column."""
     return ~rxn_equals(rxn, query, parameters)
 
 
-class aam(GenericFunction):
+class aam(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "aam"
 
     def __init__(
         self,
         rxn: AnyBingoReactionLike | AnyBingoBinaryReactionLike,
-        strategy: sqltypes.Text | Literal["CLEAR", "DISCARD", "ALTER", "KEEP"] = "KEEP",
+        strategy: Literal["CLEAR", "DISCARD", "ALTER", "KEEP"]
+        | SqlOperand[str] = "KEEP",
         **kwargs: Any,
     ) -> None:
         """Creates an atom-atom mapping for a reaction.
@@ -264,7 +271,7 @@ class aam(GenericFunction):
         ----------
         rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
             Input reaction
-        strategy : sqltypes.Text | Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP']
+        strategy : Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP'] | SqlOperand[str]
             Strategy for handling existing atom mapping (default is 'KEEP').
                 - 'CLEAR': Remove all existing mappings and compute new ones
                 - 'DISCARD': Remove all mappings without computing new ones
@@ -282,7 +289,8 @@ class aam(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class cansmiles(GenericFunction):
+class cansmiles(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "cansmiles"
 
@@ -307,7 +315,8 @@ class cansmiles(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class checkmolecule(GenericFunction):
+class checkmolecule(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "checkmolecule"
 
@@ -332,7 +341,8 @@ class checkmolecule(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class checkreaction(GenericFunction):
+class checkreaction(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "checkreaction"
 
@@ -357,7 +367,8 @@ class checkreaction(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class cml(GenericFunction):
+class cml(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "cml"
 
@@ -382,14 +393,15 @@ class cml(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class compactmolecule(GenericFunction):
+class compactmolecule(GenericFunction[bytes]):
+    type = sqltypes.LargeBinary()
     inherit_cache = True
     name = "compactmolecule"
 
     def __init__(
         self,
         mol: AnyBingoMolLike | AnyBingoBinaryMolLike,
-        use_pos: sqltypes.Boolean | bool = False,
+        use_pos: BooleanOperand = False,
         **kwargs: Any,
     ) -> None:
         """Calculates the compact representation of a molecule.
@@ -398,7 +410,7 @@ class compactmolecule(GenericFunction):
         ----------
         mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Input molecule in any supported format
-        use_pos : sqltypes.Boolean | bool
+        use_pos : BooleanOperand
             If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -412,14 +424,15 @@ class compactmolecule(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class compactreaction(GenericFunction):
+class compactreaction(GenericFunction[bytes]):
+    type = sqltypes.LargeBinary()
     inherit_cache = True
     name = "compactreaction"
 
     def __init__(
         self,
         rxn: AnyBingoReactionLike | AnyBingoBinaryReactionLike,
-        use_pos: sqltypes.Boolean | bool = False,
+        use_pos: BooleanOperand = False,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `compactreaction`.
@@ -428,7 +441,7 @@ class compactreaction(GenericFunction):
         ----------
         rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
             Input reaction in any supported format
-        use_pos : sqltypes.Boolean | bool
+        use_pos : BooleanOperand
             If it is true, the positions of atoms are saved to the binary format. If it is false, the positions are skipped.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -442,29 +455,30 @@ class compactreaction(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class exportrdf(GenericFunction):
+class exportrdf(GenericFunction[None]):
+    type = sqltypes.NullType()
     inherit_cache = True
     name = "exportrdf"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text,
-        arg_2: str | sqltypes.Text,
-        arg_3: str | sqltypes.Text,
-        arg_4: str | sqltypes.Text,
+        arg_1: TextOperand,
+        arg_2: TextOperand,
+        arg_3: TextOperand,
+        arg_4: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Exports reactions to an RDF format.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text
+        arg_2 : TextOperand
             Undocumented cartridge parameter.
-        arg_3 : str | sqltypes.Text
+        arg_3 : TextOperand
             Undocumented cartridge parameter.
-        arg_4 : str | sqltypes.Text
+        arg_4 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -478,29 +492,30 @@ class exportrdf(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class exportsdf(GenericFunction):
+class exportsdf(GenericFunction[None]):
+    type = sqltypes.NullType()
     inherit_cache = True
     name = "exportsdf"
 
     def __init__(
         self,
-        table: str | sqltypes.Text,
-        column: str | sqltypes.Text,
-        other_columns: str | sqltypes.Text,
-        outfile: str | sqltypes.Text,
+        table: TextOperand,
+        column: TextOperand,
+        other_columns: TextOperand,
+        outfile: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Exports molecules to an SDF format.
 
         Parameters
         ----------
-        table : str | sqltypes.Text
+        table : TextOperand
             Name of the table containing the molecules to export
-        column : str | sqltypes.Text
+        column : TextOperand
             Name of the column containing the molecules to export
-        other_columns : str | sqltypes.Text
+        other_columns : TextOperand
             Space-separated list of other columns to include in the SDF file as SD data fields
-        outfile : str | sqltypes.Text
+        outfile : TextOperand
             Path to the output SDF file
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -514,16 +529,17 @@ class exportsdf(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class filetoblob(GenericFunction):
+class filetoblob(GenericFunction[bytes]):
+    type = sqltypes.LargeBinary()
     inherit_cache = True
     name = "filetoblob"
 
-    def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
+    def __init__(self, arg_1: TextOperand, **kwargs: Any) -> None:
         """Calls the bingo cartridge function `filetoblob`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -537,16 +553,17 @@ class filetoblob(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class filetotext(GenericFunction):
+class filetotext(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "filetotext"
 
-    def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
+    def __init__(self, arg_1: TextOperand, **kwargs: Any) -> None:
         """Calls the bingo cartridge function `filetotext`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -560,23 +577,21 @@ class filetotext(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class fingerprint(GenericFunction):
+class fingerprint(GenericFunction[bytes]):
+    type = sqltypes.LargeBinary()
     inherit_cache = True
     name = "fingerprint"
 
     def __init__(
-        self,
-        arg_1: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
-        arg_2: str | sqltypes.Text,
-        **kwargs: Any,
+        self, arg_1: TextOrBinaryOperand, arg_2: TextOperand, **kwargs: Any
     ) -> None:
         """Calls the bingo cartridge function `fingerprint`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        arg_1 : TextOrBinaryOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text
+        arg_2 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -590,16 +605,17 @@ class fingerprint(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class getblockcount(GenericFunction):
+class getblockcount(GenericFunction[int]):
+    type = sqltypes.Integer()
     inherit_cache = True
     name = "getblockcount"
 
-    def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
+    def __init__(self, arg_1: TextOperand, **kwargs: Any) -> None:
         """Calls the bingo cartridge function `getblockcount`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -613,7 +629,8 @@ class getblockcount(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class getindexstructurescount(GenericFunction):
+class getindexstructurescount(GenericFunction[int]):
+    type = sqltypes.Integer()
     inherit_cache = True
     name = "getindexstructurescount"
 
@@ -635,7 +652,8 @@ class getindexstructurescount(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class getmass(GenericFunction):
+class getmass(GenericFunction[float]):
+    type = sqltypes.Float()
     inherit_cache = True
     name = "getmass"
 
@@ -660,7 +678,8 @@ class getmass(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class getname(GenericFunction):
+class getname(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "getname"
 
@@ -683,7 +702,7 @@ class getname(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class getsimilarity(GenericFunction):
+class getsimilarity(GenericFunction[float]):
     type = sqltypes.Float()
     inherit_cache = True
     name = "getsimilarity"
@@ -717,16 +736,17 @@ class getsimilarity(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class getstructurescount(GenericFunction):
+class getstructurescount(GenericFunction[int]):
+    type = sqltypes.Integer()
     inherit_cache = True
     name = "getstructurescount"
 
-    def __init__(self, arg_1: str | sqltypes.Text, **kwargs: Any) -> None:
+    def __init__(self, arg_1: TextOperand, **kwargs: Any) -> None:
         """Calls the bingo cartridge function `getstructurescount`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -740,7 +760,8 @@ class getstructurescount(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class getversion(GenericFunction):
+class getversion(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "getversion"
 
@@ -762,14 +783,15 @@ class getversion(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class getweight(GenericFunction):
+class getweight(GenericFunction[float]):
+    type = sqltypes.Float()
     inherit_cache = True
     name = "getweight"
 
     def __init__(
         self,
         mol: AnyBingoMolLike | AnyBingoBinaryMolLike,
-        arg_2: str | sqltypes.Text,
+        arg_2: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `getweight`.
@@ -778,7 +800,7 @@ class getweight(GenericFunction):
         ----------
         mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text
+        arg_2 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -792,7 +814,8 @@ class getweight(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class gross(GenericFunction):
+class gross(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "gross"
 
@@ -817,7 +840,8 @@ class gross(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class importrdf(GenericFunction):
+class importrdf(GenericFunction[None]):
+    type = sqltypes.NullType()
     inherit_cache = True
     name = "importrdf"
 
@@ -853,29 +877,30 @@ class importrdf(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class importsdf(GenericFunction):
+class importsdf(GenericFunction[None]):
+    type = sqltypes.NullType()
     inherit_cache = True
     name = "importsdf"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text,
-        arg_2: str | sqltypes.Text,
-        arg_3: str | sqltypes.Text,
-        arg_4: str | sqltypes.Text,
+        arg_1: TextOperand,
+        arg_2: TextOperand,
+        arg_3: TextOperand,
+        arg_4: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `importsdf`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text
+        arg_2 : TextOperand
             Undocumented cartridge parameter.
-        arg_3 : str | sqltypes.Text
+        arg_3 : TextOperand
             Undocumented cartridge parameter.
-        arg_4 : str | sqltypes.Text
+        arg_4 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -889,29 +914,30 @@ class importsdf(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class importsmiles(GenericFunction):
+class importsmiles(GenericFunction[None]):
+    type = sqltypes.NullType()
     inherit_cache = True
     name = "importsmiles"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text,
-        arg_2: str | sqltypes.Text,
-        arg_3: str | sqltypes.Text,
-        arg_4: str | sqltypes.Text,
+        arg_1: TextOperand,
+        arg_2: TextOperand,
+        arg_3: TextOperand,
+        arg_4: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `importsmiles`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text
+        arg_2 : TextOperand
             Undocumented cartridge parameter.
-        arg_3 : str | sqltypes.Text
+        arg_3 : TextOperand
             Undocumented cartridge parameter.
-        arg_4 : str | sqltypes.Text
+        arg_4 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -925,14 +951,15 @@ class importsmiles(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class inchi(GenericFunction):
+class inchi(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "inchi"
 
     def __init__(
         self,
         mol: AnyBingoMolLike | AnyBingoBinaryMolLike,
-        arg_2: str | sqltypes.Text,
+        arg_2: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `inchi`.
@@ -941,7 +968,7 @@ class inchi(GenericFunction):
         ----------
         mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text
+        arg_2 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -955,7 +982,8 @@ class inchi(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class inchikey(GenericFunction):
+class inchikey(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "inchikey"
 
@@ -978,7 +1006,7 @@ class inchikey(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class matchexact(GenericFunction):
+class matchexact(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "matchexact"
@@ -1001,7 +1029,7 @@ class matchexact(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class matchgross(GenericFunction):
+class matchgross(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "matchgross"
@@ -1024,7 +1052,7 @@ class matchgross(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class matchrexact(GenericFunction):
+class matchrexact(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "matchrexact"
@@ -1047,7 +1075,7 @@ class matchrexact(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class matchrsmarts(GenericFunction):
+class matchrsmarts(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "matchrsmarts"
@@ -1070,7 +1098,7 @@ class matchrsmarts(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class matchrsub(GenericFunction):
+class matchrsub(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "matchrsub"
@@ -1093,7 +1121,7 @@ class matchrsub(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class matchsim(GenericFunction):
+class matchsim(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "matchsim"
@@ -1116,7 +1144,7 @@ class matchsim(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class matchsmarts(GenericFunction):
+class matchsmarts(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "matchsmarts"
@@ -1139,7 +1167,7 @@ class matchsmarts(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class matchsub(GenericFunction):
+class matchsub(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "matchsub"
@@ -1162,7 +1190,8 @@ class matchsub(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class molfile(GenericFunction):
+class molfile(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "molfile"
 
@@ -1187,20 +1216,19 @@ class molfile(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class precachedatabase(GenericFunction):
+class precachedatabase(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "precachedatabase"
 
-    def __init__(
-        self, arg_1: str | sqltypes.Text, arg_2: str | sqltypes.Text, **kwargs: Any
-    ) -> None:
+    def __init__(self, arg_1: TextOperand, arg_2: TextOperand, **kwargs: Any) -> None:
         """Calls the bingo cartridge function `precachedatabase`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text
+        arg_2 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -1214,7 +1242,8 @@ class precachedatabase(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class rcml(GenericFunction):
+class rcml(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "rcml"
 
@@ -1239,14 +1268,15 @@ class rcml(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class rfingerprint(GenericFunction):
+class rfingerprint(GenericFunction[bytes]):
+    type = sqltypes.LargeBinary()
     inherit_cache = True
     name = "rfingerprint"
 
     def __init__(
         self,
         rxn: AnyBingoReactionLike | AnyBingoBinaryReactionLike,
-        arg_2: str | sqltypes.Text,
+        arg_2: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `rfingerprint`.
@@ -1255,7 +1285,7 @@ class rfingerprint(GenericFunction):
         ----------
         rxn : AnyBingoReactionLike | AnyBingoBinaryReactionLike
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text
+        arg_2 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -1269,7 +1299,8 @@ class rfingerprint(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class rsmiles(GenericFunction):
+class rsmiles(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "rsmiles"
 
@@ -1294,7 +1325,8 @@ class rsmiles(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class rxnfile(GenericFunction):
+class rxnfile(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "rxnfile"
 
@@ -1319,7 +1351,8 @@ class rxnfile(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class smiles(GenericFunction):
+class smiles(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "smiles"
 
@@ -1344,14 +1377,15 @@ class smiles(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class standardize(GenericFunction):
+class standardize(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "standardize"
 
     def __init__(
         self,
         mol: AnyBingoMolLike | AnyBingoBinaryMolLike,
-        arg_2: str | sqltypes.Text,
+        arg_2: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `standardize`.
@@ -1360,7 +1394,7 @@ class standardize(GenericFunction):
         ----------
         mol : AnyBingoMolLike | AnyBingoBinaryMolLike
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text
+        arg_2 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.

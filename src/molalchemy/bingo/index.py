@@ -72,7 +72,7 @@ class BingoMolIndex(_BingoIndexBase):
     ...     __tablename__ = 'molecules'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     structure: Mapped[BingoMol] = mapped_column(BingoMol)
+    ...     structure: Mapped[str] = mapped_column(BingoMol())
     ...
     ...     __table_args__ = (
     ...         BingoMolIndex('idx_mol_structure', 'structure'),
@@ -121,7 +121,7 @@ class BingoBinaryMolIndex(_BingoIndexBase):
     ...     __tablename__ = 'molecules'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     structure_bin: Mapped[BingoBinaryMol] = mapped_column(BingoBinaryMol)
+    ...     structure_bin: Mapped[str] = mapped_column(BingoBinaryMol())
     ...
     ...     __table_args__ = (
     ...         BingoBinaryMolIndex('idx_mol_structure_bin', 'structure_bin'),
@@ -171,7 +171,7 @@ class BingoRxnIndex(_BingoIndexBase):
     ...     __tablename__ = 'reactions'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     reaction: Mapped[BingoReaction] = mapped_column(BingoReaction)
+    ...     reaction: Mapped[str] = mapped_column(BingoReaction())
     ...
     ...     __table_args__ = (
     ...         BingoRxnIndex('idx_reaction_structure', 'reaction'),

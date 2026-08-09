@@ -10,10 +10,18 @@ from sqlalchemy.sql.functions import GenericFunction
 
 from molalchemy.bingo.search import _bingo_search_values
 from molalchemy.protocols import (
+    BinaryOperand,
+    BingoMolSqlOperand,
     BingoOperand,
     BingoParameters,
+    BingoReactionSqlOperand,
     BingoSimilarityBound,
+    BooleanOperand,
+    FloatOperand,
+    IntegerOperand,
     SqlOperand,
+    TextOperand,
+    TextOrBinaryOperand,
 )
 
 from ._types import (

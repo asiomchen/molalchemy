@@ -15,6 +15,81 @@ from jinja2 import Environment, FileSystemLoader
 
 UNDOCUMENTED_PARAM_DESCRIPTION = "Undocumented cartridge parameter."
 
+ARGUMENT_TYPE_MAP = {
+    "bool | sqltypes.Boolean": "BooleanOperand",
+    "sqltypes.Boolean": "BooleanOperand",
+    "sqltypes.Boolean | bool": "BooleanOperand",
+    "float": "FloatOperand",
+    "float | sqltypes.Float": "FloatOperand",
+    "sqltypes.Float": "FloatOperand",
+    "int | sqltypes.Integer": "IntegerOperand",
+    "sqltypes.Integer": "IntegerOperand",
+    "bytes | sqltypes.LargeBinary": "BinaryOperand",
+    "sqltypes.LargeBinary": "BinaryOperand",
+    "str | sqltypes.Text": "TextOperand",
+    "sqltypes.Text": "TextOperand",
+    "str | sqltypes.Text | bytes | sqltypes.LargeBinary": "TextOrBinaryOperand",
+    "CString": "TextOperand",
+    "CString | Cast[Any]": "str | SqlOperand[Any]",
+    "sqltypes.Text | CString": "TextOperand",
+    "sqltypes.Text | CString | Cast[Any]": "str | SqlOperand[Any]",
+    "sqltypes.Text | CString | Cast[Any] | str": "str | SqlOperand[Any]",
+    "sqltypes.Text | Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP']": (
+        "Literal['CLEAR', 'DISCARD', 'ALTER', 'KEEP'] | SqlOperand[str]"
+    ),
+}
+
+RETURN_TYPE_MAP = {
+    "CString": ("str", "CString()"),
+    "None | sqltypes.NullType": ("None", "sqltypes.NullType()"),
+    "bytes | sqltypes.LargeBinary": ("bytes", "sqltypes.LargeBinary()"),
+    "float | sqltypes.Float": ("float", "sqltypes.Float()"),
+    "int | sqltypes.Integer": ("int", "sqltypes.Integer()"),
+    "sqltypes.Boolean": ("bool", "sqltypes.Boolean()"),
+    "sqltypes.Float": ("float", "sqltypes.Float()"),
+    "sqltypes.LargeBinary": ("bytes", "sqltypes.LargeBinary()"),
+    "sqltypes.Text": ("str", "sqltypes.Text()"),
+    "str | sqltypes.Text": ("str", "sqltypes.Text()"),
+}
+
+
+def normalize_argument_type(type_name: str) -> str:
+    """Translate metadata types into accepted Python values/SQL operands."""
+    if type_name.startswith("Rdkit"):
+        if "Sparse" in type_name and "Bit" in type_name:
+            return "AnyRdkitFingerprintLike"
+        return " | ".join(
+            f"Any{part.replace(' ', '')}Like" for part in type_name.split("|")
+        )
+    return ARGUMENT_TYPE_MAP.get(type_name, type_name)
+
+
+def normalize_return_type(type_name: str) -> tuple[str, str]:
+    """Return the Python result and runtime SQLAlchemy type expression."""
+    if type_name in RETURN_TYPE_MAP:
+        return RETURN_TYPE_MAP[type_name]
+    if "RdkitBitFingerprint" in type_name:
+        return "bytes", "RdkitBitFingerprint()"
+    if "RdkitSparseFingerprint" in type_name:
+        return "bytes", "RdkitSparseFingerprint()"
+    if "RdkitReaction" in type_name:
+        return "str", "RdkitReaction()"
+    if "RdkitMol" in type_name:
+        return "str", "RdkitMol()"
+    if "RdkitQMol" in type_name:
+        return "str", "RdkitQMol()"
+    if "RdkitXQMol" in type_name:
+        return "str", "RdkitXQMol()"
+    if "BingoBinaryMol" in type_name:
+        return "str", "BingoBinaryMol()"
+    if "BingoMol" in type_name:
+        return "str", "BingoMol()"
+    if "BingoBinaryReaction" in type_name:
+        return "bytes", "BingoBinaryReaction()"
+    if "BingoReaction" in type_name:
+        return "str", "BingoReaction()"
+    raise ValueError(f"Unsupported function return type: {type_name}")
+
 
 def format_doc_param(param: dict) -> str:
     """Format a JSON argument definition as a NumPy-style docstring parameter."""
@@ -46,20 +121,13 @@ def json_to_function_code(func_name: str, data: dict, template) -> str:
 
     # Process function arguments
     for param in data["args"]:
-        if param["type"].startswith("Rdkit"):
-            if "Sparse" in param["type"] and "Bit" in param["type"]:
-                param["type"] = "AnyRdkitFingerprintLike"
-            else:
-                param_t = param["type"].split("|")
-                param["type"] = " | ".join(
-                    [f"Any{t.replace(' ', '')}Like" for t in param_t]
-                )
-        param_str = f"{param['name']}: {param['type']}"
+        argument_type = normalize_argument_type(param["type"])
+        param_str = f"{param['name']}: {argument_type}"
         if param["default"] is not None:
             param_str += f" = {param['default']}"
         params_list.append(param_str)
 
-        doc_param_list.append(format_doc_param(param))
+        doc_param_list.append(format_doc_param({**param, "type": argument_type}))
         arg_names.append(param["name"])
 
     # Format parameters for template
@@ -73,6 +141,9 @@ def json_to_function_code(func_name: str, data: dict, template) -> str:
         arg_names_str = ""
 
     # Render the template
+    python_return_type, sqlalchemy_return_type = normalize_return_type(
+        data["return_type"]["type"]
+    )
     generated_code = template.render(
         func_name=func_name,
         description=description,
@@ -80,6 +151,8 @@ def json_to_function_code(func_name: str, data: dict, template) -> str:
         arg_inits=params,
         arg_names=arg_names_str,
         return_type=data["return_type"]["type"],
+        python_return_type=python_return_type,
+        sqlalchemy_return_type=sqlalchemy_return_type,
         return_description=data["return_type"]["description"],
     )
     return generated_code

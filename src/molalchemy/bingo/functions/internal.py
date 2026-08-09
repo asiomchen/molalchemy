@@ -7,30 +7,36 @@ from typing import Any
 from sqlalchemy import types as sqltypes
 from sqlalchemy.sql.functions import GenericFunction
 
+from molalchemy.protocols import (
+    FloatOperand,
+    IntegerOperand,
+    TextOperand,
+    TextOrBinaryOperand,
+)
 from molalchemy.types import CString
 
 
-class _exact_internal(GenericFunction):
+class _exact_internal(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "_exact_internal"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text,
-        arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
-        arg_3: str | sqltypes.Text,
+        arg_1: TextOperand,
+        arg_2: TextOrBinaryOperand,
+        arg_3: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `_exact_internal`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        arg_2 : TextOrBinaryOperand
             Undocumented cartridge parameter.
-        arg_3 : str | sqltypes.Text
+        arg_3 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -44,7 +50,8 @@ class _exact_internal(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _get_block_count(GenericFunction):
+class _get_block_count(GenericFunction[int]):
+    type = sqltypes.Integer()
     inherit_cache = True
     name = "_get_block_count"
 
@@ -66,7 +73,7 @@ class _get_block_count(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _get_profiling_info(GenericFunction):
+class _get_profiling_info(GenericFunction[str]):
     type = CString()
     inherit_cache = True
     name = "_get_profiling_info"
@@ -89,7 +96,8 @@ class _get_profiling_info(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _get_structures_count(GenericFunction):
+class _get_structures_count(GenericFunction[int]):
+    type = sqltypes.Integer()
     inherit_cache = True
     name = "_get_structures_count"
 
@@ -111,27 +119,27 @@ class _get_structures_count(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _gross_internal(GenericFunction):
+class _gross_internal(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "_gross_internal"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text,
-        arg_2: str | sqltypes.Text,
-        arg_3: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
+        arg_1: TextOperand,
+        arg_2: TextOperand,
+        arg_3: TextOrBinaryOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `_gross_internal`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text
+        arg_2 : TextOperand
             Undocumented cartridge parameter.
-        arg_3 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        arg_3 : TextOrBinaryOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -145,26 +153,27 @@ class _gross_internal(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _internal_func_011(GenericFunction):
+class _internal_func_011(GenericFunction[None]):
+    type = sqltypes.NullType()
     inherit_cache = True
     name = "_internal_func_011"
 
     def __init__(
         self,
-        arg_1: int | sqltypes.Integer,
-        arg_2: str | sqltypes.Text,
-        arg_3: str | sqltypes.Text,
+        arg_1: IntegerOperand,
+        arg_2: TextOperand,
+        arg_3: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `_internal_func_011`.
 
         Parameters
         ----------
-        arg_1 : int | sqltypes.Integer
+        arg_1 : IntegerOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text
+        arg_2 : TextOperand
             Undocumented cartridge parameter.
-        arg_3 : str | sqltypes.Text
+        arg_3 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -178,20 +187,21 @@ class _internal_func_011(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _internal_func_012(GenericFunction):
+class _internal_func_012(GenericFunction[None]):
+    type = sqltypes.NullType()
     inherit_cache = True
     name = "_internal_func_012"
 
     def __init__(
-        self, arg_1: int | sqltypes.Integer, arg_2: str | sqltypes.Text, **kwargs: Any
+        self, arg_1: IntegerOperand, arg_2: TextOperand, **kwargs: Any
     ) -> None:
         """Calls the bingo cartridge function `_internal_func_012`.
 
         Parameters
         ----------
-        arg_1 : int | sqltypes.Integer
+        arg_1 : IntegerOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text
+        arg_2 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -205,17 +215,17 @@ class _internal_func_012(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _internal_func_check(GenericFunction):
+class _internal_func_check(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "_internal_func_check"
 
-    def __init__(self, arg_1: int | sqltypes.Integer, **kwargs: Any) -> None:
+    def __init__(self, arg_1: IntegerOperand, **kwargs: Any) -> None:
         """Calls the bingo cartridge function `_internal_func_check`.
 
         Parameters
         ----------
-        arg_1 : int | sqltypes.Integer
+        arg_1 : IntegerOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -229,7 +239,7 @@ class _internal_func_check(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _match_mass_great(GenericFunction):
+class _match_mass_great(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "_match_mass_great"
@@ -252,7 +262,7 @@ class _match_mass_great(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _match_mass_less(GenericFunction):
+class _match_mass_less(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "_match_mass_less"
@@ -275,7 +285,8 @@ class _match_mass_less(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _precache_database(GenericFunction):
+class _precache_database(GenericFunction[str]):
+    type = sqltypes.Text()
     inherit_cache = True
     name = "_precache_database"
 
@@ -297,7 +308,8 @@ class _precache_database(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _print_profiling_info(GenericFunction):
+class _print_profiling_info(GenericFunction[None]):
+    type = sqltypes.NullType()
     inherit_cache = True
     name = "_print_profiling_info"
 
@@ -319,7 +331,8 @@ class _print_profiling_info(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _reset_profiling_info(GenericFunction):
+class _reset_profiling_info(GenericFunction[None]):
+    type = sqltypes.NullType()
     inherit_cache = True
     name = "_reset_profiling_info"
 
@@ -341,27 +354,27 @@ class _reset_profiling_info(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _rexact_internal(GenericFunction):
+class _rexact_internal(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "_rexact_internal"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text,
-        arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
-        arg_3: str | sqltypes.Text,
+        arg_1: TextOperand,
+        arg_2: TextOrBinaryOperand,
+        arg_3: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `_rexact_internal`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        arg_2 : TextOrBinaryOperand
             Undocumented cartridge parameter.
-        arg_3 : str | sqltypes.Text
+        arg_3 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -375,27 +388,27 @@ class _rexact_internal(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _rsmarts_internal(GenericFunction):
+class _rsmarts_internal(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "_rsmarts_internal"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text,
-        arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
-        arg_3: str | sqltypes.Text,
+        arg_1: TextOperand,
+        arg_2: TextOrBinaryOperand,
+        arg_3: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `_rsmarts_internal`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        arg_2 : TextOrBinaryOperand
             Undocumented cartridge parameter.
-        arg_3 : str | sqltypes.Text
+        arg_3 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -409,27 +422,27 @@ class _rsmarts_internal(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _rsub_internal(GenericFunction):
+class _rsub_internal(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "_rsub_internal"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text,
-        arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
-        arg_3: str | sqltypes.Text,
+        arg_1: TextOperand,
+        arg_2: TextOrBinaryOperand,
+        arg_3: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `_rsub_internal`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        arg_2 : TextOrBinaryOperand
             Undocumented cartridge parameter.
-        arg_3 : str | sqltypes.Text
+        arg_3 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -443,33 +456,33 @@ class _rsub_internal(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _sim_internal(GenericFunction):
+class _sim_internal(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "_sim_internal"
 
     def __init__(
         self,
-        arg_1: float | sqltypes.Float,
-        arg_2: float | sqltypes.Float,
-        arg_3: str | sqltypes.Text,
-        arg_4: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
-        arg_5: str | sqltypes.Text,
+        arg_1: FloatOperand,
+        arg_2: FloatOperand,
+        arg_3: TextOperand,
+        arg_4: TextOrBinaryOperand,
+        arg_5: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `_sim_internal`.
 
         Parameters
         ----------
-        arg_1 : float | sqltypes.Float
+        arg_1 : FloatOperand
             Undocumented cartridge parameter.
-        arg_2 : float | sqltypes.Float
+        arg_2 : FloatOperand
             Undocumented cartridge parameter.
-        arg_3 : str | sqltypes.Text
+        arg_3 : TextOperand
             Undocumented cartridge parameter.
-        arg_4 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        arg_4 : TextOrBinaryOperand
             Undocumented cartridge parameter.
-        arg_5 : str | sqltypes.Text
+        arg_5 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -483,27 +496,27 @@ class _sim_internal(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _smarts_internal(GenericFunction):
+class _smarts_internal(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "_smarts_internal"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text,
-        arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
-        arg_3: str | sqltypes.Text,
+        arg_1: TextOperand,
+        arg_2: TextOrBinaryOperand,
+        arg_3: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `_smarts_internal`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        arg_2 : TextOrBinaryOperand
             Undocumented cartridge parameter.
-        arg_3 : str | sqltypes.Text
+        arg_3 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -517,27 +530,27 @@ class _smarts_internal(GenericFunction):
         self.packagenames = ("bingo",)
 
 
-class _sub_internal(GenericFunction):
+class _sub_internal(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
     name = "_sub_internal"
 
     def __init__(
         self,
-        arg_1: str | sqltypes.Text,
-        arg_2: str | sqltypes.Text | bytes | sqltypes.LargeBinary,
-        arg_3: str | sqltypes.Text,
+        arg_1: TextOperand,
+        arg_2: TextOrBinaryOperand,
+        arg_3: TextOperand,
         **kwargs: Any,
     ) -> None:
         """Calls the bingo cartridge function `_sub_internal`.
 
         Parameters
         ----------
-        arg_1 : str | sqltypes.Text
+        arg_1 : TextOperand
             Undocumented cartridge parameter.
-        arg_2 : str | sqltypes.Text | bytes | sqltypes.LargeBinary
+        arg_2 : TextOrBinaryOperand
             Undocumented cartridge parameter.
-        arg_3 : str | sqltypes.Text
+        arg_3 : TextOperand
             Undocumented cartridge parameter.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.

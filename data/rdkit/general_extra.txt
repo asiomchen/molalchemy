@@ -1,7 +1,7 @@
 
 
 def fp_similar_to(
-    fp_column: SqlOperand,
+    fp_column: RdkitFingerprintSqlOperand,
     query: RdkitFingerprintOperand,
     minimum: RdkitSimilarityBound = 0.0,
     maximum: RdkitSimilarityBound = 1.0,
@@ -17,7 +17,7 @@ def fp_similar_to(
 
 
 def fp_similarity_score(
-    fp_column: SqlOperand,
+    fp_column: RdkitFingerprintSqlOperand,
     query: RdkitFingerprintOperand,
     metric: RdkitSimilarityMetric = "Tanimoto",
 ) -> ColumnElement[float]:
@@ -26,7 +26,7 @@ def fp_similarity_score(
 
 
 def mol_has_substructure(
-    mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
+    mol_column: RdkitMolSqlOperand, query: AnyRdkitMolLike
 ) -> ColumnElement[bool]:
     """
     Perform substructure search.
@@ -36,7 +36,7 @@ def mol_has_substructure(
 
     Parameters
     ----------
-    mol_column : ColumnElement[molalchemy.rdkit.types.RdkitMol]
+    mol_column : RdkitMolSqlOperand
         The database column containing the molecular structure to search.
     query : AnyRdkitMolLike
         The query structure. Plain Python strings are treated as SMILES-like
@@ -59,7 +59,9 @@ def mol_has_substructure(
     return _rdkit_predicate(mol_column, "@>", query)
 
 
-def mol_has_smarts(mol_column: ColumnElement, pattern: str) -> ColumnElement[bool]:
+def mol_has_smarts(
+    mol_column: RdkitMolSqlOperand, pattern: str
+) -> ColumnElement[bool]:
     """
     Perform molecule SMARTS search.
 
@@ -89,7 +91,7 @@ def mol_has_smarts(mol_column: ColumnElement, pattern: str) -> ColumnElement[boo
 
 
 def mol_is_substructure_of(
-    mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
+    mol_column: RdkitMolSqlOperand, query: AnyRdkitMolLike
 ) -> ColumnElement[bool]:
     """
     Perform reverse substructure search.
@@ -99,7 +101,7 @@ def mol_is_substructure_of(
 
     Parameters
     ----------
-    mol_column : ColumnElement[molalchemy.rdkit.types.RdkitMol]
+    mol_column : RdkitMolSqlOperand
         The database column containing the molecular structure to search.
     query : AnyRdkitMolLike
         The query structure. Plain Python strings are treated as SMILES-like
@@ -115,7 +117,7 @@ def mol_is_substructure_of(
 
 
 def mol_equals(
-    mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
+    mol_column: RdkitMolSqlOperand, query: AnyRdkitMolLike
 ) -> ColumnElement[bool]:
     """
     Perform exact structure matching.
@@ -127,7 +129,7 @@ def mol_equals(
 
     Parameters
     ----------
-    mol_column : ColumnElement[molalchemy.rdkit.types.RdkitMol]
+    mol_column : RdkitMolSqlOperand
         The database column containing the molecular structure to compare.
     query : AnyRdkitMolLike
         The query structure. Plain Python strings are treated as SMILES-like
@@ -142,7 +144,7 @@ def mol_equals(
 
 
 def mol_not_equals(
-    mol_column: ColumnElement[RdkitMol], query: AnyRdkitMolLike
+    mol_column: RdkitMolSqlOperand, query: AnyRdkitMolLike
 ) -> ColumnElement[bool]:
     """
     Perform negative exact structure matching.
@@ -155,7 +157,7 @@ def mol_not_equals(
 
 
 def mol_has_query_substructure(
-    mol_column: ColumnElement[RdkitMol],
+    mol_column: RdkitMolSqlOperand,
     query: AnyRdkitMolLike | AnyRdkitQMolLike | AnyRdkitXQMolLike,
 ) -> ColumnElement[bool]:
     """
@@ -169,7 +171,7 @@ def mol_has_query_substructure(
 
 
 def mol_is_query_substructure_of(
-    mol_column: ColumnElement[RdkitMol],
+    mol_column: RdkitMolSqlOperand,
     query: AnyRdkitMolLike | AnyRdkitQMolLike | AnyRdkitXQMolLike,
 ) -> ColumnElement[bool]:
     """
@@ -183,7 +185,7 @@ def mol_is_query_substructure_of(
 
 
 def rxn_has_substructure(
-    rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
+    rxn_column: RdkitReactionSqlOperand, query: AnyRdkitReactionLike
 ) -> ColumnElement[bool]:
     """
     Perform reaction substructure search.
@@ -195,7 +197,7 @@ def rxn_has_substructure(
 
 
 def rxn_is_substructure_of(
-    rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
+    rxn_column: RdkitReactionSqlOperand, query: AnyRdkitReactionLike
 ) -> ColumnElement[bool]:
     """
     Perform reverse reaction substructure search.
@@ -207,7 +209,7 @@ def rxn_is_substructure_of(
 
 
 def rxn_equals(
-    rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
+    rxn_column: RdkitReactionSqlOperand, query: AnyRdkitReactionLike
 ) -> ColumnElement[bool]:
     """
     Perform exact reaction matching.
@@ -219,7 +221,7 @@ def rxn_equals(
 
 
 def rxn_not_equals(
-    rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
+    rxn_column: RdkitReactionSqlOperand, query: AnyRdkitReactionLike
 ) -> ColumnElement[bool]:
     """
     Perform negative exact reaction matching.
@@ -231,7 +233,7 @@ def rxn_not_equals(
 
 
 def rxn_has_substructure_fp(
-    rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
+    rxn_column: RdkitReactionSqlOperand, query: AnyRdkitReactionLike
 ) -> ColumnElement[bool]:
     """
     Perform fingerprint-backed reaction substructure search.
@@ -243,7 +245,7 @@ def rxn_has_substructure_fp(
 
 
 def rxn_is_substructure_fp_of(
-    rxn_column: ColumnElement[RdkitReaction], query: AnyRdkitReactionLike
+    rxn_column: RdkitReactionSqlOperand, query: AnyRdkitReactionLike
 ) -> ColumnElement[bool]:
     """
     Perform reverse fingerprint-backed reaction substructure search.
@@ -254,7 +256,9 @@ def rxn_is_substructure_fp_of(
     return _rdkit_predicate(rxn_column, "?<", query)
 
 
-def rxn_has_smarts(rxn_column: ColumnElement, pattern: str) -> ColumnElement[bool]:
+def rxn_has_smarts(
+    rxn_column: RdkitReactionSqlOperand, pattern: str
+) -> ColumnElement[bool]:
     """
     Perform reaction substructure search.
 

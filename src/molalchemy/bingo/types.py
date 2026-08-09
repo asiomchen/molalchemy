@@ -4,19 +4,44 @@ This module provides SQLAlchemy UserDefinedType classes for working with
 chemical molecules and reactions in PostgreSQL using the Bingo cartridge.
 """
 
-from typing import Any, Literal
+from typing import Any, Generic, Literal, TypeVar, overload
 
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
 from molalchemy.bingo.comparators import BingoMolComparator, BingoRxnComparator
 
+_BINGO_BINARY_MOL_RETURN_TYPES = ("smiles", "molfile", "cml", "bytes")
+_T = TypeVar("_T")
 
-class BingoBaseType(UserDefinedType):
+
+def _validate_return_type(value: object) -> None:
+    if not isinstance(value, str):
+        raise TypeError(f"return_type must be a str, got {type(value).__name__}")
+    if value not in _BINGO_BINARY_MOL_RETURN_TYPES:
+        choices = ", ".join(repr(choice) for choice in _BINGO_BINARY_MOL_RETURN_TYPES)
+        raise ValueError(f"return_type must be one of {choices}, got {value!r}")
+
+
+def _validate_preserve_pos(value: object) -> None:
+    if type(value) is not bool:
+        raise TypeError(f"preserve_pos must be a bool, got {type(value).__name__}")
+
+
+class BingoBaseType(UserDefinedType[_T], Generic[_T]):
     """Base class for Bingo types."""
 
+    _immutable_options: frozenset[str] = frozenset()
 
-class BingoMol(BingoBaseType):
+    def __setattr__(self, name: str, value: Any) -> None:
+        # SQLAlchemy builds _static_cache_key from constructor-named attributes
+        # in __dict__; read-only properties backed by private names hide them.
+        if name in self._immutable_options and name in self.__dict__:
+            raise AttributeError(f"{name} is immutable")
+        super().__setattr__(name, value)
+
+
+class BingoMol(BingoBaseType[str]):
     """SQLAlchemy type for molecule data stored as text (varchar).
 
     This type represents molecules stored as text in PostgreSQL, typically
@@ -43,7 +68,7 @@ class BingoMol(BingoBaseType):
     ...     __tablename__ = 'molecules'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     smiles: Mapped[str] = mapped_column(BingoMol)
+    ...     smiles: Mapped[str] = mapped_column(BingoMol())
     ...     name: Mapped[str] = mapped_column(String(100))
     >>>
     >>> # Usage in queries
@@ -58,7 +83,7 @@ class BingoMol(BingoBaseType):
     cache_ok = True
     comparator_factory = BingoMolComparator
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "BingoMol()"
 
     def get_col_spec(self, **kwargs: Any) -> str:
@@ -72,7 +97,7 @@ class BingoMol(BingoBaseType):
         return "varchar"
 
 
-class BingoBinaryMol(BingoBaseType):
+class BingoBinaryMol(BingoBaseType[_T], Generic[_T]):
     """SQLAlchemy type for binary molecule data with format conversion.
 
     This type represents molecules stored in Bingo's internal binary format
@@ -81,7 +106,7 @@ class BingoBinaryMol(BingoBaseType):
     atomic coordinates and specifying the return format for queries.
 
     Parameters
-        ----------
+    ----------
     preserve_pos : bool, default False
         Whether to preserve atomic coordinates when converting to binary format.
         If `True`, coordinates are stored; if `False`, they are discarded.
@@ -100,6 +125,17 @@ class BingoBinaryMol(BingoBaseType):
     --------
     When `preserve_pos=True`, only inputs with present atomic coordinates should be used, otherwise an error will occur during conversion.
 
+    Raises
+    ------
+    TypeError
+        If `preserve_pos` is not a boolean or `return_type` is not a string.
+    ValueError
+        If `return_type` is not one of the supported values.
+
+    Notes
+    -----
+    `preserve_pos` and `return_type` are immutable after construction.
+
     Examples
     --------
     >>> from sqlalchemy import Integer, String
@@ -113,7 +149,7 @@ class BingoBinaryMol(BingoBaseType):
     ...     __tablename__ = 'molecules'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     structure: Mapped[bytes] = mapped_column(
+    ...     structure: Mapped[str] = mapped_column(
     ...         BingoBinaryMol(preserve_pos=True, return_type="smiles")
     ...     )
     ...     name: Mapped[str] = mapped_column(String(100))
@@ -123,7 +159,7 @@ class BingoBinaryMol(BingoBaseType):
     ...     __tablename__ = 'molecules_molfile'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     structure: Mapped[bytes] = mapped_column(
+    ...     structure: Mapped[str] = mapped_column(
     ...         BingoBinaryMol(preserve_pos=True, return_type="molfile")
     ...     )
     >>>
@@ -136,18 +172,38 @@ class BingoBinaryMol(BingoBaseType):
 
     cache_ok = True
     comparator_factory = BingoMolComparator
+    _immutable_options = frozenset(("preserve_pos", "return_type"))
+
+    @overload
+    def __init__(
+        self: "BingoBinaryMol[str]",
+        preserve_pos: bool = False,
+        return_type: Literal["smiles", "molfile", "cml"] = "smiles",
+    ) -> None: ...
+
+    @overload
+    def __init__(
+        self: "BingoBinaryMol[bytes]",
+        preserve_pos: bool = False,
+        return_type: Literal["bytes"] = "bytes",
+    ) -> None: ...
 
     def __init__(
         self,
         preserve_pos: bool = False,
         return_type: Literal["smiles", "molfile", "cml", "bytes"] = "smiles",
-    ):
+    ) -> None:
+        _validate_preserve_pos(preserve_pos)
+        _validate_return_type(return_type)
         self.preserve_pos = preserve_pos
         self.return_type = return_type
         super().__init__()
 
-    def __repr__(self):
-        return f"BingoBinaryMol(preserve_pos={self.preserve_pos!r}, return_type={self.return_type!r})"
+    def __repr__(self) -> str:
+        return (
+            f"BingoBinaryMol(preserve_pos={self.preserve_pos!r}, "
+            f"return_type={self.return_type!r})"
+        )
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "bytea"
@@ -164,13 +220,10 @@ class BingoBinaryMol(BingoBaseType):
             return func.Bingo.cml(colexpr)
         elif self.return_type == "bytes":
             return colexpr
-        else:
-            raise ValueError(
-                f"Invalid return_type: {self.return_type}. Available options are 'smiles', 'molfile', 'cml', 'bytes'."
-            )
+        raise AssertionError("validated return_type was not handled")
 
 
-class BingoReaction(BingoBaseType):
+class BingoReaction(BingoBaseType[str]):
     """SQLAlchemy type for chemical reaction data stored as text (varchar).
 
     This type represents chemical reactions stored as text in PostgreSQL,
@@ -192,7 +245,7 @@ class BingoReaction(BingoBaseType):
     ...     __tablename__ = 'reactions'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     reaction_smiles: Mapped[str] = mapped_column(BingoReaction)
+    ...     reaction_smiles: Mapped[str] = mapped_column(BingoReaction())
     ...     name: Mapped[str] = mapped_column(String(200))
     >>>
     >>> # Usage in queries
@@ -217,14 +270,14 @@ class BingoReaction(BingoBaseType):
     cache_ok = True
     comparator_factory = BingoRxnComparator
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "BingoReaction()"
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "varchar"
 
 
-class BingoBinaryReaction(BingoBaseType):
+class BingoBinaryReaction(BingoBaseType[bytes]):
     """SQLAlchemy type for binary chemical reaction data.
 
     This type represents chemical reactions stored in Bingo's internal binary
@@ -241,6 +294,15 @@ class BingoBinaryReaction(BingoBaseType):
     --------
     When `preserve_pos=True`, only inputs with present atomic coordinates should be used, otherwise conversion can return `NULL`.
 
+    Raises
+    ------
+    TypeError
+        If `preserve_pos` is not a boolean.
+
+    Notes
+    -----
+    `preserve_pos` is immutable after construction.
+
     Examples
     --------
     >>> from sqlalchemy import Integer, String
@@ -254,7 +316,7 @@ class BingoBinaryReaction(BingoBaseType):
     ...     __tablename__ = 'reactions_binary'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     reaction_data: Mapped[bytes] = mapped_column(BingoBinaryReaction)
+    ...     reaction_data: Mapped[bytes] = mapped_column(BingoBinaryReaction())
     ...     name: Mapped[str] = mapped_column(String(200))
     >>>
     >>> # Usage: Binary storage provides faster searching and less storage space
@@ -277,15 +339,15 @@ class BingoBinaryReaction(BingoBaseType):
 
     cache_ok = True
     comparator_factory = BingoRxnComparator
+    _immutable_options = frozenset(("preserve_pos",))
 
-    def __init__(self, preserve_pos: bool = False):
+    def __init__(self, preserve_pos: bool = False) -> None:
+        _validate_preserve_pos(preserve_pos)
         self.preserve_pos = preserve_pos
         super().__init__()
 
-    def __repr__(self):
-        if self.preserve_pos:
-            return "BingoBinaryReaction(preserve_pos=True)"
-        return "BingoBinaryReaction()"
+    def __repr__(self) -> str:
+        return f"BingoBinaryReaction(preserve_pos={self.preserve_pos!r})"
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "bytea"

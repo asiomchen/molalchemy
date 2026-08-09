@@ -1,7 +1,7 @@
 from sqlalchemy.types import UserDefinedType
 
 
-class CString(UserDefinedType):
+class CString(UserDefinedType[str]):
     """Custom type for C-style strings (null-terminated)."""
 
     impl = str

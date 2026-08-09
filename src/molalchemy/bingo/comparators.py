@@ -1,9 +1,12 @@
 """Bingo SQLAlchemy comparators for chemical structure searching."""
 
+from typing import cast
+
 from sqlalchemy import ColumnElement
+from sqlalchemy import types as sqltypes
+from sqlalchemy.sql.functions import Function
 from sqlalchemy.types import UserDefinedType
 
-from molalchemy.bingo.functions.general import mol_similarity_score
 from molalchemy.bingo.search import _bingo_search_values
 from molalchemy.protocols import (
     BingoOperand,
@@ -139,7 +142,17 @@ class BingoMolComparator(UserDefinedType.Comparator):
         metric: BingoParameters = "Tanimoto",
     ) -> ColumnElement[float]:
         """Return the numeric similarity score for `query`."""
-        return mol_similarity_score(self.expr, query, metric)
+        return cast(
+            ColumnElement[float],
+            Function(
+                "getsimilarity",
+                self.expr,
+                query,
+                metric,
+                packagenames=("bingo",),
+                type_=sqltypes.Float(),
+            ),
+        )
 
 
 class BingoRxnComparator(UserDefinedType.Comparator):

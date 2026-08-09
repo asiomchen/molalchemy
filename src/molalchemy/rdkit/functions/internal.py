@@ -8,6 +8,9 @@ from typing import Any
 from sqlalchemy import types as sqltypes
 from sqlalchemy.sql.functions import GenericFunction
 
+from molalchemy.protocols import (
+    TextOperand,
+)
 from molalchemy.rdkit.types import (
     RdkitBitFingerprint,
     RdkitMol,
@@ -29,7 +32,8 @@ from ._types import (
 )
 
 
-class bfp_cmp(GenericFunction):
+class bfp_cmp(GenericFunction[int]):
+    type = sqltypes.Integer()
     inherit_cache = True
 
     def __init__(
@@ -57,7 +61,7 @@ class bfp_cmp(GenericFunction):
         super().__init__(fp_1, fp_2, **kwargs)
 
 
-class bfp_eq(GenericFunction):
+class bfp_eq(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -86,7 +90,7 @@ class bfp_eq(GenericFunction):
         super().__init__(fp_1, fp_2, **kwargs)
 
 
-class bfp_ge(GenericFunction):
+class bfp_ge(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -115,7 +119,7 @@ class bfp_ge(GenericFunction):
         super().__init__(fp_1, fp_2, **kwargs)
 
 
-class bfp_gt(GenericFunction):
+class bfp_gt(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -144,16 +148,16 @@ class bfp_gt(GenericFunction):
         super().__init__(fp_1, fp_2, **kwargs)
 
 
-class bfp_in(GenericFunction):
+class bfp_in(GenericFunction[bytes]):
     type = RdkitBitFingerprint()
     inherit_cache = True
 
-    def __init__(self, input: CString, **kwargs: Any) -> None:
+    def __init__(self, input: TextOperand, **kwargs: Any) -> None:
         """Converts a string representation into an RDKit bit fingerprint. Used for input conversion from the client.
 
         Parameters
         ----------
-        input : CString
+        input : TextOperand
             The string representation of the bit fingerprint.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -166,7 +170,7 @@ class bfp_in(GenericFunction):
         super().__init__(input, **kwargs)
 
 
-class bfp_lt(GenericFunction):
+class bfp_lt(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -195,7 +199,7 @@ class bfp_lt(GenericFunction):
         super().__init__(fp_1, fp_2, **kwargs)
 
 
-class bfp_ne(GenericFunction):
+class bfp_ne(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -224,7 +228,7 @@ class bfp_ne(GenericFunction):
         super().__init__(bfp1, bfp2, **kwargs)
 
 
-class bfp_out(GenericFunction):
+class bfp_out(GenericFunction[str]):
     type = CString()
     inherit_cache = True
 
@@ -246,20 +250,18 @@ class bfp_out(GenericFunction):
         super().__init__(fp, **kwargs)
 
 
-class fmcs_smiles_transition(GenericFunction):
+class fmcs_smiles_transition(GenericFunction[str]):
     type = sqltypes.Text()
     inherit_cache = True
 
-    def __init__(
-        self, arg_1: sqltypes.Text, arg_2: sqltypes.Text, **kwargs: Any
-    ) -> None:
+    def __init__(self, arg_1: TextOperand, arg_2: TextOperand, **kwargs: Any) -> None:
         """TODO
 
         Parameters
         ----------
-        arg_1 : sqltypes.Text
+        arg_1 : TextOperand
             TODO.
-        arg_2 : sqltypes.Text
+        arg_2 : TextOperand
             TODO.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -272,7 +274,8 @@ class fmcs_smiles_transition(GenericFunction):
         super().__init__(arg_1, arg_2, **kwargs)
 
 
-class mol_cmp(GenericFunction):
+class mol_cmp(GenericFunction[int]):
+    type = sqltypes.Integer()
     inherit_cache = True
 
     def __init__(
@@ -297,7 +300,7 @@ class mol_cmp(GenericFunction):
         super().__init__(mol_1, mol_2, **kwargs)
 
 
-class mol_eq(GenericFunction):
+class mol_eq(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -323,7 +326,7 @@ class mol_eq(GenericFunction):
         super().__init__(mol_1, mol_2, **kwargs)
 
 
-class mol_ge(GenericFunction):
+class mol_ge(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -349,7 +352,7 @@ class mol_ge(GenericFunction):
         super().__init__(arg_1, arg_2, **kwargs)
 
 
-class mol_gt(GenericFunction):
+class mol_gt(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -375,16 +378,16 @@ class mol_gt(GenericFunction):
         super().__init__(mol_1, mol_2, **kwargs)
 
 
-class mol_in(GenericFunction):
+class mol_in(GenericFunction[str]):
     type = RdkitMol()
     inherit_cache = True
 
-    def __init__(self, mol_str: CString, **kwargs: Any) -> None:
+    def __init__(self, mol_str: TextOperand, **kwargs: Any) -> None:
         """Internal function used to load the molecule from the client input.
 
         Parameters
         ----------
-        mol_str : CString
+        mol_str : TextOperand
             The string representation of the molecule.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -397,7 +400,7 @@ class mol_in(GenericFunction):
         super().__init__(mol_str, **kwargs)
 
 
-class mol_le(GenericFunction):
+class mol_le(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -423,7 +426,7 @@ class mol_le(GenericFunction):
         super().__init__(mol_1, mol_2, **kwargs)
 
 
-class mol_lt(GenericFunction):
+class mol_lt(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -449,7 +452,7 @@ class mol_lt(GenericFunction):
         super().__init__(mol_1, mol_2, **kwargs)
 
 
-class mol_ne(GenericFunction):
+class mol_ne(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -475,7 +478,7 @@ class mol_ne(GenericFunction):
         super().__init__(mol_1, mol_2, **kwargs)
 
 
-class mol_out(GenericFunction):
+class mol_out(GenericFunction[str]):
     type = CString()
     inherit_cache = True
 
@@ -497,16 +500,16 @@ class mol_out(GenericFunction):
         super().__init__(mol, **kwargs)
 
 
-class qmol_in(GenericFunction):
+class qmol_in(GenericFunction[str]):
     type = RdkitQMol()
     inherit_cache = True
 
-    def __init__(self, mol_str: CString, **kwargs: Any) -> None:
+    def __init__(self, mol_str: TextOperand, **kwargs: Any) -> None:
         """Constructs an RDKit query molecule from a string representation. This function is used internally for receiving a query molecule from the client.
 
         Parameters
         ----------
-        mol_str : CString
+        mol_str : TextOperand
             The string representation of the query molecule
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -519,7 +522,7 @@ class qmol_in(GenericFunction):
         super().__init__(mol_str, **kwargs)
 
 
-class qmol_out(GenericFunction):
+class qmol_out(GenericFunction[str]):
     type = CString()
     inherit_cache = True
 
@@ -541,7 +544,7 @@ class qmol_out(GenericFunction):
         super().__init__(mol, **kwargs)
 
 
-class reaction_eq(GenericFunction):
+class reaction_eq(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -567,16 +570,16 @@ class reaction_eq(GenericFunction):
         super().__init__(rxn_1, rxn_2, **kwargs)
 
 
-class reaction_in(GenericFunction):
+class reaction_in(GenericFunction[str]):
     type = RdkitReaction()
     inherit_cache = True
 
-    def __init__(self, rxn_str: CString, **kwargs: Any) -> None:
+    def __init__(self, rxn_str: TextOperand, **kwargs: Any) -> None:
         """Converts a string representation of a chemical reaction into an RDKit reaction object.
 
         Parameters
         ----------
-        rxn_str : CString
+        rxn_str : TextOperand
             The string representation of the chemical reaction, typically in reaction SMILES format.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -589,7 +592,7 @@ class reaction_in(GenericFunction):
         super().__init__(rxn_str, **kwargs)
 
 
-class reaction_ne(GenericFunction):
+class reaction_ne(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -615,7 +618,7 @@ class reaction_ne(GenericFunction):
         super().__init__(rxn_1, rxn_2, **kwargs)
 
 
-class reaction_out(GenericFunction):
+class reaction_out(GenericFunction[str]):
     type = CString()
     inherit_cache = True
 
@@ -637,7 +640,8 @@ class reaction_out(GenericFunction):
         super().__init__(rxn, **kwargs)
 
 
-class sfp_cmp(GenericFunction):
+class sfp_cmp(GenericFunction[int]):
+    type = sqltypes.Integer()
     inherit_cache = True
 
     def __init__(
@@ -665,7 +669,7 @@ class sfp_cmp(GenericFunction):
         super().__init__(arg_1, arg_2, **kwargs)
 
 
-class sfp_eq(GenericFunction):
+class sfp_eq(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -694,7 +698,7 @@ class sfp_eq(GenericFunction):
         super().__init__(fp_1, fp_2, **kwargs)
 
 
-class sfp_ge(GenericFunction):
+class sfp_ge(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -723,7 +727,7 @@ class sfp_ge(GenericFunction):
         super().__init__(fp_1, fp_2, **kwargs)
 
 
-class sfp_gt(GenericFunction):
+class sfp_gt(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -752,16 +756,16 @@ class sfp_gt(GenericFunction):
         super().__init__(fp_1, fp_2, **kwargs)
 
 
-class sfp_in(GenericFunction):
+class sfp_in(GenericFunction[bytes]):
     type = RdkitSparseFingerprint()
     inherit_cache = True
 
-    def __init__(self, fp_string: CString, **kwargs: Any) -> None:
+    def __init__(self, fp_string: TextOperand, **kwargs: Any) -> None:
         """Internal function, that constructs an RDKit sparse fingerprint (sfp) from a string representation.
 
         Parameters
         ----------
-        fp_string : CString
+        fp_string : TextOperand
             The string representation of the sparse fingerprint.
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -774,7 +778,7 @@ class sfp_in(GenericFunction):
         super().__init__(fp_string, **kwargs)
 
 
-class sfp_le(GenericFunction):
+class sfp_le(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -803,7 +807,7 @@ class sfp_le(GenericFunction):
         super().__init__(fp_1, fp_2, **kwargs)
 
 
-class sfp_lt(GenericFunction):
+class sfp_lt(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -832,7 +836,7 @@ class sfp_lt(GenericFunction):
         super().__init__(fp_1, fp_2, **kwargs)
 
 
-class sfp_ne(GenericFunction):
+class sfp_ne(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -861,7 +865,7 @@ class sfp_ne(GenericFunction):
         super().__init__(fp_1, fp_2, **kwargs)
 
 
-class sfp_out(GenericFunction):
+class sfp_out(GenericFunction[str]):
     type = CString()
     inherit_cache = True
 
@@ -883,7 +887,7 @@ class sfp_out(GenericFunction):
         super().__init__(fp, **kwargs)
 
 
-class tanimoto_sml_op(GenericFunction):
+class tanimoto_sml_op(GenericFunction[bool]):
     type = sqltypes.Boolean()
     inherit_cache = True
 
@@ -912,16 +916,16 @@ class tanimoto_sml_op(GenericFunction):
         super().__init__(fp_1, fp_2, **kwargs)
 
 
-class xqmol_in(GenericFunction):
+class xqmol_in(GenericFunction[str]):
     type = RdkitXQMol()
     inherit_cache = True
 
-    def __init__(self, arg_1: CString, **kwargs: Any) -> None:
+    def __init__(self, arg_1: TextOperand, **kwargs: Any) -> None:
         """Internal function: Constructs a query molecule from an input string.
 
         Parameters
         ----------
-        arg_1 : CString
+        arg_1 : TextOperand
             The string representation of the query molecule (e.g., SMILES, SMARTS, or CTAB).
         kwargs : Any
             Additional keyword arguments passed to the `GenericFunction`.
@@ -934,7 +938,7 @@ class xqmol_in(GenericFunction):
         super().__init__(arg_1, **kwargs)
 
 
-class xqmol_out(GenericFunction):
+class xqmol_out(GenericFunction[str]):
     type = CString()
     inherit_cache = True
 

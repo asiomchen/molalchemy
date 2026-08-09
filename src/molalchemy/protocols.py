@@ -5,22 +5,39 @@ protocols provide a precise static view for the validation helpers in
 ``molalchemy.helpers``.
 """
 
-from typing import Any, Literal, Protocol, TypeAlias
+from typing import Any, Literal, Protocol, TypeAlias, TypeVar
 
 from rdkit import Chem
 from rdkit.Chem.rdChemReactions import ChemicalReaction
 from sqlalchemy.orm import InstrumentedAttribute
 from sqlalchemy.sql.elements import ColumnElement
 
-SqlOperand: TypeAlias = ColumnElement[Any] | InstrumentedAttribute[Any]
-RdkitMolOperand: TypeAlias = str | Chem.Mol | SqlOperand
-RdkitReactionOperand: TypeAlias = str | ChemicalReaction | SqlOperand
-RdkitFingerprintOperand: TypeAlias = bytes | SqlOperand
+_T = TypeVar("_T")
+
+SqlOperand: TypeAlias = ColumnElement[_T] | InstrumentedAttribute[_T]
+BooleanOperand: TypeAlias = bool | SqlOperand[bool]
+IntegerOperand: TypeAlias = int | SqlOperand[int]
+FloatOperand: TypeAlias = float | SqlOperand[float]
+TextOperand: TypeAlias = str | SqlOperand[str]
+BinaryOperand: TypeAlias = bytes | SqlOperand[bytes]
+TextOrBinaryOperand: TypeAlias = TextOperand | BinaryOperand
+BingoMolSqlOperand: TypeAlias = SqlOperand[str] | SqlOperand[bytes]
+BingoReactionSqlOperand: TypeAlias = SqlOperand[str] | SqlOperand[bytes]
+RdkitMolSqlOperand: TypeAlias = (
+    SqlOperand[str] | SqlOperand[bytes] | SqlOperand[Chem.Mol]
+)
+RdkitReactionSqlOperand: TypeAlias = (
+    SqlOperand[str] | SqlOperand[bytes] | SqlOperand[ChemicalReaction]
+)
+RdkitFingerprintSqlOperand: TypeAlias = SqlOperand[bytes]
+RdkitMolOperand: TypeAlias = str | Chem.Mol | RdkitMolSqlOperand
+RdkitReactionOperand: TypeAlias = str | ChemicalReaction | RdkitReactionSqlOperand
+RdkitFingerprintOperand: TypeAlias = bytes | RdkitFingerprintSqlOperand
 RdkitSimilarityMetric: TypeAlias = Literal["Tanimoto", "Dice"]
-RdkitSimilarityBound: TypeAlias = float | None | SqlOperand
-BingoOperand: TypeAlias = str | bytes | SqlOperand
-BingoParameters: TypeAlias = str | SqlOperand
-BingoSimilarityBound: TypeAlias = float | None | SqlOperand
+RdkitSimilarityBound: TypeAlias = float | None | SqlOperand[Any]
+BingoOperand: TypeAlias = str | bytes | BingoMolSqlOperand
+BingoParameters: TypeAlias = str | SqlOperand[Any]
+BingoSimilarityBound: TypeAlias = float | None | SqlOperand[Any]
 
 
 class BingoMolColumn(Protocol):
@@ -75,12 +92,14 @@ class BingoReactionColumn(Protocol):
 
 class RdkitMolColumn(Protocol):
     def has_substructure(self, query: RdkitMolOperand) -> ColumnElement[bool]: ...
-    def has_smarts(self, query: str | SqlOperand) -> ColumnElement[bool]: ...
+    def has_smarts(self, query: str | SqlOperand[Any]) -> ColumnElement[bool]: ...
     def is_substructure_of(self, query: RdkitMolOperand) -> ColumnElement[bool]: ...
     def equals(self, query: RdkitMolOperand) -> ColumnElement[bool]: ...
     def not_equals(self, query: RdkitMolOperand) -> ColumnElement[bool]: ...
-    def has_query_substructure(self, query: SqlOperand) -> ColumnElement[bool]: ...
-    def is_query_substructure_of(self, query: SqlOperand) -> ColumnElement[bool]: ...
+    def has_query_substructure(self, query: SqlOperand[Any]) -> ColumnElement[bool]: ...
+    def is_query_substructure_of(
+        self, query: SqlOperand[Any]
+    ) -> ColumnElement[bool]: ...
 
 
 class RdkitReactionColumn(Protocol):
@@ -92,7 +111,7 @@ class RdkitReactionColumn(Protocol):
 
     def equals(self, query: RdkitReactionOperand) -> ColumnElement[bool]: ...
     def not_equals(self, query: RdkitReactionOperand) -> ColumnElement[bool]: ...
-    def has_smarts(self, query: str | SqlOperand) -> ColumnElement[bool]: ...
+    def has_smarts(self, query: str | SqlOperand[Any]) -> ColumnElement[bool]: ...
     def has_substructure_fp(
         self, query: RdkitReactionOperand
     ) -> ColumnElement[bool]: ...
@@ -130,18 +149,29 @@ class RdkitFingerprintColumn(Protocol):
 
 
 __all__ = [
+    "BinaryOperand",
     "BingoMolColumn",
+    "BingoMolSqlOperand",
     "BingoOperand",
     "BingoParameters",
     "BingoReactionColumn",
+    "BingoReactionSqlOperand",
     "BingoSimilarityBound",
+    "BooleanOperand",
+    "FloatOperand",
+    "IntegerOperand",
     "RdkitFingerprintColumn",
     "RdkitFingerprintOperand",
+    "RdkitFingerprintSqlOperand",
     "RdkitMolColumn",
     "RdkitMolOperand",
+    "RdkitMolSqlOperand",
     "RdkitReactionColumn",
     "RdkitReactionOperand",
+    "RdkitReactionSqlOperand",
     "RdkitSimilarityBound",
     "RdkitSimilarityMetric",
     "SqlOperand",
+    "TextOperand",
+    "TextOrBinaryOperand",
 ]
