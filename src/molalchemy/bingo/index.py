@@ -169,7 +169,7 @@ class BingoRxnIndex(_BingoIndexBase):
     >>> from sqlalchemy import Integer
     >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
     >>> from molalchemy.bingo.index import BingoRxnIndex
-    >>> from molalchemy.bingo.types import BingoRxn
+    >>> from molalchemy.bingo.types import BingoReaction
     >>>
     >>> class Base(DeclarativeBase):
     ...     pass
@@ -178,7 +178,7 @@ class BingoRxnIndex(_BingoIndexBase):
     ...     __tablename__ = 'reactions'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     reaction: Mapped[BingoRxn] = mapped_column(BingoRxn)
+    ...     reaction: Mapped[BingoReaction] = mapped_column(BingoReaction)
     ...
     ...     __table_args__ = (
     ...         BingoRxnIndex('idx_reaction_structure', 'reaction'),
@@ -219,7 +219,7 @@ class BingoBinaryRxnIndex(_BingoIndexBase):
     >>> from sqlalchemy import Integer
     >>> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
     >>> from molalchemy.bingo.index import BingoBinaryRxnIndex
-    >>> from molalchemy.bingo.types import BingoBinaryRxn
+    >>> from molalchemy.bingo.types import BingoBinaryReaction
     >>>
     >>> class Base(DeclarativeBase):
     ...     pass
@@ -228,7 +228,9 @@ class BingoBinaryRxnIndex(_BingoIndexBase):
     ...     __tablename__ = 'reactions'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     reaction_bin: Mapped[BingoBinaryRxn] = mapped_column(BingoBinaryRxn)
+    ...     reaction_bin: Mapped[BingoBinaryReaction] = mapped_column(
+    ...         BingoBinaryReaction
+    ...     )
     ...
     ...     __table_args__ = (
     ...         BingoBinaryRxnIndex('idx_reaction_structure_bin', 'reaction_bin'),
