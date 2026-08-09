@@ -5,7 +5,7 @@ from unittest.mock import Mock, patch
 import pytest
 from alembic.autogenerate.api import render_python_code
 from alembic.migration import MigrationContext
-from alembic.operations.ops import CreateIndexOp, UpgradeOps
+from alembic.operations.ops import CreateIndexOp, CreateTableOp, UpgradeOps
 from sqlalchemy import Column, MetaData, Table, text
 
 from molalchemy.alembic_helpers import (
@@ -101,7 +101,13 @@ ALL_TYPES = [
         BingoBinaryReaction(),
         "molalchemy.bingo.types",
         "BingoBinaryReaction",
-        "BingoBinaryReaction()",
+        "BingoBinaryReaction(preserve_pos=False)",
+    ),
+    (
+        BingoBinaryReaction(preserve_pos=True),
+        "molalchemy.bingo.types",
+        "BingoBinaryReaction",
+        "BingoBinaryReaction(preserve_pos=True)",
     ),
 ]
 
@@ -135,12 +141,41 @@ class TestRenderAllTypes:
     def test_rendered_type_is_valid_constructor(
         self, instance, expected_module, class_name, expected_repr
     ):
-        """Test that the rendered string is exactly the constructor call."""
+        """The rendered constructor recreates the type's complete configuration."""
         autogen_context = Mock()
         autogen_context.imports = set()
 
         result = render_item("type", instance, autogen_context)
+
         assert result == expected_repr
+        recreated = eval(result, {class_name: type(instance)})
+        assert recreated._static_cache_key == instance._static_cache_key
+
+
+def render_table_operation(table):
+    """Render an Alembic table operation with the offline PostgreSQL dialect."""
+    migration_context = MigrationContext.configure(dialect_name="postgresql")
+    upgrade_ops = UpgradeOps(ops=[CreateTableOp.from_table(table)])
+    return render_python_code(
+        upgrade_ops,
+        render_item=render_item,
+        migration_context=migration_context,
+    )
+
+
+def test_alembic_table_rendering_preserves_explicit_default_options():
+    """A generated table migration does not rely on future constructor defaults."""
+    metadata = MetaData()
+    table = Table(
+        "reactions",
+        metadata,
+        Column("reaction", BingoBinaryReaction()),
+    )
+
+    rendered = render_table_operation(table)
+
+    assert "BingoBinaryReaction(preserve_pos=False)" in rendered
+    compile(f"def upgrade():\n{rendered}", "<generated migration>", "exec")
 
 
 class TestRenderNonTypes:
@@ -265,8 +300,7 @@ class TestRenderAllIndexes:
         rendered = render_index_operation(index)
 
         assert (
-            "op.create_index('ix_items_structure', 'items', ['structure'], "
-            "unique=False"
+            "op.create_index('ix_items_structure', 'items', ['structure'], unique=False"
         ) in rendered
         for expected_option in expected_options:
             assert expected_option in rendered

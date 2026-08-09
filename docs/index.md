@@ -377,7 +377,11 @@ results = session.query(
 
 ### Alembic Database Migrations
 
-Molalchemy provides utilities for Alembic integration.For automatic import handling in migrations, the library provides type rendering utilities that ensure proper import statements are generated for molalchemy types.
+MolAlchemy provides utilities for Alembic integration. For automatic import
+handling in migrations, the library provides type rendering utilities that
+ensure proper import statements are generated for MolAlchemy types. Generated
+type constructors explicitly include configurable defaults so migrations do
+not inherit different behavior if a future release changes those defaults.
 
 ```python
 # ...

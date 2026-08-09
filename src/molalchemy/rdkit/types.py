@@ -97,7 +97,7 @@ class RdkitMol(RdkitBaseType[_T], Generic[_T]):
         super().__init__()
         self.return_type = return_type
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"RdkitMol(return_type={self.return_type!r})"
 
     def column_expression(self, colexpr):
@@ -161,7 +161,7 @@ class RdkitBitFingerprint(RdkitBaseType[bytes]):
     cache_ok = True
     comparator_factory = RdkitFPComparator
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "RdkitBitFingerprint()"
 
     def get_col_spec(self, **kwargs: Any) -> str:
@@ -179,7 +179,7 @@ class RdkitSparseFingerprint(RdkitBaseType[bytes]):
     cache_ok = True
     comparator_factory = RdkitFPComparator
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "RdkitSparseFingerprint()"
 
     def get_col_spec(self, **kwargs: Any) -> str:
@@ -251,7 +251,7 @@ class RdkitReaction(RdkitBaseType[_T], Generic[_T]):
         super().__init__()
         self.return_type = return_type
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"RdkitReaction(return_type={self.return_type!r})"
 
     def bind_processor(self, dialect):
@@ -310,7 +310,7 @@ class RdkitReaction(RdkitBaseType[_T], Generic[_T]):
 class RdkitQMol(RdkitBaseType[str]):
     cache_ok = True
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "RdkitQMol()"
 
     def get_col_spec(self, **kwargs: Any) -> str:
@@ -320,7 +320,7 @@ class RdkitQMol(RdkitBaseType[str]):
 class RdkitXQMol(RdkitBaseType[str]):
     cache_ok = True
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "RdkitXQMol()"
 
     def get_col_spec(self, **kwargs: Any) -> str:

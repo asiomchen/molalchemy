@@ -95,4 +95,23 @@ def run_migrations_online():
     # ...
 ```
 
-This will ensure that when Alembic generates migration scripts, it will include the necessary import statements for `molalchemy` types, allowing the migrations to run without import errors.
+This ensures that Alembic includes the necessary type imports. For the model
+above, the generated migration contains:
+
+```python
+from molalchemy.rdkit.types import RdkitMol
+
+
+def upgrade() -> None:
+    op.create_table(
+        "molecules",
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("mol", RdkitMol(return_type="bytes"), nullable=False),
+        sa.PrimaryKeyConstraint("id"),
+    )
+```
+
+MolAlchemy renders every configurable constructor option, including defaults.
+For example, a default binary Bingo reaction type is rendered as
+`BingoBinaryReaction(preserve_pos=False)`. This keeps an existing migration's
+meaning stable if a constructor default changes in a later MolAlchemy release.

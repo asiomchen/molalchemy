@@ -68,7 +68,7 @@ class BingoMol(BingoBaseType[str]):
     ...     __tablename__ = 'molecules'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     smiles: Mapped[str] = mapped_column(BingoMol)
+    ...     smiles: Mapped[str] = mapped_column(BingoMol())
     ...     name: Mapped[str] = mapped_column(String(100))
     >>>
     >>> # Usage in queries
@@ -83,7 +83,7 @@ class BingoMol(BingoBaseType[str]):
     cache_ok = True
     comparator_factory = BingoMolComparator
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "BingoMol()"
 
     def get_col_spec(self, **kwargs: Any) -> str:
@@ -106,7 +106,7 @@ class BingoBinaryMol(BingoBaseType[_T], Generic[_T]):
     atomic coordinates and specifying the return format for queries.
 
     Parameters
-        ----------
+    ----------
     preserve_pos : bool, default False
         Whether to preserve atomic coordinates when converting to binary format.
         If `True`, coordinates are stored; if `False`, they are discarded.
@@ -199,8 +199,11 @@ class BingoBinaryMol(BingoBaseType[_T], Generic[_T]):
         self.return_type = return_type
         super().__init__()
 
-    def __repr__(self):
-        return f"BingoBinaryMol(preserve_pos={self.preserve_pos!r}, return_type={self.return_type!r})"
+    def __repr__(self) -> str:
+        return (
+            f"BingoBinaryMol(preserve_pos={self.preserve_pos!r}, "
+            f"return_type={self.return_type!r})"
+        )
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "bytea"
@@ -242,7 +245,7 @@ class BingoReaction(BingoBaseType[str]):
     ...     __tablename__ = 'reactions'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     reaction_smiles: Mapped[str] = mapped_column(BingoReaction)
+    ...     reaction_smiles: Mapped[str] = mapped_column(BingoReaction())
     ...     name: Mapped[str] = mapped_column(String(200))
     >>>
     >>> # Usage in queries
@@ -267,7 +270,7 @@ class BingoReaction(BingoBaseType[str]):
     cache_ok = True
     comparator_factory = BingoRxnComparator
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "BingoReaction()"
 
     def get_col_spec(self, **kwargs: Any) -> str:
@@ -313,7 +316,7 @@ class BingoBinaryReaction(BingoBaseType[bytes]):
     ...     __tablename__ = 'reactions_binary'
     ...
     ...     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ...     reaction_data: Mapped[bytes] = mapped_column(BingoBinaryReaction)
+    ...     reaction_data: Mapped[bytes] = mapped_column(BingoBinaryReaction())
     ...     name: Mapped[str] = mapped_column(String(200))
     >>>
     >>> # Usage: Binary storage provides faster searching and less storage space
@@ -338,15 +341,13 @@ class BingoBinaryReaction(BingoBaseType[bytes]):
     comparator_factory = BingoRxnComparator
     _immutable_options = frozenset(("preserve_pos",))
 
-    def __init__(self, preserve_pos: bool = False):
+    def __init__(self, preserve_pos: bool = False) -> None:
         _validate_preserve_pos(preserve_pos)
         self.preserve_pos = preserve_pos
         super().__init__()
 
-    def __repr__(self):
-        if self.preserve_pos:
-            return "BingoBinaryReaction(preserve_pos=True)"
-        return "BingoBinaryReaction()"
+    def __repr__(self) -> str:
+        return f"BingoBinaryReaction(preserve_pos={self.preserve_pos!r})"
 
     def get_col_spec(self, **kwargs: Any) -> str:
         return "bytea"
