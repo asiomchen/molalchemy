@@ -1,3 +1,5 @@
+
+
 <p align="center">
   <a href="https://molalchemy.readthedocs.io"><img src="https://raw.githubusercontent.com/asiomchen/molalchemy/refs/heads/main/docs/img/logo-full.svg" alt="MolAlchemy"></a>
 </p>
@@ -452,6 +454,7 @@ This project uses modern Python development tools:
 - **uv**: For virtual environment and dependency management
 - **Ruff**: For linting and formatting
 - **pytest**: For testing
+- **ty**: For static type checking
 
 ### Building Function Bindings
 
